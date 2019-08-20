@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.activities
+package com.ak.passwordsaver.presentation.screens.home
 
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -6,9 +6,9 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.view.MenuItem
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.activities.base.BasePSFragmentActivity
-import com.ak.passwordsaver.presentation.fragments.PasswordsListFragment
-import com.ak.passwordsaver.presentation.fragments.SettingsFragment
+import com.ak.passwordsaver.presentation.base.BasePSFragmentActivity
+import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListFragment
+import com.ak.passwordsaver.presentation.screens.settings.SettingsFragment
 import com.ak.passwordsaver.utils.bindView
 
 class HomeActivity : BasePSFragmentActivity(), BottomNavigationView.OnNavigationItemSelectedListener {

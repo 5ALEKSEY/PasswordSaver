@@ -9,7 +9,7 @@
             android:name=".PSApplication"
             android:supportsRtl="true"
             android:theme="@style/AppTheme" tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".presentation.activities.HomeActivity">
+        <activity android:name=".presentation.screens.home.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

@@ -1,7 +1,7 @@
-package com.ak.passwordsaver.presentation.fragments
+package com.ak.passwordsaver.presentation.screens.settings
 
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.fragments.base.BasePSFragment
+import com.ak.passwordsaver.presentation.base.BasePSFragment
 
 class SettingsFragment : BasePSFragment() {
 

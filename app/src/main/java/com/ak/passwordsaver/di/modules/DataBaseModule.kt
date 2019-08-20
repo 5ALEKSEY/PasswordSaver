@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.di
+package com.ak.passwordsaver.di.modules
 
 import android.arch.persistence.room.Room
 import android.content.Context
@@ -13,6 +13,7 @@ class DataBaseModule {
 
     @Provides
     @Singleton
-    fun providePasswordSaverDatabaseInstance(context: Context) =
-        Room.databaseBuilder(context, PSDatabase::class.java, BuildConfig.DATA_BASE_NAME).build()
+    fun providePasswordSaverDatabaseInstance(context: Context): PSDatabase {
+        return Room.databaseBuilder(context, PSDatabase::class.java, BuildConfig.DATA_BASE_NAME).build()
+    }
 }

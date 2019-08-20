@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.di
+package com.ak.passwordsaver.di.modules
 
 import android.content.Context
 import dagger.Module
