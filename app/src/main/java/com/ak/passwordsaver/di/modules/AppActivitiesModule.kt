@@ -1,6 +1,7 @@
 package com.ak.passwordsaver.di.modules
 
 import com.ak.passwordsaver.di.scopes.ActivityScope
+import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordActivity
 import com.ak.passwordsaver.presentation.screens.home.HomeActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -12,4 +13,8 @@ interface AppActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [ActivityModule::class])
     fun injectHomeActivity(): HomeActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [ActivityModule::class])
+    fun injectAddNewPasswordActivity(): AddNewPasswordActivity
 }

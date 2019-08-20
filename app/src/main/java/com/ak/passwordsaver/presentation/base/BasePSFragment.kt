@@ -25,6 +25,11 @@ abstract class BasePSFragment : MvpAppCompatFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViewBeforePresenterAttach()
         mvpDelegate.onAttach()
+    }
+
+    protected open fun initViewBeforePresenterAttach() {
+
     }
 }

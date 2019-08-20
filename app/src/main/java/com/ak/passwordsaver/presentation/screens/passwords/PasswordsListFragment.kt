@@ -1,15 +1,14 @@
 package com.ak.passwordsaver.presentation.screens.passwords
 
-import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.widget.Toast
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.adapter.passwords.PasswordItemModel
 import com.ak.passwordsaver.presentation.adapter.passwords.PasswordsListRecyclerAdapter
 import com.ak.passwordsaver.presentation.base.BasePSFragment
+import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordActivity
 import com.ak.passwordsaver.utils.bindView
 import com.arellomobile.mvp.presenter.InjectPresenter
 
@@ -29,10 +28,15 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView {
 
     override fun getFragmentLayoutResId() = R.layout.fragment_passwords_list
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun initViewBeforePresenterAttach() {
+        super.initViewBeforePresenterAttach()
         initRecyclerView()
-        mPasswordsListPresenter.loadPasswords()
+
+        mAddNewPasswordButton.setOnClickListener {
+            if (context != null) {
+                AddNewPasswordActivity.startActivity(context!!)
+            }
+        }
     }
 
     private fun initRecyclerView() {

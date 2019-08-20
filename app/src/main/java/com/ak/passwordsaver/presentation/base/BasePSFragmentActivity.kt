@@ -21,6 +21,7 @@ abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView, Ha
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
+        initViewBeforePresenterAttach()
         mvpDelegate.onAttach()
     }
 
@@ -33,5 +34,9 @@ abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView, Ha
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return mFragmentDispatchingAndroidInjector
+    }
+
+    protected open fun initViewBeforePresenterAttach() {
+
     }
 }

@@ -18,7 +18,12 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         PSApplication.appInstance.getApplicationComponent().inject(this)
     }
 
-    public fun loadPasswords() {
+    override fun onFirstViewAttach() {
+        super.onFirstViewAttach()
+        loadPasswords()
+    }
+
+    private fun loadPasswords() {
         mDatabase.getPasswordsDao().getAllPasswords()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
