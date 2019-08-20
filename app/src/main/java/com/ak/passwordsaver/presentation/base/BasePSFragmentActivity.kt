@@ -21,7 +21,6 @@ abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView, Ha
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        initViewBeforePresenterAttach()
         mvpDelegate.onAttach()
     }
 
@@ -29,6 +28,7 @@ abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView, Ha
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(getScreenLayoutResId())
+        initViewBeforePresenterAttach()
         mvpDelegate.onAttach()
     }
 
