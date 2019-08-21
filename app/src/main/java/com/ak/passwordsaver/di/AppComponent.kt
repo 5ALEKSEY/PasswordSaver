@@ -7,6 +7,7 @@ import com.ak.passwordsaver.di.modules.AppModule
 import com.ak.passwordsaver.di.modules.DataBaseModule
 import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordPresenter
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListPresenter
+import com.ak.passwordsaver.presentation.screens.settings.SettingsPresenter
 import dagger.Component
 import javax.inject.Singleton
 
@@ -23,4 +24,5 @@ interface AppComponent {
     fun inject(app: PSApplication)
     fun inject(presenter: PasswordsListPresenter)
     fun inject(presenter: AddNewPasswordPresenter)
+    fun inject(presenter: SettingsPresenter)
 }
