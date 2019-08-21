@@ -14,6 +14,8 @@ class DataBaseModule {
     @Provides
     @Singleton
     fun providePasswordSaverDatabaseInstance(context: Context): PSDatabase {
-        return Room.databaseBuilder(context, PSDatabase::class.java, BuildConfig.DATA_BASE_NAME).build()
+        return Room.databaseBuilder(context, PSDatabase::class.java, BuildConfig.DATA_BASE_NAME)
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

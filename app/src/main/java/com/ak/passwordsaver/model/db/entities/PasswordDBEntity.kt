@@ -8,11 +8,11 @@ import android.arch.persistence.room.PrimaryKey
 data class PasswordDBEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = COLUMN_PASSWORD_ID)
-    val passwordId: Long,
+    val passwordId: Long?,
     @ColumnInfo(name = COLUMN_PASSWORD_NAME)
     val passwordName: String,
     @ColumnInfo(name = COLUMN_PASSWORD_URL)
-    val passwordUrl: String,
+    val passwordUrl: String?,
     @ColumnInfo(name = COLUMN_PASSWORD_CONTENT)
     val passwordContent: String
 ) {

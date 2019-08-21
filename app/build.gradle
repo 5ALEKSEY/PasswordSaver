@@ -14,6 +14,8 @@ def glideVersion = '4.9.0'
 def circleImageViewVersion = '2.2.0'
 def rxJavaVersion = '2.2.2'
 def rxAndroidVersion = '2.0.2'
+def stethoVersion = '1.5.0'
+def stethoLeakcanaryVersion = '1.5.4'
 
 android {
     compileSdkVersion 28
@@ -90,4 +92,9 @@ dependencies {
     // rx
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
     implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+
+    // Stetho
+    debugImplementation "com.facebook.stetho:stetho:$stethoVersion"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$stethoLeakcanaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$stethoLeakcanaryVersion"
 }

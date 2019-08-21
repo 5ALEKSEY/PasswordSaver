@@ -5,6 +5,7 @@ import android.app.Application
 import com.ak.passwordsaver.di.AppComponent
 import com.ak.passwordsaver.di.DaggerAppComponent
 import com.ak.passwordsaver.di.modules.AppModule
+import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
@@ -21,7 +22,7 @@ class PSApplication : Application(), HasActivityInjector {
     @Inject
     lateinit var mActivityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
-    public fun getApplicationComponent() = mAppComponent
+    fun getApplicationComponent() = mAppComponent
 
     override fun onCreate() {
         super.onCreate()
@@ -29,6 +30,9 @@ class PSApplication : Application(), HasActivityInjector {
 
         mAppComponent = buildApplicationDaggerComponent()
         mAppComponent.inject(this)
+
+        // Init Stetho
+        Stetho.initializeWithDefaults(this)
     }
 
     override fun activityInjector(): AndroidInjector<Activity> = mActivityDispatchingAndroidInjector

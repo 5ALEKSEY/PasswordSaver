@@ -1,6 +1,6 @@
 package com.ak.passwordsaver.presentation.screens.passwords
 
-import com.ak.passwordsaver.presentation.adapter.passwords.PasswordItemModel
+import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
 import com.ak.passwordsaver.presentation.base.IBaseAppView
 
 interface IPasswordsListView : IBaseAppView {

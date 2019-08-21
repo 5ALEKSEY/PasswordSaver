@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.adapter.passwords
+package com.ak.passwordsaver.presentation.screens.passwords.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
