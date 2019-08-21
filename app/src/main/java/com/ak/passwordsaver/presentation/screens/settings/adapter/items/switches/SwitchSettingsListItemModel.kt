@@ -3,7 +3,8 @@ package com.ak.passwordsaver.presentation.screens.settings.adapter.items.switche
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 
 class SwitchSettingsListItemModel(
+    settingId: Int,
     settingName: String,
     settingDescription: String,
     val isChecked: Boolean
-) : SettingsListItemModel(SettingsListItemModel.SWITCH_SETTING_TYPE, settingName, settingDescription)
+) : SettingsListItemModel(SettingsListItemModel.SWITCH_SETTING_TYPE, settingId, settingName, settingDescription)

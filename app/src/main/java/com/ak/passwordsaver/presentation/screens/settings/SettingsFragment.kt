@@ -8,8 +8,7 @@ import android.support.v7.widget.Toolbar
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecyclerViewAdapter
-import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerSettingsListItemModel
-import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchSettingsListItemModel
+import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import com.ak.passwordsaver.utils.bindView
 import com.arellomobile.mvp.presenter.InjectPresenter
 
@@ -35,6 +34,10 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
         initRecyclerView()
     }
 
+    override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
+        mSettingsRecyclerAdapter.addSettingsList(settingsItems)
+    }
+
     private fun initToolbar() {
         if (activity is AppCompatActivity) {
             val appCompatActivity = activity as AppCompatActivity
@@ -44,25 +47,10 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
     }
 
     private fun initRecyclerView() {
-        mSettingsRecyclerAdapter = SettingsRecyclerViewAdapter()
+        mSettingsRecyclerAdapter = SettingsRecyclerViewAdapter(mSettingsPresenter::settingSpinnerItemChanged)
         mSettingsRecyclerView.adapter = mSettingsRecyclerAdapter
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         mSettingsRecyclerView.layoutManager = linearLayoutManager
         mSettingsRecyclerView.addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation))
-
-        val spinnerList = listOf("Belarus", "Germany", "Russia", "Turkey")
-
-        mSettingsRecyclerAdapter.addSettingsList(
-            listOf(
-                SwitchSettingsListItemModel("Setting name 1", "Description of setting name 1 ...", true),
-                SwitchSettingsListItemModel("Setting name 2", "Description of setting name 2 ...", false),
-                SwitchSettingsListItemModel("Setting name 3", "Description of setting name 3 ...", false),
-                SwitchSettingsListItemModel("Setting name 4", "Description of setting name 4 ...", true),
-                SpinnerSettingsListItemModel("Setting name 4", "Description of setting name 4 ...", 1, spinnerList),
-                SwitchSettingsListItemModel("Setting name 5", "Description of setting name 5 ...", true),
-                SpinnerSettingsListItemModel("Setting name 5", "Description of setting name 5 ...", 2, spinnerList),
-                SwitchSettingsListItemModel("Setting name 6", "Description of setting name 6 ...", false)
-            )
-        )
     }
 }

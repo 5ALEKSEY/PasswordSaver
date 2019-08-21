@@ -10,7 +10,8 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SettingsSwitchHolder
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchSettingsListItemModel
 
-class SettingsRecyclerViewAdapter : RecyclerView.Adapter<BaseSettingsViewHolder<*>>() {
+class SettingsRecyclerViewAdapter(val onSpinnerSettingsChanged: (settingId: Int, newDataId: Int) -> Unit) :
+    RecyclerView.Adapter<BaseSettingsViewHolder<*>>() {
 
     private val mSettingsItemsList = arrayListOf<SettingsListItemModel>()
 
@@ -23,7 +24,7 @@ class SettingsRecyclerViewAdapter : RecyclerView.Adapter<BaseSettingsViewHolder<
             }
             SettingsListItemModel.SPINNER_SETTING_TYPE -> {
                 val view = inflater.inflate(R.layout.settings_item_spinner_layout, parent, false)
-                SettingsSpinnerHolder(view)
+                SettingsSpinnerHolder(view, onSpinnerSettingsChanged)
             }
             else -> {
                 // default setting model

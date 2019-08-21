@@ -16,5 +16,6 @@ class PasswordsListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(item
     fun bindPasswordListItemView(passwordItemModel: PasswordItemModel) {
         mPasswordNameTextView.text = passwordItemModel.name
         mPasswordContentTextView.text = passwordItemModel.password
+        mPasswordContentTextView.visibility = if (passwordItemModel.isPasswordContentNeeds) View.VISIBLE else View.GONE
     }
 }

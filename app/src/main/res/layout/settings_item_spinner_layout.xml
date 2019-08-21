@@ -41,6 +41,7 @@
             android:id="@+id/s_setting_spinner_chooser"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="16dp"
             app:layout_constraintTop_toTopOf="@+id/tv_setting_name"

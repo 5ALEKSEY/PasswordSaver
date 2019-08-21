@@ -2,8 +2,10 @@ package com.ak.passwordsaver.presentation.screens.passwords
 
 import android.util.Log
 import com.ak.passwordsaver.PSApplication
+import com.ak.passwordsaver.model.PasswordShowingType
 import com.ak.passwordsaver.model.db.PSDatabase
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
+import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
 import com.arellomobile.mvp.InjectViewState
@@ -16,6 +18,8 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
 
     @Inject
     lateinit var mDatabase: PSDatabase
+    @Inject
+    lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
 
     init {
         PSApplication.appInstance.getApplicationComponent().inject(this)
@@ -45,6 +49,8 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     private fun convertDBEntitiesList(entitiesList: List<PasswordDBEntity>): List<PasswordItemModel> {
+        val showingType = mSettingsPreferencesManager.getPasswordShowingType()
+        val isPasswordContentNeeds = showingType == PasswordShowingType.IN_CARD
         val resultList = arrayListOf<PasswordItemModel>()
         for (entity in entitiesList) {
             resultList.add(
@@ -52,7 +58,8 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
                     entity.passwordId!!,
                     entity.passwordName,
                     entity.passwordUrl ?: "",
-                    entity.passwordContent
+                    entity.passwordContent,
+                    isPasswordContentNeeds
                 )
             )
         }

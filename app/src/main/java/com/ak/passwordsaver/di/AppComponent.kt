@@ -1,10 +1,7 @@
 package com.ak.passwordsaver.di
 
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.di.modules.AppActivitiesModule
-import com.ak.passwordsaver.di.modules.AppFragmentsModule
-import com.ak.passwordsaver.di.modules.AppModule
-import com.ak.passwordsaver.di.modules.DataBaseModule
+import com.ak.passwordsaver.di.modules.*
 import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordPresenter
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListPresenter
 import com.ak.passwordsaver.presentation.screens.settings.SettingsPresenter
@@ -16,7 +13,8 @@ import javax.inject.Singleton
         AppModule::class,
         DataBaseModule::class,
         AppActivitiesModule::class,
-        AppFragmentsModule::class]
+        AppFragmentsModule::class,
+        ManagersModule::class]
 )
 @Singleton
 interface AppComponent {
