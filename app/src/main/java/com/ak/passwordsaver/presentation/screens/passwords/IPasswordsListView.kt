@@ -6,4 +6,5 @@ import com.ak.passwordsaver.presentation.base.IBaseAppView
 interface IPasswordsListView : IBaseAppView {
     fun displayEmptyPasswordsState()
     fun displayPasswords(passwordModelsList: List<PasswordItemModel>)
+    fun openPasswordForUser(passwordId: Long)
 }

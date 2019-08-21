@@ -6,5 +6,25 @@ data class PasswordItemModel(
     val photoUrl: String,
     val password: String,
     val isPasswordContentNeeds: Boolean,
-    val isPasswordContentVisible: Boolean = false
-)
+    var isPasswordContentVisible: Boolean = false
+) {
+    companion object {
+        fun getSearchingTempModel(passwordId: Long) =
+            PasswordItemModel(passwordId, "", "", "", false)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as PasswordItemModel
+
+        if (passwordId != other.passwordId) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return passwordId.hashCode()
+    }
+}

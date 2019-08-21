@@ -30,6 +30,11 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         loadPasswords()
     }
 
+    fun passwordShowActionRequired(passwordId: Long) {
+        // TODO: check passcodes (mb save this passwordId in presenter for feature)
+        viewState.openPasswordForUser(passwordId)
+    }
+
     private fun loadPasswords() {
         mDatabase.getPasswordsDao().getAllPasswords()
             .subscribeOn(Schedulers.io())
@@ -50,7 +55,6 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
 
     private fun convertDBEntitiesList(entitiesList: List<PasswordDBEntity>): List<PasswordItemModel> {
         val showingType = mSettingsPreferencesManager.getPasswordShowingType()
-        val isPasswordContentNeeds = showingType == PasswordShowingType.IN_CARD
         val resultList = arrayListOf<PasswordItemModel>()
         for (entity in entitiesList) {
             resultList.add(
@@ -59,7 +63,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
                     entity.passwordName,
                     entity.passwordUrl ?: "",
                     entity.passwordContent,
-                    isPasswordContentNeeds
+                    showingType == PasswordShowingType.IN_CARD
                 )
             )
         }

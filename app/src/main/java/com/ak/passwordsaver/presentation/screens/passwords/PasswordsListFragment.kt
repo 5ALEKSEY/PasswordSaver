@@ -7,10 +7,10 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import android.widget.Toast
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
-import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordsListRecyclerAdapter
 import com.ak.passwordsaver.presentation.base.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordActivity
+import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
+import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordsListRecyclerAdapter
 import com.ak.passwordsaver.utils.bindView
 import com.arellomobile.mvp.presenter.InjectPresenter
 
@@ -43,6 +43,18 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView {
         }
     }
 
+    override fun displayPasswords(passwordModelsList: List<PasswordItemModel>) {
+        mPasswordsAdapter.insertData(passwordModelsList)
+    }
+
+    override fun displayEmptyPasswordsState() {
+        Toast.makeText(context, "Passwords are empty", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun openPasswordForUser(passwordId: Long) {
+        mPasswordsAdapter.openPasswordForPasswordItemId(passwordId)
+    }
+
     private fun initToolbar() {
         if (activity is AppCompatActivity) {
             val appCompatActivity = activity as AppCompatActivity
@@ -52,7 +64,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView {
     }
 
     private fun initRecyclerView() {
-        mPasswordsAdapter = PasswordsListRecyclerAdapter()
+        mPasswordsAdapter = PasswordsListRecyclerAdapter(mPasswordsListPresenter::passwordShowActionRequired)
         mPasswordsRecyclerView.adapter = mPasswordsAdapter
 
         mPasswordsRecyclerView.layoutManager = GridLayoutManager(
@@ -73,13 +85,5 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView {
                 super.onScrolled(recyclerView, dx, dy)
             }
         })
-    }
-
-    override fun displayPasswords(passwordModelsList: List<PasswordItemModel>) {
-        mPasswordsAdapter.insertData(passwordModelsList)
-    }
-
-    override fun displayEmptyPasswordsState() {
-        Toast.makeText(context, "Passwords are empty", Toast.LENGTH_SHORT).show()
     }
 }

@@ -10,7 +10,7 @@ import com.ak.passwordsaver.utils.bindView
 
 class SettingsSpinnerHolder(
     itemView: View,
-    val onSpinnerSettingsChanged: (settingId: Int, newDataId: Int) -> Unit
+    private val onSpinnerSettingsChanged: (settingId: Int, newDataId: Int) -> Unit
 ) : BaseSettingsViewHolder<SpinnerSettingsListItemModel>(itemView) {
 
     private val mSpinner: Spinner by bindView(R.id.s_setting_spinner_chooser)
