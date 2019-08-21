@@ -5,5 +5,6 @@ data class PasswordItemModel(
     val name: String,
     val photoUrl: String,
     val password: String,
-    val isPasswordContentNeeds: Boolean
+    val isPasswordContentNeeds: Boolean,
+    val isPasswordContentVisible: Boolean = false
 )

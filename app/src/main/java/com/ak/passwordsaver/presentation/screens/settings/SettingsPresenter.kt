@@ -36,6 +36,7 @@ class SettingsPresenter : BasePSPresenter<ISettingsView>() {
     }
 
     private fun loadSettingsData() {
+        // ------------------------------------------ Showing Type -----------------------------------------------------
         val showingType = mSettingsPreferencesManager.getPasswordShowingType()
         val showingTypeList = mSettingsPreferencesManager.getStringListOfPasswordShowingTypes()
         val showingTypeSpinnerItem = SpinnerSettingsListItemModel(
@@ -45,6 +46,7 @@ class SettingsPresenter : BasePSPresenter<ISettingsView>() {
             showingType.number,
             showingTypeList
         )
+        // -------------------------------------------------------------------------------------------------------------
 
         viewState.displayAppSettings(listOf(showingTypeSpinnerItem))
     }
