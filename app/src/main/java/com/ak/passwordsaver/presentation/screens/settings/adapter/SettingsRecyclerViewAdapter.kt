@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
+import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SettingsSpinnerHolder
+import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerSettingsListItemModel
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SettingsSwitchHolder
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchSettingsListItemModel
 
@@ -18,6 +20,10 @@ class SettingsRecyclerViewAdapter : RecyclerView.Adapter<BaseSettingsViewHolder<
             SettingsListItemModel.SWITCH_SETTING_TYPE -> {
                 val view = inflater.inflate(R.layout.settings_item_switch_layout, parent, false)
                 SettingsSwitchHolder(view)
+            }
+            SettingsListItemModel.SPINNER_SETTING_TYPE -> {
+                val view = inflater.inflate(R.layout.settings_item_spinner_layout, parent, false)
+                SettingsSpinnerHolder(view)
             }
             else -> {
                 // default setting model
@@ -35,6 +41,9 @@ class SettingsRecyclerViewAdapter : RecyclerView.Adapter<BaseSettingsViewHolder<
         when (getItemViewType(position)) {
             SettingsListItemModel.SWITCH_SETTING_TYPE -> {
                 (viewHolder as SettingsSwitchHolder).bindViewHolder(mSettingsItemsList[position] as SwitchSettingsListItemModel)
+            }
+            SettingsListItemModel.SPINNER_SETTING_TYPE -> {
+                (viewHolder as SettingsSpinnerHolder).bindViewHolder(mSettingsItemsList[position] as SpinnerSettingsListItemModel)
             }
         }
     }

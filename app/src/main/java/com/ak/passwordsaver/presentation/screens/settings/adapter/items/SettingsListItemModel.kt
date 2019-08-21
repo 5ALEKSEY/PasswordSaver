@@ -7,5 +7,6 @@ abstract class SettingsListItemModel(
 ) {
     companion object {
         const val SWITCH_SETTING_TYPE = 1
+        const val SPINNER_SETTING_TYPE = 2
     }
 }
