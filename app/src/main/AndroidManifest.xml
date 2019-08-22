@@ -13,9 +13,12 @@
             tools:ignore="GoogleAppIndexingWarning">
         <activity
                 android:name=".presentation.screens.addnew.AddNewPasswordActivity"
+                android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize">
         </activity>
-        <activity android:name=".presentation.screens.home.HomeActivity">
+        <activity
+                android:name=".presentation.screens.home.HomeActivity"
+                android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

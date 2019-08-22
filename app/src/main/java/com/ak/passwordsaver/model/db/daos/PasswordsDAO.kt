@@ -13,6 +13,12 @@ interface PasswordsDAO {
     @Query("SELECT * FROM " + PasswordDBEntity.PASSWORD_TABLE_NAME)
     fun getAllPasswords(): Single<List<PasswordDBEntity>>
 
+    @Query(
+        "SELECT * FROM " + PasswordDBEntity.PASSWORD_TABLE_NAME + " WHERE "
+                + PasswordDBEntity.COLUMN_PASSWORD_ID + " = :passwordId LIMIT 1"
+    )
+    fun getPasswordById(passwordId: Long): Single<PasswordDBEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewPassword(vararg passwordDBEntity: PasswordDBEntity): List<Long>
 }

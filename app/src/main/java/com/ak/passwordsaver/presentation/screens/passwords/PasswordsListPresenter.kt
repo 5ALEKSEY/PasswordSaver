@@ -21,6 +21,8 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     @Inject
     lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
 
+    private var mCurrentPasswordId = 0L
+
     init {
         PSApplication.appInstance.getApplicationComponent().inject(this)
     }
@@ -32,7 +34,28 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
 
     fun passwordShowActionRequired(passwordId: Long) {
         // TODO: check passcodes (mb save this passwordId in presenter for feature)
-        viewState.openPasswordForUser(passwordId)
+        mCurrentPasswordId = passwordId
+        val showingType = mSettingsPreferencesManager.getPasswordShowingType()
+
+        when (showingType) {
+            PasswordShowingType.DIALOG -> getPasswordDataAndStartAction(viewState::openPasswordDialogMode)
+            PasswordShowingType.TOAST -> getPasswordDataAndStartAction(viewState::openPasswordToastMode)
+            PasswordShowingType.IN_CARD -> viewState.openPasswordInCardMode(passwordId)
+        }
+    }
+
+    private fun getPasswordDataAndStartAction(action: (name: String, content: String) -> Unit) {
+        mDatabase.getPasswordsDao().getPasswordById(mCurrentPasswordId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { entity ->
+                    action.invoke(entity.passwordName, entity.passwordContent)
+                },
+                { throwable ->
+                    Log.d("dddd", "dddd")
+                })
+            .let(::bindDisposable)
     }
 
     private fun loadPasswords() {

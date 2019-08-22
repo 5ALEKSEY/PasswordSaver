@@ -24,10 +24,9 @@ class PasswordsListItemViewHolder(itemView: View, private val onShowPasswordActi
         mPasswordNameTextView.text = passwordItemModel.name
         mPasswordContentTextView.text = getPasswordContentText(passwordItemModel)
         mPasswordContentTextView.visibility = if (passwordItemModel.isPasswordContentNeeds) View.VISIBLE else View.GONE
-        if (passwordItemModel.isPasswordContentNeeds) {
-            mShowPasswordButton.setOnClickListener {
-                onShowPasswordAction.invoke(passwordItemModel.passwordId)
-            }
+
+        mShowPasswordButton.setOnClickListener {
+            onShowPasswordAction.invoke(passwordItemModel.passwordId)
         }
     }
 

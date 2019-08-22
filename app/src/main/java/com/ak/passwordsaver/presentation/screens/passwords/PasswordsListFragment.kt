@@ -51,7 +51,16 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView {
         Toast.makeText(context, "Passwords are empty", Toast.LENGTH_SHORT).show()
     }
 
-    override fun openPasswordForUser(passwordId: Long) {
+    override fun openPasswordDialogMode(passwordName: String, passwordContent: String) {
+        openPasswordToastMode(passwordName, passwordContent)
+    }
+
+    override fun openPasswordToastMode(passwordName: String, passwordContent: String) {
+        val message = "$passwordName: $passwordContent"
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun openPasswordInCardMode(passwordId: Long) {
         mPasswordsAdapter.openPasswordForPasswordItemId(passwordId)
     }
 
