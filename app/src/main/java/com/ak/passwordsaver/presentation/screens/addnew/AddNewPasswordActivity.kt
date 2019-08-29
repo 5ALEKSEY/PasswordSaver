@@ -5,6 +5,7 @@ import android.content.Intent
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import com.ak.passwordsaver.R
@@ -32,6 +33,15 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
         initToolbar()
+
+        mPasswordContentEditText.setOnEditorActionListener { _, actionId, _ ->
+            return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_DONE) {
+                onSavePasswordAction()
+                true
+            } else {
+                false
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -41,10 +51,7 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
     override fun onOptionsItemSelected(item: MenuItem?) =
         if (item != null && item.itemId == R.id.action_save_password) {
-            mAddNewPasswordPresenter.saveNewPassword(
-                mPasswordNameEditText.text.toString(),
-                mPasswordContentEditText.text.toString()
-            )
+            onSavePasswordAction()
             true
         } else {
             super.onOptionsItemSelected(item)
@@ -64,5 +71,12 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
         supportActionBar?.title = "Add new password"
         mToolbar.setNavigationIcon(R.drawable.ic_back_action)
         mToolbar.setNavigationOnClickListener { finish() }
+    }
+
+    private fun onSavePasswordAction() {
+        mAddNewPasswordPresenter.saveNewPassword(
+            mPasswordNameEditText.text.toString(),
+            mPasswordContentEditText.text.toString()
+        )
     }
 }
