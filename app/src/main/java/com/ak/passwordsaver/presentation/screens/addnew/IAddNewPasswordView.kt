@@ -4,5 +4,8 @@ import com.ak.passwordsaver.presentation.base.IBaseAppView
 
 interface IAddNewPasswordView : IBaseAppView {
     fun displaySuccessPasswordSave()
-    fun displayFailedPasswordSave(errorMessage: String)
+    fun displayPasswordNameInputError(errorMessage: String)
+    fun hidePasswordNameInputError()
+    fun displayPasswordContentInputError(errorMessage: String)
+    fun hidePasswordContentInputError()
 }

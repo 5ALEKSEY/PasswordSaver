@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
+import com.ak.passwordsaver.presentation.extensions.showToastMessage
 import com.arellomobile.mvp.MvpAppCompatActivity
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -34,6 +35,10 @@ abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView, Ha
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return mFragmentDispatchingAndroidInjector
+    }
+
+    override fun showShortTimeMessage(message: String) {
+        showToastMessage(message)
     }
 
     protected open fun initViewBeforePresenterAttach() {

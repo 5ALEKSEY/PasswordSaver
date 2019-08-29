@@ -14,7 +14,8 @@ import javax.inject.Singleton
         DataBaseModule::class,
         AppActivitiesModule::class,
         AppFragmentsModule::class,
-        ManagersModule::class]
+        ManagersModule::class,
+        BusinessLogicModule::class]
 )
 @Singleton
 interface AppComponent {

@@ -2,6 +2,7 @@ package com.ak.passwordsaver.presentation.screens.addnew
 
 import android.content.Context
 import android.content.Intent
+import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
@@ -10,6 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.BasePSFragmentActivity
+import com.ak.passwordsaver.presentation.extensions.hideKeyBoard
 import com.ak.passwordsaver.utils.bindView
 import com.arellomobile.mvp.presenter.InjectPresenter
 
@@ -26,7 +28,9 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
     private val mToolbar: Toolbar by bindView(R.id.tb_add_new_password_bar)
     private val mPasswordNameEditText: EditText by bindView(R.id.tiet_password_name_field)
+    private val mPasswordNameInputLayout: TextInputLayout by bindView(R.id.til_password_name_layout)
     private val mPasswordContentEditText: EditText by bindView(R.id.tiet_password_content_field)
+    private val mPasswordContentInputLayout: TextInputLayout by bindView(R.id.til_password_content_layout)
 
     override fun getScreenLayoutResId() = R.layout.activity_add_new_password
 
@@ -34,8 +38,9 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
         super.initViewBeforePresenterAttach()
         initToolbar()
 
-        mPasswordContentEditText.setOnEditorActionListener { _, actionId, _ ->
+        mPasswordContentEditText.setOnEditorActionListener { view, actionId, _ ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyBoard(view)
                 onSavePasswordAction()
                 true
             } else {
@@ -62,8 +67,20 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
         finish()
     }
 
-    override fun displayFailedPasswordSave(errorMessage: String) {
-        Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT).show()
+    override fun displayPasswordNameInputError(errorMessage: String) {
+        mPasswordNameInputLayout.error = errorMessage
+    }
+
+    override fun hidePasswordNameInputError() {
+        mPasswordNameInputLayout.error = null
+    }
+
+    override fun displayPasswordContentInputError(errorMessage: String) {
+        mPasswordContentInputLayout.error = errorMessage
+    }
+
+    override fun hidePasswordContentInputError() {
+        mPasswordContentInputLayout.error = null
     }
 
     private fun initToolbar() {

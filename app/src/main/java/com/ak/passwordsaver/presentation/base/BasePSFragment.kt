@@ -6,10 +6,11 @@ import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.ak.passwordsaver.presentation.extensions.showToastMessage
 import com.arellomobile.mvp.MvpAppCompatFragment
 import dagger.android.support.AndroidSupportInjection
 
-abstract class BasePSFragment : MvpAppCompatFragment() {
+abstract class BasePSFragment : MvpAppCompatFragment(), IBaseAppView {
 
     @LayoutRes
     abstract fun getFragmentLayoutResId(): Int
@@ -27,6 +28,10 @@ abstract class BasePSFragment : MvpAppCompatFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViewBeforePresenterAttach()
         mvpDelegate.onAttach()
+    }
+
+    override fun showShortTimeMessage(message: String) {
+        context?.showToastMessage(message)
     }
 
     protected open fun initViewBeforePresenterAttach() {
