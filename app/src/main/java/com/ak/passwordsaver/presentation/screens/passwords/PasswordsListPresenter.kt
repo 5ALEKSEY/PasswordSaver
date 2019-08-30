@@ -62,10 +62,15 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         mDatabase.getPasswordsDao().getAllPasswords()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                viewState.setLoadingState(true)
+                viewState.setEmptyPasswordsState(false)
+            }
+            .doFinally { viewState.setLoadingState(false) }
             .subscribe(
                 { list ->
                     if (list.isEmpty()) {
-                        viewState.displayEmptyPasswordsState()
+                        viewState.setEmptyPasswordsState(true)
                     } else {
                         viewState.displayPasswords(convertDBEntitiesList(list))
                     }

@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
+import android.view.View
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.BasePSFragment
@@ -27,6 +29,8 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView {
     private val mToolbar: Toolbar by bindView(R.id.tb_passwords_list_bar)
     private val mPasswordsRecyclerView: RecyclerView by bindView(R.id.rv_passwords_list)
     private val mAddNewPasswordButton: FloatingActionButton by bindView(R.id.fab_add_new_password_action)
+    private val mEmptyView: View by bindView(R.id.l_empty_view)
+    private val mProgressBar: ProgressBar by bindView(R.id.pb_passwords_loading)
     private lateinit var mPasswordsAdapter: PasswordsListRecyclerAdapter
 
     override fun getFragmentLayoutResId() = R.layout.fragment_passwords_list
@@ -47,8 +51,12 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView {
         mPasswordsAdapter.insertData(passwordModelsList)
     }
 
-    override fun displayEmptyPasswordsState() {
-        Toast.makeText(context, "Passwords are empty", Toast.LENGTH_SHORT).show()
+    override fun setLoadingState(isLoading: Boolean) {
+        mProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+    }
+
+    override fun setEmptyPasswordsState(isEmptyViewVisible: Boolean) {
+        mEmptyView.visibility = if (isEmptyViewVisible) View.VISIBLE else View.GONE
     }
 
     override fun openPasswordDialogMode(passwordName: String, passwordContent: String) {
