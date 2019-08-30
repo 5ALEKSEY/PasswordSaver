@@ -38,9 +38,8 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
         super.initViewBeforePresenterAttach()
         initToolbar()
 
-        mPasswordContentEditText.setOnEditorActionListener { view, actionId, _ ->
+        mPasswordContentEditText.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_DONE) {
-                hideKeyBoard(view)
                 onSavePasswordAction()
                 true
             } else {
@@ -91,6 +90,9 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
     }
 
     private fun onSavePasswordAction() {
+        hideKeyBoard()
+        hidePasswordNameInputError()
+        hidePasswordContentInputError()
         mAddNewPasswordPresenter.saveNewPassword(
             mPasswordNameEditText.text.toString(),
             mPasswordContentEditText.text.toString()
