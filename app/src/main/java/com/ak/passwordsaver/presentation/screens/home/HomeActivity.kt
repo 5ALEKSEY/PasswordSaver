@@ -10,8 +10,12 @@ import com.ak.passwordsaver.presentation.base.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListFragment
 import com.ak.passwordsaver.presentation.screens.settings.SettingsFragment
 import com.ak.passwordsaver.utils.bindView
+import com.arellomobile.mvp.presenter.InjectPresenter
 
-class HomeActivity : BasePSFragmentActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+class HomeActivity : BasePSFragmentActivity(), BottomNavigationView.OnNavigationItemSelectedListener, IHomeView {
+
+    @InjectPresenter
+    lateinit var mHomePresenter: HomePresenter
 
     private val mBottomMenu: BottomNavigationView by bindView(R.id.bnv_bottom_bar)
 
@@ -35,6 +39,14 @@ class HomeActivity : BasePSFragmentActivity(), BottomNavigationView.OnNavigation
             }
             else -> false
         }
+    }
+
+    override fun onBackPressed() {
+        mHomePresenter.finishScreenAction()
+    }
+
+    override fun finishScreen() {
+        finish()
     }
 
     private fun showFragment(fragment: Fragment) {

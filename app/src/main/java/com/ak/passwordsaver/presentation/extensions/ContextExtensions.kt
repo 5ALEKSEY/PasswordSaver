@@ -22,6 +22,6 @@ private fun Context.hideKeyBoard(focusedView: View) {
     imm?.hideSoftInputFromWindow(focusedView.windowToken, 0)
 }
 
-fun Context.showToastMessage(message: String, duration: Int = Toast.LENGTH_LONG) {
+fun Context.showToastMessage(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }
