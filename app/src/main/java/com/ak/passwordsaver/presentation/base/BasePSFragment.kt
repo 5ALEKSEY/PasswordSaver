@@ -6,7 +6,7 @@ import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ak.passwordsaver.presentation.extensions.showToastMessage
+import com.ak.passwordsaver.utils.extensions.showToastMessage
 import com.arellomobile.mvp.MvpAppCompatFragment
 import dagger.android.support.AndroidSupportInjection
 

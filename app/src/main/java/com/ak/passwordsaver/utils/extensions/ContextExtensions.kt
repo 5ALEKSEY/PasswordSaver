@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.extensions
+package com.ak.passwordsaver.utils.extensions
 
 import android.content.Context
 import android.support.v4.app.Fragment

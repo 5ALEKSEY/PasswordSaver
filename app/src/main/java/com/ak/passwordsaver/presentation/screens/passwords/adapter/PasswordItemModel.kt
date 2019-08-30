@@ -6,6 +6,7 @@ data class PasswordItemModel(
     val photoUrl: String,
     val password: String,
     val isPasswordContentNeeds: Boolean,
+    var isItemSelected: Boolean = false,
     var isPasswordContentVisible: Boolean = false
 ) {
     companion object {

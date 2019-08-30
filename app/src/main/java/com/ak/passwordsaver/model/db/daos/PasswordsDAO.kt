@@ -1,9 +1,6 @@
 package com.ak.passwordsaver.model.db.daos
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.OnConflictStrategy
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
 import io.reactivex.Single
 
@@ -21,4 +18,7 @@ interface PasswordsDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewPassword(vararg passwordDBEntity: PasswordDBEntity): List<Long>
+
+    @Delete
+    fun deletePasswords(vararg passwordDBEntity: PasswordDBEntity)
 }

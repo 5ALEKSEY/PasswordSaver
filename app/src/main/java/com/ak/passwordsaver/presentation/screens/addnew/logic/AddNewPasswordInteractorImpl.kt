@@ -22,7 +22,7 @@ class AddNewPasswordInteractorImpl @Inject constructor(
         }
 
         return Single.fromCallable {
-            mPsDatabase.getPasswordsDao().insertNewPassword(PasswordDBEntity(null, passwordName, null, passwordContent))
+            mPsDatabase.getPasswordsDao().insertNewPassword(PasswordDBEntity(passwordName, passwordContent))
         }
             .subscribeOn(Schedulers.io())
             .map { longs -> longs.size >= 0 }

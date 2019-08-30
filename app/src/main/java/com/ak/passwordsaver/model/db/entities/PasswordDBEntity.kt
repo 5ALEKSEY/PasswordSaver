@@ -2,20 +2,26 @@ package com.ak.passwordsaver.model.db.entities
 
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 
 @Entity(tableName = PasswordDBEntity.PASSWORD_TABLE_NAME)
 data class PasswordDBEntity(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = COLUMN_PASSWORD_ID)
-    val passwordId: Long?,
+    var passwordId: Long?,
     @ColumnInfo(name = COLUMN_PASSWORD_NAME)
-    val passwordName: String,
+    var passwordName: String,
     @ColumnInfo(name = COLUMN_PASSWORD_URL)
-    val passwordUrl: String?,
+    var passwordUrl: String?,
     @ColumnInfo(name = COLUMN_PASSWORD_CONTENT)
-    val passwordContent: String
+    var passwordContent: String
 ) {
+
+    @Ignore
+    constructor(passwordId: Long) : this(passwordId, "", "", "")
+    @Ignore
+    constructor(passwordName: String, passwordContent: String) : this(null, passwordName, "", passwordContent)
 
     companion object {
         const val PASSWORD_TABLE_NAME = "Passwords"

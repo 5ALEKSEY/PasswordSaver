@@ -8,7 +8,12 @@ import android.widget.TextView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.bindView
 
-class PasswordsListItemViewHolder(itemView: View, private val onShowPasswordAction: (passwordId: Long) -> Unit) :
+class PasswordsListItemViewHolder(
+    itemView: View,
+    private val onShowPasswordAction: (passwordId: Long) -> Unit,
+    private val onPasswordItemSingleClick: (passwordId: Long) -> Unit,
+    private val onPasswordItemLongClick: (passwordId: Long) -> Unit
+) :
     RecyclerView.ViewHolder(itemView) {
 
     companion object {
@@ -17,6 +22,7 @@ class PasswordsListItemViewHolder(itemView: View, private val onShowPasswordActi
 
     private val mPasswordNameTextView: TextView by bindView(R.id.tv_password_name)
     private val mPasswordContentTextView: TextView by bindView(R.id.tv_password_content)
+    private val mPasswordItemRoot: View by bindView(R.id.cl_password_item_root)
     private val mPasswordAvatarImageView: ImageView by bindView(R.id.iv_password_avatar)
     private val mShowPasswordButton: Button by bindView(R.id.btn_password_show_action)
 
@@ -28,7 +34,26 @@ class PasswordsListItemViewHolder(itemView: View, private val onShowPasswordActi
         mShowPasswordButton.setOnClickListener {
             onShowPasswordAction.invoke(passwordItemModel.passwordId)
         }
+
+        itemView.setOnClickListener {
+            onPasswordItemSingleClick.invoke(passwordItemModel.passwordId)
+        }
+
+        itemView.setOnLongClickListener {
+            onPasswordItemLongClick.invoke(passwordItemModel.passwordId)
+            return@setOnLongClickListener true
+        }
+
+        val rootBackgroundResource = getRootItemBackground(passwordItemModel.isItemSelected)
+        mPasswordItemRoot.setBackgroundResource(rootBackgroundResource)
     }
+
+    private fun getRootItemBackground(isItemSelected: Boolean) =
+        if (isItemSelected) {
+            R.drawable.bg_selected_password_item
+        } else {
+            0
+        }
 
     private fun getPasswordContentText(passwordItemModel: PasswordItemModel) =
         if (passwordItemModel.isPasswordContentVisible) {
