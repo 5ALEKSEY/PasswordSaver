@@ -57,6 +57,11 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        hideSelectedMode()
+    }
+
     override fun displayPasswords(passwordModelsList: List<PasswordItemModel>) {
         mPasswordsAdapter.insertData(passwordModelsList)
     }
