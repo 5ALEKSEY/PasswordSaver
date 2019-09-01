@@ -2,13 +2,14 @@ package com.ak.passwordsaver.model.db.daos
 
 import android.arch.persistence.room.*
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
+import io.reactivex.Flowable
 import io.reactivex.Single
 
 @Dao
 interface PasswordsDAO {
 
     @Query("SELECT * FROM " + PasswordDBEntity.PASSWORD_TABLE_NAME)
-    fun getAllPasswords(): Single<List<PasswordDBEntity>>
+    fun getAllPasswords(): Flowable<List<PasswordDBEntity>>
 
     @Query(
         "SELECT * FROM " + PasswordDBEntity.PASSWORD_TABLE_NAME + " WHERE "

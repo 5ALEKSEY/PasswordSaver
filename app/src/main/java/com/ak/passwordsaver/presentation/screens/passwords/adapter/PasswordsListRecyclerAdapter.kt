@@ -1,5 +1,6 @@
 package com.ak.passwordsaver.presentation.screens.passwords.adapter
 
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -26,8 +27,12 @@ class PasswordsListRecyclerAdapter(
     }
 
     fun insertData(passwordModels: List<PasswordItemModel>) {
+        val diffCallback = PasswordsDiffUtilCallback(mItemsList, passwordModels)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        mItemsList.clear()
         mItemsList.addAll(passwordModels)
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 
     fun openPasswordForPasswordItemId(passwordId: Long) {
@@ -40,11 +45,11 @@ class PasswordsListRecyclerAdapter(
     }
 
     fun setSelectedStateForPasswordItemId(isSelected: Boolean, passwordId: Long) {
-        val index = mItemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
+        val position = mItemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
         mItemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }
             ?.let {
                 it.isItemSelected = isSelected
-                changePasswordItem(it, index)
+                changePasswordItem(it, position)
             }
     }
 
@@ -53,5 +58,21 @@ class PasswordsListRecyclerAdapter(
             mItemsList[position] = newPasswordItemModel
             notifyItemChanged(position)
         }
+    }
+
+    class PasswordsDiffUtilCallback(
+        private val oldList: List<PasswordItemModel>,
+        private val newList: List<PasswordItemModel>
+    ) : DiffUtil.Callback() {
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+            oldList[oldItemPosition] === newList[newItemPosition]
+
+        override fun getOldListSize() = oldList.size
+
+        override fun getNewListSize() = newList.size
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+            oldList[oldItemPosition].isTheSameContent(newList[newItemPosition])
     }
 }

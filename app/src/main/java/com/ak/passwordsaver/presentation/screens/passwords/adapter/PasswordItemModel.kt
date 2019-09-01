@@ -14,6 +14,15 @@ data class PasswordItemModel(
             PasswordItemModel(passwordId, "", "", "", false)
     }
 
+    fun isTheSameContent(passwordItemModel: PasswordItemModel) =
+        !(this.passwordId != passwordItemModel.passwordId
+                || this.name != passwordItemModel.name
+                || this.photoUrl != passwordItemModel.photoUrl
+                || this.password != passwordItemModel.password
+                || this.isPasswordContentNeeds != passwordItemModel.isPasswordContentNeeds
+                || this.isItemSelected != passwordItemModel.isItemSelected
+                || this.isPasswordContentVisible != passwordItemModel.isPasswordContentVisible)
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

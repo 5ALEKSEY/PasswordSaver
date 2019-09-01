@@ -74,6 +74,7 @@ class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
+                        viewState.hideSelectedMode()
                         viewState.showShortTimeMessage("deleted")
                     },
                     { throwable ->
