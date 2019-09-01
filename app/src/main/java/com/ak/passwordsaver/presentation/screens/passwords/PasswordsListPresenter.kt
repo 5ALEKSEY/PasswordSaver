@@ -69,8 +69,8 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
             .subscribe(
                 { list ->
                     viewState.setLoadingState(false)
-                    viewState.setEmptyPasswordsState(list.isEmpty())
                     viewState.displayPasswords(convertDBEntitiesList(list))
+                    viewState.setEmptyPasswordsState(list.isEmpty())
                 },
                 { throwable ->
                     Log.d("de", "dede")
