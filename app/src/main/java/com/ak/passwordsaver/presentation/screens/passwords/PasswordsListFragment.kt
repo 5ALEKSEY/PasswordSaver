@@ -83,8 +83,8 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
 
-    override fun openPasswordInCardMode(passwordId: Long) {
-        mPasswordsAdapter.openPasswordForPasswordItemId(passwordId)
+    override fun setPasswordVisibilityInCardMode(passwordId: Long, contentVisibilityState: Boolean) {
+        mPasswordsAdapter.setPasswordContentVisibility(passwordId, contentVisibilityState)
     }
 
     private fun initToolbar() {

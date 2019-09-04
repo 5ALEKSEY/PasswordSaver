@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import com.ak.passwordsaver.R
 
 class PasswordsListRecyclerAdapter(
-    private val onShowPasswordAction: (passwordId: Long) -> Unit,
+    private val onShowPasswordAction: (passwordId: Long, newVisibilityState: Boolean) -> Unit,
     private val onPasswordItemSingleClick: (passwordId: Long) -> Unit,
     private val onPasswordItemLongClick: (passwordId: Long) -> Unit
 ) :
@@ -38,11 +38,11 @@ class PasswordsListRecyclerAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    fun openPasswordForPasswordItemId(passwordId: Long) {
+    fun setPasswordContentVisibility(passwordId: Long, isContentVisible: Boolean) {
         val index = mItemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
         mItemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }
             ?.let {
-                it.isPasswordContentVisible = true
+                it.isPasswordContentVisible = isContentVisible
                 changePasswordItem(it, index)
             }
     }

@@ -9,5 +9,5 @@ interface IPasswordsListView : IBaseAppView {
     fun displayPasswords(passwordModelsList: List<PasswordItemModel>)
     fun openPasswordDialogMode(passwordName: String, passwordContent: String)
     fun openPasswordToastMode(passwordName: String, passwordContent: String)
-    fun openPasswordInCardMode(passwordId: Long)
+    fun setPasswordVisibilityInCardMode(passwordId: Long, contentVisibilityState: Boolean)
 }

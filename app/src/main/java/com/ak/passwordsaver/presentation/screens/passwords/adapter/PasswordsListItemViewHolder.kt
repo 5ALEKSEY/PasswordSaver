@@ -10,7 +10,7 @@ import com.ak.passwordsaver.utils.bindView
 
 class PasswordsListItemViewHolder(
     itemView: View,
-    private val onShowPasswordAction: (passwordId: Long) -> Unit,
+    private val onVisibilityPasswordAction: (passwordId: Long, newVisibilityState: Boolean) -> Unit,
     private val onPasswordItemSingleClick: (passwordId: Long) -> Unit,
     private val onPasswordItemLongClick: (passwordId: Long) -> Unit
 ) :
@@ -24,15 +24,16 @@ class PasswordsListItemViewHolder(
     private val mPasswordContentTextView: TextView by bindView(R.id.tv_password_content)
     private val mPasswordItemRoot: View by bindView(R.id.cl_password_item_root)
     private val mPasswordAvatarImageView: ImageView by bindView(R.id.iv_password_avatar)
-    private val mShowPasswordButton: Button by bindView(R.id.btn_password_show_action)
+    private val mVisibilityPasswordButton: Button by bindView(R.id.btn_password_visibility_action)
 
     fun bindPasswordListItemView(passwordItemModel: PasswordItemModel) {
         mPasswordNameTextView.text = passwordItemModel.name
         mPasswordContentTextView.text = getPasswordContentText(passwordItemModel)
         mPasswordContentTextView.visibility = if (passwordItemModel.isPasswordContentNeeds) View.VISIBLE else View.GONE
 
-        mShowPasswordButton.setOnClickListener {
-            onShowPasswordAction.invoke(passwordItemModel.passwordId)
+        mVisibilityPasswordButton.text = getVisibilityPasswordButtonText(passwordItemModel.isPasswordContentVisible)
+        mVisibilityPasswordButton.setOnClickListener {
+            onVisibilityPasswordAction.invoke(passwordItemModel.passwordId, !passwordItemModel.isPasswordContentVisible)
         }
 
         itemView.setOnClickListener {
@@ -47,6 +48,9 @@ class PasswordsListItemViewHolder(
         val rootBackgroundResource = getRootItemBackground(passwordItemModel.isItemSelected)
         mPasswordItemRoot.setBackgroundResource(rootBackgroundResource)
     }
+
+    private fun getVisibilityPasswordButtonText(isPasswordContentVisible: Boolean) =
+        if (isPasswordContentVisible) "Hide" else "Show"
 
     private fun getRootItemBackground(isItemSelected: Boolean) =
         if (isItemSelected) {

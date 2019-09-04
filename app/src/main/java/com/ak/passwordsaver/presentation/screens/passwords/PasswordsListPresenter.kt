@@ -32,15 +32,21 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         loadPasswords()
     }
 
-    fun passwordShowActionRequired(passwordId: Long) {
+    fun passwordShowActionRequired(passwordId: Long, newVisibilityState: Boolean) {
         // TODO: check passcodes (mb save this passwordId in presenter for feature)
         mCurrentPasswordId = passwordId
         val showingType = mSettingsPreferencesManager.getPasswordShowingType()
 
-        when (showingType) {
-            PasswordShowingType.DIALOG -> getPasswordDataAndStartAction(viewState::openPasswordDialogMode)
-            PasswordShowingType.TOAST -> getPasswordDataAndStartAction(viewState::openPasswordToastMode)
-            PasswordShowingType.IN_CARD -> viewState.openPasswordInCardMode(passwordId)
+        if (showingType == PasswordShowingType.IN_CARD && !newVisibilityState) {
+            // hide password content for 'in card' mode
+            viewState.setPasswordVisibilityInCardMode(passwordId, false)
+        } else {
+            // open state
+            when (showingType) {
+                PasswordShowingType.DIALOG -> getPasswordDataAndStartAction(viewState::openPasswordDialogMode)
+                PasswordShowingType.TOAST -> getPasswordDataAndStartAction(viewState::openPasswordToastMode)
+                PasswordShowingType.IN_CARD -> viewState.setPasswordVisibilityInCardMode(passwordId, true)
+            }
         }
     }
 
