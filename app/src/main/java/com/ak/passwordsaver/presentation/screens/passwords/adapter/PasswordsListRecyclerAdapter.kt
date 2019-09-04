@@ -1,7 +1,9 @@
 package com.ak.passwordsaver.presentation.screens.passwords.adapter
 
 import android.support.v7.util.DiffUtil
+import android.support.v7.util.ListUpdateCallback
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.ak.passwordsaver.R
@@ -32,6 +34,7 @@ class PasswordsListRecyclerAdapter(
 
         mItemsList.clear()
         mItemsList.addAll(passwordModels)
+        diffResult.dispatchUpdatesTo(getListUpdateLogger())
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -60,13 +63,33 @@ class PasswordsListRecyclerAdapter(
         }
     }
 
+    private fun getListUpdateLogger(): ListUpdateCallback {
+        return object : ListUpdateCallback {
+            override fun onChanged(p0: Int, p1: Int, p2: Any?) {
+                Log.d("TEMPTAG", "onChanged p0=$p0, p1=$p1")
+            }
+
+            override fun onMoved(p0: Int, p1: Int) {
+                Log.d("TEMPTAG", "onMoved p0=$p0, p1=$p1")
+            }
+
+            override fun onInserted(p0: Int, p1: Int) {
+                Log.d("TEMPTAG", "onInserted p0=$p0, p1=$p1")
+            }
+
+            override fun onRemoved(p0: Int, p1: Int) {
+                Log.d("TEMPTAG", "onRemoved p0=$p0, p1=$p1")
+            }
+        }
+    }
+
     class PasswordsDiffUtilCallback(
         private val oldList: List<PasswordItemModel>,
         private val newList: List<PasswordItemModel>
     ) : DiffUtil.Callback() {
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-            oldList[oldItemPosition] === newList[newItemPosition]
+            oldList[oldItemPosition] == newList[newItemPosition]
 
         override fun getOldListSize() = oldList.size
 
