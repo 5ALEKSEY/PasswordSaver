@@ -1,6 +1,8 @@
 <component name="ProjectDictionaryState">
   <dictionary name="User">
     <words>
+      <w>bcrypt</w>
+      <w>encryptor</w>
       <w>interactor</w>
       <w>moxy</w>
       <w>passcodes</w>
