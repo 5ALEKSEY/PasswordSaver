@@ -69,7 +69,7 @@ class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>()
                     PasswordDBEntity(passwordId)
                 }
                 .toList()
-                .flatMap(::getDeletePasswordsSingle)
+                .flatMap(this::getDeletePasswordsSingle)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -80,7 +80,7 @@ class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>()
                     { throwable ->
                         viewState.showShortTimeMessage(throwable.message ?: "unknown")
                     })
-                .let(::bindDisposable)
+                .let(this::bindDisposable)
         }
     }
 

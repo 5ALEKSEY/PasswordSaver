@@ -3,11 +3,11 @@ package com.ak.passwordsaver.presentation.screens.passwords
 import android.util.Log
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.model.PasswordShowingType
-import com.ak.passwordsaver.model.db.PSDatabase
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
+import com.ak.passwordsaver.presentation.screens.passwords.logic.PasswordsListInteractor
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
 
     @Inject
-    lateinit var mDatabase: PSDatabase
+    lateinit var mPasswordsListInteractor: PasswordsListInteractor
     @Inject
     lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
 
@@ -51,7 +51,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     private fun getPasswordDataAndStartAction(action: (name: String, content: String) -> Unit) {
-        mDatabase.getPasswordsDao().getPasswordById(mCurrentPasswordId)
+        mPasswordsListInteractor.getPasswordById(mCurrentPasswordId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -61,11 +61,11 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
                 { throwable ->
                     Log.d("dddd", "dddd")
                 })
-            .let(::bindDisposable)
+            .let(this::bindDisposable)
     }
 
     private fun loadPasswords() {
-        mDatabase.getPasswordsDao().getAllPasswords()
+        mPasswordsListInteractor.getAndListenAllPasswords()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
@@ -81,7 +81,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
                 { throwable ->
                     Log.d("de", "dede")
                 })
-            .let(::bindDisposable)
+            .let(this::bindDisposable)
     }
 
     private fun convertDBEntitiesList(entitiesList: List<PasswordDBEntity>): List<PasswordItemModel> {

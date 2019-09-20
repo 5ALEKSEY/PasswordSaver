@@ -1,6 +1,7 @@
 package com.ak.passwordsaver.presentation.screens.addnew
 
 import com.ak.passwordsaver.PSApplication
+import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.screens.addnew.logic.AddNewPasswordInteractor
 import com.ak.passwordsaver.presentation.screens.addnew.logic.usecases.PasswordDataCheckException
@@ -19,7 +20,7 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
     }
 
     fun saveNewPassword(name: String, content: String) {
-        mAddNewPasswordInteractor.addNewPassword(name, content)
+        mAddNewPasswordInteractor.addNewPassword(PasswordDBEntity(name, content))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { isSuccess ->
@@ -30,7 +31,7 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
                 { throwable ->
                     handleError(throwable)
                 })
-            .let(::bindDisposable)
+            .let(this::bindDisposable)
     }
 
     private fun handleError(throwable: Throwable) {

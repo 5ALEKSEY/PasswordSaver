@@ -5,6 +5,7 @@ import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.presentation.base.encryption.EncryptionUseCase
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -15,18 +16,49 @@ class PasswordsListInteractorImpl @Inject constructor(
     private val mEncryptionUseCase: EncryptionUseCase = EncryptionUseCase()
 
     override fun getAndListenAllPasswords(): Flowable<List<PasswordDBEntity>> {
-        return mPsDatabase.getPasswordsDao().getAllPasswords()
-            .subscribeOn(Schedulers.io())
-            .map { encryptedPasswords ->
-                val decryptedPasswords = arrayListOf<PasswordDBEntity>()
-                encryptedPasswords.forEach {
-                    decryptedPasswords
-                }
-                return@map decryptedPasswords
-            }
+        return getInvokedPasswordsUseCase()
+            .flatMapSingle(this::getInvokedDecryptionUseCase)
     }
 
-    private fun getInvokedDecryptionUseCase(encryptedList: List<PasswordDBEntity>) =
-            Observable.fromIterable(encryptedList)
-                .map { encryptedEntity -> encryptedEntity.passwordContent = mEncryptionUseCase }
+    override fun getPasswordById(passwordId: Long) =
+        getInvokedPasswordByIdUseCase(passwordId)
+            .flatMap { entity -> getInvokedDecryptionUseCase(listOf(entity)) }
+            .map { it[0] }
+
+    //------------------------------------------ Decrypt passwords data ------------------------------------------------
+
+    private fun getInvokedDecryptionUseCase(passwordDBEntities: List<PasswordDBEntity>) =
+        Observable.fromIterable(passwordDBEntities)
+            .flatMap(
+                { entity -> decryptPasswordContent(entity.passwordContent) },
+                { oldEntity, decryptedPasswordContent ->
+                    oldEntity.passwordContent = decryptedPasswordContent
+                    return@flatMap oldEntity
+                })
+            .toList()
+
+    private fun decryptPasswordContent(encryptedPasswordContent: String) =
+        Single.create<String> { emitter ->
+            try {
+                mEncryptionUseCase.decrypt(encryptedPasswordContent) {
+                    emitter.onSuccess(it)
+                }
+            } catch (e: Exception) {
+                emitter.onError(e)
+            }
+        }.toObservable()
+
+    //------------------------------------------------------------------------------------------------------------------
+
+    //---------------------------------------------- Get passwords data ------------------------------------------------
+
+    private fun getInvokedPasswordsUseCase() =
+        mPsDatabase.getPasswordsDao().getAllPasswords()
+            .subscribeOn(Schedulers.io())
+
+    private fun getInvokedPasswordByIdUseCase(passwordId: Long) =
+        mPsDatabase.getPasswordsDao().getPasswordById(passwordId)
+            .subscribeOn(Schedulers.io())
+
+    //------------------------------------------------------------------------------------------------------------------
 }

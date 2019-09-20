@@ -34,6 +34,6 @@ class HomePresenter : BasePSPresenter<IHomeView>() {
                 viewState.showShortTimeMessage("Click again for exit app")
             }
             .subscribe { mIsFinishScreenAllow = false }
-            .let(::bindDisposable)
+            .let(this::bindDisposable)
     }
 }
