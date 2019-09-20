@@ -11,7 +11,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
-import android.widget.Toast
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordActivity
@@ -80,7 +79,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     override fun openPasswordToastMode(passwordName: String, passwordContent: String) {
         val message = "$passwordName: $passwordContent"
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        showShortTimeMessage(message)
     }
 
     override fun setPasswordVisibilityInCardMode(passwordId: Long, contentVisibilityState: Boolean) {
