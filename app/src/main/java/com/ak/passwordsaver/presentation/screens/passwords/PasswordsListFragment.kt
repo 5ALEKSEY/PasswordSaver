@@ -12,7 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.base.BasePSFragment
+import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordActivity
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.IPasswordsActionModeView
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsActionModePresenter
@@ -74,7 +74,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     }
 
     override fun openPasswordDialogMode(passwordName: String, passwordContent: String) {
-        openPasswordToastMode(passwordName, passwordContent)
+        OpenedPasswordContentDialog.show(passwordName, passwordContent, childFragmentManager)
     }
 
     override fun openPasswordToastMode(passwordName: String, passwordContent: String) {

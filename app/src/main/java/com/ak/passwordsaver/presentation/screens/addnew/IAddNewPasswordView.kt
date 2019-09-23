@@ -1,6 +1,6 @@
 package com.ak.passwordsaver.presentation.screens.addnew
 
-import com.ak.passwordsaver.presentation.base.IBaseAppView
+import com.ak.passwordsaver.presentation.base.ui.IBaseAppView
 
 interface IAddNewPasswordView : IBaseAppView {
     fun displaySuccessPasswordSave()

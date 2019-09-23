@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.base.BasePSFragment
+import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecyclerViewAdapter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import com.ak.passwordsaver.utils.bindView

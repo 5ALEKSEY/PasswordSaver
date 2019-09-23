@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.base
+package com.ak.passwordsaver.presentation.base.ui
 
 import com.arellomobile.mvp.MvpView
 

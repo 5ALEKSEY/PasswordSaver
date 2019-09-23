@@ -1,5 +1,6 @@
 package com.ak.passwordsaver.presentation.base
 
+import com.ak.passwordsaver.presentation.base.ui.IBaseAppView
 import com.arellomobile.mvp.MvpPresenter
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

@@ -1,6 +1,6 @@
 package com.ak.passwordsaver.presentation.screens.passwords.actionMode
 
-import com.ak.passwordsaver.presentation.base.IBaseAppView
+import com.ak.passwordsaver.presentation.base.ui.IBaseAppView
 
 interface IPasswordsActionModeView : IBaseAppView {
     fun showSelectedItemsQuantityText(text: String)

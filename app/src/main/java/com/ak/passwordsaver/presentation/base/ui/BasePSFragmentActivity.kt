@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.base
+package com.ak.passwordsaver.presentation.base.ui
 
 import android.content.Intent
 import android.os.Bundle

@@ -10,7 +10,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.base.BasePSFragmentActivity
+import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.utils.extensions.hideKeyBoard
 import com.ak.passwordsaver.utils.bindView
 import com.arellomobile.mvp.presenter.InjectPresenter

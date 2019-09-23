@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.view.MenuItem
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.base.BasePSFragmentActivity
+import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListFragment
 import com.ak.passwordsaver.presentation.screens.settings.SettingsFragment
 import com.ak.passwordsaver.utils.bindView
