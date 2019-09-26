@@ -1,9 +1,11 @@
 package com.ak.passwordsaver.presentation.screens.addnew
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
@@ -17,10 +19,16 @@ import com.ak.passwordsaver.presentation.screens.addnew.ui.PhotoChooserBottomShe
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.hideKeyBoard
 import com.arellomobile.mvp.presenter.InjectPresenter
+import com.eazypermissions.common.model.PermissionResult
+import com.eazypermissions.coroutinespermission.PermissionManager
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
     companion object {
+        private const val AVATAR_PERMISSIONS_REQUEST_CODE = 1
+
         fun startActivity(context: Context) {
             context.startActivity(Intent(context, AddNewPasswordActivity::class.java))
         }
@@ -59,8 +67,33 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
         }
 
         mChooseAvatarAction.setOnClickListener {
-            dismissPasswordAvatarChooserDialog()
-            mAvatarChooserDialog = PhotoChooserBottomSheetDialog.show(supportFragmentManager)
+            GlobalScope.launch {
+
+                val permissionResult = PermissionManager.requestPermissions(
+                    this@AddNewPasswordActivity,
+                    AVATAR_PERMISSIONS_REQUEST_CODE,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                )
+
+                when (permissionResult) {
+                    is PermissionResult.PermissionGranted -> {
+                        Log.d("Alex_testing", "Granted")
+                        dismissPasswordAvatarChooserDialog()
+                        mAvatarChooserDialog = PhotoChooserBottomSheetDialog.show(supportFragmentManager)
+                    }
+                    is PermissionResult.PermissionDenied -> {
+                        Log.d("Alex_testing", "PermissionDenied")
+                    }
+                    is PermissionResult.PermissionDeniedPermanently -> {
+                        Log.d("Alex_testing", "PermissionDeniedPermanently")
+                    }
+                    is PermissionResult.ShowRational -> {
+                        Log.d("Alex_testing", "ShowRational")
+                    }
+                }
+
+            }
         }
     }
 

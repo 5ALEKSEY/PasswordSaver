@@ -2,6 +2,7 @@
   <dictionary name="User">
     <words>
       <w>bcrypt</w>
+      <w>coroutines</w>
       <w>encryptor</w>
       <w>interactor</w>
       <w>moxy</w>
