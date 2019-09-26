@@ -7,12 +7,15 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
-import com.ak.passwordsaver.utils.extensions.hideKeyBoard
+import com.ak.passwordsaver.presentation.screens.addnew.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.utils.bindView
+import com.ak.passwordsaver.utils.extensions.hideKeyBoard
 import com.arellomobile.mvp.presenter.InjectPresenter
 
 class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
@@ -25,14 +28,22 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
     @InjectPresenter
     lateinit var mAddNewPasswordPresenter: AddNewPasswordPresenter
+    lateinit var mAvatarChooserDialog: PhotoChooserBottomSheetDialog
 
     private val mToolbar: Toolbar by bindView(R.id.tb_add_new_password_bar)
     private val mPasswordNameEditText: EditText by bindView(R.id.tiet_password_name_field)
     private val mPasswordNameInputLayout: TextInputLayout by bindView(R.id.til_password_name_layout)
     private val mPasswordContentEditText: EditText by bindView(R.id.tiet_password_content_field)
     private val mPasswordContentInputLayout: TextInputLayout by bindView(R.id.til_password_content_layout)
+    private val mChooseAvatarAction: Button by bindView(R.id.btn_password_avatar_choose_action)
+    private val mPasswordAvatar: ImageView by bindView(R.id.iv_password_avatar_chooser)
 
     override fun getScreenLayoutResId() = R.layout.activity_add_new_password
+
+    override fun onPause() {
+        super.onPause()
+        dismissPasswordAvatarChooserDialog()
+    }
 
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
@@ -45,6 +56,11 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
             } else {
                 false
             }
+        }
+
+        mChooseAvatarAction.setOnClickListener {
+            dismissPasswordAvatarChooserDialog()
+            mAvatarChooserDialog = PhotoChooserBottomSheetDialog.show(supportFragmentManager)
         }
     }
 
@@ -80,6 +96,16 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
     override fun hidePasswordContentInputError() {
         mPasswordContentInputLayout.error = null
+    }
+
+    override fun displayPasswordAvatarChooserImage(resId: Int) {
+
+    }
+
+    override fun dismissPasswordAvatarChooserDialog() {
+        if (this::mAvatarChooserDialog.isInitialized) {
+            mAvatarChooserDialog.dismiss()
+        }
     }
 
     private fun initToolbar() {

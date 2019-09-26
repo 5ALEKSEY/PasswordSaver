@@ -8,4 +8,6 @@ interface IAddNewPasswordView : IBaseAppView {
     fun hidePasswordNameInputError()
     fun displayPasswordContentInputError(errorMessage: String)
     fun hidePasswordContentInputError()
+    fun displayPasswordAvatarChooserImage(resId: Int)
+    fun dismissPasswordAvatarChooserDialog()
 }
