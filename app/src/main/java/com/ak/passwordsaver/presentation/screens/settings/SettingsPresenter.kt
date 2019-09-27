@@ -5,6 +5,7 @@ import com.ak.passwordsaver.model.PasswordShowingType
 import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerSettingsListItemModel
+import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchSettingsListItemModel
 import com.arellomobile.mvp.InjectViewState
 import javax.inject.Inject
 

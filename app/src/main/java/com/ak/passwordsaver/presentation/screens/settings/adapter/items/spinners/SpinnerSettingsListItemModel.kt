@@ -8,4 +8,4 @@ class SpinnerSettingsListItemModel(
     settingDescription: String,
     val selectedItemPosition: Int,
     val spinnerItems: List<String>
-) : SettingsListItemModel(SettingsListItemModel.SPINNER_SETTING_TYPE, settingId, settingName, settingDescription)
+) : SettingsListItemModel(settingId, settingName, settingDescription)

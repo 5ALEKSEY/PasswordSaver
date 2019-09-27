@@ -1,52 +1,39 @@
 package com.ak.passwordsaver.presentation.screens.settings.adapter
 
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.ak.passwordsaver.R
+import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegatesManager
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
-import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SettingsSpinnerHolder
-import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerSettingsListItemModel
-import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SettingsSwitchHolder
-import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchSettingsListItemModel
+import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerAdapterDelegate
+import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchAdapterDelegate
 
-class SettingsRecyclerViewAdapter(private val onSpinnerSettingsChanged: (settingId: Int, newDataId: Int) -> Unit) :
-    RecyclerView.Adapter<BaseSettingsViewHolder<*>>() {
+class SettingsRecyclerViewAdapter(onSpinnerSettingsChanged: (settingId: Int, newDataId: Int) -> Unit) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val mSettingsItemsList = arrayListOf<SettingsListItemModel>()
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseSettingsViewHolder<*> {
-        val inflater = LayoutInflater.from(parent.context)
-        return when (viewType) {
-            SettingsListItemModel.SWITCH_SETTING_TYPE -> {
-                val view = inflater.inflate(R.layout.settings_item_switch_layout, parent, false)
-                SettingsSwitchHolder(view)
-            }
-            SettingsListItemModel.SPINNER_SETTING_TYPE -> {
-                val view = inflater.inflate(R.layout.settings_item_spinner_layout, parent, false)
-                SettingsSpinnerHolder(view, onSpinnerSettingsChanged)
-            }
-            else -> {
-                // default setting model
-                val view = inflater.inflate(R.layout.settings_item_switch_layout, parent, false)
-                SettingsSwitchHolder(view)
-            }
-        }
+    companion object {
+        const val SWITCH_SETTING_TYPE = 1
+        const val SPINNER_SETTING_TYPE = 2
     }
 
-    override fun getItemViewType(position: Int) = mSettingsItemsList[position].settingType
+    private val mSettingsItemsList = arrayListOf<SettingsListItemModel>()
+    private val mAdapterDelegatesManager = AdapterDelegatesManager<SettingsListItemModel>()
+
+    init {
+        mAdapterDelegatesManager.addDelegate(SwitchAdapterDelegate(SWITCH_SETTING_TYPE))
+        mAdapterDelegatesManager.addDelegate(SpinnerAdapterDelegate(SPINNER_SETTING_TYPE, onSpinnerSettingsChanged))
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        mAdapterDelegatesManager.onCreateViewHolder(parent, viewType)
+
+
+    override fun getItemViewType(position: Int) =
+        mAdapterDelegatesManager.getItemViewType(mSettingsItemsList[position])
 
     override fun getItemCount() = mSettingsItemsList.size
 
-    override fun onBindViewHolder(viewHolder: BaseSettingsViewHolder<*>, position: Int) {
-        when (getItemViewType(position)) {
-            SettingsListItemModel.SWITCH_SETTING_TYPE -> {
-                (viewHolder as SettingsSwitchHolder).bindViewHolder(mSettingsItemsList[position] as SwitchSettingsListItemModel)
-            }
-            SettingsListItemModel.SPINNER_SETTING_TYPE -> {
-                (viewHolder as SettingsSpinnerHolder).bindViewHolder(mSettingsItemsList[position] as SpinnerSettingsListItemModel)
-            }
-        }
+    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
+        mAdapterDelegatesManager.onBindViewHolder(mSettingsItemsList[position], viewHolder)
     }
 
     fun addSettingsList(settingItems: List<SettingsListItemModel>) {

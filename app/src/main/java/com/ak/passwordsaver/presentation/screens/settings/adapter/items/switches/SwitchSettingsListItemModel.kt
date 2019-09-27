@@ -7,4 +7,4 @@ class SwitchSettingsListItemModel(
     settingName: String,
     settingDescription: String,
     val isChecked: Boolean
-) : SettingsListItemModel(SettingsListItemModel.SWITCH_SETTING_TYPE, settingId, settingName, settingDescription)
+) : SettingsListItemModel(settingId, settingName, settingDescription)
