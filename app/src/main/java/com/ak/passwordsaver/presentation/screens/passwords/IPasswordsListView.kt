@@ -10,4 +10,9 @@ interface IPasswordsListView : IBaseAppView {
     fun openPasswordDialogMode(passwordName: String, passwordContent: String)
     fun openPasswordToastMode(passwordName: String, passwordContent: String)
     fun setPasswordVisibilityInCardMode(passwordId: Long, contentVisibilityState: Boolean)
+    // security
+    fun showBiometricSecurity()
+    fun hideBiometricSecurity()
+    fun showPasscodeSecurity()
+    fun hidePasscodeSecurity()
 }

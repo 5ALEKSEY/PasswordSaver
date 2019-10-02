@@ -1,6 +1,7 @@
 package com.ak.passwordsaver.presentation.screens.passwords
 
 import android.support.design.widget.FloatingActionButton
+import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
 import android.support.v7.widget.GridLayoutManager
@@ -11,6 +12,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
+import androidx.biometric.BiometricPrompt
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordActivity
@@ -20,6 +22,7 @@ import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemM
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordsListRecyclerAdapter
 import com.ak.passwordsaver.utils.bindView
 import com.arellomobile.mvp.presenter.InjectPresenter
+import java.util.concurrent.Executors
 
 
 class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsActionModeView {
@@ -42,12 +45,15 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     private var mToolbarActionMode: ActionMode? = null
     private lateinit var mPasswordsAdapter: PasswordsListRecyclerAdapter
 
+    private lateinit var mBiometricPrompt: BiometricPrompt
+
     override fun getFragmentLayoutResId() = R.layout.fragment_passwords_list
 
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
         initRecyclerView()
         initToolbar()
+        initBiometricPromptDialog()
 
         mAddNewPasswordButton.setOnClickListener {
             if (context != null) {
@@ -122,7 +128,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
         (mPasswordsRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
 
-    //-------------------------------------------------- action mode ---------------------------------------------------
+    //------------------------------------- Action mode --------------------------------------------
 
     override fun showSelectedItemsQuantityText(text: String) {
         mToolbarActionMode?.title = text
@@ -166,5 +172,62 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     override fun showSelectStateForItem(isSelected: Boolean, passwordId: Long) {
         mPasswordsAdapter.setSelectedStateForPasswordItemId(isSelected, passwordId)
+    }
+
+    //----------------------------------------------------------------------------------------------
+
+    //--------------------------------------- Security ---------------------------------------------
+
+    private fun initBiometricPromptDialog() {
+        val parentActivity = activity
+        if (parentActivity == null) {
+            showShortTimeMessage("Can't show biometric dialog")
+        }
+
+        val executor = Executors.newSingleThreadExecutor()
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Set the title to display.")
+            .setSubtitle("Set the subtitle to display.")
+            .setDescription("Set the description to display")
+            .setNegativeButtonText("Negative Button")
+            .build()
+
+//        mBiometricPrompt = BiometricPrompt(parentActivity!!, executor, object : BiometricPrompt.AuthenticationCallback() {
+//
+//            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+//                super.onAuthenticationError(errorCode, errString)
+//                if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON) {
+//                    // user clicked negative button
+//                } else {
+//                    TODO("Called when an unrecoverable error has been encountered and the operation is complete.")
+//                }
+//            }
+//
+//            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+//                super.onAuthenticationSucceeded(result)
+//                TODO("Called when a biometric is recognized.")
+//            }
+//
+//            override fun onAuthenticationFailed() {
+//                super.onAuthenticationFailed()
+//                TODO("Called when a biometric is valid but not recognized.")
+//            }
+//        })
+    }
+
+    override fun showBiometricSecurity() {
+        mBiometricPrompt.authenticate(promptInfo)
+    }
+
+    override fun hideBiometricSecurity() {
+
+    }
+
+    override fun showPasscodeSecurity() {
+
+    }
+
+    override fun hidePasscodeSecurity() {
+
     }
 }
