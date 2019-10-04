@@ -1,11 +1,15 @@
 package com.ak.passwordsaver.utils.extensions
 
 import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+
 
 fun FragmentActivity.hideKeyBoard() {
     currentFocus?.let {
@@ -15,6 +19,22 @@ fun FragmentActivity.hideKeyBoard() {
 
 fun Fragment.hideKeyboard() {
     activity?.hideKeyBoard()
+}
+
+fun Context.vibrate(vibrateDuration: Long = 200L) {
+    (this.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator)?.let {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            it.vibrate(
+                VibrationEffect.createOneShot(
+                    vibrateDuration,
+                    VibrationEffect.DEFAULT_AMPLITUDE
+                )
+            )
+        } else {
+            //deprecated in API 26
+            it.vibrate(500)
+        }
+    }
 }
 
 fun Context.showToastMessage(message: String, duration: Int = Toast.LENGTH_SHORT) {

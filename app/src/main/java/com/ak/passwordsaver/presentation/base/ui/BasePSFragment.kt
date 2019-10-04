@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.ak.passwordsaver.utils.extensions.showToastMessage
+import com.ak.passwordsaver.utils.extensions.vibrate
 import com.arellomobile.mvp.MvpAppCompatFragment
 import dagger.android.support.AndroidSupportInjection
 
@@ -32,6 +33,10 @@ abstract class BasePSFragment : MvpAppCompatFragment(), IBaseAppView {
 
     override fun showShortTimeMessage(message: String) {
         context?.showToastMessage(message)
+    }
+
+    override fun invokeVibration(vibrateDuration: Long) {
+        context?.vibrate(vibrateDuration)
     }
 
     protected open fun initViewBeforePresenterAttach() {
