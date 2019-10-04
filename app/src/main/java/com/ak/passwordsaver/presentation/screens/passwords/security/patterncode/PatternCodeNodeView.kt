@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.bindView
-import com.ak.passwordsaver.utils.extensions.vibrate
 
 class PatternCodeNodeView(context: Context?, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs) {
@@ -27,13 +26,6 @@ class PatternCodeNodeView(context: Context?, attrs: AttributeSet?) :
         @DrawableRes val backgroundRes = getBackgroundDrawable(isEnabled)
         mPatterNodeView.setBackgroundResource(backgroundRes)
         mIsPatternNodeEnabled = isEnabled
-        notifyEnableNodeState(mIsPatternNodeEnabled)
-    }
-
-    private fun notifyEnableNodeState(isEnabled: Boolean) {
-        if (isEnabled) {
-            context.vibrate(100)
-        }
     }
 
     @DrawableRes

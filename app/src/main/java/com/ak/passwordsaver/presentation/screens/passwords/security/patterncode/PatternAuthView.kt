@@ -32,6 +32,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     }
 
     lateinit var mOnFinishedAction: (patternResultCode: String) -> Unit
+    lateinit var mOnNewNodeSelectedAction: () -> Unit
 
     private var mBitmap: Bitmap = Bitmap.createBitmap(
         PATTERN_VIEW_SIZE.dpToPx(),
@@ -172,6 +173,9 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
         mIsAuthStarted = true
         mInvokedNodesNumbers.add(invokedNodeNumber)
+        if (this::mOnNewNodeSelectedAction.isInitialized) {
+            mOnNewNodeSelectedAction.invoke()
+        }
 
         touchMove(nodeData.x.toFloat(), nodeData.y.toFloat())
         nodeData.nodeView.setNodeEnableState(true)
