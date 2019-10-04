@@ -22,13 +22,16 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         private const val BACKGROUND_COLOR = Color.BLACK
         private const val PATTERN_VIEW_SIZE = 256F
         private const val PATTERN_VIEW_NODES_OFFSET = 32F
-        private const val NODES_INVOKE_OFFSET_RADIUS = 40F
+        private const val NODES_INVOKE_OFFSET_RADIUS = 24F
         /**
          * Only 4, 9, 16, 25 ... For sqrt() correct invoke.
          * [mNodesCodesList] should be changed after [NODES_NUMBER] value changes.
          */
         private const val NODES_NUMBER = 9
+        private const val FINISH_RESET_DELAY_IN_MILLIS = 1000L
     }
+
+    lateinit var mOnFinishedAction: (patternResultCode: String) -> Unit
 
     private var mBitmap: Bitmap = Bitmap.createBitmap(
         PATTERN_VIEW_SIZE.dpToPx(),
@@ -41,8 +44,9 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     private lateinit var mPath: Path
 
     private val mLinePaths = arrayListOf<PatternLinePath>()
-    private val mNodesMap = SparseArray<Pair<Int, Int>>(NODES_NUMBER)
+    private val mNodesMap = SparseArray<PatternNodeData>(NODES_NUMBER)
     private val mNodesCodesList = arrayListOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+    private val mInvokedNodesNumbers = arrayListOf<Int>()
 
     private var mIsAuthStarted = false
 
@@ -64,6 +68,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
             alpha = 0xFF
         }
         addNodeViews()
+        clearAndReset()
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -74,7 +79,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         val y = event.y
 
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> touchStart(x, y)
+            MotionEvent.ACTION_DOWN -> checkNodesAndStart(x, y)
             MotionEvent.ACTION_UP -> return false
             MotionEvent.ACTION_MOVE -> touchMove(x, y)
         }
@@ -123,8 +128,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
                 params.leftMargin = x - nodesCoordinatesPxOffset
                 params.topMargin = y - nodesCoordinatesPxOffset
 
-                val coordinatesPair = Pair(x, y)
-                mNodesMap.put(nodeNumber, coordinatesPair)
+                mNodesMap.put(nodeNumber, PatternNodeData(patternNodeView, x, y))
 
                 patternNodeView.layoutParams
                 addView(patternNodeView, params)
@@ -152,33 +156,46 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
             mPath.reset()
             mPath.moveTo(mX, mY)
             mPath.lineTo(x, y)
+            checkNodesAndStart(x, y)
         }
     }
 
-    private fun touchStart(x: Float, y: Float) {
-        val invokedNodeCode = getInvokedNodeNumber(x, y) ?: return
-        startAuthAction(invokedNodeCode)
+    private fun checkNodesAndStart(x: Float, y: Float) {
+        val invokedNodeNumber = getInvokedNodeNumber(x, y) ?: return
+        if (mInvokedNodesNumbers.contains(invokedNodeNumber)) return
+
+        startAuthAction(invokedNodeNumber)
     }
 
-    private fun startAuthAction(invokedNodeCode: Int) {
-        val nodeCoordinates = mNodesMap[invokedNodeCode]
-        mIsAuthStarted = true
+    private fun startAuthAction(invokedNodeNumber: Int) {
+        val nodeData = mNodesMap[invokedNodeNumber]
 
-        mX = nodeCoordinates.first.toFloat()
-        mY = nodeCoordinates.second.toFloat()
+        mIsAuthStarted = true
+        mInvokedNodesNumbers.add(invokedNodeNumber)
+
+        touchMove(nodeData.x.toFloat(), nodeData.y.toFloat())
+        nodeData.nodeView.setNodeEnableState(true)
+        mX = nodeData.x.toFloat()
+        mY = nodeData.y.toFloat()
 
         mPath = Path()
         val linePath = PatternLinePath(LINE_COLOR, mPath)
         mLinePaths.add(linePath)
         mPath.reset()
         mPath.moveTo(mX, mY)
+
+        if (isAuthFinished()) {
+            mIsAuthStarted = false
+            onAuthFinished()
+            return
+        }
     }
 
     private fun getInvokedNodeNumber(x: Float, y: Float): Int? {
         val invokeRadius = NODES_INVOKE_OFFSET_RADIUS.dpToPx()
-        mNodesMap.forEach { i, nodeCoordinates ->
-            if (isInvokedCoordinateValue(x, nodeCoordinates.first.toFloat(), invokeRadius)
-                && isInvokedCoordinateValue(y, nodeCoordinates.second.toFloat(), invokeRadius)
+        mNodesMap.forEach { i, nodeData ->
+            if (isInvokedCoordinateValue(x, nodeData.x.toFloat(), invokeRadius)
+                && isInvokedCoordinateValue(y, nodeData.y.toFloat(), invokeRadius)
             ) {
                 return i
             }
@@ -194,5 +211,27 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         val maxCoordinate = coordinateValue + invokeOffset
         val minCoordinate = coordinateValue - invokeOffset
         return nodeCoordinate in minCoordinate..maxCoordinate
+    }
+
+    private fun isAuthFinished() = mNodesMap.size() == mInvokedNodesNumbers.size
+
+    private fun onAuthFinished() {
+        // return result code
+        val resultStringBuilder = StringBuilder()
+        mInvokedNodesNumbers.forEach {
+            resultStringBuilder.append(mNodesCodesList[it])
+        }
+        if (this::mOnFinishedAction.isInitialized) {
+            mOnFinishedAction.invoke(resultStringBuilder.toString())
+        }
+        postDelayed({ clearAndReset() }, FINISH_RESET_DELAY_IN_MILLIS)
+    }
+
+    private fun clearAndReset() {
+        mLinePaths.clear()
+        mInvokedNodesNumbers.clear()
+        mNodesMap.forEach { _, patternNodeData -> patternNodeData.nodeView.setNodeEnableState(false) }
+        mIsAuthStarted = false
+        invalidate()
     }
 }
