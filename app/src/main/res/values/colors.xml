@@ -13,7 +13,8 @@
     <color name="failed_action_color">#FF3636</color>
     <color name="success_action_color">#33AD00</color>
 
-    <color name="pattern_line_color">#FFFFFF</color>
+    <color name="default_pattern_line_color">#FFFFFF</color>
+    <color name="failed_pattern_line_color">#8DFF3636</color>
     <color name="pattern_background_color">#000000</color>
 
 </resources>

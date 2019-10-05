@@ -28,7 +28,8 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         private const val FINISH_RESET_DELAY_IN_MILLIS = 1000L
     }
 
-    private val mLineColor by lazy { ContextCompat.getColor(context!!, R.color.pattern_line_color) }
+    private val mDefaultLineColor by lazy { ContextCompat.getColor(context!!, R.color.default_pattern_line_color) }
+    private val mFailedLineColor by lazy { ContextCompat.getColor(context!!, R.color.failed_pattern_line_color) }
     private val mBackgroundColor by lazy { ContextCompat.getColor(context!!, R.color.pattern_background_color) }
 
     lateinit var mOnFinishedAction: (patternResultCode: String) -> Unit
@@ -61,7 +62,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         mPaint.apply {
             isAntiAlias = true
             isDither = true
-            color = mLineColor
+            color = mDefaultLineColor
             style = Paint.Style.STROKE
             strokeJoin = Paint.Join.ROUND
             strokeCap = Paint.Cap.ROUND
@@ -191,7 +192,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         mY = nodeData.y.toFloat()
 
         mPath = Path()
-        val linePath = PatternLinePath(mLineColor, mPath)
+        val linePath = PatternLinePath(mDefaultLineColor, mPath)
         mLinePaths.add(linePath)
         mPath.reset()
         mPath.moveTo(mX, mY)
@@ -235,6 +236,9 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         if (this::mOnFinishedAction.isInitialized) {
             mOnFinishedAction.invoke(resultStringBuilder.toString())
         }
+
+        setAuthViewState(false)
+
         postDelayed({ clearAndReset() }, FINISH_RESET_DELAY_IN_MILLIS)
     }
 
@@ -254,6 +258,9 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
     private fun startAuthFailedAnimation() {
         val shakeAnimation = AnimationUtils.loadAnimation(context, R.anim.shake)
+        mLinePaths.forEach {
+            it.color = mFailedLineColor
+        }
         mNodesMap.forEach { _, patternNodeData ->
             patternNodeData.nodeView.apply {
                 setNodeFailedState()
