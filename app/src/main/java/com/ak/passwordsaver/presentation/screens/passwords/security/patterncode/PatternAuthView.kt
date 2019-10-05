@@ -11,6 +11,7 @@ import android.widget.RelativeLayout
 import collections.forEach
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.extensions.dpToPx
+import com.ak.passwordsaver.utils.extensions.vibrate
 import kotlin.math.sqrt
 
 class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
@@ -190,6 +191,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         if (this::mOnNewNodeSelectedAction.isInitialized) {
             mOnNewNodeSelectedAction.invoke()
         }
+        context.vibrate(30L)
 
         touchMove(nodeData.x.toFloat(), nodeData.y.toFloat())
         nodeData.nodeView.setNodeEnableState(true)
@@ -279,5 +281,6 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
                 startAnimation(shakeAnimation)
             }
         }
+        context.vibrate(FINISH_RESET_DELAY_IN_MILLIS / 3)
     }
 }
