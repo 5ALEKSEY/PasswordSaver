@@ -90,7 +90,12 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> checkNodesAndStart(x, y)
-            MotionEvent.ACTION_UP -> return false
+            MotionEvent.ACTION_UP -> {
+                if (mIsAuthStarted) {
+                    mLinePaths.removeAt(mLinePaths.size - 1)
+                    onAuthFinished()
+                }
+            }
             MotionEvent.ACTION_MOVE -> touchMove(x, y)
         }
 
@@ -198,7 +203,6 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         mPath.moveTo(mX, mY)
 
         if (isAuthFinished()) {
-            mIsAuthStarted = false
             onAuthFinished()
             return
         }
@@ -229,6 +233,12 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     private fun isAuthFinished() = mNodesMap.size() == mInvokedNodesNumbers.size
 
     private fun onAuthFinished() {
+        if (mInvokedNodesNumbers.size == 1) {
+            clearAndReset()
+            return
+        }
+
+        mIsAuthStarted = false
         val resultStringBuilder = StringBuilder()
         mInvokedNodesNumbers.forEach {
             resultStringBuilder.append(mNodesCodesList[it])
@@ -245,7 +255,9 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     private fun clearAndReset() {
         mLinePaths.clear()
         mInvokedNodesNumbers.clear()
-        mNodesMap.forEach { _, patternNodeData -> patternNodeData.nodeView.setNodeEnableState(false) }
+        mNodesMap.forEach { _, patternNodeData ->
+            patternNodeData.nodeView.setNodeEnableState(false)
+        }
         mIsAuthStarted = false
         invalidate()
     }
