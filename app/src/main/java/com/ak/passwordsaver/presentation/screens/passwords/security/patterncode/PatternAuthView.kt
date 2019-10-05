@@ -2,10 +2,11 @@ package com.ak.passwordsaver.presentation.screens.passwords.security.patterncode
 
 import android.content.Context
 import android.graphics.*
-import android.support.annotation.ColorInt
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.MotionEvent
+import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import collections.forEach
 import com.ak.passwordsaver.R
@@ -16,10 +17,6 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
     companion object {
         private const val STROKE_WIDTH = 20F
-        @ColorInt
-        private const val LINE_COLOR = Color.WHITE
-        @ColorInt
-        private const val BACKGROUND_COLOR = Color.BLACK
         private const val PATTERN_VIEW_SIZE = 256F
         private const val PATTERN_VIEW_NODES_OFFSET = 32F
         private const val NODES_INVOKE_OFFSET_RADIUS = 24F
@@ -30,6 +27,9 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         private const val NODES_NUMBER = 9
         private const val FINISH_RESET_DELAY_IN_MILLIS = 1000L
     }
+
+    private val mLineColor by lazy { ContextCompat.getColor(context!!, R.color.pattern_line_color) }
+    private val mBackgroundColor by lazy { ContextCompat.getColor(context!!, R.color.pattern_background_color) }
 
     lateinit var mOnFinishedAction: (patternResultCode: String) -> Unit
     lateinit var mOnNewNodeSelectedAction: () -> Unit
@@ -61,7 +61,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         mPaint.apply {
             isAntiAlias = true
             isDither = true
-            color = LINE_COLOR
+            color = mLineColor
             style = Paint.Style.STROKE
             strokeJoin = Paint.Join.ROUND
             strokeCap = Paint.Cap.ROUND
@@ -70,6 +70,14 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         }
         addNodeViews()
         clearAndReset()
+    }
+
+    public fun setAuthViewState(isSuccess: Boolean) {
+        if (isSuccess) {
+            startAuthSuccessAnimation()
+        } else {
+            startAuthFailedAnimation()
+        }
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
@@ -96,7 +104,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         }
 
         canvas.save()
-        mCanvas.drawColor(BACKGROUND_COLOR)
+        mCanvas.drawColor(mBackgroundColor)
 
         mLinePaths.forEach {
             mPaint.color = it.color
@@ -183,7 +191,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         mY = nodeData.y.toFloat()
 
         mPath = Path()
-        val linePath = PatternLinePath(LINE_COLOR, mPath)
+        val linePath = PatternLinePath(mLineColor, mPath)
         mLinePaths.add(linePath)
         mPath.reset()
         mPath.moveTo(mX, mY)
@@ -220,7 +228,6 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     private fun isAuthFinished() = mNodesMap.size() == mInvokedNodesNumbers.size
 
     private fun onAuthFinished() {
-        // return result code
         val resultStringBuilder = StringBuilder()
         mInvokedNodesNumbers.forEach {
             resultStringBuilder.append(mNodesCodesList[it])
@@ -237,5 +244,21 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         mNodesMap.forEach { _, patternNodeData -> patternNodeData.nodeView.setNodeEnableState(false) }
         mIsAuthStarted = false
         invalidate()
+    }
+
+    private fun startAuthSuccessAnimation() {
+        mNodesMap.forEach { _, patternNodeData ->
+            patternNodeData.nodeView.setNodeSuccessState()
+        }
+    }
+
+    private fun startAuthFailedAnimation() {
+        val shakeAnimation = AnimationUtils.loadAnimation(context, R.anim.shake)
+        mNodesMap.forEach { _, patternNodeData ->
+            patternNodeData.nodeView.apply {
+                setNodeFailedState()
+                startAnimation(shakeAnimation)
+            }
+        }
     }
 }

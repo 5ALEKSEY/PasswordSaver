@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.passwords.security.fingerprint
+package com.ak.passwordsaver.presentation.screens.passwords.security
 
 interface AuthenticationListener {
     fun onAuthSuccess()
