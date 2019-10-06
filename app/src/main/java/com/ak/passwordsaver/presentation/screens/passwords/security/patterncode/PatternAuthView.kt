@@ -27,6 +27,8 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
          */
         private const val NODES_NUMBER = 9
         private const val FINISH_RESET_DELAY_IN_MILLIS = 1000L
+        private const val NODE_SELECT_VIBRATION_DELAY_IN_MILLIS = 30L
+        private const val FAILED_AUTH_VIBRATION_DELAY_IN_MILLIS = FINISH_RESET_DELAY_IN_MILLIS / 3
     }
 
     private val mDefaultLineColor by lazy { ContextCompat.getColor(context!!, R.color.default_pattern_line_color) }
@@ -34,7 +36,6 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     private val mBackgroundColor by lazy { ContextCompat.getColor(context!!, R.color.pattern_background_color) }
 
     lateinit var mOnFinishedAction: (patternResultCode: String) -> Unit
-    lateinit var mOnNewNodeSelectedAction: () -> Unit
 
     private var mBitmap: Bitmap = Bitmap.createBitmap(
         PATTERN_VIEW_SIZE.dpToPx(),
@@ -52,6 +53,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     private val mInvokedNodesNumbers = arrayListOf<Int>()
 
     private var mIsAuthStarted = false
+    private var mIsPatternInputLocked = false
 
     private var mX: Float = 0F
     private var mY: Float = 0F
@@ -74,7 +76,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         clearAndReset()
     }
 
-    public fun setAuthViewState(isSuccess: Boolean) {
+    fun setAuthViewState(isSuccess: Boolean) {
         if (isSuccess) {
             startAuthSuccessAnimation()
         } else {
@@ -82,8 +84,12 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         }
     }
 
+    fun setAuthViewInputLockState(isLocked: Boolean) {
+        mIsPatternInputLocked = isLocked
+    }
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (event == null) {
+        if (event == null || mIsPatternInputLocked) {
             return false
         }
         val x = event.x
@@ -188,10 +194,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
         mIsAuthStarted = true
         mInvokedNodesNumbers.add(invokedNodeNumber)
-        if (this::mOnNewNodeSelectedAction.isInitialized) {
-            mOnNewNodeSelectedAction.invoke()
-        }
-        context.vibrate(30L)
+        context.vibrate(NODE_SELECT_VIBRATION_DELAY_IN_MILLIS)
 
         touchMove(nodeData.x.toFloat(), nodeData.y.toFloat())
         nodeData.nodeView.setNodeEnableState(true)
@@ -240,6 +243,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
             return
         }
 
+        mIsPatternInputLocked = true
         mIsAuthStarted = false
         val resultStringBuilder = StringBuilder()
         mInvokedNodesNumbers.forEach {
@@ -261,6 +265,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
             patternNodeData.nodeView.setNodeEnableState(false)
         }
         mIsAuthStarted = false
+        mIsPatternInputLocked = false
         invalidate()
     }
 
@@ -281,6 +286,6 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
                 startAnimation(shakeAnimation)
             }
         }
-        context.vibrate(FINISH_RESET_DELAY_IN_MILLIS / 3)
+        context.vibrate(FAILED_AUTH_VIBRATION_DELAY_IN_MILLIS)
     }
 }
