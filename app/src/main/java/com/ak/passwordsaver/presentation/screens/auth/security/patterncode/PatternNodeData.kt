@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.passwords.security.patterncode
+package com.ak.passwordsaver.presentation.screens.auth.security.patterncode
 
 data class PatternNodeData(
     var nodeView: PatternCodeNodeView,

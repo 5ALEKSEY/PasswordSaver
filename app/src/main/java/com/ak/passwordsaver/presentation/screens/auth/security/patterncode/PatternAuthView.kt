@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.passwords.security.patterncode
+package com.ak.passwordsaver.presentation.screens.auth.security.patterncode
 
 import android.content.Context
 import android.graphics.*
@@ -17,7 +17,7 @@ import kotlin.math.sqrt
 class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
 
     companion object {
-        private const val STROKE_WIDTH = 20F
+        private const val STROKE_WIDTH = 12F
         private const val PATTERN_VIEW_SIZE = 256F
         private const val PATTERN_VIEW_NODES_OFFSET = 32F
         private const val NODES_INVOKE_OFFSET_RADIUS = 24F
@@ -253,6 +253,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
             mOnFinishedAction.invoke(resultStringBuilder.toString())
         }
 
+        // TODO: should be deleted (only for test)
         setAuthViewState(false)
 
         postDelayed({ clearAndReset() }, FINISH_RESET_DELAY_IN_MILLIS)

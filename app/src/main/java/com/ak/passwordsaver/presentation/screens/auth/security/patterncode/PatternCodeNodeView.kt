@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.passwords.security.patterncode
+package com.ak.passwordsaver.presentation.screens.auth.security.patterncode
 
 import android.content.Context
 import android.graphics.PorterDuff
