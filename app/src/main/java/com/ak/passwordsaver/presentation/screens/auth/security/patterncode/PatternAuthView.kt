@@ -1,7 +1,10 @@
 package com.ak.passwordsaver.presentation.screens.auth.security.patterncode
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Path
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.SparseArray
@@ -16,20 +19,28 @@ import kotlin.math.sqrt
 
 class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
 
-    companion object {
-        private const val STROKE_WIDTH = 12F
+    companion object DefaultValues {
+        private const val LINE_WIDTH = 12F
         private const val PATTERN_VIEW_SIZE = 256F
-        private const val PATTERN_VIEW_NODES_OFFSET = 32F
+        private const val PATTERN_VIEW_NODES_OFFSET = PATTERN_VIEW_SIZE * 0.1.toFloat()
         private const val NODES_INVOKE_OFFSET_RADIUS = 24F
         /**
-         * Only 4, 9, 16, 25 ... For sqrt() correct invoke.
+         * Only 4, 9, 16 ... For sqrt() correct invoke.
          * [mNodesCodesList] should be changed after [NODES_NUMBER] value changes.
          */
         private const val NODES_NUMBER = 9
         private const val FINISH_RESET_DELAY_IN_MILLIS = 1000L
         private const val NODE_SELECT_VIBRATION_DELAY_IN_MILLIS = 30L
         private const val FAILED_AUTH_VIBRATION_DELAY_IN_MILLIS = FINISH_RESET_DELAY_IN_MILLIS / 3
+        private const val IS_VIBRATION_NEEDS = true
     }
+
+    //-------------------------------------- values for init ---------------------------------------
+    private var mLineWidth = 0F
+    private var mIsVibrationNeeds = false
+    private var mNodesNumber = 0
+    //----------------------------------------------------------------------------------------------
+
 
     private val mDefaultLineColor by lazy { ContextCompat.getColor(context!!, R.color.default_pattern_line_color) }
     private val mFailedLineColor by lazy { ContextCompat.getColor(context!!, R.color.failed_pattern_line_color) }
@@ -49,7 +60,8 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
     private val mLinePaths = arrayListOf<PatternLinePath>()
     private val mNodesMap = SparseArray<PatternNodeData>(NODES_NUMBER)
-    private val mNodesCodesList = arrayListOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9")
+    private val mNodesCodesList =
+        arrayListOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f")
     private val mInvokedNodesNumbers = arrayListOf<Int>()
 
     private var mIsAuthStarted = false
@@ -59,6 +71,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     private var mY: Float = 0F
 
     init {
+        initViewAttributes(attrs)
         setWillNotDraw(false)
         mCanvas = Canvas(mBitmap)
         // init paint
@@ -74,6 +87,31 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         }
         addNodeViews()
         clearAndReset()
+    }
+
+    private fun initViewAttributes(attrs: AttributeSet?) {
+        val typedArray = context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.PatternAuthViewStyleable,
+            0, 0
+        )
+
+        try {
+            mIsVibrationNeeds = typedArray.getBoolean(
+                R.styleable.PatternAuthViewStyleable_vibration,
+                IS_VIBRATION_NEEDS
+            )
+            mLineWidth = typedArray.getFloat(
+                R.styleable.PatternAuthViewStyleable_patternLineWidth,
+                LINE_WIDTH
+            )
+            mNodesNumber = typedArray.getInt(
+                R.styleable.PatternAuthViewStyleable_nodesNumber,
+                NODES_NUMBER
+            )
+        } finally {
+            typedArray.recycle()
+        }
     }
 
     fun setAuthViewState(isSuccess: Boolean) {
@@ -121,7 +159,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
         mLinePaths.forEach {
             mPaint.color = it.color
-            mPaint.strokeWidth = STROKE_WIDTH
+            mPaint.strokeWidth = mLineWidth
             mCanvas.drawPath(it.path, mPaint)
         }
 
@@ -194,7 +232,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
         mIsAuthStarted = true
         mInvokedNodesNumbers.add(invokedNodeNumber)
-        context.vibrate(NODE_SELECT_VIBRATION_DELAY_IN_MILLIS)
+        vibrate(NODE_SELECT_VIBRATION_DELAY_IN_MILLIS)
 
         touchMove(nodeData.x.toFloat(), nodeData.y.toFloat())
         nodeData.nodeView.setNodeEnableState(true)
@@ -287,6 +325,12 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
                 startAnimation(shakeAnimation)
             }
         }
-        context.vibrate(FAILED_AUTH_VIBRATION_DELAY_IN_MILLIS)
+        vibrate(FAILED_AUTH_VIBRATION_DELAY_IN_MILLIS)
+    }
+
+    private fun vibrate(duration: Long) {
+        if (mIsVibrationNeeds) {
+            context.vibrate(duration)
+        }
     }
 }

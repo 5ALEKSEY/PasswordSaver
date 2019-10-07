@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PatternAuthViewStyleable">
+        <attr name="nodesNumber" format="enum">
+            <enum name="four" value="4" />
+            <enum name="nine" value="9" />
+            <enum name="sixteen" value="16" />
+        </attr>
+        <attr name="patternLineWidth" format="float" />
+        <attr name="vibration" format="boolean" />
+    </declare-styleable>
+
+</resources>
