@@ -1,8 +1,7 @@
-package com.ak.passwordsaver.presentation.screens.auth.security
+package com.ak.passwordsaver.presentation.screens.auth
 
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
-import com.ak.passwordsaver.presentation.screens.auth.ISecurityView
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers

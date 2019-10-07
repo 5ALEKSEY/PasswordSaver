@@ -9,7 +9,6 @@ import android.widget.TextView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
-import com.ak.passwordsaver.presentation.screens.auth.security.SecurityPresenter
 import com.ak.passwordsaver.presentation.screens.auth.security.patterncode.PatternAuthView
 import com.ak.passwordsaver.utils.bindView
 import com.arellomobile.mvp.presenter.InjectPresenter

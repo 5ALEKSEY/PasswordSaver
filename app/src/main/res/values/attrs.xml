@@ -11,4 +11,21 @@
         <attr name="vibration" format="boolean" />
     </declare-styleable>
 
+    <declare-styleable name="PincodeNumberView">
+        <attr name="primaryText" format="string" />
+        <attr name="secondaryText" format="string" />
+        <attr name="pincodeValue" format="enum">
+            <enum name="zero" value="0" />
+            <enum name="one" value="1" />
+            <enum name="two" value="2" />
+            <enum name="three" value="3" />
+            <enum name="four" value="4" />
+            <enum name="five" value="5" />
+            <enum name="six" value="6" />
+            <enum name="seven" value="7" />
+            <enum name="eight" value="8" />
+            <enum name="nine" value="9" />
+        </attr>
+    </declare-styleable>
+
 </resources>
