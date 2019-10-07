@@ -1,5 +1,7 @@
 package com.ak.passwordsaver.presentation.screens.passwords
 
+import android.app.Activity
+import android.content.Intent
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
@@ -12,8 +14,10 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ProgressBar
 import com.ak.passwordsaver.R
+import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordActivity
+import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.IPasswordsActionModeView
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsActionModePresenter
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
@@ -48,7 +52,6 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
         super.initViewBeforePresenterAttach()
         initRecyclerView()
         initToolbar()
-        initBiometricPromptDialog()
 
         mAddNewPasswordButton.setOnClickListener {
             if (context != null) {
@@ -72,10 +75,6 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     override fun setEmptyPasswordsState(isEmptyViewVisible: Boolean) {
         mEmptyView.visibility = if (isEmptyViewVisible) View.VISIBLE else View.GONE
-    }
-
-    override fun openPasswordDialogMode(passwordName: String, passwordContent: String) {
-        OpenedPasswordContentDialog.show(passwordName, passwordContent, childFragmentManager)
     }
 
     override fun openPasswordToastMode(passwordName: String, passwordContent: String) {
@@ -173,23 +172,23 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     //--------------------------------------- Security ---------------------------------------------
 
-    private fun initBiometricPromptDialog() {
-
+    override fun startSecurityAuthAction() {
+        activity?.let {
+            SecurityActivity.startSecurityForResult(activity!!, this)
+        }
     }
 
-    override fun showBiometricSecurity() {
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            AppConstants.SECURITY_REQUEST_CODE -> handleSecurityAuthResult(resultCode)
+        }
     }
 
-    override fun hideBiometricSecurity() {
-
-    }
-
-    override fun showPasscodeSecurity() {
-
-    }
-
-    override fun hidePasscodeSecurity() {
-
+    private fun handleSecurityAuthResult(resultCode: Int) {
+        when (resultCode) {
+            Activity.RESULT_OK -> mPasswordsListPresenter.onSecurityAuthSuccessful()
+            Activity.RESULT_CANCELED -> mPasswordsListPresenter.onSecurityAuthCanceled()
+        }
     }
 }

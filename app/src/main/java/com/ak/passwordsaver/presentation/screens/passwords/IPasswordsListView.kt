@@ -7,12 +7,8 @@ interface IPasswordsListView : IBaseAppView {
     fun setLoadingState(isLoading: Boolean)
     fun setEmptyPasswordsState(isEmptyViewVisible: Boolean)
     fun displayPasswords(passwordModelsList: List<PasswordItemModel>)
-    fun openPasswordDialogMode(passwordName: String, passwordContent: String)
     fun openPasswordToastMode(passwordName: String, passwordContent: String)
     fun setPasswordVisibilityInCardMode(passwordId: Long, contentVisibilityState: Boolean)
     // security
-    fun showBiometricSecurity()
-    fun hideBiometricSecurity()
-    fun showPasscodeSecurity()
-    fun hidePasscodeSecurity()
+    fun startSecurityAuthAction()
 }

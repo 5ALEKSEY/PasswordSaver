@@ -12,7 +12,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:src="@mipmap/ic_launcher"
-            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintBottom_toTopOf="@+id/tv_security_message_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -20,12 +20,12 @@
             tools:ignore="ContentDescription" />
 
     <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tv_security_message_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/iconsAndText"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/patternAuthView"
+            app:layout_constraintBottom_toTopOf="@+id/v_pattern_auth_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,9 +33,10 @@
             android:text="Incorrect password. Please, try again" />
 
     <com.ak.passwordsaver.presentation.screens.auth.security.patterncode.PatternAuthView
-            android:id="@+id/patternAuthView"
+            android:id="@+id/v_pattern_auth_view"
             android:layout_width="256dp"
             android:layout_height="256dp"
+            android:layout_marginTop="16dp"
             app:nodesNumber="nine"
             app:patternLineWidth="12"
             app:vibration="true"
@@ -43,7 +44,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/tv_security_message_text"
             tools:background="@color/colorAccent" />
 
     <android.support.constraint.Guideline
@@ -58,6 +59,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.8" />
+            app:layout_constraintGuide_percent="0.85" />
 
 </android.support.constraint.ConstraintLayout>

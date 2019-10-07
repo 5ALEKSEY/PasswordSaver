@@ -14,6 +14,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.ak.passwordsaver.R
+import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.addnew.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.utils.bindView
@@ -27,8 +28,6 @@ import kotlinx.coroutines.launch
 class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
     companion object {
-        private const val AVATAR_PERMISSIONS_REQUEST_CODE = 1
-
         fun startActivity(context: Context) {
             context.startActivity(Intent(context, AddNewPasswordActivity::class.java))
         }
@@ -71,7 +70,7 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
                 val permissionResult = PermissionManager.requestPermissions(
                     this@AddNewPasswordActivity,
-                    AVATAR_PERMISSIONS_REQUEST_CODE,
+                    AppConstants.AVATAR_PERMISSIONS_REQUEST_CODE,
                     Manifest.permission.CAMERA,
                     Manifest.permission.READ_EXTERNAL_STORAGE
                 )

@@ -7,7 +7,6 @@ import android.support.v4.app.FragmentTransaction
 import android.view.MenuItem
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
-import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListFragment
 import com.ak.passwordsaver.presentation.screens.settings.SettingsFragment
 import com.ak.passwordsaver.utils.bindView
@@ -26,7 +25,6 @@ class HomeActivity : BasePSFragmentActivity(), BottomNavigationView.OnNavigation
         super.onCreate(savedInstanceState)
         showFragment(PasswordsListFragment.getInstance())
         mBottomMenu.setOnNavigationItemSelectedListener(this)
-        SecurityActivity.startActivity(this)
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {

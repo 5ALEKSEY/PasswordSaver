@@ -32,10 +32,22 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         loadPasswords()
     }
 
+    fun onSecurityAuthSuccessful() {
+        showPasswordAction(true, mCurrentPasswordId)
+    }
+
+    fun onSecurityAuthCanceled() {
+        Log.d("Alex_tester", "canceled")
+    }
+
     fun passwordShowActionRequired(passwordId: Long, newVisibilityState: Boolean) {
         // TODO: check passcodes (mb save this passwordId in presenter for feature)
         mCurrentPasswordId = passwordId
-        showPasswordAction(newVisibilityState, passwordId)
+        if (newVisibilityState) {
+            viewState.startSecurityAuthAction()
+        } else {
+            showPasswordAction(newVisibilityState, passwordId)
+        }
     }
 
     private fun showPasswordAction(newVisibilityState: Boolean, passwordId: Long) {
@@ -47,7 +59,6 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         } else {
             // open state
             when (showingType) {
-                PasswordShowingType.DIALOG -> getPasswordDataAndStartAction(viewState::openPasswordDialogMode)
                 PasswordShowingType.TOAST -> getPasswordDataAndStartAction(viewState::openPasswordToastMode)
                 PasswordShowingType.IN_CARD -> viewState.setPasswordVisibilityInCardMode(
                     passwordId,

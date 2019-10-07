@@ -23,7 +23,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         private const val LINE_WIDTH = 12F
         private const val PATTERN_VIEW_SIZE = 256F
         private const val PATTERN_VIEW_NODES_OFFSET = PATTERN_VIEW_SIZE * 0.1.toFloat()
-        private const val NODES_INVOKE_OFFSET_RADIUS = 24F
+        private const val NODES_INVOKE_OFFSET_RADIUS = 20F
         /**
          * Only 4, 9, 16 ... For sqrt() correct invoke.
          * [mNodesCodesList] should be changed after [NODES_NUMBER] value changes.
@@ -59,7 +59,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     private lateinit var mPath: Path
 
     private val mLinePaths = arrayListOf<PatternLinePath>()
-    private val mNodesMap = SparseArray<PatternNodeData>(NODES_NUMBER)
+    private val mNodesMap = SparseArray<PatternNodeData>(mNodesNumber)
     private val mNodesCodesList =
         arrayListOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f")
     private val mInvokedNodesNumbers = arrayListOf<Int>()
@@ -203,7 +203,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         (PATTERN_VIEW_SIZE - 2 * PATTERN_VIEW_NODES_OFFSET) / marginsCount
 
     private fun calculateNodesCountInLine(): Int {
-        return sqrt(NODES_NUMBER.toFloat()).toInt()
+        return sqrt(mNodesNumber.toFloat()).toInt()
     }
 
     private fun calculateNodesMarginsCount(): Int {
@@ -290,10 +290,6 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         if (this::mOnFinishedAction.isInitialized) {
             mOnFinishedAction.invoke(resultStringBuilder.toString())
         }
-
-        // TODO: should be deleted (only for test)
-        setAuthViewState(false)
-
         postDelayed({ clearAndReset() }, FINISH_RESET_DELAY_IN_MILLIS)
     }
 
@@ -315,7 +311,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     }
 
     private fun startAuthFailedAnimation() {
-        val shakeAnimation = AnimationUtils.loadAnimation(context, R.anim.shake)
+        val shakeAnimation = AnimationUtils.loadAnimation(context, R.anim.medium_shake)
         mLinePaths.forEach {
             it.color = mFailedLineColor
         }

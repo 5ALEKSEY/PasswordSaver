@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="pattern_code_node_size">16dp</dimen>
-    <dimen name="pattern_code_node_inner_size">8dp</dimen>
+    <dimen name="pattern_code_node_size">12dp</dimen>
+    <dimen name="pattern_code_node_inner_size">6dp</dimen>
 </resources>
