@@ -8,13 +8,11 @@
         tools:context=".presentation.screens.auth.SecurityActivity">
 
     <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/iv_security_screen_logo"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:src="@mipmap/ic_launcher"
-            app:layout_constraintBottom_toTopOf="@+id/tv_security_message_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline"
             tools:ignore="ContentDescription" />
@@ -25,27 +23,43 @@
             android:layout_height="wrap_content"
             android:textColor="@color/iconsAndText"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/v_pattern_auth_view"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/iv_security_screen_logo"
             android:text="Incorrect password. Please, try again" />
 
-    <com.ak.passwordsaver.presentation.screens.auth.security.patterncode.PatternAuthView
-            android:id="@+id/v_pattern_auth_view"
-            android:layout_width="256dp"
-            android:layout_height="256dp"
+    <FrameLayout
+            android:id="@+id/fl_auth_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:nodesNumber="nine"
-            app:patternLineWidth="12"
-            app:vibration="true"
             app:layout_constraintBottom_toTopOf="@+id/guideline2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_security_message_text"
-            tools:background="@color/colorAccent" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_security_message_text">
+
+        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeAuthView
+                android:id="@+id/v_pincode_auth_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                tools:background="@color/colorAccent"
+                tools:visibility="gone" />
+
+        <com.ak.passwordsaver.presentation.screens.auth.security.patterncode.PatternAuthView
+                android:id="@+id/v_pattern_auth_view"
+                android:layout_width="256dp"
+                android:layout_height="256dp"
+                android:visibility="visible"
+                app:nodesNumber="nine"
+                app:patternLineWidth="12"
+                app:vibration="true"
+                tools:background="@color/colorAccent"
+                tools:visibility="visible" />
+
+    </FrameLayout>
 
     <android.support.constraint.Guideline
             android:id="@+id/guideline"
@@ -59,6 +73,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.85" />
+            app:layout_constraintGuide_percent="0.9" />
 
 </android.support.constraint.ConstraintLayout>

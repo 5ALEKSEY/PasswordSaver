@@ -9,4 +9,5 @@ interface ISecurityView : IBaseAppView {
     fun lockPatternViewInput()
     fun unlockPatternViewInput()
     fun finishActivityWithResult(isCanceled: Boolean)
+    fun switchAuthMethod(isPincode: Boolean, withAnimation: Boolean = false)
 }

@@ -4,12 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import android.widget.TextView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.auth.security.patterncode.PatternAuthView
+import com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeAuthView
 import com.ak.passwordsaver.utils.bindView
 import com.arellomobile.mvp.presenter.InjectPresenter
 
@@ -30,8 +33,12 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     @InjectPresenter
     lateinit var mSecurityPresenter: SecurityPresenter
 
+    private val mPincodeAuthView: PincodeAuthView by bindView(R.id.v_pincode_auth_view)
     private val mPatternAuthView: PatternAuthView by bindView(R.id.v_pattern_auth_view)
     private val mSecurityMessageText: TextView by bindView(R.id.tv_security_message_text)
+    private val mSwitchTemp: ImageView by bindView(R.id.iv_security_screen_logo)
+
+    private var mIsPincodeAuthMethod = true
 
     override fun getScreenLayoutResId() = R.layout.activity_security
 
@@ -42,6 +49,11 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
         mPatternAuthView.mOnFinishedAction = mSecurityPresenter::onPatterAuthFinished
+        switchAuthMethod(mIsPincodeAuthMethod)
+
+        mSwitchTemp.setOnClickListener {
+            switchAuthMethod(!mIsPincodeAuthMethod)
+        }
     }
 
     override fun showSecurityMessage(message: String, withAnimation: Boolean) {
@@ -72,5 +84,11 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         val result = if (isCanceled) Activity.RESULT_CANCELED else Activity.RESULT_OK
         setResult(result)
         finish()
+    }
+
+    override fun switchAuthMethod(isPincode: Boolean, withAnimation: Boolean) {
+        mPatternAuthView.visibility = if (isPincode) View.GONE else View.VISIBLE
+        mPincodeAuthView.visibility = if (isPincode) View.VISIBLE else View.GONE
+        mIsPincodeAuthMethod = isPincode
     }
 }

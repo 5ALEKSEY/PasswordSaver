@@ -10,6 +10,7 @@ class PincodeAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
     init {
         val inflater = LayoutInflater.from(context)
-        val pincodeView = inflater.inflate(R.layout.layout_pincode_auth_view, this)
+        val pincodeView = inflater.inflate(R.layout.layout_pincode_auth_view, this, false)
+        addView(pincodeView)
     }
 }
