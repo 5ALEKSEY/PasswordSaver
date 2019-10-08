@@ -5,6 +5,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.view.View
@@ -104,18 +105,21 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         disappearAnim.playSequentially(appearAnim)
         disappearAnim.start()
 
+        appearView.visibility = View.VISIBLE
+        Handler().postDelayed({ disappearView.visibility = View.GONE }, 2 * switchDuration)
+
         mIsPincodeAuthMethod = isPincode
     }
 
     private fun startAppearAnimationForView(view: View, duration: Long): AnimatorSet {
-        val appearWithOffsetX = ObjectAnimator.ofFloat(view, "scaleX", 0f, 1.1f)
-        val appearWithOffsetY = ObjectAnimator.ofFloat(view, "scaleY", 0f, 1.1f)
+        val appearWithOffsetX = ObjectAnimator.ofFloat(view, View.SCALE_X, 0f, 1.1f)
+        val appearWithOffsetY = ObjectAnimator.ofFloat(view, View.SCALE_Y, 0f, 1.1f)
         val appearWithOffset = AnimatorSet()
         appearWithOffset.duration = duration
         appearWithOffset.playTogether(appearWithOffsetX, appearWithOffsetY)
 
-        val appearToDefaultSizeX = ObjectAnimator.ofFloat(view, "scaleX", 1f)
-        val appearToDefaultSizeY = ObjectAnimator.ofFloat(view, "scaleY", 1f)
+        val appearToDefaultSizeX = ObjectAnimator.ofFloat(view, View.SCALE_X, 1f)
+        val appearToDefaultSizeY = ObjectAnimator.ofFloat(view, View.SCALE_Y, 1f)
         val appearToDefaultSize = AnimatorSet()
         appearToDefaultSize.duration = duration / 3
         appearToDefaultSize.playTogether(appearToDefaultSizeX, appearToDefaultSizeY)
@@ -125,8 +129,8 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     }
 
     private fun startDisappearAnimationForView(view: View, duration: Long): AnimatorSet {
-        val disappearX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 0f)
-        val disappearY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 0f)
+        val disappearX = ObjectAnimator.ofFloat(view, View.SCALE_X, 1f, 0f)
+        val disappearY = ObjectAnimator.ofFloat(view, View.SCALE_Y, 1f, 0f)
         val disappear = AnimatorSet()
         disappear.duration = duration / 2
         disappear.playTogether(disappearX, disappearY)
