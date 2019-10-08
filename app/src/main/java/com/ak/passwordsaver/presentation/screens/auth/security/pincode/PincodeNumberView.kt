@@ -1,15 +1,15 @@
 package com.ak.passwordsaver.presentation.screens.auth.security.pincode
 
 import android.content.Context
+import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.RelativeLayout
 import android.widget.TextView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.bindView
 
 class PincodeNumberView(context: Context?, attrs: AttributeSet?) :
-    RelativeLayout(context, attrs) {
+    ConstraintLayout(context, attrs) {
 
     var pincodeValue: Int = 0
     private lateinit var mPrimaryText: String
@@ -20,7 +20,7 @@ class PincodeNumberView(context: Context?, attrs: AttributeSet?) :
 
     init {
         val inflater = LayoutInflater.from(context)
-        val pincodeView = inflater.inflate(R.layout.layout_pincode_number_view, this)
+        val pincodeView = inflater.inflate(R.layout.layout_pincode_number_view, this, false)
         addView(pincodeView)
         initViewAttributes(attrs)
         initTextContent()
