@@ -29,8 +29,8 @@
             app:layout_constraintTop_toBottomOf="@+id/iv_security_screen_logo"
             android:text="Incorrect password. Please, try again" />
 
-    <FrameLayout
-            android:id="@+id/fl_auth_container"
+    <RelativeLayout
+            android:id="@+id/rl_auth_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -43,8 +43,8 @@
         <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeAuthView
                 android:id="@+id/v_pincode_auth_view"
                 android:layout_width="wrap_content"
+                android:layout_centerInParent="true"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 tools:background="@color/colorAccent"
                 tools:visibility="gone" />
 
@@ -52,14 +52,14 @@
                 android:id="@+id/v_pattern_auth_view"
                 android:layout_width="256dp"
                 android:layout_height="256dp"
-                android:visibility="visible"
+                android:layout_centerInParent="true"
                 app:nodesNumber="nine"
                 app:patternLineWidth="12"
                 app:vibration="true"
                 tools:background="@color/colorAccent"
                 tools:visibility="visible" />
 
-    </FrameLayout>
+    </RelativeLayout>
 
     <android.support.constraint.Guideline
             android:id="@+id/guideline"

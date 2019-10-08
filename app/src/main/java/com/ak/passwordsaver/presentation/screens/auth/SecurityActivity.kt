@@ -1,10 +1,14 @@
 package com.ak.passwordsaver.presentation.screens.auth
 
+import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.view.View
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
@@ -16,9 +20,12 @@ import com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeAu
 import com.ak.passwordsaver.utils.bindView
 import com.arellomobile.mvp.presenter.InjectPresenter
 
+
 class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
 
     companion object {
+        private const val SWITCH_AUTH_METHOD_DURATION = 200L
+
         fun startSecurityForResult(context: FragmentActivity, fragment: Fragment) {
             val intent = Intent(context, SecurityActivity::class.java)
             context.startActivityFromFragment(fragment, intent, AppConstants.SECURITY_REQUEST_CODE)
@@ -52,7 +59,7 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         switchAuthMethod(mIsPincodeAuthMethod)
 
         mSwitchTemp.setOnClickListener {
-            switchAuthMethod(!mIsPincodeAuthMethod)
+            switchAuthMethod(!mIsPincodeAuthMethod, true)
         }
     }
 
@@ -87,8 +94,50 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     }
 
     override fun switchAuthMethod(isPincode: Boolean, withAnimation: Boolean) {
-        mPatternAuthView.visibility = if (isPincode) View.GONE else View.VISIBLE
-        mPincodeAuthView.visibility = if (isPincode) View.VISIBLE else View.GONE
+        val switchDuration = if (withAnimation) SWITCH_AUTH_METHOD_DURATION else 0L
+
+        val appearView = if (isPincode) mPincodeAuthView else mPatternAuthView
+        val disappearView = if (!isPincode) mPincodeAuthView else mPatternAuthView
+
+        val appearAnim = startAppearAnimationForView(appearView, switchDuration)
+        val disappearAnim = startDisappearAnimationForView(disappearView, switchDuration)
+        disappearAnim.playSequentially(appearAnim)
+        disappearAnim.start()
+
         mIsPincodeAuthMethod = isPincode
+    }
+
+    private fun startAppearAnimationForView(view: View, duration: Long): AnimatorSet {
+        val appearWithOffsetX = ObjectAnimator.ofFloat(view, "scaleX", 0f, 1.1f)
+        val appearWithOffsetY = ObjectAnimator.ofFloat(view, "scaleY", 0f, 1.1f)
+        val appearWithOffset = AnimatorSet()
+        appearWithOffset.duration = duration
+        appearWithOffset.playTogether(appearWithOffsetX, appearWithOffsetY)
+
+        val appearToDefaultSizeX = ObjectAnimator.ofFloat(view, "scaleX", 1f)
+        val appearToDefaultSizeY = ObjectAnimator.ofFloat(view, "scaleY", 1f)
+        val appearToDefaultSize = AnimatorSet()
+        appearToDefaultSize.duration = duration / 3
+        appearToDefaultSize.playTogether(appearToDefaultSizeX, appearToDefaultSizeY)
+
+
+        return startAnimations(appearWithOffset, appearToDefaultSize)
+    }
+
+    private fun startDisappearAnimationForView(view: View, duration: Long): AnimatorSet {
+        val disappearX = ObjectAnimator.ofFloat(view, "scaleX", 1f, 0f)
+        val disappearY = ObjectAnimator.ofFloat(view, "scaleY", 1f, 0f)
+        val disappear = AnimatorSet()
+        disappear.duration = duration / 2
+        disappear.playTogether(disappearX, disappearY)
+
+        return startAnimations(disappear)
+    }
+
+    private fun startAnimations(vararg animations: Animator): AnimatorSet {
+        val animSet = AnimatorSet()
+        animSet.playSequentially(*animations)
+        animSet.interpolator = AccelerateDecelerateInterpolator()
+        return animSet
     }
 }
