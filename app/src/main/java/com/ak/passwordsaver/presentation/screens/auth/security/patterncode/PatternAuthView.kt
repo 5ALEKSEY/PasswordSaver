@@ -190,7 +190,6 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
                 mNodesMap.put(nodeNumber, PatternNodeData(patternNodeView, x, y))
 
-                patternNodeView.layoutParams
                 addView(patternNodeView, params)
             }
         }
