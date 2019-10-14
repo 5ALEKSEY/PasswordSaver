@@ -100,8 +100,8 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         val appearView = if (isPincode) mPincodeAuthView else mPatternAuthView
         val disappearView = if (!isPincode) mPincodeAuthView else mPatternAuthView
 
-        val appearAnim = startAppearAnimationForView(appearView, switchDuration)
-        val disappearAnim = startDisappearAnimationForView(disappearView, switchDuration)
+        val appearAnim = getAppearAnimationForView(appearView, switchDuration)
+        val disappearAnim = getDisappearAnimationForView(disappearView, switchDuration)
         disappearAnim.playSequentially(appearAnim)
         disappearAnim.start()
 
@@ -111,7 +111,7 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         mIsPincodeAuthMethod = isPincode
     }
 
-    private fun startAppearAnimationForView(view: View, duration: Long): AnimatorSet {
+    private fun getAppearAnimationForView(view: View, duration: Long): AnimatorSet {
         val appearWithOffsetX = ObjectAnimator.ofFloat(view, View.SCALE_X, 0f, 1.1f)
         val appearWithOffsetY = ObjectAnimator.ofFloat(view, View.SCALE_Y, 0f, 1.1f)
         val appearWithOffset = AnimatorSet()
@@ -128,7 +128,7 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         return startAnimations(appearWithOffset, appearToDefaultSize)
     }
 
-    private fun startDisappearAnimationForView(view: View, duration: Long): AnimatorSet {
+    private fun getDisappearAnimationForView(view: View, duration: Long): AnimatorSet {
         val disappearX = ObjectAnimator.ofFloat(view, View.SCALE_X, 1f, 0f)
         val disappearY = ObjectAnimator.ofFloat(view, View.SCALE_Y, 1f, 0f)
         val disappear = AnimatorSet()
