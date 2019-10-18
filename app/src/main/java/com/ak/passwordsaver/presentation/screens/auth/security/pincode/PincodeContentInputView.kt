@@ -9,12 +9,16 @@ class PincodeContentInputView(context: Context?, attrs: AttributeSet?) :
     LinearLayout(context, attrs) {
 
     companion object {
-        private const val DEFAULT_FILL_CONTENT_SIZE = 4
+        private const val DEFAULT_FILL_CONTENT_SIZE = 10
+        private const val SET_SECRET_NUMBER_STATE_DELAY_IN_MILLIS = 1000L
     }
 
     private var mFillContentSize = DEFAULT_FILL_CONTENT_SIZE
     private val mInputPincodeViews = arrayListOf<InputPincodeValueView>()
-    lateinit var mOnContentFilled: () -> String
+    private val mResultPincodeStringBuilder = StringBuilder()
+    private val mSecretPincodeStateAction = Runnable(this::setSecretImageForLastPincodeValue)
+
+    lateinit var mOnContentFilled: (resultCode: String) -> Unit
 
     init {
         orientation = HORIZONTAL
@@ -29,17 +33,47 @@ class PincodeContentInputView(context: Context?, attrs: AttributeSet?) :
         val inputPincodeViewSize = resources.getDimensionPixelSize(R.dimen.input_pincode_value_size)
         val params = LayoutParams(inputPincodeViewSize, inputPincodeViewSize)
         params.weight = 1F
-        mInputPincodeViews.add(inputPincodeView)
         addView(inputPincodeView, params)
         inputPincodeView.showInputPincodeValue(value)
+        mResultPincodeStringBuilder.append(value)
+        removeCallbacks(mSecretPincodeStateAction)
+        setSecretImageForLastPincodeValue()
+        mInputPincodeViews.add(inputPincodeView)
+        postDelayed(mSecretPincodeStateAction, SET_SECRET_NUMBER_STATE_DELAY_IN_MILLIS)
+
+
+        if (mInputPincodeViews.size == mFillContentSize) {
+            if (this::mOnContentFilled.isInitialized) {
+                mOnContentFilled.invoke(mResultPincodeStringBuilder.toString())
+            }
+            clearContentInputView()
+        }
     }
 
     fun removeLastPincodeValue() {
-        if (mInputPincodeViews.isNotEmpty()) {
+        getLastPincodeValueView()?.let {
             val lastViewIndex = mInputPincodeViews.size - 1
-            val inputPincodeValueView = mInputPincodeViews[lastViewIndex]
-            removeView(inputPincodeValueView)
+            removeView(it)
             mInputPincodeViews.removeAt(lastViewIndex)
+            mResultPincodeStringBuilder.deleteCharAt(mResultPincodeStringBuilder.length - 1)
         }
     }
+
+    private fun clearContentInputView() {
+        removeAllViewsInLayout()
+        mResultPincodeStringBuilder.clear()
+        mInputPincodeViews.clear()
+    }
+
+    private fun setSecretImageForLastPincodeValue() {
+        getLastPincodeValueView()?.setSecretStateForPincodeValue()
+    }
+
+    private fun getLastPincodeValueView() =
+        if (mInputPincodeViews.isNotEmpty()) {
+            val lastViewIndex = mInputPincodeViews.size - 1
+            mInputPincodeViews[lastViewIndex]
+        } else {
+            null
+        }
 }

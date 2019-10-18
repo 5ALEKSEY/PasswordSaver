@@ -6,157 +6,157 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <View
-            android:id="@+id/view2"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
+    <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeContentInputView
+            android:id="@+id/pciv_pincode_input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:background="@color/colorAccent"
+            tools:background="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
-            android:id="@+id/pincodeNumberView"
+            android:id="@+id/pnv_pincode_number_1"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/pincodeNumberView2"
+            app:layout_constraintEnd_toStartOf="@+id/pnv_pincode_number_2"
             app:layout_constraintHorizontal_bias="0.5"
             app:pincodeValue="one"
             app:primaryText="1"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view2" />
+            app:layout_constraintTop_toBottomOf="@+id/pciv_pincode_input" />
 
     <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
-            android:id="@+id/pincodeNumberView2"
+            android:id="@+id/pnv_pincode_number_2"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/pincodeNumberView3"
+            app:layout_constraintEnd_toStartOf="@+id/pnv_pincode_number_3"
             app:layout_constraintHorizontal_bias="0.5"
             app:pincodeValue="two"
             app:primaryText="2"
             app:secondaryText="ABC"
-            app:layout_constraintStart_toEndOf="@+id/pincodeNumberView"
-            app:layout_constraintTop_toBottomOf="@+id/view2" />
+            app:layout_constraintStart_toEndOf="@+id/pnv_pincode_number_1"
+            app:layout_constraintTop_toBottomOf="@+id/pciv_pincode_input" />
 
     <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
-            android:id="@+id/pincodeNumberView3"
+            android:id="@+id/pnv_pincode_number_3"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/pincodeNumberView2"
-            app:layout_constraintTop_toBottomOf="@+id/view2"
+            app:layout_constraintStart_toEndOf="@+id/pnv_pincode_number_2"
+            app:layout_constraintTop_toBottomOf="@+id/pciv_pincode_input"
             app:pincodeValue="three"
             app:primaryText="3"
             app:secondaryText="DEF" />
 
     <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
-            android:id="@+id/pincodeNumberView31"
+            android:id="@+id/pnv_pincode_number_4"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/pincodeNumberView312"
+            app:layout_constraintEnd_toStartOf="@+id/pnv_pincode_number_5"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pincodeNumberView"
+            app:layout_constraintTop_toBottomOf="@+id/pnv_pincode_number_1"
             app:pincodeValue="four"
             app:primaryText="4"
             app:secondaryText="GHI" />
 
     <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
-            android:id="@+id/pincodeNumberView312"
+            android:id="@+id/pnv_pincode_number_5"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/pincodeNumberView3211"
+            app:layout_constraintEnd_toStartOf="@+id/pnv_pincode_number_6"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/pincodeNumberView31"
-            app:layout_constraintTop_toBottomOf="@+id/pincodeNumberView2"
+            app:layout_constraintStart_toEndOf="@+id/pnv_pincode_number_4"
+            app:layout_constraintTop_toBottomOf="@+id/pnv_pincode_number_2"
             app:pincodeValue="five"
             app:primaryText="5"
             app:secondaryText="JKL" />
 
     <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
-            android:id="@+id/pincodeNumberView3211"
+            android:id="@+id/pnv_pincode_number_6"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/pincodeNumberView312"
-            app:layout_constraintTop_toBottomOf="@+id/pincodeNumberView3"
+            app:layout_constraintStart_toEndOf="@+id/pnv_pincode_number_5"
+            app:layout_constraintTop_toBottomOf="@+id/pnv_pincode_number_3"
             app:pincodeValue="six"
             app:primaryText="6"
             app:secondaryText="MNO" />
 
     <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
-            android:id="@+id/pincodeNumberView311"
+            android:id="@+id/pnv_pincode_number_7"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/pincodeNumberView312"
+            app:layout_constraintEnd_toStartOf="@+id/pnv_pincode_number_5"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pincodeNumberView31"
+            app:layout_constraintTop_toBottomOf="@+id/pnv_pincode_number_4"
             app:pincodeValue="seven"
             app:primaryText="7"
             app:secondaryText="PQRS" />
 
     <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
-            android:id="@+id/pincodeNumberView3121"
+            android:id="@+id/pnv_pincode_number_8"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/pincodeNumberView3211"
+            app:layout_constraintEnd_toStartOf="@+id/pnv_pincode_number_6"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/pincodeNumberView311"
-            app:layout_constraintTop_toBottomOf="@+id/pincodeNumberView312"
+            app:layout_constraintStart_toEndOf="@+id/pnv_pincode_number_7"
+            app:layout_constraintTop_toBottomOf="@+id/pnv_pincode_number_5"
             app:pincodeValue="eight"
             app:primaryText="8"
             app:secondaryText="TUV" />
 
     <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
-            android:id="@+id/pincodeNumberView32111"
+            android:id="@+id/pnv_pincode_number_9"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/pincodeNumberView3121"
-            app:layout_constraintTop_toBottomOf="@+id/pincodeNumberView3211"
+            app:layout_constraintStart_toEndOf="@+id/pnv_pincode_number_8"
+            app:layout_constraintTop_toBottomOf="@+id/pnv_pincode_number_6"
             app:pincodeValue="nine"
             app:primaryText="9"
             app:secondaryText="WXYZ" />
 
     <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
-            android:id="@+id/pincodeNumberView31212"
+            android:id="@+id/pnv_pincode_number_0"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toStartOf="@+id/pincodeNumberView3211"
+            app:layout_constraintEnd_toStartOf="@+id/pnv_pincode_number_6"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/pincodeNumberView311"
-            app:layout_constraintTop_toBottomOf="@+id/pincodeNumberView3121"
+            app:layout_constraintStart_toEndOf="@+id/pnv_pincode_number_7"
+            app:layout_constraintTop_toBottomOf="@+id/pnv_pincode_number_8"
             app:pincodeValue="zero"
             app:primaryText="0"
             app:secondaryText="+" />
 
     <ImageView
-            android:id="@+id/pincodeNumberView321112"
+            android:id="@+id/iv_backspace_action"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="16dp"
             android:src="@drawable/ic_backspace_action"
-            app:layout_constraintBottom_toBottomOf="@+id/pincodeNumberView31212"
+            app:layout_constraintBottom_toBottomOf="@+id/pnv_pincode_number_0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/pincodeNumberView31212"
-            app:layout_constraintTop_toBottomOf="@+id/pincodeNumberView32111" />
+            app:layout_constraintStart_toEndOf="@+id/pnv_pincode_number_0"
+            app:layout_constraintTop_toBottomOf="@+id/pnv_pincode_number_9" />
 
 </android.support.constraint.ConstraintLayout>

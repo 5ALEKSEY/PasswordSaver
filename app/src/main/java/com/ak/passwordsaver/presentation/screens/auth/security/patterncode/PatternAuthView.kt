@@ -325,7 +325,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
     private fun vibrate(duration: Long) {
         if (mIsVibrationNeeds) {
-            context.vibrate(duration)
+            context?.vibrate(duration)
         }
     }
 }
