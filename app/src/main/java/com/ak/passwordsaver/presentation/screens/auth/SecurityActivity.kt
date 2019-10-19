@@ -45,7 +45,7 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     private val mPincodeAuthView: PincodeAuthView by bindView(R.id.v_pincode_auth_view)
     private val mPatternAuthView: PatternAuthView by bindView(R.id.v_pattern_auth_view)
     private val mSecurityMessageText: TextView by bindView(R.id.tv_security_message_text)
-    private val mSwitchTemp: ImageView by bindView(R.id.iv_security_screen_logo)
+    private val mSecurityInputTypeImageView: ImageView by bindView(R.id.iv_security_input_type_change_action)
 
     private var mIsPincodeAuthMethod = true
 
@@ -62,7 +62,7 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         mPincodeAuthView.setPincodeValuesCount(PINCODE_INPUT_VALUES_COUNT)
         switchAuthMethod(mIsPincodeAuthMethod)
 
-        mSwitchTemp.setOnClickListener {
+        mSecurityInputTypeImageView.setOnClickListener {
             switchAuthMethod(!mIsPincodeAuthMethod, true)
         }
     }
@@ -119,6 +119,12 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         Handler().postDelayed({ disappearView.visibility = View.GONE }, 2 * switchDuration)
 
         mIsPincodeAuthMethod = isPincode
+        setSecurityInputTypeIcon(mIsPincodeAuthMethod)
+    }
+
+    private fun setSecurityInputTypeIcon(isPincode: Boolean) {
+        (if (isPincode) R.drawable.ic_pincode_input_type
+        else R.drawable.ic_pattern_input_type).let(mSecurityInputTypeImageView::setImageResource)
     }
 
     private fun getAppearAnimationForView(view: View, duration: Long): AnimatorSet {

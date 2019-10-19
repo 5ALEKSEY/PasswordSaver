@@ -8,6 +8,16 @@
         tools:context=".presentation.screens.auth.SecurityActivity">
 
     <ImageView
+            android:id="@+id/iv_security_input_type_change_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_pattern_input_type"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
             android:id="@+id/iv_security_screen_logo"
             android:layout_width="64dp"
             android:layout_height="64dp"
