@@ -25,10 +25,20 @@ class PincodeAuthView(context: Context?, attrs: AttributeSet?) : ConstraintLayou
     private val mPincodeNumberView9: PincodeNumberView by bindView(R.id.pnv_pincode_number_9)
     private val mBackspaceActionButton: ImageView by bindView(R.id.iv_backspace_action)
 
+    private var mIsPincodeInputLocked = false
+
     init {
         val inflater = LayoutInflater.from(context)
         inflater.inflate(R.layout.layout_pincode_auth_view, this, true)
         initViewListeners()
+    }
+
+    fun setPincodeInputLockedState(isLocked: Boolean) {
+        mIsPincodeInputLocked = isLocked
+    }
+
+    fun clearPincodeInput() {
+        mPincodeInputView.clearContentInputView()
     }
 
     private fun initViewListeners() {
@@ -44,9 +54,12 @@ class PincodeAuthView(context: Context?, attrs: AttributeSet?) : ConstraintLayou
         mPincodeNumberView9.setNumberClickListener(this::onPincodeNumberClicked)
 
         mBackspaceActionButton.setOnClickListener { mPincodeInputView.removeLastPincodeValue() }
+        mPincodeInputView.mOnContentFilled = { mOnFinishedAction.invoke(it) }
     }
 
     private fun onPincodeNumberClicked(pincodeValue: String) {
-        mPincodeInputView.putPincodeValue(pincodeValue)
+        if (!mIsPincodeInputLocked) {
+            mPincodeInputView.putPincodeValue(pincodeValue)
+        }
     }
 }

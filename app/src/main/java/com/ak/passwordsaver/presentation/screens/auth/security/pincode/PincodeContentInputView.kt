@@ -27,6 +27,12 @@ class PincodeContentInputView(context: Context?, attrs: AttributeSet?) :
         mFillContentSize = size
     }
 
+    fun clearContentInputView() {
+        removeAllViewsInLayout()
+        mResultPincodeStringBuilder.clear()
+        mInputPincodeViews.clear()
+    }
+
     fun putPincodeValue(value: String) {
         val inputPincodeView = InputPincodeValueView(context, null)
         val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
@@ -55,12 +61,6 @@ class PincodeContentInputView(context: Context?, attrs: AttributeSet?) :
             mInputPincodeViews.removeAt(lastViewIndex)
             mResultPincodeStringBuilder.deleteCharAt(mResultPincodeStringBuilder.length - 1)
         }
-    }
-
-    private fun clearContentInputView() {
-        removeAllViewsInLayout()
-        mResultPincodeStringBuilder.clear()
-        mInputPincodeViews.clear()
     }
 
     private fun setSecretImageForLastPincodeValue() {

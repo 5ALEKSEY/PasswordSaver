@@ -7,8 +7,8 @@ interface ISecurityView : IBaseAppView {
     fun hideSecurityMessage()
     fun showSuccessPatternAuthAction()
     fun showFailedPatternAuthAction()
-    fun lockPatternViewInput()
-    fun unlockPatternViewInput()
+    fun lockSecurityInputViews()
+    fun unlockSecurityInputViews()
     fun finishActivityWithResult(isCanceled: Boolean)
     fun switchAuthMethod(isPincode: Boolean, withAnimation: Boolean = false)
 }

@@ -86,11 +86,13 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         mPatternAuthView.setAuthViewState(false)
     }
 
-    override fun lockPatternViewInput() {
+    override fun lockSecurityInputViews() {
+        mPincodeAuthView.setPincodeInputLockedState(true)
         mPatternAuthView.setAuthViewInputLockState(true)
     }
 
-    override fun unlockPatternViewInput() {
+    override fun unlockSecurityInputViews() {
+        mPincodeAuthView.setPincodeInputLockedState(false)
         mPatternAuthView.setAuthViewInputLockState(false)
     }
 
