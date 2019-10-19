@@ -114,12 +114,8 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         }
     }
 
-    fun setAuthViewState(isSuccess: Boolean) {
-        if (isSuccess) {
-            startAuthSuccessAnimation()
-        } else {
-            startAuthFailedAnimation()
-        }
+    fun setFailedAuthViewState() {
+        startAuthFailedAnimation()
     }
 
     fun setAuthViewInputLockState(isLocked: Boolean) {
@@ -301,12 +297,6 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         mIsAuthStarted = false
         mIsPatternInputLocked = false
         invalidate()
-    }
-
-    private fun startAuthSuccessAnimation() {
-        mNodesMap.forEach { _, patternNodeData ->
-            patternNodeData.nodeView.setNodeSuccessState()
-        }
     }
 
     private fun startAuthFailedAnimation() {

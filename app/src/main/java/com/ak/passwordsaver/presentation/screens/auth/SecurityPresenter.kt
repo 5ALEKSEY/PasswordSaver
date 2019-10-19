@@ -17,10 +17,9 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
 
     fun onPatterAuthFinished(patternCode: String) {
         // TODO: check pattern code and send result to view (hardcode below)
-        viewState.showSuccessPatternAuthAction()
         Completable.timer(200L, TimeUnit.MILLISECONDS, Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { viewState.finishActivityWithResult(false) }
+            .subscribe { viewState.sendAuthActionResult(false) }
             .let(this::bindDisposable)
     }
 

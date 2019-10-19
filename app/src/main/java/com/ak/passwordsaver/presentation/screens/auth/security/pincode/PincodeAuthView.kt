@@ -7,8 +7,13 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.bindView
+import com.ak.passwordsaver.utils.extensions.vibrate
 
 class PincodeAuthView(context: Context?, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
+
+    companion object {
+        private const val FAILED_AUTH_VIBRATION_DELAY_IN_MILLIS = 300L
+    }
 
     lateinit var mOnFinishedAction: (resultPincode: String) -> Unit
 
@@ -31,6 +36,14 @@ class PincodeAuthView(context: Context?, attrs: AttributeSet?) : ConstraintLayou
         val inflater = LayoutInflater.from(context)
         inflater.inflate(R.layout.layout_pincode_auth_view, this, true)
         initViewListeners()
+    }
+
+    fun setPincodeValuesCount(count: Int) {
+        mPincodeInputView.setFillContentSize(count)
+    }
+
+    fun setFailedAuthViewState() {
+        context.vibrate(FAILED_AUTH_VIBRATION_DELAY_IN_MILLIS)
     }
 
     fun setPincodeInputLockedState(isLocked: Boolean) {

@@ -25,6 +25,7 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
 
     companion object {
+        private const val PINCODE_INPUT_VALUES_COUNT = 4
         private const val SWITCH_AUTH_METHOD_DURATION = 200L
 
         fun startSecurityForResult(context: FragmentActivity, fragment: Fragment) {
@@ -51,13 +52,14 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     override fun getScreenLayoutResId() = R.layout.activity_security
 
     override fun onBackPressed() {
-        finishActivityWithResult(true)
+        sendAuthActionResult(true)
     }
 
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
         mPatternAuthView.mOnFinishedAction = mSecurityPresenter::onPatterAuthFinished
         mPincodeAuthView.mOnFinishedAction = mSecurityPresenter::onPincodeAuthFinished
+        mPincodeAuthView.setPincodeValuesCount(PINCODE_INPUT_VALUES_COUNT)
         switchAuthMethod(mIsPincodeAuthMethod)
 
         mSwitchTemp.setOnClickListener {
@@ -78,12 +80,12 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         mSecurityMessageText.visibility = View.INVISIBLE
     }
 
-    override fun showSuccessPatternAuthAction() {
-        mPatternAuthView.setAuthViewState(true)
+    override fun showFailedPincodeAuthAction() {
+        mPincodeAuthView.setFailedAuthViewState()
     }
 
     override fun showFailedPatternAuthAction() {
-        mPatternAuthView.setAuthViewState(false)
+        mPatternAuthView.setFailedAuthViewState()
     }
 
     override fun lockSecurityInputViews() {
@@ -96,8 +98,8 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         mPatternAuthView.setAuthViewInputLockState(false)
     }
 
-    override fun finishActivityWithResult(isCanceled: Boolean) {
-        val result = if (isCanceled) Activity.RESULT_CANCELED else Activity.RESULT_OK
+    override fun sendAuthActionResult(isSuccessfully: Boolean) {
+        val result = if (isSuccessfully) Activity.RESULT_OK else Activity.RESULT_CANCELED
         setResult(result)
         finish()
     }

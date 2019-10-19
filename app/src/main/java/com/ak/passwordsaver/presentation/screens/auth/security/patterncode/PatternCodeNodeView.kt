@@ -15,7 +15,6 @@ import com.ak.passwordsaver.utils.bindView
 class PatternCodeNodeView(context: Context?, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs) {
 
-    private val mSuccessColor by lazy { ContextCompat.getColor(context!!, R.color.success_action_color) }
     private val mFailedColor by lazy { ContextCompat.getColor(context!!, R.color.failed_action_color) }
 
     private val mPatterNodeView: ImageView by bindView(R.id.iv_node_pattern_view)
@@ -36,10 +35,6 @@ class PatternCodeNodeView(context: Context?, attrs: AttributeSet?) :
 
     fun setNodeFailedState() {
         setPatternNodeColor(mFailedColor)
-    }
-
-    fun setNodeSuccessState() {
-        setPatternNodeColor(mSuccessColor)
     }
 
     private fun setPatternNodeColor(@ColorInt color: Int) {
