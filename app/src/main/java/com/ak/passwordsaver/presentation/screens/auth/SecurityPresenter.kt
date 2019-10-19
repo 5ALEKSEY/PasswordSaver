@@ -23,4 +23,8 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
             .subscribe { viewState.finishActivityWithResult(false) }
             .let(this::bindDisposable)
     }
+
+    fun onPincodeAuthFinished(pincodeResult: String) {
+
+    }
 }

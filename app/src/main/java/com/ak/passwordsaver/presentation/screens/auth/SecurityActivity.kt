@@ -57,6 +57,7 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
         mPatternAuthView.mOnFinishedAction = mSecurityPresenter::onPatterAuthFinished
+        mPincodeAuthView.mOnFinishedAction = mSecurityPresenter::onPincodeAuthFinished
         switchAuthMethod(mIsPincodeAuthMethod)
 
         mSwitchTemp.setOnClickListener {
@@ -65,11 +66,16 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     }
 
     override fun showSecurityMessage(message: String, withAnimation: Boolean) {
+        mSecurityMessageText.visibility = View.VISIBLE
         mSecurityMessageText.text = message
         if (withAnimation) {
             val shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.small_shake)
             mSecurityMessageText.startAnimation(shakeAnimation)
         }
+    }
+
+    override fun hideSecurityMessage() {
+        mSecurityMessageText.visibility = View.INVISIBLE
     }
 
     override fun showSuccessPatternAuthAction() {

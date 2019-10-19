@@ -1,14 +1,16 @@
 package com.ak.passwordsaver.presentation.screens.auth.security.pincode
 
 import android.content.Context
+import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.bindView
 
-class PincodeAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
+class PincodeAuthView(context: Context?, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
+
+    lateinit var mOnFinishedAction: (resultPincode: String) -> Unit
 
     private val mPincodeInputView: PincodeContentInputView by bindView(R.id.pciv_pincode_input)
     private val mPincodeNumberView0: PincodeNumberView by bindView(R.id.pnv_pincode_number_0)
@@ -25,8 +27,7 @@ class PincodeAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
     init {
         val inflater = LayoutInflater.from(context)
-        val pincodeView = inflater.inflate(R.layout.layout_pincode_auth_view, this, false)
-        addView(pincodeView)
+        inflater.inflate(R.layout.layout_pincode_auth_view, this, true)
         initViewListeners()
     }
 

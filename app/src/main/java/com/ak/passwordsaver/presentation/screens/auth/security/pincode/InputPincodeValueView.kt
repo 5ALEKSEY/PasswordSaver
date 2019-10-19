@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,7 @@ import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.bindView
 
 class InputPincodeValueView(context: Context?, attrs: AttributeSet?) :
-    RelativeLayout(context, attrs) {
+    ConstraintLayout(context, attrs) {
 
     companion object {
         private const val SHOW_HIDE_ANIMATION_DURATION = 150L
@@ -27,9 +28,7 @@ class InputPincodeValueView(context: Context?, attrs: AttributeSet?) :
 
     init {
         val inflater = LayoutInflater.from(context)
-        val pincodeInputValueView =
-            inflater.inflate(R.layout.layout_input_pincode_value_view, this, false)
-        addView(pincodeInputValueView)
+        inflater.inflate(R.layout.layout_input_pincode_value_view, this, true)
     }
 
     fun showInputPincodeValue(value: String) {

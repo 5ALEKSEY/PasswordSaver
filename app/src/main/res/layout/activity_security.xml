@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/iconsAndText"
             android:textSize="16sp"
+            android:visibility="invisible"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +43,7 @@
 
         <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeAuthView
                 android:id="@+id/v_pincode_auth_view"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_centerInParent="true"
                 android:layout_height="wrap_content"
                 tools:background="@color/colorAccent"

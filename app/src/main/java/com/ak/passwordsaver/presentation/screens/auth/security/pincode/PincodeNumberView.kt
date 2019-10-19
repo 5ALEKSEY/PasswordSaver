@@ -27,8 +27,7 @@ class PincodeNumberView(context: Context?, attrs: AttributeSet?) :
 
     init {
         val inflater = LayoutInflater.from(context)
-        val pincodeView = inflater.inflate(R.layout.layout_pincode_number_view, this, false)
-        addView(pincodeView)
+        inflater.inflate(R.layout.layout_pincode_number_view, this, true)
         initViewAttributes(attrs)
         initTextContent()
         setOnClickListener(this)

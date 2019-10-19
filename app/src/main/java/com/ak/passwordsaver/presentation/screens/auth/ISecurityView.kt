@@ -4,6 +4,7 @@ import com.ak.passwordsaver.presentation.base.ui.IBaseAppView
 
 interface ISecurityView : IBaseAppView {
     fun showSecurityMessage(message: String, withAnimation: Boolean = false)
+    fun hideSecurityMessage()
     fun showSuccessPatternAuthAction()
     fun showFailedPatternAuthAction()
     fun lockPatternViewInput()

@@ -3,7 +3,6 @@ package com.ak.passwordsaver.presentation.screens.auth.security.pincode
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
-import com.ak.passwordsaver.R
 
 class PincodeContentInputView(context: Context?, attrs: AttributeSet?) :
     LinearLayout(context, attrs) {
@@ -30,8 +29,7 @@ class PincodeContentInputView(context: Context?, attrs: AttributeSet?) :
 
     fun putPincodeValue(value: String) {
         val inputPincodeView = InputPincodeValueView(context, null)
-        val inputPincodeViewSize = resources.getDimensionPixelSize(R.dimen.input_pincode_value_size)
-        val params = LayoutParams(inputPincodeViewSize, inputPincodeViewSize)
+        val params = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         params.weight = 1F
         addView(inputPincodeView, params)
         inputPincodeView.showInputPincodeValue(value)
