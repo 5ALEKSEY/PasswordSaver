@@ -5,6 +5,6 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.items.Settings
 class SwitchSettingsListItemModel(
     settingId: Int,
     settingName: String,
-    settingDescription: String,
+    val settingDescription: String,
     val isChecked: Boolean
-) : SettingsListItemModel(settingId, settingName, settingDescription)
+) : SettingsListItemModel(settingId, settingName)

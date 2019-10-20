@@ -143,7 +143,6 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
     private fun initToolbar() {
         setSupportActionBar(mToolbar)
         supportActionBar?.title = "Add new password"
-        mToolbar.setNavigationIcon(R.drawable.ic_back_action)
         mToolbar.setNavigationOnClickListener { finish() }
     }
 

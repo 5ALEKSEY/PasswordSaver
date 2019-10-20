@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.BaseSettingsViewHolder
@@ -41,6 +42,7 @@ class SettingsSpinnerHolder(
 ) : BaseSettingsViewHolder<SpinnerSettingsListItemModel>(itemView) {
 
     private val mSpinner: Spinner by bindView(R.id.s_setting_spinner_chooser)
+    private val mDescription: TextView by bindView(R.id.tv_setting_description)
 
     override fun setViewHolderData(itemModel: SpinnerSettingsListItemModel) {
         val arrayAdapter = ArrayAdapter<String>(itemView.context, R.layout.default_spinner_item)
@@ -56,5 +58,6 @@ class SettingsSpinnerHolder(
                 onSpinnerSettingsChanged.invoke(itemModel.settingId, position)
             }
         }
+        mDescription.text = itemModel.settingDescription
     }
 }

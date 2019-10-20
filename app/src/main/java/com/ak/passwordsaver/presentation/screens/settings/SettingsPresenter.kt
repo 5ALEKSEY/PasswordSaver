@@ -1,11 +1,10 @@
 package com.ak.passwordsaver.presentation.screens.settings
 
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.model.PasswordShowingType
+import com.ak.passwordsaver.R
 import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
-import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerSettingsListItemModel
-import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchSettingsListItemModel
+import com.ak.passwordsaver.presentation.screens.settings.adapter.items.sections.SectionSettingsListItemModel
 import com.arellomobile.mvp.InjectViewState
 import javax.inject.Inject
 
@@ -13,7 +12,9 @@ import javax.inject.Inject
 class SettingsPresenter : BasePSPresenter<ISettingsView>() {
 
     companion object {
-        const val SHOWING_TYPE_SETTING_ID = 1
+        const val DESIGN_SECTION_SETTING_ID = 1
+        const val PRIVACY_SECTION_SETTING_ID = 2
+        const val ABOUT_SECTION_SETTING_ID = 3
     }
 
     @Inject
@@ -28,27 +29,42 @@ class SettingsPresenter : BasePSPresenter<ISettingsView>() {
         loadSettingsData()
     }
 
-    fun settingSpinnerItemChanged(settingId: Int, newDataId: Int) {
+    fun onSectionClicked(settingId: Int) {
         when (settingId) {
-            SHOWING_TYPE_SETTING_ID -> {
-                mSettingsPreferencesManager.setPasswordShowingType(PasswordShowingType.getTypeByNumber(newDataId))
+            DESIGN_SECTION_SETTING_ID -> {
+                viewState.showDesignSettings()
+            }
+            PRIVACY_SECTION_SETTING_ID -> {
+
+            }
+            ABOUT_SECTION_SETTING_ID -> {
+
             }
         }
     }
 
     private fun loadSettingsData() {
-        // ------------------------------------------ Showing Type -----------------------------------------------------
-        val showingType = mSettingsPreferencesManager.getPasswordShowingType()
-        val showingTypeList = mSettingsPreferencesManager.getStringListOfPasswordShowingTypes()
-        val showingTypeSpinnerItem = SpinnerSettingsListItemModel(
-            SHOWING_TYPE_SETTING_ID,
-            "Showing type",
-            "Type of password showing for user",
-            showingType.number,
-            showingTypeList
+        val designSectionItemModel = SectionSettingsListItemModel(
+            DESIGN_SECTION_SETTING_ID,
+            "Design",
+            R.drawable.ic_design_section_action
         )
-        // -------------------------------------------------------------------------------------------------------------
+        val privacySectionItemModel = SectionSettingsListItemModel(
+            PRIVACY_SECTION_SETTING_ID,
+            "Privacy",
+            R.drawable.ic_privacy_section_action
+        )
+        val aboutSectionItemModel = SectionSettingsListItemModel(
+            ABOUT_SECTION_SETTING_ID,
+            "About",
+            R.drawable.ic_about_section_action
+        )
 
-        viewState.displayAppSettings(listOf(showingTypeSpinnerItem))
+        val sections = listOf(
+            designSectionItemModel,
+            privacySectionItemModel,
+            aboutSectionItemModel
+        )
+        viewState.displayAppSettings(sections)
     }
 }

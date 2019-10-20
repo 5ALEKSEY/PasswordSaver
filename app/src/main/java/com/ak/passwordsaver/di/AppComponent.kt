@@ -8,6 +8,7 @@ import com.ak.passwordsaver.presentation.screens.home.HomePresenter
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListPresenter
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsActionModePresenter
 import com.ak.passwordsaver.presentation.screens.settings.SettingsPresenter
+import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsPresenter
 import dagger.Component
 import javax.inject.Singleton
 
@@ -27,7 +28,8 @@ interface AppComponent {
     fun inject(presenter: HomePresenter)
     fun inject(presenter: PasswordsListPresenter)
     fun inject(presenter: AddNewPasswordPresenter)
-    fun inject(presenter: SettingsPresenter)
+    fun inject(presenter: DesignSettingsPresenter)
     fun inject(presenter: PasswordsActionModePresenter)
     fun inject(presenter: SecurityPresenter)
+    fun inject(presenter: SettingsPresenter)
 }

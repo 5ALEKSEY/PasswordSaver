@@ -9,6 +9,7 @@ import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecyclerViewAdapter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
+import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsActivity
 import com.ak.passwordsaver.utils.bindView
 import com.arellomobile.mvp.presenter.InjectPresenter
 
@@ -34,6 +35,20 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
         initRecyclerView()
     }
 
+    override fun showDesignSettings() {
+        context?.let {
+            DesignSettingsActivity.startActivity(it)
+        }
+    }
+
+    override fun showPrivacySettings() {
+
+    }
+
+    override fun showAboutScreen() {
+
+    }
+
     override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
         mSettingsRecyclerAdapter.addSettingsList(settingsItems)
     }
@@ -47,7 +62,10 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
     }
 
     private fun initRecyclerView() {
-        mSettingsRecyclerAdapter = SettingsRecyclerViewAdapter(mSettingsPresenter::settingSpinnerItemChanged)
+        mSettingsRecyclerAdapter = SettingsRecyclerViewAdapter(
+            null,
+            mSettingsPresenter::onSectionClicked
+        )
         mSettingsRecyclerView.adapter = mSettingsRecyclerAdapter
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         mSettingsRecyclerView.layoutManager = linearLayoutManager

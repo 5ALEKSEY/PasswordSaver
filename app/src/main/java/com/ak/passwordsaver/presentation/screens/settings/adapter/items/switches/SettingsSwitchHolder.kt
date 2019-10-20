@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Switch
+import android.widget.TextView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.BaseSettingsViewHolder
@@ -33,8 +34,10 @@ class SwitchAdapterDelegate(private val viewType: Int) : AdapterDelegate<Setting
 class SettingsSwitchHolder(itemView: View) : BaseSettingsViewHolder<SwitchSettingsListItemModel>(itemView) {
 
     private val mSwitch: Switch by bindView(R.id.s_setting_enabling_state)
+    private val mDescription: TextView by bindView(R.id.tv_setting_description)
 
     override fun setViewHolderData(itemModel: SwitchSettingsListItemModel) {
         mSwitch.isChecked = itemModel.isChecked
+        mDescription.text = itemModel.settingDescription
     }
 }

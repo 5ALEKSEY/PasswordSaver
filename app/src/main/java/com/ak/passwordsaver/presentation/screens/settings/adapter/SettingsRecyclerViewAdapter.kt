@@ -4,15 +4,19 @@ import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegatesManager
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
+import com.ak.passwordsaver.presentation.screens.settings.adapter.items.sections.SectionAdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerAdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchAdapterDelegate
 
-class SettingsRecyclerViewAdapter(onSpinnerSettingsChanged: (settingId: Int, newDataId: Int) -> Unit) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SettingsRecyclerViewAdapter(
+    onSpinnerSettingsChanged: ((settingId: Int, newDataId: Int) -> Unit)? = null,
+    onSectionSettingsClicked: ((settingId: Int) -> Unit)? = null
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         const val SWITCH_SETTING_TYPE = 1
         const val SPINNER_SETTING_TYPE = 2
+        const val SECTION_SETTING_TYPE = 3
     }
 
     private val mSettingsItemsList = arrayListOf<SettingsListItemModel>()
@@ -20,7 +24,22 @@ class SettingsRecyclerViewAdapter(onSpinnerSettingsChanged: (settingId: Int, new
 
     init {
         mAdapterDelegatesManager.addDelegate(SwitchAdapterDelegate(SWITCH_SETTING_TYPE))
-        mAdapterDelegatesManager.addDelegate(SpinnerAdapterDelegate(SPINNER_SETTING_TYPE, onSpinnerSettingsChanged))
+        if (onSpinnerSettingsChanged != null) {
+            mAdapterDelegatesManager.addDelegate(
+                SpinnerAdapterDelegate(
+                    SPINNER_SETTING_TYPE,
+                    onSpinnerSettingsChanged
+                )
+            )
+        }
+        if (onSectionSettingsClicked != null) {
+            mAdapterDelegatesManager.addDelegate(
+                SectionAdapterDelegate(
+                    SECTION_SETTING_TYPE,
+                    onSectionSettingsClicked
+                )
+            )
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

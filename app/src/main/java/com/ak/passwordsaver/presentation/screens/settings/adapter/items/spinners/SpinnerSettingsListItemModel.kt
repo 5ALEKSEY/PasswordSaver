@@ -5,7 +5,7 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.items.Settings
 class SpinnerSettingsListItemModel(
     settingId: Int,
     settingName: String,
-    settingDescription: String,
+    val settingDescription: String,
     val selectedItemPosition: Int,
     val spinnerItems: List<String>
-) : SettingsListItemModel(settingId, settingName, settingDescription)
+) : SettingsListItemModel(settingId, settingName)

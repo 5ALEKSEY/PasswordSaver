@@ -11,11 +11,9 @@ abstract class BaseSettingsViewHolder<ItemModel : SettingsListItemModel>(itemVie
     RecyclerView.ViewHolder(itemView) {
 
     private val mName: TextView by bindView(R.id.tv_setting_name)
-    private val mDescription: TextView by bindView(R.id.tv_setting_description)
 
     fun bindViewHolder(itemModel: ItemModel) {
         mName.text = itemModel.settingName
-        mDescription.text = itemModel.settingDescription
         setViewHolderData(itemModel)
     }
 
