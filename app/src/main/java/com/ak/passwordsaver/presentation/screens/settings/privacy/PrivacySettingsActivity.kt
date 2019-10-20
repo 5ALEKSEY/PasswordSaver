@@ -54,10 +54,10 @@ class PrivacySettingsActivity : BasePSFragmentActivity(), IPrivacySettingsView {
 
     private fun initRecyclerView() {
         mSettingsRecyclerAdapter = SettingsRecyclerViewAdapter(
-            {settingId, isChecked -> showShortTimeMessage("isChecked:$isChecked") },
+            mPrivacySettingsPresenter::onSwitchSettingsItemChanged,
             null,
             null,
-            { showShortTimeMessage("ss") }
+            mPrivacySettingsPresenter::onTextSettingsItemClicked
         )
         mDesignSettingsRecyclerView.apply {
             adapter = mSettingsRecyclerAdapter

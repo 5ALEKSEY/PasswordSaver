@@ -1,5 +1,6 @@
 package com.ak.passwordsaver.presentation.screens.settings.adapter
 
+import android.support.v7.util.DiffUtil
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
 import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegatesManager
@@ -75,10 +76,32 @@ class SettingsRecyclerViewAdapter constructor(
     }
 
     fun addSettingsList(settingItems: List<SettingsListItemModel>) {
-        if (!settingItems.isNullOrEmpty()) {
-            mSettingsItemsList.clear()
-            mSettingsItemsList.addAll(settingItems)
-            notifyDataSetChanged()
+        val diffCallback = PrivacyDiffUtilCallback(mSettingsItemsList, settingItems)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        mSettingsItemsList.clear()
+        mSettingsItemsList.addAll(settingItems)
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    class PrivacyDiffUtilCallback(
+        private val oldList: List<SettingsListItemModel>,
+        private val newList: List<SettingsListItemModel>
+    ) : DiffUtil.Callback() {
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+            oldList[oldItemPosition].settingId == newList[newItemPosition].settingId
+
+        override fun getOldListSize() = oldList.size
+
+        override fun getNewListSize() = newList.size
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = oldList[oldItemPosition]
+            val newItem = newList[newItemPosition]
+            val isSameId = oldItem.settingId == newItem.settingId
+            val isSameName = oldItem.settingName.contentEquals(newItem.settingName)
+            return isSameId && isSameName
         }
     }
 }

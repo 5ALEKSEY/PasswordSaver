@@ -30,13 +30,15 @@ class SettingsPreferencesManagerImpl @Inject constructor(
     override fun getStringListOfPasswordShowingTypes() =
         PasswordShowingType.getListOfTypesMessages(mContext)
 
-    override fun isPincodeEnabled() = getUserPincodeValue().isNotEmpty()
+    override fun isPincodeEnabled() =
+        mSettingsPreferences.getBoolean(IS_PINCODE_ENABLED_SHARED_KEY, false)
 
     override fun setPincodeEnableState(isEnabled: Boolean) {
         mSettingsPreferences.edit().putBoolean(IS_PINCODE_ENABLED_SHARED_KEY, isEnabled).apply()
     }
 
-    override fun isPatternEnabled() = getUserPatternValue().isNotEmpty()
+    override fun isPatternEnabled() =
+        mSettingsPreferences.getBoolean(IS_PATTERN_ENABLED_SHARED_KEY, false)
 
     override fun setPatternEnableState(isEnabled: Boolean) {
         mSettingsPreferences.edit().putBoolean(IS_PATTERN_ENABLED_SHARED_KEY, isEnabled).apply()
