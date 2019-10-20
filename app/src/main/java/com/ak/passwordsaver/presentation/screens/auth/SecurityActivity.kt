@@ -25,18 +25,31 @@ import com.arellomobile.mvp.presenter.InjectPresenter
 class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
 
     companion object {
+        private const val IS_AUTH_ACTION_KEY_EXTRA = "is_auth_action"
         private const val PINCODE_INPUT_VALUES_COUNT = 4
         private const val SWITCH_AUTH_METHOD_DURATION = 200L
 
-        fun startSecurityForResult(context: FragmentActivity, fragment: Fragment) {
-            val intent = Intent(context, SecurityActivity::class.java)
+        fun startSecurityForResult(
+            context: FragmentActivity,
+            fragment: Fragment,
+            securityAction: Int
+        ) {
+            val intent = getSecurityActivityIntent(context, securityAction)
             context.startActivityFromFragment(fragment, intent, AppConstants.SECURITY_REQUEST_CODE)
         }
 
-        fun startSecurityForResult(context: FragmentActivity) {
-            val intent = Intent(context, SecurityActivity::class.java)
+        fun startSecurityForResult(context: FragmentActivity, securityAction: Int) {
+            val intent = getSecurityActivityIntent(context, securityAction)
             context.startActivityForResult(intent, AppConstants.SECURITY_REQUEST_CODE)
         }
+
+        private fun getSecurityActivityIntent(
+            context: FragmentActivity,
+            securityAction: Int
+        ) =
+            Intent(context, SecurityActivity::class.java).apply {
+                putExtra(IS_AUTH_ACTION_KEY_EXTRA, securityAction)
+            }
     }
 
     @InjectPresenter
@@ -47,8 +60,6 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     private val mSecurityMessageText: TextView by bindView(R.id.tv_security_message_text)
     private val mSecurityInputTypeImageView: ImageView by bindView(R.id.iv_security_input_type_change_action)
 
-    private var mIsPincodeAuthMethod = true
-
     override fun getScreenLayoutResId() = R.layout.activity_security
 
     override fun onBackPressed() {
@@ -57,13 +68,14 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
 
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
-        mPatternAuthView.mOnFinishedAction = mSecurityPresenter::onPatterAuthFinished
-        mPincodeAuthView.mOnFinishedAction = mSecurityPresenter::onPincodeAuthFinished
+        intent?.let { initAuthState(it) }
+
+        mPatternAuthView.mOnFinishedAction = mSecurityPresenter::onUserAuthFinished
+        mPincodeAuthView.mOnFinishedAction = mSecurityPresenter::onUserAuthFinished
         mPincodeAuthView.setPincodeValuesCount(PINCODE_INPUT_VALUES_COUNT)
-        switchAuthMethod(mIsPincodeAuthMethod)
 
         mSecurityInputTypeImageView.setOnClickListener {
-            switchAuthMethod(!mIsPincodeAuthMethod, true)
+            mSecurityPresenter.onSecurityInputTypeChangeClicked()
         }
     }
 
@@ -118,8 +130,22 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         appearView.visibility = View.VISIBLE
         Handler().postDelayed({ disappearView.visibility = View.GONE }, 2 * switchDuration)
 
-        mIsPincodeAuthMethod = isPincode
-        setSecurityInputTypeIcon(mIsPincodeAuthMethod)
+        setSecurityInputTypeIcon(isPincode)
+    }
+
+    override fun lockSwitchAuthMethod() {
+        mSecurityInputTypeImageView.visibility = View.GONE
+    }
+
+    override fun unlockSwitchAuthMethod() {
+        mSecurityInputTypeImageView.visibility = View.VISIBLE
+    }
+
+    private fun initAuthState(intent: Intent) {
+        mSecurityPresenter.mAuthActionType = intent.getIntExtra(
+            IS_AUTH_ACTION_KEY_EXTRA,
+            -1
+        )
     }
 
     private fun setSecurityInputTypeIcon(isPincode: Boolean) {

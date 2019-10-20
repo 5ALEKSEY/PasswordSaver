@@ -11,4 +11,6 @@ interface ISecurityView : IBaseAppView {
     fun unlockSecurityInputViews()
     fun sendAuthActionResult(isSuccessfully: Boolean)
     fun switchAuthMethod(isPincode: Boolean, withAnimation: Boolean = false)
+    fun lockSwitchAuthMethod()
+    fun unlockSwitchAuthMethod()
 }

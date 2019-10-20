@@ -174,7 +174,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     override fun startSecurityAuthAction() {
         activity?.let {
-            SecurityActivity.startSecurityForResult(activity!!, this)
+            SecurityActivity.startSecurityForResult(activity!!, this, true)
         }
     }
 
