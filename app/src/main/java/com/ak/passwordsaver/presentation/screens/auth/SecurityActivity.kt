@@ -52,7 +52,7 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     override fun getScreenLayoutResId() = R.layout.activity_security
 
     override fun onBackPressed() {
-        sendAuthActionResult(true)
+        sendAuthActionResult(false)
     }
 
     override fun initViewBeforePresenterAttach() {

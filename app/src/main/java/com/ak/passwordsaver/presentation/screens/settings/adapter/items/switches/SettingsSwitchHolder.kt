@@ -12,7 +12,10 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.BaseSettingsVi
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import com.ak.passwordsaver.utils.bindView
 
-class SwitchAdapterDelegate(private val viewType: Int) : AdapterDelegate<SettingsListItemModel> {
+class SwitchAdapterDelegate(
+    private val viewType: Int,
+    private val onSwitchSettingsChanged: (settingId: Int, isChecked: Boolean) -> Unit
+) : AdapterDelegate<SettingsListItemModel> {
 
     override fun isForViewType(item: SettingsListItemModel) = item is SwitchSettingsListItemModel
 
@@ -21,7 +24,7 @@ class SwitchAdapterDelegate(private val viewType: Int) : AdapterDelegate<Setting
     override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.settings_item_switch_layout, parent, false)
-        return SettingsSwitchHolder(itemView)
+        return SettingsSwitchHolder(itemView, onSwitchSettingsChanged)
     }
 
     override fun onBindViewHolder(item: SettingsListItemModel, viewHolder: RecyclerView.ViewHolder) {
@@ -31,7 +34,10 @@ class SwitchAdapterDelegate(private val viewType: Int) : AdapterDelegate<Setting
     }
 }
 
-class SettingsSwitchHolder(itemView: View) : BaseSettingsViewHolder<SwitchSettingsListItemModel>(itemView) {
+class SettingsSwitchHolder(
+    itemView: View,
+    private val onSwitchSettingsChanged: (settingId: Int, isChecked: Boolean) -> Unit
+) : BaseSettingsViewHolder<SwitchSettingsListItemModel>(itemView) {
 
     private val mSwitch: Switch by bindView(R.id.s_setting_enabling_state)
     private val mDescription: TextView by bindView(R.id.tv_setting_description)
@@ -39,5 +45,9 @@ class SettingsSwitchHolder(itemView: View) : BaseSettingsViewHolder<SwitchSettin
     override fun setViewHolderData(itemModel: SwitchSettingsListItemModel) {
         mSwitch.isChecked = itemModel.isChecked
         mDescription.text = itemModel.settingDescription
+        itemView.setOnClickListener { mSwitch.isChecked = !mSwitch.isChecked }
+        mSwitch.setOnCheckedChangeListener { _, isChecked ->
+            onSwitchSettingsChanged.invoke(itemModel.settingId, isChecked)
+        }
     }
 }

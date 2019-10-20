@@ -35,10 +35,11 @@ class SettingsPresenter : BasePSPresenter<ISettingsView>() {
                 viewState.showDesignSettings()
             }
             PRIVACY_SECTION_SETTING_ID -> {
-
+                // TODO: check passcode if needs
+                viewState.showPrivacySettings()
             }
             ABOUT_SECTION_SETTING_ID -> {
-
+                viewState.showAboutScreen()
             }
         }
     }

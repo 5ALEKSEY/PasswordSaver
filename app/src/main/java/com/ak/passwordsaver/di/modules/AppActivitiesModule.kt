@@ -5,6 +5,7 @@ import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.home.HomeActivity
 import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsActivity
+import com.ak.passwordsaver.presentation.screens.settings.privacy.PrivacySettingsActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -27,4 +28,8 @@ interface AppActivitiesModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [ActivityModule::class])
     fun injectDesignSettingsActivity(): DesignSettingsActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [ActivityModule::class])
+    fun injectPrivacySettingsActivity(): PrivacySettingsActivity
 }

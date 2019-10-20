@@ -16,9 +16,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".presentation.screens.settings.privacy.PrivacySettingsActivity"></activity>
         <activity
                 android:name=".presentation.screens.settings.design.DesignSettingsActivity"
-                android:screenOrientation="portrait"/>
+                android:screenOrientation="portrait" />
         <activity android:name=".presentation.screens.auth.SecurityActivity" />
         <activity
                 android:name=".presentation.screens.addnew.AddNewPasswordActivity"

@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.settings.design
+package com.ak.passwordsaver.presentation.screens.settings.privacy
 
 import android.content.Context
 import android.content.Intent
@@ -13,28 +13,33 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.items.Settings
 import com.ak.passwordsaver.utils.bindView
 import com.arellomobile.mvp.presenter.InjectPresenter
 
-class DesignSettingsActivity : BasePSFragmentActivity(), IDesignSettingsView {
+class PrivacySettingsActivity : BasePSFragmentActivity(), IPrivacySettingsView {
 
     companion object {
         fun startActivity(context: Context) {
-            context.startActivity(Intent(context, DesignSettingsActivity::class.java))
+            context.startActivity(Intent(context, PrivacySettingsActivity::class.java))
         }
     }
 
     @InjectPresenter
-    lateinit var mDesignSettingsPresenter: DesignSettingsPresenter
+    lateinit var mPrivacySettingsPresenter: PrivacySettingsPresenter
 
-    private val mToolbar: Toolbar by bindView(R.id.tb_design_settings_bar)
-    private val mDesignSettingsRecyclerView: RecyclerView by bindView(R.id.rv_design_settings_items_list)
+    private val mToolbar: Toolbar by bindView(R.id.tb_privacy_settings_bar)
+    private val mDesignSettingsRecyclerView: RecyclerView by bindView(R.id.rv_privacy_settings_items_list)
 
     private lateinit var mSettingsRecyclerAdapter: SettingsRecyclerViewAdapter
 
-    override fun getScreenLayoutResId() = R.layout.activity_design_settings
+    override fun getScreenLayoutResId() = R.layout.activity_privacy_settings
 
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
         initToolbar()
         initRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mPrivacySettingsPresenter.loadSettingsData()
     }
 
     override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
@@ -43,21 +48,21 @@ class DesignSettingsActivity : BasePSFragmentActivity(), IDesignSettingsView {
 
     private fun initToolbar() {
         setSupportActionBar(mToolbar)
-        supportActionBar?.title = "Design"
+        supportActionBar?.title = "Privacy"
         mToolbar.setNavigationOnClickListener { finish() }
     }
 
     private fun initRecyclerView() {
         mSettingsRecyclerAdapter = SettingsRecyclerViewAdapter(
+            {settingId, isChecked -> showShortTimeMessage("isChecked:$isChecked") },
             null,
-            mDesignSettingsPresenter::settingSpinnerItemChanged,
             null,
-            null
+            { showShortTimeMessage("ss") }
         )
         mDesignSettingsRecyclerView.apply {
             adapter = mSettingsRecyclerAdapter
             val linLayoutManager = LinearLayoutManager(
-                this@DesignSettingsActivity,
+                this@PrivacySettingsActivity,
                 LinearLayoutManager.VERTICAL,
                 false
             )
