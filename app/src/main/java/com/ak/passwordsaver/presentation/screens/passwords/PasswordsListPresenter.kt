@@ -40,14 +40,14 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         Log.d("Alex_tester", "canceled")
     }
 
-    fun passwordShowActionRequired(passwordId: Long, newVisibilityState: Boolean) {
-        // TODO: check passcodes (mb save this passwordId in presenter for feature)
+    fun passwordShowActionRequired(passwordId: Long, isVisiblePasswordContent: Boolean) {
         mCurrentPasswordId = passwordId
-        if (newVisibilityState) {
+        val isAuthEnabled = mSettingsPreferencesManager.isPincodeEnabled()
+        if (isVisiblePasswordContent && isAuthEnabled) {
             viewState.startSecurityAuthAction()
-        } else {
-            showPasswordAction(newVisibilityState, passwordId)
+            return
         }
+        showPasswordAction(isVisiblePasswordContent, passwordId)
     }
 
     private fun showPasswordAction(newVisibilityState: Boolean, passwordId: Long) {

@@ -29,12 +29,20 @@ class PrivacySettingsPresenter : BasePSPresenter<IPrivacySettingsView>() {
     fun onSwitchSettingsItemChanged(settingId: Int, isChecked: Boolean) {
         when (settingId) {
             PINCODE_ENABLE_SETTINGS_ID -> {
-                mSettingsPreferencesManager.setPincodeEnableState(isChecked)
-                loadSettingsData()
+                if (!isChecked) {
+                    deleteUserPincodeData()
+                    loadSettingsData()
+                } else {
+                    viewState.openAddPincodeScreen()
+                }
             }
             PATTERN_ENABLE_SETTINGS_ID -> {
-                mSettingsPreferencesManager.setPatternEnableState(isChecked)
-                loadSettingsData()
+                if (!isChecked) {
+                    deleteUserPatternCodeData()
+                    loadSettingsData()
+                } else {
+                    viewState.openAddPatternScreen()
+                }
             }
         }
     }
@@ -42,10 +50,10 @@ class PrivacySettingsPresenter : BasePSPresenter<IPrivacySettingsView>() {
     fun onTextSettingsItemClicked(settingId: Int) {
         when (settingId) {
             PINCODE_CHANGE_SETTINGS_ID -> {
-                viewState.showShortTimeMessage("Change pincode")
+                viewState.openChangePincodeScreen()
             }
             PATTERN_CHANGE_SETTINGS_ID -> {
-                viewState.showShortTimeMessage("Change pattern")
+                viewState.openChangePatternScreen()
             }
         }
     }
@@ -88,5 +96,16 @@ class PrivacySettingsPresenter : BasePSPresenter<IPrivacySettingsView>() {
         }
 
         viewState.displayAppSettings(items)
+    }
+
+    private fun deleteUserPincodeData() {
+        mSettingsPreferencesManager.setPincodeEnableState(false)
+        mSettingsPreferencesManager.setUserPincodeValue("")
+        deleteUserPatternCodeData()
+    }
+
+    private fun deleteUserPatternCodeData() {
+        mSettingsPreferencesManager.setPatternEnableState(false)
+        mSettingsPreferencesManager.setUserPatternValue("")
     }
 }

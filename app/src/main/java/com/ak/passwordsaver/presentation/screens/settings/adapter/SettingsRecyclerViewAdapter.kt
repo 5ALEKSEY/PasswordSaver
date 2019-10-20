@@ -8,6 +8,7 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.items.Settings
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.sections.SectionAdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerAdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchAdapterDelegate
+import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchSettingsListItemModel
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.texts.TextAdapterDelegate
 
 class SettingsRecyclerViewAdapter constructor(
@@ -101,6 +102,9 @@ class SettingsRecyclerViewAdapter constructor(
             val newItem = newList[newItemPosition]
             val isSameId = oldItem.settingId == newItem.settingId
             val isSameName = oldItem.settingName.contentEquals(newItem.settingName)
+            if (oldItem is SwitchSettingsListItemModel && newItem is SwitchSettingsListItemModel) {
+                return isSameId && isSameName && (oldItem.isChecked == newItem.isChecked)
+            }
             return isSameId && isSameName
         }
     }

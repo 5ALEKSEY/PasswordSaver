@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
+import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
+import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecyclerViewAdapter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import com.ak.passwordsaver.utils.bindView
@@ -42,6 +44,22 @@ class PrivacySettingsActivity : BasePSFragmentActivity(), IPrivacySettingsView {
         mPrivacySettingsPresenter.loadSettingsData()
     }
 
+    override fun openAddPincodeScreen() {
+        openSecurityScreen(SecurityPresenter.ADD_PINCODE_SECURITY_ACTION_TYPE)
+    }
+
+    override fun openChangePincodeScreen() {
+        openSecurityScreen(SecurityPresenter.CHANGE_PINCODE_SECURITY_ACTION_TYPE)
+    }
+
+    override fun openAddPatternScreen() {
+        openSecurityScreen(SecurityPresenter.ADD_PATTERN_SECURITY_ACTION_TYPE)
+    }
+
+    override fun openChangePatternScreen() {
+        openSecurityScreen(SecurityPresenter.CHANGE_PATTERN_SECURITY_ACTION_TYPE)
+    }
+
     override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
         mSettingsRecyclerAdapter.addSettingsList(settingsItems)
     }
@@ -69,5 +87,9 @@ class PrivacySettingsActivity : BasePSFragmentActivity(), IPrivacySettingsView {
             layoutManager = linLayoutManager
             addItemDecoration(DividerItemDecoration(context, linLayoutManager.orientation))
         }
+    }
+
+    private fun openSecurityScreen(securityAction: Int) {
+        SecurityActivity.startSecurityForResult(this, securityAction)
     }
 }

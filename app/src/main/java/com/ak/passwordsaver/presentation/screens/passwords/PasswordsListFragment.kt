@@ -18,6 +18,7 @@ import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
+import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.IPasswordsActionModeView
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsActionModePresenter
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
@@ -174,7 +175,11 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     override fun startSecurityAuthAction() {
         activity?.let {
-            SecurityActivity.startSecurityForResult(activity!!, this, true)
+            SecurityActivity.startSecurityForResult(
+                activity!!,
+                this,
+                SecurityPresenter.AUTH_SECURITY_ACTION_TYPE
+            )
         }
     }
 

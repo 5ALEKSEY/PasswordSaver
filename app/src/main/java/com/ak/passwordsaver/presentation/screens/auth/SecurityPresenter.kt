@@ -10,11 +10,11 @@ import javax.inject.Inject
 class SecurityPresenter : BasePSPresenter<ISecurityView>() {
 
     companion object {
-        private const val AUTH_SECURITY_ACTION_TYPE = 1
-        private const val ADD_PINCODE_SECURITY_ACTION_TYPE = 2
-        private const val CHANGE_PINCODE_SECURITY_ACTION_TYPE = 3
-        private const val ADD_PATTERN_SECURITY_ACTION_TYPE = 4
-        private const val CHANGE_PATTERN_SECURITY_ACTION_TYPE = 5
+        const val AUTH_SECURITY_ACTION_TYPE = 1
+        const val ADD_PINCODE_SECURITY_ACTION_TYPE = 2
+        const val CHANGE_PINCODE_SECURITY_ACTION_TYPE = 3
+        const val ADD_PATTERN_SECURITY_ACTION_TYPE = 4
+        const val CHANGE_PATTERN_SECURITY_ACTION_TYPE = 5
 
         private const val MAX_FAILED_ATTEMPTS_COUNT = 5
         private const val MIN_CODE_LENGTH = 5
@@ -49,7 +49,9 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
             AUTH_SECURITY_ACTION_TYPE -> {
                 viewState.showSecurityMessage("Verify your identity")
                 viewState.switchAuthMethod(mIsPincodeAuthMethod)
-                viewState.unlockSwitchAuthMethod()
+                if (mSettingsPreferencesManager.isPatternEnabled()) {
+                    viewState.unlockSwitchAuthMethod()
+                }
             }
             ADD_PINCODE_SECURITY_ACTION_TYPE -> {
                 viewState.showSecurityMessage("Enter your personal pincode")
@@ -110,7 +112,7 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
                 viewState.showSecurityMessage(getMessageForConfirmCode())
                 mAddSecurityConfirmCode = inputCode
             }
-            else -> {
+            mAddSecurityConfirmCode.equals(inputCode, true) -> {
                 viewState.hideSecurityMessage()
                 when (mAuthActionType) {
                     ADD_PINCODE_SECURITY_ACTION_TYPE -> {
