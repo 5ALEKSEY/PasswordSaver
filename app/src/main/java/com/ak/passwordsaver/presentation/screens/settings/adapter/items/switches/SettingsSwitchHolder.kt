@@ -47,7 +47,7 @@ class SettingsSwitchHolder(
         mDescription.text = itemModel.settingDescription
         itemView.setOnClickListener { mSwitch.isChecked = !mSwitch.isChecked }
         mSwitch.setOnCheckedChangeListener { _, isChecked ->
-            onSwitchSettingsChanged.invoke(itemModel.settingId, isChecked)
+            onSwitchSettingsChanged.invoke(adapterPosition, isChecked)
         }
     }
 }

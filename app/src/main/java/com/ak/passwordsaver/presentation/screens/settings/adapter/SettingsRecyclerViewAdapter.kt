@@ -7,6 +7,7 @@ import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegatesManager
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.sections.SectionAdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerAdapterDelegate
+import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerSettingsListItemModel
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchAdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchSettingsListItemModel
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.texts.TextAdapterDelegate
@@ -28,12 +29,31 @@ class SettingsRecyclerViewAdapter constructor(
     private val mSettingsItemsList = arrayListOf<SettingsListItemModel>()
     private val mAdapterDelegatesManager = AdapterDelegatesManager<SettingsListItemModel>()
 
+    private val mAdapterSwitchSettingsChangedListener: (settingId: Int, isChecked: Boolean) -> Unit =
+        { position, newState ->
+            val itemModel = mSettingsItemsList[position]
+            if (itemModel is SwitchSettingsListItemModel) {
+                itemModel.isChecked = newState
+            }
+            mSettingsItemsList[position] = itemModel
+            onSwitchSettingsChanged?.invoke(itemModel.settingId, newState)
+        }
+    private val mAdapterSpinnerSettingsChangedListener: (settingId: Int, newDataId: Int) -> Unit =
+        { position, newSelectedPosition ->
+            val itemModel = mSettingsItemsList[position]
+            if (itemModel is SpinnerSettingsListItemModel) {
+                itemModel.selectedItemPosition = newSelectedPosition
+            }
+            mSettingsItemsList[position] = itemModel
+            onSpinnerSettingsChanged?.invoke(itemModel.settingId, newSelectedPosition)
+        }
+
     init {
         if (onSwitchSettingsChanged != null) {
             mAdapterDelegatesManager.addDelegate(
                 SwitchAdapterDelegate(
                     SWITCH_SETTING_TYPE,
-                    onSwitchSettingsChanged
+                    mAdapterSwitchSettingsChangedListener
                 )
             )
         }
@@ -41,7 +61,7 @@ class SettingsRecyclerViewAdapter constructor(
             mAdapterDelegatesManager.addDelegate(
                 SpinnerAdapterDelegate(
                     SPINNER_SETTING_TYPE,
-                    onSpinnerSettingsChanged
+                    mAdapterSpinnerSettingsChangedListener
                 )
             )
         }

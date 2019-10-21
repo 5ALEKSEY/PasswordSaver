@@ -6,5 +6,5 @@ class SwitchSettingsListItemModel(
     settingId: Int,
     settingName: String,
     val settingDescription: String,
-    val isChecked: Boolean
+    var isChecked: Boolean
 ) : SettingsListItemModel(settingId, settingName)

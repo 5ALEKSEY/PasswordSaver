@@ -6,6 +6,6 @@ class SpinnerSettingsListItemModel(
     settingId: Int,
     settingName: String,
     val settingDescription: String,
-    val selectedItemPosition: Int,
+    var selectedItemPosition: Int,
     val spinnerItems: List<String>
 ) : SettingsListItemModel(settingId, settingName)

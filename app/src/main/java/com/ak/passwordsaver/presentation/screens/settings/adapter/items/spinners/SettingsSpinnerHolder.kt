@@ -55,7 +55,7 @@ class SettingsSpinnerHolder(
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                onSpinnerSettingsChanged.invoke(itemModel.settingId, position)
+                onSpinnerSettingsChanged.invoke(adapterPosition, position)
             }
         }
         mDescription.text = itemModel.settingDescription
