@@ -24,7 +24,7 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
     lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
 
     var mAuthActionType = AUTH_SECURITY_ACTION_TYPE
-    var mIsPincodeAuthMethod = true
+    private var mIsPincodeAuthMethod = true
 
     private var mFailedAttemptsCount = 0
     private var mAddSecurityConfirmCode = ""
@@ -99,14 +99,19 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
             }
             initSecurityAuthState()
         } else {
-            viewState.showSecurityMessage("Nope, not that :)")
+            viewState.showSecurityMessage("Nope, not that :)", true)
+            showFailedActionViewState()
         }
     }
 
     private fun handleAddNewSecurityUserInput(inputCode: String) {
         when {
             inputCode.length < MIN_CODE_LENGTH && mAuthActionType == ADD_PATTERN_SECURITY_ACTION_TYPE -> {
-                viewState.showSecurityMessage("Why is it so simple? Please, add more lines :)")
+                viewState.showSecurityMessage(
+                    "Why is it so simple? Please, add more lines :)",
+                    true
+                )
+                showFailedActionViewState()
             }
             mAddSecurityConfirmCode.isEmpty() -> {
                 viewState.showSecurityMessage(getMessageForConfirmCode())
@@ -125,6 +130,10 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
                     }
                 }
                 viewState.sendAuthActionResult(true)
+            }
+            else -> {
+                viewState.showSecurityMessage(getMessageForConfirmCode(), true)
+                showFailedActionViewState()
             }
         }
     }
@@ -148,6 +157,7 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
                     getIncorrectAuthMessage(),
                     true
                 )
+                showFailedActionViewState()
             }
             else -> {
                 // TODO: start block timer
@@ -170,4 +180,12 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
         } else {
             "Incorrect graph pattern. Please, try again"
         }
+
+    private fun showFailedActionViewState() {
+        if (mIsPincodeAuthMethod) {
+            viewState.showFailedPincodeAuthAction()
+        } else {
+            viewState.showFailedPatternAuthAction()
+        }
+    }
 }
