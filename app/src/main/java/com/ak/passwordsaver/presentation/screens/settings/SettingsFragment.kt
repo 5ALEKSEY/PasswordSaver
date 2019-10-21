@@ -48,6 +48,16 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
     }
 
     override fun showPrivacySettings() {
+        context?.let {
+            PrivacySettingsActivity.startActivity(it)
+        }
+    }
+
+    override fun showAboutScreen() {
+
+    }
+
+    override fun startAuthAndOpenPrivacySettings() {
         activity?.let {
             SecurityActivity.startSecurityForResult(
                 it,
@@ -55,10 +65,6 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
                 SecurityPresenter.AUTH_SECURITY_ACTION_TYPE
             )
         }
-    }
-
-    override fun showAboutScreen() {
-
     }
 
     override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
@@ -95,9 +101,7 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
 
     private fun handleSecurityAuthResult(resultCode: Int) {
         if (resultCode == Activity.RESULT_OK) {
-            context?.let {
-                PrivacySettingsActivity.startActivity(it)
-            }
+            showPrivacySettings()
         } else {
             showShortTimeMessage("Is it honestly you??? :)")
         }

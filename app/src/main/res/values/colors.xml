@@ -4,8 +4,10 @@
     <color name="colorPrimaryDark">#0288D1</color>
     <color name="colorPrimaryLight">#B3E5FC</color>
     <color name="colorAccent">#536DFE</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#FFFFFF</color>
 
-    <color name="iconsAndText">#FFFFFF</color>
+    <color name="iconsAndText">@color/colorWhite</color>
     <color name="primaryText">#212121</color>
     <color name="secondaryText">#757575</color>
     <color name="divider">#BDBDBD</color>
@@ -15,6 +17,9 @@
 
     <color name="default_pattern_line_color">#F8F8F8</color>
     <color name="failed_pattern_line_color">#8DFF3636</color>
-    <color name="pattern_background_color">@color/colorPrimary</color>
+
+    <color name="security_background_color">@color/colorPrimary</color>
+    <color name="security_text_color">@color/colorWhite</color>
+    <color name="security_pincode_under_text_color">#E0DBDB</color>
 
 </resources>

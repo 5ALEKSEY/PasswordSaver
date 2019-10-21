@@ -35,8 +35,12 @@ class SettingsPresenter : BasePSPresenter<ISettingsView>() {
                 viewState.showDesignSettings()
             }
             PRIVACY_SECTION_SETTING_ID -> {
-                // TODO: check passcode if needs
-                viewState.showPrivacySettings()
+                val isAuthEnabled = mSettingsPreferencesManager.isPincodeEnabled()
+                if (isAuthEnabled) {
+                    viewState.startAuthAndOpenPrivacySettings()
+                } else {
+                    viewState.showPrivacySettings()
+                }
             }
             ABOUT_SECTION_SETTING_ID -> {
                 viewState.showAboutScreen()

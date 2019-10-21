@@ -125,6 +125,9 @@ class SettingsRecyclerViewAdapter constructor(
             if (oldItem is SwitchSettingsListItemModel && newItem is SwitchSettingsListItemModel) {
                 return isSameId && isSameName && (oldItem.isChecked == newItem.isChecked)
             }
+            if (oldItem is SpinnerSettingsListItemModel && newItem is SpinnerSettingsListItemModel) {
+                return isSameId && isSameName && (oldItem.selectedItemPosition == newItem.selectedItemPosition)
+            }
             return isSameId && isSameName
         }
     }

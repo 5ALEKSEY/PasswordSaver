@@ -4,6 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:layout_height="match_parent"
         tools:layout_width="match_parent"
+        tools:background="@color/security_background_color"
         tools:parentTag="android.support.constraint.ConstraintLayout">
 
     <android.support.constraint.ConstraintLayout
@@ -16,7 +17,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:textColor="@color/primaryText"
+                android:textColor="@color/security_text_color"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

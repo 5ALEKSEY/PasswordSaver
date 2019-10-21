@@ -7,5 +7,6 @@ interface ISettingsView : IBaseAppView {
     fun showDesignSettings()
     fun showPrivacySettings()
     fun showAboutScreen()
+    fun startAuthAndOpenPrivacySettings()
     fun displayAppSettings(settingsItems: List<SettingsListItemModel>)
 }

@@ -44,7 +44,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
 
     private val mDefaultLineColor by lazy { ContextCompat.getColor(context!!, R.color.default_pattern_line_color) }
     private val mFailedLineColor by lazy { ContextCompat.getColor(context!!, R.color.failed_pattern_line_color) }
-    private val mBackgroundColor by lazy { ContextCompat.getColor(context!!, R.color.pattern_background_color) }
+    private val mBackgroundColor by lazy { ContextCompat.getColor(context!!, R.color.security_background_color) }
 
     lateinit var mOnFinishedAction: (patternResultCode: String) -> Unit
 
