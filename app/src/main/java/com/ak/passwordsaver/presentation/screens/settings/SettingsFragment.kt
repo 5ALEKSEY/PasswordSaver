@@ -1,12 +1,17 @@
 package com.ak.passwordsaver.presentation.screens.settings
 
+import android.app.Activity
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import com.ak.passwordsaver.R
+import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
+import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
+import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecyclerViewAdapter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsActivity
@@ -43,8 +48,12 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
     }
 
     override fun showPrivacySettings() {
-        context?.let {
-            PrivacySettingsActivity.startActivity(it)
+        activity?.let {
+            SecurityActivity.startSecurityForResult(
+                it,
+                this,
+                SecurityPresenter.AUTH_SECURITY_ACTION_TYPE
+            )
         }
     }
 
@@ -75,5 +84,22 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         mSettingsRecyclerView.layoutManager = linearLayoutManager
         mSettingsRecyclerView.addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation))
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            AppConstants.SECURITY_REQUEST_CODE -> handleSecurityAuthResult(resultCode)
+        }
+    }
+
+    private fun handleSecurityAuthResult(resultCode: Int) {
+        if (resultCode == Activity.RESULT_OK) {
+            context?.let {
+                PrivacySettingsActivity.startActivity(it)
+            }
+        } else {
+            showShortTimeMessage("Is it honestly you??? :)")
+        }
     }
 }
