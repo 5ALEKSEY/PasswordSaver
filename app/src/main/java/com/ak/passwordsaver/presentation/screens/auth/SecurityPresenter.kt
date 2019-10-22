@@ -106,6 +106,25 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
 
     private fun handleAddNewSecurityUserInput(inputCode: String) {
         when {
+            mAddSecurityConfirmCode.isNotEmpty() -> {
+                if (mAddSecurityConfirmCode.equals(inputCode, true)) {
+                    viewState.hideSecurityMessage()
+                    when (mAuthActionType) {
+                        ADD_PINCODE_SECURITY_ACTION_TYPE -> {
+                            mSettingsPreferencesManager.setPincodeEnableState(true)
+                            mSettingsPreferencesManager.setUserPincodeValue(mAddSecurityConfirmCode)
+                        }
+                        ADD_PATTERN_SECURITY_ACTION_TYPE -> {
+                            mSettingsPreferencesManager.setPatternEnableState(true)
+                            mSettingsPreferencesManager.setUserPatternValue(mAddSecurityConfirmCode)
+                        }
+                    }
+                    viewState.sendAuthActionResult(true)
+                } else {
+                    viewState.showSecurityMessage(getMessageForConfirmCode(), true)
+                    showFailedActionViewState()
+                }
+            }
             inputCode.length < MIN_CODE_LENGTH && mAuthActionType == ADD_PATTERN_SECURITY_ACTION_TYPE -> {
                 viewState.showSecurityMessage(
                     "Why is it so simple? Please, add more lines :)",
@@ -116,24 +135,6 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
             mAddSecurityConfirmCode.isEmpty() -> {
                 viewState.showSecurityMessage(getMessageForConfirmCode())
                 mAddSecurityConfirmCode = inputCode
-            }
-            mAddSecurityConfirmCode.equals(inputCode, true) -> {
-                viewState.hideSecurityMessage()
-                when (mAuthActionType) {
-                    ADD_PINCODE_SECURITY_ACTION_TYPE -> {
-                        mSettingsPreferencesManager.setPincodeEnableState(true)
-                        mSettingsPreferencesManager.setUserPincodeValue(mAddSecurityConfirmCode)
-                    }
-                    ADD_PATTERN_SECURITY_ACTION_TYPE -> {
-                        mSettingsPreferencesManager.setPatternEnableState(true)
-                        mSettingsPreferencesManager.setUserPatternValue(mAddSecurityConfirmCode)
-                    }
-                }
-                viewState.sendAuthActionResult(true)
-            }
-            else -> {
-                viewState.showSecurityMessage(getMessageForConfirmCode(), true)
-                showFailedActionViewState()
             }
         }
     }
