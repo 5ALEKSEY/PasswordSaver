@@ -3,19 +3,21 @@ package com.ak.passwordsaver.presentation.screens.addnew
 import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.support.design.widget.TextInputLayout
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
+import com.ak.passwordsaver.presentation.screens.addnew.gallery.PSGalleryManager
 import com.ak.passwordsaver.presentation.screens.addnew.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.hideKeyBoard
@@ -24,6 +26,7 @@ import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+
 
 class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
@@ -35,25 +38,22 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
     @InjectPresenter
     lateinit var mAddNewPasswordPresenter: AddNewPasswordPresenter
-    lateinit var mAvatarChooserDialog: PhotoChooserBottomSheetDialog
+    private lateinit var mAvatarChooserDialog: PhotoChooserBottomSheetDialog
+    private lateinit var mGalleryManager: PSGalleryManager
 
     private val mToolbar: Toolbar by bindView(R.id.tb_add_new_password_bar)
     private val mPasswordNameEditText: EditText by bindView(R.id.tiet_password_name_field)
     private val mPasswordNameInputLayout: TextInputLayout by bindView(R.id.til_password_name_layout)
     private val mPasswordContentEditText: EditText by bindView(R.id.tiet_password_content_field)
     private val mPasswordContentInputLayout: TextInputLayout by bindView(R.id.til_password_content_layout)
-    private val mChooseAvatarAction: Button by bindView(R.id.btn_password_avatar_choose_action)
     private val mPasswordAvatar: ImageView by bindView(R.id.iv_password_avatar_chooser)
+    private val mAvatarImageDescView: View by bindView(R.id.ll_avatar_chooser_image_desc)
 
     override fun getScreenLayoutResId() = R.layout.activity_add_new_password
 
-    override fun onPause() {
-        super.onPause()
-        dismissPasswordAvatarChooserDialog()
-    }
-
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
+        initGalleryManager()
         initToolbar()
 
         mPasswordContentEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -65,7 +65,7 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
             }
         }
 
-        mChooseAvatarAction.setOnClickListener {
+        mPasswordAvatar.setOnClickListener {
             GlobalScope.launch {
 
                 val permissionResult = PermissionManager.requestPermissions(
@@ -80,6 +80,18 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
                         Log.d("Alex_testing", "Granted")
                         dismissPasswordAvatarChooserDialog()
                         mAvatarChooserDialog = PhotoChooserBottomSheetDialog.show(supportFragmentManager)
+                        mAvatarChooserDialog.onChooseAvatarActionListener =
+                            { avatarChooseActionCode ->
+                                when (avatarChooseActionCode) {
+                                    PhotoChooserBottomSheetDialog.CAMERA_CHOOSE_ACTION_ID -> {
+                                        showShortTimeMessage("Camera pick")
+                                    }
+                                    PhotoChooserBottomSheetDialog.GALLERY_CHOOSE_ACTION_ID -> {
+                                        openGalleryForImagePick()
+                                    }
+                                }
+                                dismissPasswordAvatarChooserDialog()
+                            }
                     }
                     is PermissionResult.PermissionDenied -> {
                         Log.d("Alex_testing", "PermissionDenied")
@@ -94,6 +106,11 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
             }
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        dismissPasswordAvatarChooserDialog()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -131,13 +148,33 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
     }
 
     override fun displayPasswordAvatarChooserImage(resId: Int) {
+        mAvatarImageDescView.visibility = View.GONE
+    }
 
+    override fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap) {
+        mPasswordAvatar.setImageBitmap(bitmapImage)
+        mAvatarImageDescView.visibility = View.GONE
     }
 
     override fun dismissPasswordAvatarChooserDialog() {
         if (this::mAvatarChooserDialog.isInitialized) {
             mAvatarChooserDialog.dismiss()
         }
+    }
+
+    override fun openGalleryForImagePick() {
+        if (this::mGalleryManager.isInitialized) {
+            mGalleryManager.openGalleryForImagePick(this)
+        }
+    }
+
+    override fun openCameraForImagePick() {
+
+    }
+
+    private fun initGalleryManager() {
+        mGalleryManager = PSGalleryManager(this)
+        mGalleryManager.onImagePickedFromGallery = (this::displayPasswordAvatarChooserImage)
     }
 
     private fun initToolbar() {
@@ -154,5 +191,12 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
             mPasswordNameEditText.text.toString(),
             mPasswordContentEditText.text.toString()
         )
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (this::mGalleryManager.isInitialized) {
+            mGalleryManager.onActivityResult(requestCode, resultCode, data)
+        }
     }
 }

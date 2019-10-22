@@ -22,4 +22,7 @@
     <color name="security_text_color">@color/colorWhite</color>
     <color name="security_pincode_under_text_color">#E0DBDB</color>
 
+    <color name="avatar_chooser_dialog_text_color">@color/colorWhite</color>
+    <color name="avatar_chooser_dialog_image_tint">@color/colorWhite</color>
+
 </resources>
