@@ -8,7 +8,7 @@ import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.screens.addnew.camera.PSCameraService
+import com.ak.passwordsaver.presentation.screens.addnew.camera.PSCameraManager
 
 class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
 
@@ -24,7 +24,7 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
 
     private var fragmentView: View? = null
     private lateinit var mCameraPreviewView: TextureView
-    private lateinit var mCameraPreviewService: PSCameraService
+    private lateinit var mCameraPreviewManager: PSCameraManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,21 +39,21 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         mCameraPreviewView = view.findViewById(R.id.iv_photo_chooser_camera_preview)
         context?.let {
-            mCameraPreviewService = PSCameraService(context!!, true, mCameraPreviewView)
+            mCameraPreviewManager = PSCameraManager(context!!, true, mCameraPreviewView)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (this::mCameraPreviewService.isInitialized) {
-            mCameraPreviewService.openCamera()
+        if (this::mCameraPreviewManager.isInitialized) {
+            mCameraPreviewManager.openCamera()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if (this::mCameraPreviewService.isInitialized) {
-            mCameraPreviewService.closeCamera()
+        if (this::mCameraPreviewManager.isInitialized) {
+            mCameraPreviewManager.closeCamera()
         }
     }
 }

@@ -12,7 +12,7 @@ import android.view.Surface
 import android.view.TextureView
 
 
-class PSCameraService constructor(
+class PSCameraManager constructor(
     private val context: Context,
     private val isPreviewOnly: Boolean,
     private val previewImageView: TextureView
