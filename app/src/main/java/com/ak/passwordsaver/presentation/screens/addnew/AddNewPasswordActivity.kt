@@ -3,9 +3,12 @@ package com.ak.passwordsaver.presentation.screens.addnew
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
+import android.graphics.*
 import android.support.design.widget.TextInputLayout
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -65,6 +68,11 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
             }
         }
 
+        mPasswordAvatar.setOnLongClickListener {
+            deletePasswordAvatarChooserImage()
+            return@setOnLongClickListener true
+        }
+
         mPasswordAvatar.setOnClickListener {
             GlobalScope.launch {
 
@@ -106,6 +114,20 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
             }
         }
+
+        mPasswordNameEditText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                mAddNewPasswordPresenter.onPasswordNameTextChanged(s.toString())
+            }
+        })
     }
 
     override fun onPause() {
@@ -147,13 +169,47 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
         mPasswordContentInputLayout.error = null
     }
 
-    override fun displayPasswordAvatarChooserImage(resId: Int) {
-        mAvatarImageDescView.visibility = View.GONE
+    override fun drawTextForPasswordAvatar(text: String) {
+        val isTextDrawNeeds = text.isNotEmpty()
+        val fillColor = ContextCompat.getColor(this, R.color.colorPrimary)
+        val textColor = ContextCompat.getColor(this, R.color.colorWhite)
+        val textSizeInPx = resources.getDimensionPixelSize(R.dimen.avatar_text_size)
+        val avatarSize = resources.getDimensionPixelSize(R.dimen.add_password_avatar_size)
+
+        // start drawing
+        val bitmap = Bitmap.createBitmap(avatarSize, avatarSize, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(fillColor)
+
+        val paint = Paint().apply {
+            color = textColor
+            textAlign = Paint.Align.CENTER
+            textSize = textSizeInPx.toFloat()
+            xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER)
+        }
+
+        canvas.drawBitmap(bitmap, 0F, 0F, paint)
+
+        if (isTextDrawNeeds) {
+            val xPos = bitmap.width / 2
+            val yPos = (bitmap.height / 2 - (paint.descent() + paint.ascent()) / 2).toInt()
+            canvas.drawText(text, xPos.toFloat(), yPos.toFloat(), paint)
+        }
+
+        mAvatarImageDescView.visibility = if (isTextDrawNeeds) View.GONE else View.VISIBLE
+        mPasswordAvatar.setImageBitmap(bitmap)
     }
 
     override fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap) {
+        mAddNewPasswordPresenter.mIsAvatarDisplayed = true
         mPasswordAvatar.setImageBitmap(bitmapImage)
         mAvatarImageDescView.visibility = View.GONE
+    }
+
+    override fun deletePasswordAvatarChooserImage() {
+        // TODO: bug with delete avatar
+        mAddNewPasswordPresenter.onPasswordNameTextChanged(mPasswordNameEditText.text.toString())
+        mAddNewPasswordPresenter.mIsAvatarDisplayed = false
     }
 
     override fun dismissPasswordAvatarChooserDialog() {
