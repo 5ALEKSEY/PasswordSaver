@@ -3,6 +3,7 @@ package com.ak.passwordsaver.presentation.screens.addnew.ui
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.support.annotation.ColorInt
+import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.content.ContextCompat
@@ -35,6 +36,11 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
     private lateinit var mCameraPreviewView: TextureView
     private lateinit var mCameraManager: PSCameraManager
     private lateinit var mGalleryManager: PSGalleryManager
+
+    override fun getTheme() = R.style.BaseBottomSheetDialog
+
+    override fun onCreateDialog(savedInstanceState: Bundle?) =
+        BottomSheetDialog(requireContext(), theme)
 
     override fun onCreateView(
         inflater: LayoutInflater,
