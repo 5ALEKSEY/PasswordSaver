@@ -8,7 +8,9 @@ import com.ak.passwordsaver.presentation.screens.addnew.logic.usecases.PasswordD
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -16,12 +18,13 @@ import javax.inject.Inject
 @InjectViewState
 class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
 
-    var mIsAvatarDisplayed = false
+    private var mNameChangeDis: Disposable? = null
+    private var mIsAvatarDisplayed = false
 
     @Inject
     lateinit var mAddNewPasswordInteractor: AddNewPasswordInteractor
 
-    private val mPasswordNameChangeSubject = PublishSubject.create<String>()
+    private val mPasswordNameChangeSubject = BehaviorSubject.create<String>()
 
     init {
         PSApplication.appInstance.getApplicationComponent().inject(this)
@@ -43,12 +46,21 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
             .let(this::bindDisposable)
     }
 
+    fun onAvatarDisplayStateChanged(isDisplayed: Boolean) {
+        mIsAvatarDisplayed = isDisplayed
+        if (mIsAvatarDisplayed) {
+            mNameChangeDis?.dispose()
+        } else {
+            observePasswordNameChanges()
+        }
+    }
+
     fun onPasswordNameTextChanged(currentName: String) {
         mPasswordNameChangeSubject.onNext(currentName)
     }
 
     private fun observePasswordNameChanges() {
-        mPasswordNameChangeSubject.toFlowable(BackpressureStrategy.LATEST)
+        mNameChangeDis = mPasswordNameChangeSubject.toFlowable(BackpressureStrategy.LATEST)
             .subscribeOn(Schedulers.io())
             .debounce(300L, TimeUnit.MILLISECONDS)
             .map { currentName ->
@@ -63,12 +75,8 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
             .map(String::toUpperCase)
             .distinctUntilChanged()
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe{textForDraw ->
-                if (!mIsAvatarDisplayed) {
-                    viewState.drawTextForPasswordAvatar(textForDraw)
-                }
-            }
-            .let(this::bindDisposable)
+            .subscribe(viewState::drawTextForPasswordAvatar)
+        bindDisposable(mNameChangeDis!!)
     }
 
     private fun handleError(throwable: Throwable) {

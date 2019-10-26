@@ -68,11 +68,6 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
             }
         }
 
-        mPasswordAvatar.setOnLongClickListener {
-            deletePasswordAvatarChooserImage()
-            return@setOnLongClickListener true
-        }
-
         mPasswordAvatar.setOnClickListener {
             GlobalScope.launch {
 
@@ -201,15 +196,14 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
     }
 
     override fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap) {
-        mAddNewPasswordPresenter.mIsAvatarDisplayed = true
+        mAddNewPasswordPresenter.onAvatarDisplayStateChanged(true)
         mPasswordAvatar.setImageBitmap(bitmapImage)
         mAvatarImageDescView.visibility = View.GONE
     }
 
     override fun deletePasswordAvatarChooserImage() {
-        // TODO: bug with delete avatar
+        mAddNewPasswordPresenter.onAvatarDisplayStateChanged(false)
         mAddNewPasswordPresenter.onPasswordNameTextChanged(mPasswordNameEditText.text.toString())
-        mAddNewPasswordPresenter.mIsAvatarDisplayed = false
     }
 
     override fun dismissPasswordAvatarChooserDialog() {
