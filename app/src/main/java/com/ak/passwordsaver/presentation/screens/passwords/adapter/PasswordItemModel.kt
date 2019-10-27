@@ -3,7 +3,7 @@ package com.ak.passwordsaver.presentation.screens.passwords.adapter
 data class PasswordItemModel(
     val passwordId: Long,
     val name: String,
-    val photoUrl: String,
+    val photoPath: String,
     val password: String,
     val isPasswordContentNeeds: Boolean,
     var isItemSelected: Boolean = false,
@@ -17,7 +17,7 @@ data class PasswordItemModel(
     fun isTheSameContent(passwordItemModel: PasswordItemModel) =
         !(this.passwordId != passwordItemModel.passwordId
                 || this.name != passwordItemModel.name
-                || this.photoUrl != passwordItemModel.photoUrl
+                || this.photoPath != passwordItemModel.photoPath
                 || this.password != passwordItemModel.password
                 || this.isPasswordContentNeeds != passwordItemModel.isPasswordContentNeeds
                 || this.isItemSelected != passwordItemModel.isItemSelected

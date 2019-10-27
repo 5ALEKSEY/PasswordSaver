@@ -110,7 +110,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
                 PasswordItemModel(
                     entity.passwordId!!,
                     entity.passwordName,
-                    entity.passwordUrl ?: "",
+                    entity.passwordPath ?: "",
                     entity.passwordContent,
                     showingType == PasswordShowingType.IN_CARD
                 )

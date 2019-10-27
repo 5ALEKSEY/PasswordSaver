@@ -8,4 +8,5 @@ object AppConstants {
 
     // Other constants
     const val IMAGE_MIME_TYPE = "image/*"
+    const val TEXT_INPUT_DEBOUNCE = 200L
 }

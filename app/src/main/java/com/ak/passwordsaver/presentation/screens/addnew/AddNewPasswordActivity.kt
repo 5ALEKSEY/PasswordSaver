@@ -15,7 +15,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
@@ -23,10 +22,12 @@ import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.addnew.gallery.PSGalleryManager
 import com.ak.passwordsaver.presentation.screens.addnew.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.utils.bindView
+import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.hideKeyBoard
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -49,8 +50,9 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
     private val mPasswordNameInputLayout: TextInputLayout by bindView(R.id.til_password_name_layout)
     private val mPasswordContentEditText: EditText by bindView(R.id.tiet_password_content_field)
     private val mPasswordContentInputLayout: TextInputLayout by bindView(R.id.til_password_content_layout)
-    private val mPasswordAvatar: ImageView by bindView(R.id.iv_password_avatar_chooser)
+    private val mPasswordAvatar: CircleImageView by bindView(R.id.iv_password_avatar_chooser)
     private val mAvatarImageDescView: View by bindView(R.id.ll_avatar_chooser_image_desc)
+    private val mSavePasswordActionButton: View by bindView(R.id.btn_save_password_action)
 
     override fun getScreenLayoutResId() = R.layout.activity_add_new_password
 
@@ -123,6 +125,10 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
                 mAddNewPasswordPresenter.onPasswordNameTextChanged(s.toString())
             }
         })
+
+        mSavePasswordActionButton.setOnClickListener {
+            onSavePasswordAction()
+        }
     }
 
     override fun onPause() {
@@ -168,31 +174,10 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
         val isTextDrawNeeds = text.isNotEmpty()
         val fillColor = ContextCompat.getColor(this, R.color.colorPrimary)
         val textColor = ContextCompat.getColor(this, R.color.colorWhite)
-        val textSizeInPx = resources.getDimensionPixelSize(R.dimen.avatar_text_size)
-        val avatarSize = resources.getDimensionPixelSize(R.dimen.add_password_avatar_size)
+        val textSizeInPx = resources.getDimensionPixelSize(R.dimen.add_avatar_inner_text_size)
 
-        // start drawing
-        val bitmap = Bitmap.createBitmap(avatarSize, avatarSize, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        canvas.drawColor(fillColor)
-
-        val paint = Paint().apply {
-            color = textColor
-            textAlign = Paint.Align.CENTER
-            textSize = textSizeInPx.toFloat()
-            xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER)
-        }
-
-        canvas.drawBitmap(bitmap, 0F, 0F, paint)
-
-        if (isTextDrawNeeds) {
-            val xPos = bitmap.width / 2
-            val yPos = (bitmap.height / 2 - (paint.descent() + paint.ascent()) / 2).toInt()
-            canvas.drawText(text, xPos.toFloat(), yPos.toFloat(), paint)
-        }
-
+        mPasswordAvatar.drawTextInner(fillColor, textColor, textSizeInPx, text)
         mAvatarImageDescView.visibility = if (isTextDrawNeeds) View.GONE else View.VISIBLE
-        mPasswordAvatar.setImageBitmap(bitmap)
     }
 
     override fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap) {

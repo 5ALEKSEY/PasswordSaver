@@ -13,7 +13,7 @@ data class PasswordDBEntity(
     @ColumnInfo(name = COLUMN_PASSWORD_NAME)
     var passwordName: String,
     @ColumnInfo(name = COLUMN_PASSWORD_URL)
-    var passwordUrl: String?,
+    var passwordPath: String?,
     @ColumnInfo(name = COLUMN_PASSWORD_CONTENT)
     var passwordContent: String
 ) {

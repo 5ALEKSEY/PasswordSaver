@@ -3,15 +3,16 @@ package com.ak.passwordsaver.presentation.screens.addnew
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
+import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.screens.addnew.logic.AddNewPasswordInteractor
 import com.ak.passwordsaver.presentation.screens.addnew.logic.usecases.PasswordDataCheckException
+import com.ak.passwordsaver.utils.PSUtils
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -62,17 +63,8 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
     private fun observePasswordNameChanges() {
         mNameChangeDis = mPasswordNameChangeSubject.toFlowable(BackpressureStrategy.LATEST)
             .subscribeOn(Schedulers.io())
-            .debounce(300L, TimeUnit.MILLISECONDS)
-            .map { currentName ->
-                val list = currentName.split(" ")
-                return@map when {
-                    list.isEmpty() -> ""
-                    list.size > 1 -> list[0].take(1) + list[1].take(1)
-                    list.size == 1 -> list[0].take(1)
-                    else -> ""
-                }
-            }
-            .map(String::toUpperCase)
+            .debounce(AppConstants.TEXT_INPUT_DEBOUNCE, TimeUnit.MILLISECONDS)
+            .map(PSUtils::getAbbreviationFormPasswordName)
             .distinctUntilChanged()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(viewState::drawTextForPasswordAvatar)
