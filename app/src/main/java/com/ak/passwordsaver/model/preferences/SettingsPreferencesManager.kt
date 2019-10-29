@@ -15,4 +15,6 @@ interface SettingsPreferencesManager {
     fun setUserPincodeValue(newPincodeValue: String)
     fun getUserPatternValue(): String
     fun setUserPatternValue(newPatternValue: String)
+    fun setBlockSecurityInputTime(blockSecurityInputTime: Long)
+    fun getBlockSecurityInputTime(): Long
 }

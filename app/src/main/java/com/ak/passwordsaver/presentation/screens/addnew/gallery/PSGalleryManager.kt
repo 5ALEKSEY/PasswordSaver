@@ -82,6 +82,6 @@ class PSGalleryManager constructor(
 
     private fun getGalleryPickIntentAction() =
         Intent(Intent.ACTION_PICK).apply {
-            type = "image/*"
+            type = AppConstants.IMAGE_MIME_TYPE
         }
 }

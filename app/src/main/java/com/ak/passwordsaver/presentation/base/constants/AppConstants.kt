@@ -9,4 +9,6 @@ object AppConstants {
     // Other constants
     const val IMAGE_MIME_TYPE = "image/*"
     const val TEXT_INPUT_DEBOUNCE = 200L
+    const val BLOCK_SECURITY_INPUT_DELAY = 60.toLong() // 60 seconds
+    const val BLOCK_SECURITY_INTERVAL = 1.toLong() // 1 second
 }

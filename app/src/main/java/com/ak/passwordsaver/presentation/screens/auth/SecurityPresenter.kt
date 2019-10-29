@@ -1,9 +1,15 @@
 package com.ak.passwordsaver.presentation.screens.auth
 
+import android.util.Log
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
+import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.arellomobile.mvp.InjectViewState
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @InjectViewState
@@ -47,10 +53,18 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
         viewState.lockSwitchAuthMethod()
         when (mAuthActionType) {
             AUTH_SECURITY_ACTION_TYPE -> {
-                viewState.showSecurityMessage("Verify your identity")
                 viewState.switchAuthMethod(mIsPincodeAuthMethod)
                 if (mSettingsPreferencesManager.isPatternEnabled()) {
                     viewState.unlockSwitchAuthMethod()
+                }
+                val blockSecurityInputTime = mSettingsPreferencesManager.getBlockSecurityInputTime()
+                val leftBlockInterval = (System.currentTimeMillis() - blockSecurityInputTime) / 1000
+                if (leftBlockInterval > AppConstants.BLOCK_SECURITY_INPUT_DELAY) {
+                    resetAttemptsAndUnlockSecurityInput()
+                } else {
+                    viewState.lockSecurityInputViews()
+                    val timeForBlock = AppConstants.BLOCK_SECURITY_INPUT_DELAY - leftBlockInterval
+                    startBlockSecurityInputTimer(timeForBlock)
                 }
             }
             ADD_PINCODE_SECURITY_ACTION_TYPE -> {
@@ -161,8 +175,8 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
                 showFailedActionViewState()
             }
             else -> {
-                // TODO: start block timer
-                viewState.showSecurityMessage("Too many attempts. Please, try later")
+                mSettingsPreferencesManager.setBlockSecurityInputTime(System.currentTimeMillis())
+                startBlockSecurityInputTimer(AppConstants.BLOCK_SECURITY_INPUT_DELAY)
                 viewState.lockSecurityInputViews()
             }
         }
@@ -188,5 +202,34 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
         } else {
             viewState.showFailedPatternAuthAction()
         }
+    }
+
+    private fun startBlockSecurityInputTimer(timeForBlock: Long) {
+        viewState.showSecurityMessage("Security input blocked. Try after after: $timeForBlock")
+        val startedStep = timeForBlock - 1
+        Observable.interval(
+            AppConstants.BLOCK_SECURITY_INTERVAL,
+            TimeUnit.SECONDS,
+            Schedulers.computation()
+        )
+            .take(timeForBlock, TimeUnit.SECONDS)
+            .map { leftValue -> startedStep - leftValue }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { tickValue ->
+                    viewState.showSecurityMessage("Security input blocked. Try after after: $tickValue")
+                },
+                { throwable -> Log.d("ded", throwable.message) },
+                {
+                    resetAttemptsAndUnlockSecurityInput()
+                }
+            )
+            .let(this::bindDisposable)
+    }
+
+    private fun resetAttemptsAndUnlockSecurityInput() {
+        mFailedAttemptsCount = 0
+        viewState.showSecurityMessage("Verify your identity")
+        viewState.unlockSecurityInputViews()
     }
 }

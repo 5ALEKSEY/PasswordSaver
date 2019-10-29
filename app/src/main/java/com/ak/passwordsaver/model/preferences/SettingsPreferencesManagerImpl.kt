@@ -18,6 +18,7 @@ class SettingsPreferencesManagerImpl @Inject constructor(
         const val IS_PATTERN_ENABLED_SHARED_KEY = "is_pattern_enabled"
         const val PINCODE_VALUE_SHARED_KEY = "pincode_value"
         const val PATTERN_VALUE_SHARED_KEY = "pattern_value"
+        const val BLOCK_SECURITY_INPUT_TIME_SHARED_KEY = "block_security_input_time"
     }
 
     override fun getPasswordShowingType() =
@@ -57,4 +58,13 @@ class SettingsPreferencesManagerImpl @Inject constructor(
     override fun setUserPatternValue(newPatternValue: String) {
         mSettingsPreferences.edit().putString(PATTERN_VALUE_SHARED_KEY, newPatternValue).apply()
     }
+
+    override fun setBlockSecurityInputTime(blockSecurityInputTime: Long) {
+        mSettingsPreferences.edit()
+            .putLong(BLOCK_SECURITY_INPUT_TIME_SHARED_KEY, blockSecurityInputTime)
+            .apply()
+    }
+
+    override fun getBlockSecurityInputTime() =
+        mSettingsPreferences.getLong(BLOCK_SECURITY_INPUT_TIME_SHARED_KEY, 0L)
 }
