@@ -64,6 +64,9 @@ class PSGalleryManager constructor(
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode != AppConstants.GALLERY_IMAGE_PICK_REQUEST_CODE) {
+            return
+        }
         if (resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             try {
                 val imageStream = context.contentResolver.openInputStream(data.data!!)
