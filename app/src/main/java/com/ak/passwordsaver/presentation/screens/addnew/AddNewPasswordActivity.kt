@@ -3,7 +3,8 @@ package com.ak.passwordsaver.presentation.screens.addnew
 import android.Manifest
 import android.content.Context
 import android.content.Intent
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
@@ -30,6 +31,7 @@ import com.eazypermissions.coroutinespermission.PermissionManager
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.FileNotFoundException
 
 
 class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
@@ -180,7 +182,7 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
         mAvatarImageDescView.visibility = if (isTextDrawNeeds) View.GONE else View.VISIBLE
     }
 
-    override fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap) {
+    override fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap?) {
         mAddNewPasswordPresenter.onAvatarDisplayStateChanged(true)
         mPasswordAvatar.setImageBitmap(bitmapImage)
         mAvatarImageDescView.visibility = View.GONE
@@ -209,7 +211,7 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
     private fun initGalleryManager() {
         mGalleryManager = PSGalleryManager(this)
-        mGalleryManager.onImagePickedFromGallery = (this::displayPasswordAvatarChooserImage)
+        mGalleryManager.onImagePickedFromGallery = mAddNewPasswordPresenter::onGalleryAvatarSelected
     }
 
     private fun initToolbar() {

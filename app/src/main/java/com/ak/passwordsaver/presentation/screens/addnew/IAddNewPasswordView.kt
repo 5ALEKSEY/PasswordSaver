@@ -10,7 +10,7 @@ interface IAddNewPasswordView : IBaseAppView {
     fun displayPasswordContentInputError(errorMessage: String)
     fun hidePasswordContentInputError()
     fun drawTextForPasswordAvatar(text: String)
-    fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap)
+    fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap?)
     fun deletePasswordAvatarChooserImage()
     fun dismissPasswordAvatarChooserDialog()
     fun openGalleryForImagePick()

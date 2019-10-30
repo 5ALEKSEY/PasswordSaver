@@ -6,6 +6,7 @@ import com.ak.passwordsaver.model.PasswordShowingType
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
+import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
 import com.ak.passwordsaver.presentation.screens.passwords.logic.PasswordsListInteractor
 import com.arellomobile.mvp.InjectViewState
@@ -20,6 +21,8 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     lateinit var mPasswordsListInteractor: PasswordsListInteractor
     @Inject
     lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
+    @Inject
+    lateinit var mBitmapDecoderManager: IBitmapDecoderManager
 
     private var mCurrentPasswordId = 0L
 
@@ -105,13 +108,14 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     private fun convertDBEntitiesList(entitiesList: List<PasswordDBEntity>): List<PasswordItemModel> {
         val showingType = mSettingsPreferencesManager.getPasswordShowingType()
         val resultList = arrayListOf<PasswordItemModel>()
-        for (entity in entitiesList) {
+        entitiesList.forEach {
+            val avatarBitmap = mBitmapDecoderManager.decodeBitmapFromUriPath(it.passwordAvatarPath)
             resultList.add(
                 PasswordItemModel(
-                    entity.passwordId!!,
-                    entity.passwordName,
-                    entity.passwordPath ?: "",
-                    entity.passwordContent,
+                    it.passwordId!!,
+                    it.passwordName,
+                    avatarBitmap,
+                    it.passwordContent,
                     showingType == PasswordShowingType.IN_CARD
                 )
             )

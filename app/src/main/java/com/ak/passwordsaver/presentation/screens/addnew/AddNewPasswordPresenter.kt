@@ -4,6 +4,7 @@ import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
+import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
 import com.ak.passwordsaver.presentation.screens.addnew.logic.AddNewPasswordInteractor
 import com.ak.passwordsaver.presentation.screens.addnew.logic.usecases.PasswordDataCheckException
 import com.ak.passwordsaver.utils.PSUtils
@@ -24,8 +25,11 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
 
     @Inject
     lateinit var mAddNewPasswordInteractor: AddNewPasswordInteractor
+    @Inject
+    lateinit var mBitmapDecoderManager: IBitmapDecoderManager
 
     private val mPasswordNameChangeSubject = BehaviorSubject.create<String>()
+    private var mSelectedGalleryAvatarPath: String? = null
 
     init {
         PSApplication.appInstance.getApplicationComponent().inject(this)
@@ -33,7 +37,7 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
     }
 
     fun saveNewPassword(name: String, content: String) {
-        mAddNewPasswordInteractor.addNewPassword(PasswordDBEntity(name, content))
+        mAddNewPasswordInteractor.addNewPassword(PasswordDBEntity(name, content, mSelectedGalleryAvatarPath))
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { isSuccess ->
@@ -58,6 +62,16 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
 
     fun onPasswordNameTextChanged(currentName: String) {
         mPasswordNameChangeSubject.onNext(currentName)
+    }
+
+    fun onGalleryAvatarSelected(avatarUriPath: String) {
+        mSelectedGalleryAvatarPath = avatarUriPath
+        viewState.displayPasswordAvatarChooserImage(mBitmapDecoderManager.decodeBitmapFromUriPath(avatarUriPath))
+    }
+
+    fun onAvatarRemoved() {
+        mSelectedGalleryAvatarPath = null
+        viewState.deletePasswordAvatarChooserImage()
     }
 
     private fun observePasswordNameChanges() {

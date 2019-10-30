@@ -51,8 +51,8 @@ class PasswordsListItemViewHolder(
         val rootBackgroundResource = getRootItemBackground(passwordItemModel.isItemSelected)
         mPasswordItemRoot.setBackgroundResource(rootBackgroundResource)
 
-        if (passwordItemModel.photoPath.isNotEmpty()) {
-            // TODO: show image from path
+        if (passwordItemModel.passwordAvatarBitmap != null) {
+            mPasswordAvatarImageView.setImageBitmap(passwordItemModel.passwordAvatarBitmap)
         } else {
             val fillColor = ContextCompat.getColor(itemView.context, R.color.colorPrimary)
             val textColor = ContextCompat.getColor(itemView.context, R.color.colorWhite)

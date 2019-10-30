@@ -1,9 +1,11 @@
 package com.ak.passwordsaver.presentation.screens.passwords.adapter
 
-data class PasswordItemModel(
+import android.graphics.Bitmap
+
+data class PasswordItemModel constructor(
     val passwordId: Long,
     val name: String,
-    val photoPath: String,
+    val passwordAvatarBitmap: Bitmap?,
     val password: String,
     val isPasswordContentNeeds: Boolean,
     var isItemSelected: Boolean = false,
@@ -11,13 +13,13 @@ data class PasswordItemModel(
 ) {
     companion object {
         fun getSearchingTempModel(passwordId: Long) =
-            PasswordItemModel(passwordId, "", "", "", false)
+            PasswordItemModel(passwordId, "", null, "", false)
     }
 
     fun isTheSameContent(passwordItemModel: PasswordItemModel) =
         !(this.passwordId != passwordItemModel.passwordId
                 || this.name != passwordItemModel.name
-                || this.photoPath != passwordItemModel.photoPath
+                || this.passwordAvatarBitmap != passwordItemModel.passwordAvatarBitmap
                 || this.password != passwordItemModel.password
                 || this.isPasswordContentNeeds != passwordItemModel.isPasswordContentNeeds
                 || this.isItemSelected != passwordItemModel.isItemSelected

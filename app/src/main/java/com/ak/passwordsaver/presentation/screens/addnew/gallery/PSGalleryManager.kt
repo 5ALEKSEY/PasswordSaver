@@ -5,20 +5,18 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import java.io.File
-import java.io.FileNotFoundException
 
 
-class PSGalleryManager constructor(
-    private val context: Context
-) {
+class PSGalleryManager constructor(private val context: Context) {
 
-    lateinit var onImagePickedFromGallery: (bitmapImage: Bitmap) -> Unit
+    lateinit var onImagePickedFromGallery: (imageUriPath: String) -> Unit
 
     fun getLastGalleryImage(): Bitmap? {
         val projection = arrayOf(
@@ -63,23 +61,18 @@ class PSGalleryManager constructor(
         )
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         if (requestCode != AppConstants.GALLERY_IMAGE_PICK_REQUEST_CODE) {
             return
         }
-        if (resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-            try {
-                val imageStream = context.contentResolver.openInputStream(data.data!!)
-                pushPickedImage(BitmapFactory.decodeStream(imageStream))
-            } catch (e: FileNotFoundException) {
-                e.printStackTrace()
-            }
+        if (resultCode == Activity.RESULT_OK && intent != null && intent.data != null) {
+            pushPickedImageUriPath(intent.data!!.toString())
         }
     }
 
-    private fun pushPickedImage(bitmapImage: Bitmap) {
+    private fun pushPickedImageUriPath(imageUriPath: String) {
         if (this::onImagePickedFromGallery.isInitialized) {
-            onImagePickedFromGallery.invoke(bitmapImage)
+            onImagePickedFromGallery.invoke(imageUriPath)
         }
     }
 

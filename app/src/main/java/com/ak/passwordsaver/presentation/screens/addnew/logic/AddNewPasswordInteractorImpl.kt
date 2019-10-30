@@ -16,7 +16,8 @@ class AddNewPasswordInteractorImpl @Inject constructor(
     private val mPasswordDataCheckUseCase: PasswordDataCheckUseCase = PasswordDataCheckUseCase()
     private val mEncryptionUseCase: EncryptionUseCase = EncryptionUseCase()
 
-    override fun addNewPassword(passwordDBEntity: PasswordDBEntity) = addNewPasswords(listOf(passwordDBEntity))
+    override fun addNewPassword(passwordDBEntity: PasswordDBEntity) =
+        addNewPasswords(listOf(passwordDBEntity))
 
     override fun addNewPasswords(passwordDBEntities: List<PasswordDBEntity>): Single<Boolean> {
         return getInvokedPasswordsDataCheckUseCase(passwordDBEntities)
@@ -50,7 +51,7 @@ class AddNewPasswordInteractorImpl @Inject constructor(
             .flatMap(
                 { entity -> encryptPasswordContent(entity.passwordContent) },
                 { oldEntity, encryptedPassword ->
-                    PasswordDBEntity(oldEntity.passwordName, encryptedPassword)
+                    PasswordDBEntity(oldEntity.passwordName, encryptedPassword, oldEntity.passwordAvatarPath)
                 })
             .toList()
 
