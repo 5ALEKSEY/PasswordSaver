@@ -66,7 +66,12 @@ class PSGalleryManager constructor(private val context: Context) {
             return
         }
         if (resultCode == Activity.RESULT_OK && intent != null && intent.data != null) {
-            pushPickedImageUriPath(intent.data!!.toString())
+            val imageUriPath = intent.data!!.toString()
+            context.contentResolver.takePersistableUriPermission(
+                intent.data!!,
+                Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            )
+            pushPickedImageUriPath(imageUriPath)
         }
     }
 
@@ -77,7 +82,7 @@ class PSGalleryManager constructor(private val context: Context) {
     }
 
     private fun getGalleryPickIntentAction() =
-        Intent(Intent.ACTION_PICK).apply {
+        Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             type = AppConstants.IMAGE_MIME_TYPE
         }
 }
