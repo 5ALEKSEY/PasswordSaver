@@ -15,6 +15,8 @@ import collections.forEach
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.extensions.dpToPx
 import com.ak.passwordsaver.utils.extensions.vibrate
+import kotlin.math.abs
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
 class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
@@ -130,14 +132,14 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         val y = event.y
 
         when (event.action) {
-            MotionEvent.ACTION_DOWN -> checkNodesAndStart(x, y)
+            MotionEvent.ACTION_DOWN -> handleCoordinateForNodeAdd(x, y)
             MotionEvent.ACTION_UP -> {
                 if (mIsAuthStarted) {
                     mLinePaths.removeAt(mLinePaths.size - 1)
                     onAuthFinished()
                 }
             }
-            MotionEvent.ACTION_MOVE -> touchMove(x, y)
+            MotionEvent.ACTION_MOVE -> handleMoveAction(x, y)
         }
 
         invalidate()
@@ -206,20 +208,57 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         return nodesInLine - 1
     }
 
-    private fun touchMove(x: Float, y: Float) {
-        if (this::mPath.isInitialized && mIsAuthStarted) {
-            mPath.reset()
-            mPath.moveTo(mX, mY)
-            mPath.lineTo(x, y)
-            checkNodesAndStart(x, y)
+    private fun handleMoveAction(x: Float, y: Float) {
+        if (mIsAuthStarted) {
+            drawLineTo(x, y)
+            // check nodes and path line intersection
+            checkNodesOnPathLineAndStart(mX, mY, x, y)
+            // check node intersection with current position
+            handleCoordinateForNodeAdd(x, y)
         }
     }
 
-    private fun checkNodesAndStart(x: Float, y: Float) {
-        val invokedNodeNumber = getInvokedNodeNumber(x, y) ?: return
-        if (mInvokedNodesNumbers.contains(invokedNodeNumber)) return
+    private fun drawLineTo(x: Float, y: Float) {
+        if (this::mPath.isInitialized) {
+            mPath.reset()
+            mPath.moveTo(mX, mY)
+            mPath.lineTo(x, y)
+        }
+    }
+
+    private fun checkNodesOnPathLineAndStart(x1: Float, y1: Float, x2: Float, y2: Float) {
+        var dx = x2 - x1
+        var dy = y2 - y1
+
+        val dxAbs = abs(dx)
+        val dyAbs = abs(dy)
+        val step = if (dxAbs >= dyAbs) {
+            dxAbs
+        } else {
+            dyAbs
+        }
+
+        dx /= step
+        dy /= step
+
+        var x = x1
+        var y = y1
+        for (i in 1..step.roundToInt()) {
+            if (handleCoordinateForNodeAdd(x, y)) {
+                return
+            }
+            x += dx
+            y += dy
+        }
+    }
+
+    // return true if new node invoked, otherwise false
+    private fun handleCoordinateForNodeAdd(x: Float, y: Float): Boolean {
+        val invokedNodeNumber = getInvokedNodeNumber(x, y) ?: return false
+        if (mInvokedNodesNumbers.contains(invokedNodeNumber)) return false
 
         addNewAuthNode(invokedNodeNumber)
+        return true
     }
 
     private fun addNewAuthNode(invokedNodeNumber: Int) {
@@ -229,7 +268,7 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         mInvokedNodesNumbers.add(invokedNodeNumber)
         vibrate(NODE_SELECT_VIBRATION_DELAY_IN_MILLIS)
 
-        touchMove(nodeData.x.toFloat(), nodeData.y.toFloat())
+        drawLineTo(nodeData.x.toFloat(), nodeData.y.toFloat())
         nodeData.nodeView.setNodeEnableState(true)
         mX = nodeData.x.toFloat()
         mY = nodeData.y.toFloat()
