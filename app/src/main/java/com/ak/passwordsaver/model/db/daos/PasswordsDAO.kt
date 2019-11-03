@@ -8,10 +8,7 @@ import io.reactivex.Single
 @Dao
 interface PasswordsDAO {
 
-    @Query(
-        "SELECT * FROM " + PasswordDBEntity.PASSWORD_TABLE_NAME + " ORDER BY "
-                + PasswordDBEntity.COLUMN_PASSWORD_ID + " DESC"
-    )
+    @Query("SELECT * FROM " + PasswordDBEntity.PASSWORD_TABLE_NAME)
     fun getAllPasswords(): Flowable<List<PasswordDBEntity>>
 
     @Query(
