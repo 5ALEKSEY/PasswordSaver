@@ -219,10 +219,10 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
         val invokedNodeNumber = getInvokedNodeNumber(x, y) ?: return
         if (mInvokedNodesNumbers.contains(invokedNodeNumber)) return
 
-        startAuthAction(invokedNodeNumber)
+        addNewAuthNode(invokedNodeNumber)
     }
 
-    private fun startAuthAction(invokedNodeNumber: Int) {
+    private fun addNewAuthNode(invokedNodeNumber: Int) {
         val nodeData = mNodesMap[invokedNodeNumber]
 
         mIsAuthStarted = true
