@@ -5,7 +5,7 @@
 
     <dimen name="secret_input_pincode_image_size">8dp</dimen>
     <dimen name="add_password_avatar_size">150dp</dimen>
-    <dimen name="card_avatar_avatar_size">135dp</dimen>
+    <dimen name="card_avatar_avatar_size">130dp</dimen>
 
     <dimen name="add_avatar_inner_text_size">60sp</dimen>
     <dimen name="card_avatar_inner_text_size">40sp</dimen>

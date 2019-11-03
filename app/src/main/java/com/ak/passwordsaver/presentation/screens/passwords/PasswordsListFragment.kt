@@ -105,7 +105,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
         mPasswordsRecyclerView.adapter = mPasswordsAdapter
         mPasswordsRecyclerView.layoutManager = GridLayoutManager(
             context,
-            1,
+            2,
             GridLayoutManager.VERTICAL,
             false
         )
