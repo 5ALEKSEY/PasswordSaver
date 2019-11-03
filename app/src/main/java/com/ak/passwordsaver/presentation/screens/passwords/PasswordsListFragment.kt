@@ -2,6 +2,7 @@ package com.ak.passwordsaver.presentation.screens.passwords
 
 import android.app.Activity
 import android.content.Intent
+import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.view.ActionMode
@@ -24,6 +25,8 @@ import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsA
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordsListRecyclerAdapter
 import com.ak.passwordsaver.utils.bindView
+import com.ak.passwordsaver.utils.extensions.turnOffToolbarScrolling
+import com.ak.passwordsaver.utils.extensions.turnOnToolbarScrolling
 import com.arellomobile.mvp.presenter.InjectPresenter
 
 
@@ -38,6 +41,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     @InjectPresenter
     lateinit var mPasswordsActionModePresenter: PasswordsActionModePresenter
 
+    private val mAppBarLayout: AppBarLayout by bindView(R.id.abl_passwords_list_bar_layout)
     private val mToolbar: Toolbar by bindView(R.id.tb_passwords_list_bar)
     private val mPasswordsRecyclerView: RecyclerView by bindView(R.id.rv_passwords_list)
     private val mAddNewPasswordButton: FloatingActionButton by bindView(R.id.fab_add_new_password_action)
@@ -85,6 +89,14 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     override fun setPasswordVisibilityInCardMode(passwordId: Long, contentVisibilityState: Boolean) {
         mPasswordsAdapter.setPasswordContentVisibility(passwordId, contentVisibilityState)
+    }
+
+    override fun enableToolbarScrolling() {
+        mToolbar.turnOnToolbarScrolling(mAppBarLayout)
+    }
+
+    override fun disableToolbarScrolling() {
+        mToolbar.turnOffToolbarScrolling(mAppBarLayout)
     }
 
     private fun initToolbar() {

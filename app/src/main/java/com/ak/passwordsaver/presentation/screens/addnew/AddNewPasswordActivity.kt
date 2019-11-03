@@ -10,6 +10,7 @@ import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
@@ -72,6 +73,9 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
                 false
             }
         }
+        mPasswordContentEditText.filters = arrayOf(
+            InputFilter.LengthFilter(AppConstants.PASSWORD_CONTENT_MAX_LENGTH)
+        )
 
         mPasswordAvatar.setOnClickListener {
             GlobalScope.launch {
@@ -128,6 +132,9 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
                 mAddNewPasswordPresenter.onPasswordNameTextChanged(s.toString())
             }
         })
+        mPasswordNameEditText.filters = arrayOf(
+            InputFilter.LengthFilter(AppConstants.PASSWORD_NAME_MAX_LENGTH)
+        )
 
         mSavePasswordActionButton.setOnClickListener {
             onSavePasswordAction()

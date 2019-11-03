@@ -1,9 +1,13 @@
 package com.ak.passwordsaver.utils.extensions
 
 import android.graphics.*
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CoordinatorLayout
+import android.support.v7.widget.Toolbar
 import android.util.TypedValue
 import com.ak.passwordsaver.PSApplication
 import de.hdodenhof.circleimageview.CircleImageView
+
 
 fun Float.dpToPx(): Int {
     return TypedValue.applyDimension(
@@ -44,4 +48,29 @@ fun CircleImageView.drawTextInner(
     textToDraw: String
 ) {
     drawTextInner(width, fillColor, textColor, textSizeInPx, textToDraw)
+}
+
+fun Toolbar.turnOffToolbarScrolling(appBarLayout: AppBarLayout) {
+    //turn off scrolling
+    val toolbarLayoutParams = layoutParams as AppBarLayout.LayoutParams
+    toolbarLayoutParams.scrollFlags = 0
+    layoutParams = toolbarLayoutParams
+
+    changeAppBarLayoutScrollBehavior(appBarLayout, false)
+}
+
+fun Toolbar.turnOnToolbarScrolling(appBarLayout: AppBarLayout) {
+    //turn on scrolling
+    val toolbarLayoutParams = layoutParams as AppBarLayout.LayoutParams
+    toolbarLayoutParams.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
+            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
+    layoutParams = toolbarLayoutParams
+
+    changeAppBarLayoutScrollBehavior(appBarLayout, true)
+}
+
+private fun changeAppBarLayoutScrollBehavior(appBarLayout: AppBarLayout, isScrollNeeds: Boolean) {
+    val appBarLayoutParams = appBarLayout.layoutParams as CoordinatorLayout.LayoutParams
+    appBarLayoutParams.behavior = if (isScrollNeeds) AppBarLayout.Behavior() else null
+    appBarLayout.layoutParams = appBarLayoutParams
 }

@@ -9,6 +9,8 @@ interface IPasswordsListView : IBaseAppView {
     fun displayPasswords(passwordModelsList: List<PasswordItemModel>)
     fun openPasswordToastMode(passwordName: String, passwordContent: String)
     fun setPasswordVisibilityInCardMode(passwordId: Long, contentVisibilityState: Boolean)
+    fun enableToolbarScrolling()
+    fun disableToolbarScrolling()
     // security
     fun startSecurityAuthAction()
 }

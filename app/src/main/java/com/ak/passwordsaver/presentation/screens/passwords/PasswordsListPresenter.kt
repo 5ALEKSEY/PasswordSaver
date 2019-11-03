@@ -6,6 +6,7 @@ import com.ak.passwordsaver.model.PasswordShowingType
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
+import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
 import com.ak.passwordsaver.presentation.screens.passwords.logic.PasswordsListInteractor
@@ -95,14 +96,24 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
             }
             .subscribe(
                 { list ->
+                    val listForDisplay = convertDBEntitiesList(list)
                     viewState.setLoadingState(false)
-                    viewState.displayPasswords(convertDBEntitiesList(list))
+                    viewState.displayPasswords(listForDisplay)
                     viewState.setEmptyPasswordsState(list.isEmpty())
+                    handleListForDisplay(listForDisplay)
                 },
                 { throwable ->
                     Log.d("de", "dede")
                 })
             .let(this::bindDisposable)
+    }
+
+    private fun handleListForDisplay(listForDisplay: List<PasswordItemModel>) {
+        if (listForDisplay.size >= AppConstants.TOOLBAR_SCROLL_MIN_PASSWORDS_SIZE) {
+            viewState.enableToolbarScrolling()
+        } else {
+            viewState.disableToolbarScrolling()
+        }
     }
 
     private fun convertDBEntitiesList(entitiesList: List<PasswordDBEntity>): List<PasswordItemModel> {
