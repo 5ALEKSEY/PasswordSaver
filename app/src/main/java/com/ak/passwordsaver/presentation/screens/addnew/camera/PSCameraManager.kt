@@ -17,6 +17,7 @@ class PSCameraManager constructor(
     private val isPreviewOnly: Boolean,
     private val previewImageView: TextureView
 ) {
+
     private var mBackgroundHandler: Handler? = null
     private var mBackgroundThread: HandlerThread? = null
 
@@ -45,7 +46,9 @@ class PSCameraManager constructor(
     }
 
     fun openCamera() {
-        if (mFacingBackCameraId.isNotEmpty()) {
+        if (mCurrentCameraId.isNotEmpty()) {
+            openCamera(mCurrentCameraId)
+        } else {
             openCamera(mFacingBackCameraId)
             mCurrentCameraId = mFacingBackCameraId
         }
@@ -69,7 +72,8 @@ class PSCameraManager constructor(
             else -> mFacingBackCameraId
         }
         mCurrentCameraId = cameraIdForOpen
-        // TODO: open camera
+        closeCamera()
+        openCamera(mCurrentCameraId)
     }
 
     private fun openCamera(cameraId: String) {
@@ -80,20 +84,20 @@ class PSCameraManager constructor(
                 mCameraManager.openCamera(cameraId, object : CameraDevice.StateCallback() {
                     override fun onOpened(cameraDevice: CameraDevice) {
                         mCameraDevice = cameraDevice
-                        startCameraPreview()
+                        setupCameraPreview()
                     }
 
                     override fun onClosed(camera: CameraDevice) {
                         super.onClosed(camera)
-
+                        Log.d("camera_testing", "onClosed")
                     }
 
                     override fun onDisconnected(camera: CameraDevice) {
-
+                        Log.d("camera_testing", "onDisconnected")
                     }
 
                     override fun onError(camera: CameraDevice, error: Int) {
-
+                        Log.d("camera_testing", "onError")
                     }
                 }, mBackgroundHandler)
 
@@ -124,31 +128,58 @@ class PSCameraManager constructor(
         }
     }
 
-    private fun startCameraPreview() {
+    private fun setupCameraPreview() {
         if (mCameraDevice == null) {
             return
         }
 
-        previewImageView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
-            override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, w: Int, h: Int) {
+        if (previewImageView.isAvailable) {
+            val surfaceTexture = previewImageView.surfaceTexture
+            val optimalPreviewSize = CameraCalculatorHelper.getBestCameraPhotoPreviewSize(
+                context,
+                mCurrentCameraId,
+                mCameraManager,
+                previewImageView.width, previewImageView.height
+            )
+            surfaceTexture.setDefaultBufferSize(optimalPreviewSize.width, optimalPreviewSize.height)
+            createCameraPreviewSession(surfaceTexture)
+        } else {
+            previewImageView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+                override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, w: Int, h: Int) {
 
-            }
+                }
 
-            override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
+                override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
+                    Log.d("d", "ss")
+                }
 
-            }
+                override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
+                    Log.d("d", "ss")
+                    return true
+                }
 
-            override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
-                Log.d("d", "ss")
-                return true
-            }
+                override fun onSurfaceTextureAvailable(
+                    surface: SurfaceTexture?,
+                    width: Int,
+                    height: Int
+                ) {
+                    if (surface == null) return
 
-            override fun onSurfaceTextureAvailable(surface: SurfaceTexture?, w: Int, h: Int) {
-                surface?.let {
-                    createCameraPreviewSession(it)
+                    val optimalPreviewSize = CameraCalculatorHelper.getBestCameraPhotoPreviewSize(
+                        context,
+                        mCurrentCameraId,
+                        mCameraManager,
+                        width,
+                        height
+                    )
+                    surface.setDefaultBufferSize(
+                        optimalPreviewSize.width,
+                        optimalPreviewSize.height
+                    )
+
+                    createCameraPreviewSession(surface)
                 }
             }
-
         }
     }
 

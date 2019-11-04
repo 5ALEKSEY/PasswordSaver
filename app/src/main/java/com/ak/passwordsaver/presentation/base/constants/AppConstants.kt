@@ -5,6 +5,7 @@ object AppConstants {
     const val AVATAR_PERMISSIONS_REQUEST_CODE = 1
     const val SECURITY_REQUEST_CODE = 2
     const val GALLERY_IMAGE_PICK_REQUEST_CODE = 3
+    const val CAMERA_IMAGE_PICK_REQUEST_CODE = 4
 
     // create password
     const val PASSWORD_NAME_MAX_LENGTH = 20

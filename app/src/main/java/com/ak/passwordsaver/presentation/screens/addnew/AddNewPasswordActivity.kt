@@ -22,6 +22,7 @@ import android.widget.Toast
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
+import com.ak.passwordsaver.presentation.screens.addnew.camera.CameraPickImageActivity
 import com.ak.passwordsaver.presentation.screens.addnew.gallery.PSGalleryManager
 import com.ak.passwordsaver.presentation.screens.addnew.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.utils.bindView
@@ -96,7 +97,7 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
                             { avatarChooseActionCode ->
                                 when (avatarChooseActionCode) {
                                     PhotoChooserBottomSheetDialog.CAMERA_CHOOSE_ACTION_ID -> {
-                                        showShortTimeMessage("Camera pick")
+                                        CameraPickImageActivity.startCameraPickActivityForResult(this@AddNewPasswordActivity)
                                     }
                                     PhotoChooserBottomSheetDialog.GALLERY_CHOOSE_ACTION_ID -> {
                                         openGalleryForImagePick()
