@@ -25,4 +25,7 @@
     <color name="avatar_chooser_dialog_text_color">@color/colorWhite</color>
     <color name="avatar_chooser_dialog_image_tint">@color/colorWhite</color>
 
+    <color name="camera_pick_image_back_facing_panel_background">@color/colorBlack</color>
+    <color name="camera_pick_image_front_facing_panel_background">#66181818</color>
+
 </resources>

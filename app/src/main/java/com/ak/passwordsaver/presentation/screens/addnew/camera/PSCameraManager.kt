@@ -31,6 +31,12 @@ class PSCameraManager constructor(
     private var mFacingBackCameraId: String = ""
     private var mFacingFrontCameraId: String = ""
 
+    val isFacingBackCameraExist
+        get() = mFacingBackCameraId.isNotEmpty()
+
+    val isFacingFrontCameraExist
+        get() = mFacingFrontCameraId.isNotEmpty()
+
     init {
         try {
             mCameraManager.cameraIdList.forEach {
@@ -44,6 +50,7 @@ class PSCameraManager constructor(
             e.printStackTrace()
         }
     }
+
 
     fun openCamera() {
         if (mCurrentCameraId.isNotEmpty()) {
@@ -146,7 +153,7 @@ class PSCameraManager constructor(
         } else {
             previewImageView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
                 override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, w: Int, h: Int) {
-
+                    Log.d("d", "d")
                 }
 
                 override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
