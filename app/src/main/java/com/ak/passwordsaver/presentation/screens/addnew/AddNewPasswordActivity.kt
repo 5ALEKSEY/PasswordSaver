@@ -4,10 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.support.design.widget.TextInputLayout
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.InputFilter
@@ -27,14 +24,15 @@ import com.ak.passwordsaver.presentation.screens.addnew.gallery.PSGalleryManager
 import com.ak.passwordsaver.presentation.screens.addnew.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.drawTextInner
+import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.hideKeyBoard
+import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.arellomobile.mvp.presenter.InjectPresenter
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.io.FileNotFoundException
 
 
 class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
@@ -183,12 +181,12 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
 
     override fun drawTextForPasswordAvatar(text: String) {
         val isTextDrawNeeds = text.isNotEmpty()
-        val fillColor = ContextCompat.getColor(this, R.color.colorPrimary)
-        val textColor = ContextCompat.getColor(this, R.color.colorWhite)
+        val fillColor = getColorCompat(R.color.colorPrimary)
+        val textColor = getColorCompat(R.color.colorWhite)
         val textSizeInPx = resources.getDimensionPixelSize(R.dimen.add_avatar_inner_text_size)
 
         mPasswordAvatar.drawTextInner(fillColor, textColor, textSizeInPx, text)
-        mAvatarImageDescView.visibility = if (isTextDrawNeeds) View.GONE else View.VISIBLE
+        mAvatarImageDescView.setVisibility(!isTextDrawNeeds)
     }
 
     override fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap?) {

@@ -5,6 +5,7 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.Toolbar
 import android.util.TypedValue
+import android.view.View
 import com.ak.passwordsaver.PSApplication
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -67,6 +68,22 @@ fun Toolbar.turnOnToolbarScrolling(appBarLayout: AppBarLayout) {
     layoutParams = toolbarLayoutParams
 
     changeAppBarLayoutScrollBehavior(appBarLayout, true)
+}
+
+fun View.setVisibility(isVisible: Boolean) {
+    visibility = if (isVisible) {
+        View.VISIBLE
+    } else {
+        View.GONE
+    }
+}
+
+fun View.setVisibilityInvisible(isVisible: Boolean) {
+    visibility = if (isVisible) {
+        View.VISIBLE
+    } else {
+        View.INVISIBLE
+    }
 }
 
 private fun changeAppBarLayoutScrollBehavior(appBarLayout: AppBarLayout, isScrollNeeds: Boolean) {

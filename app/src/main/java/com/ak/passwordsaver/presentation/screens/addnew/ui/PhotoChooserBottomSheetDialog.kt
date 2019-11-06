@@ -6,7 +6,6 @@ import android.support.annotation.ColorInt
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.BottomSheetDialogFragment
 import android.support.v4.app.FragmentManager
-import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
@@ -15,6 +14,7 @@ import android.widget.ImageView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.screens.addnew.camera.PSCameraManager
 import com.ak.passwordsaver.presentation.screens.addnew.gallery.PSGalleryManager
+import com.ak.passwordsaver.utils.extensions.getColorCompat
 
 class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
 
@@ -64,7 +64,7 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
                 setImageBitmap(lastGalleryImage)
             } else {
                 @ColorInt
-                val noLastImageColor = ContextCompat.getColor(context!!, R.color.colorBlack)
+                val noLastImageColor = context.getColorCompat(R.color.colorBlack)
                 setImageDrawable(ColorDrawable(noLastImageColor))
             }
         }

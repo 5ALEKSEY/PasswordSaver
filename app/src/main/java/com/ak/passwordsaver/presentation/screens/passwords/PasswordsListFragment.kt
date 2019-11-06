@@ -25,6 +25,7 @@ import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsA
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordsListRecyclerAdapter
 import com.ak.passwordsaver.utils.bindView
+import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.turnOffToolbarScrolling
 import com.ak.passwordsaver.utils.extensions.turnOnToolbarScrolling
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -75,11 +76,11 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     }
 
     override fun setLoadingState(isLoading: Boolean) {
-        mProgressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        mProgressBar.setVisibility(isLoading)
     }
 
     override fun setEmptyPasswordsState(isEmptyViewVisible: Boolean) {
-        mEmptyView.visibility = if (isEmptyViewVisible) View.VISIBLE else View.GONE
+        mEmptyView.setVisibility(isEmptyViewVisible)
     }
 
     override fun openPasswordToastMode(passwordName: String, passwordContent: String) {

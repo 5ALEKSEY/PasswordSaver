@@ -5,17 +5,17 @@ import android.graphics.PorterDuff
 import android.support.annotation.ColorInt
 import android.support.annotation.DrawableRes
 import android.support.constraint.ConstraintLayout
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.ImageView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.bindView
+import com.ak.passwordsaver.utils.extensions.getColorCompat
 
 class PatternCodeNodeView(context: Context?, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs) {
 
-    private val mFailedColor by lazy { ContextCompat.getColor(context!!, R.color.failed_action_color) }
+    private val mFailedColor by lazy { context!!.getColorCompat(R.color.failed_action_color) }
 
     private val mPatterNodeView: ImageView by bindView(R.id.iv_node_pattern_view)
 

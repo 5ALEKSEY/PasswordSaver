@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.MotionEvent
@@ -14,6 +13,7 @@ import android.widget.RelativeLayout
 import collections.forEach
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.extensions.dpToPx
+import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.vibrate
 import kotlin.math.abs
 import kotlin.math.roundToInt
@@ -44,9 +44,9 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     //----------------------------------------------------------------------------------------------
 
 
-    private val mDefaultLineColor by lazy { ContextCompat.getColor(context!!, R.color.default_pattern_line_color) }
-    private val mFailedLineColor by lazy { ContextCompat.getColor(context!!, R.color.failed_pattern_line_color) }
-    private val mBackgroundColor by lazy { ContextCompat.getColor(context!!, R.color.security_background_color) }
+    private val mDefaultLineColor by lazy { context!!.getColorCompat(R.color.default_pattern_line_color) }
+    private val mFailedLineColor by lazy { context!!.getColorCompat(R.color.failed_pattern_line_color) }
+    private val mBackgroundColor by lazy { context!!.getColorCompat(R.color.security_background_color) }
 
     lateinit var mOnFinishedAction: (patternResultCode: String) -> Unit
 

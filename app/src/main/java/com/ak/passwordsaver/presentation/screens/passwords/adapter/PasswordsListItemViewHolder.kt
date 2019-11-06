@@ -1,6 +1,5 @@
 package com.ak.passwordsaver.presentation.screens.passwords.adapter
 
-import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.Button
@@ -9,6 +8,8 @@ import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.PSUtils
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.drawTextInner
+import com.ak.passwordsaver.utils.extensions.getColorCompat
+import com.ak.passwordsaver.utils.extensions.setVisibility
 import de.hdodenhof.circleimageview.CircleImageView
 
 class PasswordsListItemViewHolder(
@@ -32,7 +33,7 @@ class PasswordsListItemViewHolder(
     fun bindPasswordListItemView(passwordItemModel: PasswordItemModel) {
         mPasswordNameTextView.text = passwordItemModel.name
         mPasswordContentTextView.text = getPasswordContentText(passwordItemModel)
-        mPasswordContentTextView.visibility = if (passwordItemModel.isPasswordContentNeeds) View.VISIBLE else View.GONE
+        mPasswordContentTextView.setVisibility(passwordItemModel.isPasswordContentNeeds)
 
         mVisibilityPasswordButton.text = getVisibilityPasswordButtonText(passwordItemModel.isPasswordContentVisible)
         mVisibilityPasswordButton.setOnClickListener {
@@ -54,8 +55,8 @@ class PasswordsListItemViewHolder(
         if (passwordItemModel.passwordAvatarBitmap != null) {
             mPasswordAvatarImageView.setImageBitmap(passwordItemModel.passwordAvatarBitmap)
         } else {
-            val fillColor = ContextCompat.getColor(itemView.context, R.color.colorPrimary)
-            val textColor = ContextCompat.getColor(itemView.context, R.color.colorWhite)
+            val fillColor = itemView.context.getColorCompat(R.color.colorPrimary)
+            val textColor = itemView.context.getColorCompat(R.color.colorWhite)
             val textSizeInPx = itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_inner_text_size)
             val avatarSizeInPx = itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_avatar_size)
             mPasswordAvatarImageView.drawTextInner(

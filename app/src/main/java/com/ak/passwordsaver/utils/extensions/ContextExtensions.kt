@@ -4,8 +4,10 @@ import android.content.Context
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.support.annotation.ColorRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
@@ -40,6 +42,9 @@ fun Context.vibrate(vibrateDuration: Long = 200L) {
 fun Context.showToastMessage(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }
+
+fun Context.getColorCompat(@ColorRes colorRes: Int) =
+    ContextCompat.getColor(this, colorRes)
 
 private fun Context.hideKeyBoard(focusedView: View) {
     val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager

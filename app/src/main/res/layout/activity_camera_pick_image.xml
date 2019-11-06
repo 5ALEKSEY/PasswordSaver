@@ -11,7 +11,7 @@
             android:id="@+id/texv_camera_pick_image_preview"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/cl_camera_actions_panel_container"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -29,17 +29,19 @@
     <android.support.constraint.ConstraintLayout
             android:id="@+id/cl_camera_actions_panel_container"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:background="@color/camera_pick_image_back_facing_panel_background"
+            android:layout_height="120dp"
+            android:background="@color/camera_pick_image_panel_background"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-                android:id="@+id/btn_camera_pick_image_switch_camera_action"
+        <ImageView
+                android:id="@+id/btn_take_image_action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="switch camera"
+                android:padding="8dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/ic_take_image_action"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
