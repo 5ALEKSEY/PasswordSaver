@@ -3,8 +3,10 @@ package com.ak.passwordsaver.presentation.screens.addnew.camera
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
+import android.media.ImageReader
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
@@ -24,12 +26,18 @@ class PSCameraManager constructor(
     private var mCameraManager: CameraManager =
         context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
     private var mCameraDevice: CameraDevice? = null
-    private lateinit var mCaptureSession: CameraCaptureSession
     private lateinit var mPreviewSurface: Surface
+    private var mCaptureSession: CameraCaptureSession? = null
+    private var mImageReader: ImageReader? = null
 
     private var mCurrentCameraId: String = ""
     private var mFacingBackCameraId: String = ""
     private var mFacingFrontCameraId: String = ""
+
+    private val mOnImageAvailableListener =
+        ImageReader.OnImageAvailableListener {
+
+        }
 
     val isFacingBackCameraExist
         get() = mFacingBackCameraId.isNotEmpty()
@@ -65,6 +73,8 @@ class PSCameraManager constructor(
         stopBackgroundThread()
         mCameraDevice?.close()
         mCameraDevice = null
+        mImageReader = null
+        mCaptureSession = null
         mPreviewSurface.release()
     }
 
@@ -81,6 +91,37 @@ class PSCameraManager constructor(
         mCurrentCameraId = cameraIdForOpen
         closeCamera()
         openCamera(mCurrentCameraId)
+    }
+
+    fun takeImage() {
+        if (isPreviewOnly || mImageReader == null || mCaptureSession == null) {
+            return
+        }
+        try {
+
+            val builder = mCameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
+            builder.addTarget(mImageReader!!.surface)
+            mCaptureSession!!.stopRepeating()
+            mCaptureSession!!.abortCaptures()
+            mCaptureSession!!.capture(
+                builder.build(),
+                object : CameraCaptureSession.CaptureCallback() {
+                    override fun onCaptureCompleted(
+                        session: CameraCaptureSession,
+                        request: CaptureRequest,
+                        result: TotalCaptureResult
+                    ) {
+                        super.onCaptureCompleted(session, request, result)
+
+                    }
+                },
+                mBackgroundHandler
+            )
+
+
+        } catch (e: CameraAccessException) {
+            e.printStackTrace()
+        }
     }
 
     private fun openCamera(cameraId: String) {
@@ -148,8 +189,11 @@ class PSCameraManager constructor(
                 mCameraManager,
                 previewImageView.width, previewImageView.height
             )
-            surfaceTexture.setDefaultBufferSize(optimalPreviewSize.width, optimalPreviewSize.height)
-            createCameraPreviewSession(surfaceTexture)
+            createCameraPreviewSession(
+                surfaceTexture,
+                optimalPreviewSize.width,
+                optimalPreviewSize.height
+            )
         } else {
             previewImageView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
                 override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, w: Int, h: Int) {
@@ -179,25 +223,42 @@ class PSCameraManager constructor(
                         width,
                         height
                     )
-                    surface.setDefaultBufferSize(
+
+                    createCameraPreviewSession(
+                        surface,
                         optimalPreviewSize.width,
                         optimalPreviewSize.height
                     )
-
-                    createCameraPreviewSession(surface)
                 }
             }
         }
     }
 
-    private fun createCameraPreviewSession(surfaceTexture: SurfaceTexture) {
+    private fun createCameraPreviewSession(surfaceTexture: SurfaceTexture, w: Int, h: Int) {
+        surfaceTexture.setDefaultBufferSize(w, h)
         mPreviewSurface = Surface(surfaceTexture)
         try {
             val sessionSurfaces = arrayListOf<Surface>()
-            if (isPreviewOnly) {
-                sessionSurfaces.add(mPreviewSurface)
-            } else {
-                // TODO: create image reader surface for capture session
+            sessionSurfaces.add(mPreviewSurface)
+            if (!isPreviewOnly) {
+                val imageSize = CameraCalculatorHelper.getBestPhotoSize(
+                    context,
+                    mCurrentCameraId,
+                    mCameraManager,
+                    w,
+                    h
+                )
+                mImageReader = ImageReader.newInstance(
+                    imageSize.width,
+                    imageSize.height,
+                    ImageFormat.JPEG,
+                    1
+                )
+                mImageReader!!.setOnImageAvailableListener(
+                    mOnImageAvailableListener,
+                    mBackgroundHandler
+                )
+                sessionSurfaces.add(mImageReader!!.surface)
             }
             mCameraDevice!!.createCaptureSession(
                 sessionSurfaces,
@@ -212,7 +273,7 @@ class PSCameraManager constructor(
                             val builder =
                                 mCameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
                             builder.addTarget(mPreviewSurface)
-                            mCaptureSession.setRepeatingRequest(
+                            mCaptureSession!!.setRepeatingRequest(
                                 builder.build(),
                                 null,
                                 mBackgroundHandler

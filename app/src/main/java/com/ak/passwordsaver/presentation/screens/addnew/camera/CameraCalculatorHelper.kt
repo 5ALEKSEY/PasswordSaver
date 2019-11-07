@@ -19,6 +19,10 @@ object CameraCalculatorHelper {
     private const val MAX_PHOTO_WIDTH = 3000
     private const val MAX_PHOTO_RATIO_DIFF = 0.091
 
+    private val compareSizesByArea = Comparator<CameraSize> { a, b ->
+        a.width * a.height - b.width * b.height
+    }
+
     fun getBestCameraPhotoPreviewSize(
         context: Context,
         cameraId: String,
@@ -30,9 +34,9 @@ object CameraCalculatorHelper {
         val texturePreviewSize = getPreviewTextureSize(sensorOrientation, CameraSize(w, h), context)
         val maxPreviewSize = getMaxAvailablePreviewSize(sensorOrientation, context)
 
-        val previewSizes = getAndconvertOutputSizes(SurfaceTexture::class.java, cameraId, cameraManager)
-        val pictureSizes = getAndconvertOutputSizes(ImageFormat.JPEG, cameraId, cameraManager)
-        val bestPhotoSize = getBestPhotoSize(pictureSizes, texturePreviewSize)
+        val previewSizes =
+            getAndConvertOutputSizes(SurfaceTexture::class.java, cameraId, cameraManager)
+        val bestPhotoSize = getBestPhotoSize(context, cameraId, cameraManager, w, h)
 
         return chooseOptimalPhotoPreviewSize(
             previewSizes,
@@ -44,8 +48,44 @@ object CameraCalculatorHelper {
         )
     }
 
-    private val compareSizesByArea = Comparator<CameraSize> { a, b ->
-        a.width * a.height - b.width * b.height
+    fun getBestPhotoSize(
+        context: Context,
+        cameraId: String,
+        cameraManager: CameraManager,
+        w: Int,
+        h: Int
+    ): CameraSize {
+        val sensorOrientation = getSensorOrientation(cameraId, cameraManager)
+        val texturePreviewSize = getPreviewTextureSize(sensorOrientation, CameraSize(w, h), context)
+        val pictureSizes = getAndConvertOutputSizes(ImageFormat.JPEG, cameraId, cameraManager)
+        return getBestPhotoSize(pictureSizes, texturePreviewSize)
+    }
+
+    private fun getBestPhotoSize(pictureSizes: List<CameraSize>, previewSize: CameraSize): CameraSize {
+
+        val bestCandidatesList = ArrayList<CameraSize>()
+        val worstCandidatesList = ArrayList<CameraSize>()
+        val previewRatio = previewSize.heightRatio
+
+        for (size in pictureSizes) {
+            val ratio = size.heightRatio
+            val diff = abs(ratio - previewRatio) / previewRatio
+            if (diff < MAX_PHOTO_RATIO_DIFF) {
+                if (size.width < MAX_PHOTO_WIDTH) {
+                    bestCandidatesList.add(size)
+                } else {
+                    worstCandidatesList.add(size)
+                }
+            }
+        }
+
+        if (bestCandidatesList.isNotEmpty()) {
+            return Collections.max(bestCandidatesList, compareSizesByArea)
+        } else if (worstCandidatesList.isNotEmpty()) {
+            return Collections.max(worstCandidatesList, compareSizesByArea)
+        }
+
+        return Collections.max(pictureSizes, compareSizesByArea)
     }
 
     private fun getDefaultDisplay(context: Context) = getWindowManager(context)?.defaultDisplay!!
@@ -114,7 +154,7 @@ object CameraCalculatorHelper {
         return CameraSize(maxPreviewWidth, maxPreviewHeight)
     }
 
-    private fun getAndconvertOutputSizes(
+    private fun getAndConvertOutputSizes(
         format: Any,
         cameraId: String,
         cameraManager: CameraManager
@@ -135,36 +175,6 @@ object CameraCalculatorHelper {
             }
         }
         return sizes
-    }
-
-    private fun getBestPhotoSize(
-        pictureSizes: List<CameraSize>,
-        previewSize: CameraSize
-    ): CameraSize {
-
-        val bestCandidatesList = ArrayList<CameraSize>()
-        val worstCandidatesList = ArrayList<CameraSize>()
-        val previewRatio = previewSize.heightRatio
-
-        for (size in pictureSizes) {
-            val ratio = size.heightRatio
-            val diff = abs(ratio - previewRatio) / previewRatio
-            if (diff < MAX_PHOTO_RATIO_DIFF) {
-                if (size.width < MAX_PHOTO_WIDTH) {
-                    bestCandidatesList.add(size)
-                } else {
-                    worstCandidatesList.add(size)
-                }
-            }
-        }
-
-        if (bestCandidatesList.isNotEmpty()) {
-            return Collections.max(bestCandidatesList, compareSizesByArea)
-        } else if (worstCandidatesList.isNotEmpty()) {
-            return Collections.max(worstCandidatesList, compareSizesByArea)
-        }
-
-        return Collections.max(pictureSizes, compareSizesByArea)
     }
 
     private fun chooseOptimalPhotoPreviewSize(
