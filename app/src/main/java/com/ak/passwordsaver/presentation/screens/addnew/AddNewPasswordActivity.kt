@@ -20,7 +20,7 @@ import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.addnew.camera.CameraPickImageActivity
-import com.ak.passwordsaver.presentation.screens.addnew.gallery.PSGalleryManager
+import com.ak.passwordsaver.presentation.screens.addnew.gallery.manager.PSGalleryManagerImpl
 import com.ak.passwordsaver.presentation.screens.addnew.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.drawTextInner
@@ -46,7 +46,7 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
     @InjectPresenter
     lateinit var mAddNewPasswordPresenter: AddNewPasswordPresenter
     private lateinit var mAvatarChooserDialog: PhotoChooserBottomSheetDialog
-    private lateinit var mGalleryManager: PSGalleryManager
+    private lateinit var mGalleryManager: PSGalleryManagerImpl
 
     private val mToolbar: Toolbar by bindView(R.id.tb_add_new_password_bar)
     private val mPasswordNameEditText: EditText by bindView(R.id.tiet_password_name_field)
@@ -217,7 +217,8 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
     }
 
     private fun initGalleryManager() {
-        mGalleryManager = PSGalleryManager(this)
+        mGalleryManager =
+            PSGalleryManagerImpl(this)
         mGalleryManager.onImagePickedFromGallery = mAddNewPasswordPresenter::onGalleryAvatarSelected
     }
 

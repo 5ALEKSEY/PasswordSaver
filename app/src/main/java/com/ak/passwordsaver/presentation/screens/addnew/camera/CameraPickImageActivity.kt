@@ -7,13 +7,14 @@ import android.support.v4.app.FragmentActivity
 import android.view.TextureView
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
+import com.ak.passwordsaver.presentation.screens.addnew.camera.manager.IPSCameraManager
+import com.ak.passwordsaver.presentation.screens.addnew.camera.manager.PSCameraManagerImpl
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.getColorCompat
-import com.ak.passwordsaver.utils.extensions.setVisibility
+import javax.inject.Inject
 
 class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
 
@@ -36,11 +37,12 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
             Intent(context, CameraPickImageActivity::class.java)
     }
 
+    @Inject
+    lateinit var mPSCameraManager: IPSCameraManager
+
     private val mCameraPreviewView: TextureView by bindView(R.id.texv_camera_pick_image_preview)
     private val mCancelPickButton: View by bindView(R.id.iv_camera_pick_image_cancel_action)
     private val mTakeImageButton: View by bindView(R.id.btn_take_image_action)
-
-    private var mPSCameraManager: PSCameraManager? = null
 
     override fun getScreenLayoutResId() = R.layout.activity_camera_pick_image
 
@@ -48,7 +50,7 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
         super.initViewBeforePresenterAttach()
         initWindow()
 
-        mPSCameraManager = PSCameraManager(this, true, mCameraPreviewView)
+        mPSCameraManager.initCameraManager(false, mCameraPreviewView)
 
         mTakeImageButton.setOnClickListener {
             takeImageAction()
@@ -70,15 +72,15 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
 
     override fun onResume() {
         super.onResume()
-        mPSCameraManager?.openCamera()
+        mPSCameraManager.openCamera()
     }
 
     override fun onPause() {
         super.onPause()
-        mPSCameraManager?.closeCamera()
+        mPSCameraManager.closeCamera()
     }
 
     override fun takeImageAction() {
-
+        mPSCameraManager.takeImage()
     }
 }

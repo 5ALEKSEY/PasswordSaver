@@ -12,9 +12,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.screens.addnew.camera.PSCameraManager
-import com.ak.passwordsaver.presentation.screens.addnew.gallery.PSGalleryManager
+import com.ak.passwordsaver.presentation.screens.addnew.camera.manager.IPSCameraManager
+import com.ak.passwordsaver.presentation.screens.addnew.gallery.manager.IPSGalleryManager
+import com.ak.passwordsaver.presentation.screens.addnew.gallery.manager.PSGalleryManagerImpl
 import com.ak.passwordsaver.utils.extensions.getColorCompat
+import dagger.android.support.AndroidSupportInjection
+import javax.inject.Inject
 
 class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
 
@@ -30,14 +33,22 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
         }
     }
 
+    @Inject
+    lateinit var mPSCameraManager: IPSCameraManager
+    @Inject
+    lateinit var mPSGalleryManager: IPSGalleryManager
+
     lateinit var onChooseAvatarActionListener: (chooseActionId: Int) -> Unit
 
     private var mFragmentView: View? = null
     private lateinit var mCameraPreviewView: TextureView
-    private lateinit var mCameraManager: PSCameraManager
-    private lateinit var mGalleryManager: PSGalleryManager
 
     override fun getTheme() = R.style.BaseBottomSheetDialog
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        AndroidSupportInjection.inject(this)
+    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) =
         BottomSheetDialog(requireContext(), theme)
@@ -54,12 +65,9 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mCameraPreviewView = view.findViewById(R.id.texv_photo_chooser_camera_preview)
-        context?.let {
-            mCameraManager = PSCameraManager(context!!, true, mCameraPreviewView)
-            mGalleryManager = PSGalleryManager(context!!)
-        }
+        mPSCameraManager.initCameraManager(true, mCameraPreviewView)
         view.findViewById<ImageView>(R.id.iv_photo_chooser_gallery_preview).apply {
-            val lastGalleryImage = mGalleryManager.getLastGalleryImage()
+            val lastGalleryImage = mPSGalleryManager.getLastGalleryImage()
             if (lastGalleryImage != null) {
                 setImageBitmap(lastGalleryImage)
             } else {
@@ -82,15 +90,15 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        if (this::mCameraManager.isInitialized) {
-            mCameraManager.openCamera()
+        if (this::mPSCameraManager.isInitialized) {
+            mPSCameraManager.openCamera()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if (this::mCameraManager.isInitialized) {
-            mCameraManager.closeCamera()
+        if (this::mPSCameraManager.isInitialized) {
+            mPSCameraManager.closeCamera()
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addnew.camera
+package com.ak.passwordsaver.presentation.screens.addnew.camera.manager
 
 import android.Manifest
 import android.content.Context
@@ -12,19 +12,18 @@ import android.os.HandlerThread
 import android.util.Log
 import android.view.Surface
 import android.view.TextureView
+import com.ak.passwordsaver.presentation.screens.addnew.camera.CameraCalculatorHelper
+import javax.inject.Inject
 
 
-class PSCameraManager constructor(
-    private val context: Context,
-    private val isPreviewOnly: Boolean,
-    private val previewImageView: TextureView
-) {
+class PSCameraManagerImpl @Inject constructor(
+    val context: Context,
+    val cameraManager: CameraManager
+) : IPSCameraManager {
 
     private var mBackgroundHandler: Handler? = null
     private var mBackgroundThread: HandlerThread? = null
 
-    private var mCameraManager: CameraManager =
-        context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
     private var mCameraDevice: CameraDevice? = null
     private lateinit var mPreviewSurface: Surface
     private var mCaptureSession: CameraCaptureSession? = null
@@ -34,21 +33,22 @@ class PSCameraManager constructor(
     private var mFacingBackCameraId: String = ""
     private var mFacingFrontCameraId: String = ""
 
+    private var mIsPreviewOnly: Boolean = true
+    private var mPreviewImageView: TextureView? = null
+    private var mIsManagerInitialized = false
+
     private val mOnImageAvailableListener =
         ImageReader.OnImageAvailableListener {
-
+            val image = it.acquireNextImage()
+            Log.d("dded", "dede")
         }
 
-    val isFacingBackCameraExist
-        get() = mFacingBackCameraId.isNotEmpty()
-
-    val isFacingFrontCameraExist
-        get() = mFacingFrontCameraId.isNotEmpty()
-
-    init {
+    override fun initCameraManager(isPreviewOnly: Boolean, previewImageView: TextureView) {
+        this.mIsPreviewOnly = isPreviewOnly
+        this.mPreviewImageView = previewImageView
         try {
-            mCameraManager.cameraIdList.forEach {
-                val characteristics = mCameraManager.getCameraCharacteristics(it)
+            cameraManager.cameraIdList.forEach {
+                val characteristics = cameraManager.getCameraCharacteristics(it)
                 when (characteristics.get(CameraCharacteristics.LENS_FACING)) {
                     CameraCharacteristics.LENS_FACING_BACK -> mFacingBackCameraId = it
                     CameraCharacteristics.LENS_FACING_FRONT -> mFacingFrontCameraId = it
@@ -57,10 +57,14 @@ class PSCameraManager constructor(
         } catch (e: CameraAccessException) {
             e.printStackTrace()
         }
+        mIsManagerInitialized = true
     }
 
+    override fun openCamera() {
+        if (!mIsManagerInitialized) {
+            return
+        }
 
-    fun openCamera() {
         if (mCurrentCameraId.isNotEmpty()) {
             openCamera(mCurrentCameraId)
         } else {
@@ -69,7 +73,11 @@ class PSCameraManager constructor(
         }
     }
 
-    fun closeCamera() {
+    override fun closeCamera() {
+        if (!mIsManagerInitialized) {
+            return
+        }
+
         stopBackgroundThread()
         mCameraDevice?.close()
         mCameraDevice = null
@@ -78,7 +86,11 @@ class PSCameraManager constructor(
         mPreviewSurface.release()
     }
 
-    fun switchCamera() {
+    override fun switchCamera() {
+        if (!mIsManagerInitialized) {
+            return
+        }
+
         val cameraIdForOpen = when {
             mCurrentCameraId.equals(mFacingBackCameraId, true) -> {
                 mFacingFrontCameraId
@@ -93,8 +105,16 @@ class PSCameraManager constructor(
         openCamera(mCurrentCameraId)
     }
 
-    fun takeImage() {
-        if (isPreviewOnly || mImageReader == null || mCaptureSession == null) {
+    override fun isFacingBackCameraExist() = mFacingBackCameraId.isNotEmpty()
+
+    override fun isFacingFrontCameraExist() = mFacingFrontCameraId.isNotEmpty()
+
+    override fun takeImage() {
+        if (!mIsManagerInitialized) {
+            return
+        }
+
+        if (mIsPreviewOnly || mImageReader == null || mCaptureSession == null) {
             return
         }
         try {
@@ -105,16 +125,7 @@ class PSCameraManager constructor(
             mCaptureSession!!.abortCaptures()
             mCaptureSession!!.capture(
                 builder.build(),
-                object : CameraCaptureSession.CaptureCallback() {
-                    override fun onCaptureCompleted(
-                        session: CameraCaptureSession,
-                        request: CaptureRequest,
-                        result: TotalCaptureResult
-                    ) {
-                        super.onCaptureCompleted(session, request, result)
-
-                    }
-                },
+                null,
                 mBackgroundHandler
             )
 
@@ -129,7 +140,7 @@ class PSCameraManager constructor(
         try {
             if (context.checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 
-                mCameraManager.openCamera(cameraId, object : CameraDevice.StateCallback() {
+                cameraManager.openCamera(cameraId, object : CameraDevice.StateCallback() {
                     override fun onOpened(cameraDevice: CameraDevice) {
                         mCameraDevice = cameraDevice
                         setupCameraPreview()
@@ -177,25 +188,27 @@ class PSCameraManager constructor(
     }
 
     private fun setupCameraPreview() {
-        if (mCameraDevice == null) {
+        if (mCameraDevice == null || mPreviewImageView == null) {
             return
         }
 
-        if (previewImageView.isAvailable) {
-            val surfaceTexture = previewImageView.surfaceTexture
-            val optimalPreviewSize = CameraCalculatorHelper.getBestCameraPhotoPreviewSize(
-                context,
-                mCurrentCameraId,
-                mCameraManager,
-                previewImageView.width, previewImageView.height
-            )
+        if (mPreviewImageView!!.isAvailable) {
+            val surfaceTexture = mPreviewImageView!!.surfaceTexture
+            val optimalPreviewSize =
+                CameraCalculatorHelper.getBestCameraPhotoPreviewSize(
+                    context,
+                    mCurrentCameraId,
+                    cameraManager,
+                    mPreviewImageView!!.width, mPreviewImageView!!.height
+                )
             createCameraPreviewSession(
                 surfaceTexture,
                 optimalPreviewSize.width,
                 optimalPreviewSize.height
             )
         } else {
-            previewImageView.surfaceTextureListener = object : TextureView.SurfaceTextureListener {
+            mPreviewImageView!!.surfaceTextureListener =
+                object : TextureView.SurfaceTextureListener {
                 override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, w: Int, h: Int) {
                     Log.d("d", "d")
                 }
@@ -216,13 +229,14 @@ class PSCameraManager constructor(
                 ) {
                     if (surface == null) return
 
-                    val optimalPreviewSize = CameraCalculatorHelper.getBestCameraPhotoPreviewSize(
-                        context,
-                        mCurrentCameraId,
-                        mCameraManager,
-                        width,
-                        height
-                    )
+                    val optimalPreviewSize =
+                        CameraCalculatorHelper.getBestCameraPhotoPreviewSize(
+                            context,
+                            mCurrentCameraId,
+                            cameraManager,
+                            width,
+                            height
+                        )
 
                     createCameraPreviewSession(
                         surface,
@@ -240,14 +254,15 @@ class PSCameraManager constructor(
         try {
             val sessionSurfaces = arrayListOf<Surface>()
             sessionSurfaces.add(mPreviewSurface)
-            if (!isPreviewOnly) {
-                val imageSize = CameraCalculatorHelper.getBestPhotoSize(
-                    context,
-                    mCurrentCameraId,
-                    mCameraManager,
-                    w,
-                    h
-                )
+            if (!mIsPreviewOnly) {
+                val imageSize =
+                    CameraCalculatorHelper.getBestPhotoSize(
+                        context,
+                        mCurrentCameraId,
+                        cameraManager,
+                        w,
+                        h
+                    )
                 mImageReader = ImageReader.newInstance(
                     imageSize.width,
                     imageSize.height,
@@ -268,19 +283,15 @@ class PSCameraManager constructor(
                     }
 
                     override fun onConfigured(session: CameraCaptureSession) {
-                        if (isPreviewOnly) {
-                            mCaptureSession = session
-                            val builder =
-                                mCameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
-                            builder.addTarget(mPreviewSurface)
-                            mCaptureSession!!.setRepeatingRequest(
-                                builder.build(),
-                                null,
-                                mBackgroundHandler
-                            )
-                        } else {
-                            // TODO: create request with listener for making photo
-                        }
+                        mCaptureSession = session
+                        val builder =
+                            mCameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW)
+                        builder.addTarget(mPreviewSurface)
+                        mCaptureSession!!.setRepeatingRequest(
+                            builder.build(),
+                            null,
+                            mBackgroundHandler
+                        )
                     }
                 },
                 mBackgroundHandler

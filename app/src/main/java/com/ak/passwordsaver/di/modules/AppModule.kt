@@ -1,6 +1,7 @@
 package com.ak.passwordsaver.di.modules
 
 import android.content.Context
+import android.hardware.camera2.CameraManager
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named
@@ -22,4 +23,9 @@ class AppModule(private val mAppContext: Context) {
     @Named(SETTINGS_PREFERENCES)
     fun provideAndroidPreferences(context: Context) =
         context.getSharedPreferences(SETTINGS_PREFERENCES, Context.MODE_PRIVATE)
+
+    @Provides
+    @Singleton
+    fun provideCameraManager(context: Context) =
+        context.getSystemService(Context.CAMERA_SERVICE) as CameraManager
 }

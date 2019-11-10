@@ -1,24 +1,24 @@
-package com.ak.passwordsaver.presentation.screens.addnew.gallery
+package com.ak.passwordsaver.presentation.screens.addnew.gallery.manager
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.app.AppCompatActivity
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import java.io.File
+import javax.inject.Inject
 
 
-class PSGalleryManager constructor(private val context: Context) {
+class PSGalleryManagerImpl @Inject constructor(val context: Context): IPSGalleryManager {
 
     lateinit var onImagePickedFromGallery: (imageUriPath: String) -> Unit
 
-    fun getLastGalleryImage(): Bitmap? {
+    override fun getLastGalleryImage(): Bitmap? {
         val projection = arrayOf(
             MediaStore.Images.ImageColumns._ID,
             MediaStore.Images.ImageColumns.DATA,
@@ -46,7 +46,7 @@ class PSGalleryManager constructor(private val context: Context) {
         return null
     }
 
-    fun openGalleryForImagePick(parentActivity: FragmentActivity, fragment: Fragment) {
+    override fun openGalleryForImagePick(parentActivity: FragmentActivity, fragment: Fragment) {
         parentActivity.startActivityFromFragment(
             fragment,
             getGalleryPickIntentAction(),
@@ -54,14 +54,14 @@ class PSGalleryManager constructor(private val context: Context) {
         )
     }
 
-    fun openGalleryForImagePick(activity: AppCompatActivity) {
+    override fun openGalleryForImagePick(activity: AppCompatActivity) {
         activity.startActivityForResult(
             getGalleryPickIntentAction(),
             AppConstants.GALLERY_IMAGE_PICK_REQUEST_CODE
         )
     }
 
-    fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         if (requestCode != AppConstants.GALLERY_IMAGE_PICK_REQUEST_CODE) {
             return
         }
