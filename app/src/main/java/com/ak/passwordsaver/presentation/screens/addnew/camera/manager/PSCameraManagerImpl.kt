@@ -3,6 +3,7 @@ package com.ak.passwordsaver.presentation.screens.addnew.camera.manager
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
@@ -12,14 +13,18 @@ import android.os.HandlerThread
 import android.util.Log
 import android.view.Surface
 import android.view.TextureView
+import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
 import com.ak.passwordsaver.presentation.screens.addnew.camera.CameraCalculatorHelper
 import javax.inject.Inject
 
 
 class PSCameraManagerImpl @Inject constructor(
     val context: Context,
-    val cameraManager: CameraManager
+    val cameraManager: CameraManager,
+    val bitmapDecoderManager: IBitmapDecoderManager
 ) : IPSCameraManager {
+
+    private var mOnImageCreatedListener: ((imageBitmap: Bitmap) -> Unit)? = null
 
     private var mBackgroundHandler: Handler? = null
     private var mBackgroundThread: HandlerThread? = null
@@ -40,7 +45,13 @@ class PSCameraManagerImpl @Inject constructor(
     private val mOnImageAvailableListener =
         ImageReader.OnImageAvailableListener {
             val image = it.acquireNextImage()
-            Log.d("dded", "dede")
+            val bitmap = bitmapDecoderManager.decodeBitmap(image)
+            if (bitmap == null) {
+                Log.d("dd", "ded")
+                return@OnImageAvailableListener
+            }
+            mOnImageCreatedListener?.invoke(bitmap)
+            image.close()
         }
 
     override fun initCameraManager(isPreviewOnly: Boolean, previewImageView: TextureView) {
@@ -109,7 +120,8 @@ class PSCameraManagerImpl @Inject constructor(
 
     override fun isFacingFrontCameraExist() = mFacingFrontCameraId.isNotEmpty()
 
-    override fun takeImage() {
+    override fun takeImage(onImageCreatedListener: (imageBitmap: Bitmap) -> Unit) {
+        mOnImageCreatedListener = onImageCreatedListener
         if (!mIsManagerInitialized) {
             return
         }

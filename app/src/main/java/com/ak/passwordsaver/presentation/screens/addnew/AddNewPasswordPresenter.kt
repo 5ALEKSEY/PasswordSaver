@@ -66,7 +66,7 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
 
     fun onGalleryAvatarSelected(avatarUriPath: String) {
         mSelectedGalleryAvatarPath = avatarUriPath
-        viewState.displayPasswordAvatarChooserImage(mBitmapDecoderManager.decodeBitmapFromUriPath(avatarUriPath))
+        viewState.displayPasswordAvatarChooserImage(mBitmapDecoderManager.decodeBitmap(avatarUriPath))
     }
 
     fun onAvatarRemoved() {

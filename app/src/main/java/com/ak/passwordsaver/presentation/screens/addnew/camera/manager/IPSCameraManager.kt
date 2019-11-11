@@ -1,5 +1,6 @@
 package com.ak.passwordsaver.presentation.screens.addnew.camera.manager
 
+import android.graphics.Bitmap
 import android.view.TextureView
 
 interface IPSCameraManager {
@@ -7,7 +8,7 @@ interface IPSCameraManager {
     fun openCamera()
     fun closeCamera()
     fun switchCamera()
-    fun takeImage()
+    fun takeImage(onImageCreatedListener: (imageBitmap: Bitmap) -> Unit)
     fun isFacingBackCameraExist(): Boolean
     fun isFacingFrontCameraExist(): Boolean
 }

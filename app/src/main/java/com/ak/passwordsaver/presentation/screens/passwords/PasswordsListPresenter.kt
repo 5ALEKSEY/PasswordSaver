@@ -120,7 +120,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         val showingType = mSettingsPreferencesManager.getPasswordShowingType()
         val resultList = arrayListOf<PasswordItemModel>()
         entitiesList.forEach {
-            val avatarBitmap = mBitmapDecoderManager.decodeBitmapFromUriPath(it.passwordAvatarPath)
+            val avatarBitmap = mBitmapDecoderManager.decodeBitmap(it.passwordAvatarPath)
             resultList.add(
                 PasswordItemModel(
                     it.passwordId!!,

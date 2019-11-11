@@ -1,5 +1,7 @@
 package com.ak.passwordsaver.di.modules
 
+import com.ak.passwordsaver.model.internalstorage.IPSInternalStorageManager
+import com.ak.passwordsaver.model.internalstorage.PSInternalStorageManagerImpl
 import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.model.preferences.SettingsPreferencesManagerImpl
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.BitmapDecoderManagerImpl
@@ -30,4 +32,8 @@ interface ManagersModule {
     @Binds
     @Singleton
     fun providePSGelleryManager(galleryManagerImpl: PSGalleryManagerImpl): IPSGalleryManager
+
+    @Binds
+    @Singleton
+    fun providePSInternalStorageManager(psInternalStorageManagerImpl: PSInternalStorageManagerImpl): IPSInternalStorageManager
 }
