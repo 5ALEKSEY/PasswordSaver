@@ -12,7 +12,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 
-object CameraCalculatorHelper {
+object CameraHelper {
 
     private const val MAX_PREVIEW_WIDTH = 1920
     private const val MAX_PREVIEW_HEIGHT = 1080
@@ -59,6 +59,27 @@ object CameraCalculatorHelper {
         val texturePreviewSize = getPreviewTextureSize(sensorOrientation, CameraSize(w, h), context)
         val pictureSizes = getAndConvertOutputSizes(ImageFormat.JPEG, cameraId, cameraManager)
         return getBestPhotoSize(pictureSizes, texturePreviewSize)
+    }
+
+    fun gePhotoOrientation(
+        context: Context,
+        cameraId: String,
+        cameraManager: CameraManager,
+        isFacingFront: Boolean
+    ): Int {
+        val sensorOrientation = getSensorOrientation(cameraId, cameraManager)
+        val displayRotation = getDefaultDisplay(context).rotation
+
+        if (displayRotation == -1) {
+            return 0
+        }
+        var deviceOrientation = (displayRotation + 45) / 90 * 90
+
+        if (isFacingFront) {
+            deviceOrientation = -deviceOrientation
+        }
+
+        return (sensorOrientation + deviceOrientation + 360) % 360
     }
 
     private fun getBestPhotoSize(pictureSizes: List<CameraSize>, previewSize: CameraSize): CameraSize {

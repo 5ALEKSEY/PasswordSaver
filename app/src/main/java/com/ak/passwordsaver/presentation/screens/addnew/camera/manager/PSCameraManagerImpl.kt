@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageFormat
+import android.graphics.Matrix
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.media.ImageReader
@@ -14,14 +15,14 @@ import android.util.Log
 import android.view.Surface
 import android.view.TextureView
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
-import com.ak.passwordsaver.presentation.screens.addnew.camera.CameraCalculatorHelper
+import com.ak.passwordsaver.presentation.screens.addnew.camera.CameraHelper
 import javax.inject.Inject
 
 
 class PSCameraManagerImpl @Inject constructor(
-    val context: Context,
-    val cameraManager: CameraManager,
-    val bitmapDecoderManager: IBitmapDecoderManager
+    private val context: Context,
+    private val cameraManager: CameraManager,
+    private val bitmapDecoderManager: IBitmapDecoderManager
 ) : IPSCameraManager {
 
     private var mOnImageCreatedListener: ((imageBitmap: Bitmap) -> Unit)? = null
@@ -31,6 +32,7 @@ class PSCameraManagerImpl @Inject constructor(
 
     private var mCameraDevice: CameraDevice? = null
     private lateinit var mPreviewSurface: Surface
+    private lateinit var mImageReaderSurface: Surface
     private var mCaptureSession: CameraCaptureSession? = null
     private var mImageReader: ImageReader? = null
 
@@ -42,6 +44,9 @@ class PSCameraManagerImpl @Inject constructor(
     private var mPreviewImageView: TextureView? = null
     private var mIsManagerInitialized = false
 
+    private val mIsFacingFrontCurrentCameraId
+        get() = mFacingFrontCameraId == mCurrentCameraId
+
     private val mOnImageAvailableListener =
         ImageReader.OnImageAvailableListener {
             val image = it.acquireNextImage()
@@ -50,7 +55,27 @@ class PSCameraManagerImpl @Inject constructor(
                 Log.d("dd", "ded")
                 return@OnImageAvailableListener
             }
-            mOnImageCreatedListener?.invoke(bitmap)
+
+            val rotateDegree = CameraHelper.gePhotoOrientation(
+                context,
+                mCurrentCameraId,
+                cameraManager,
+                mIsFacingFrontCurrentCameraId
+            )
+            val rotatedBitmap = Matrix().run {
+                postRotate(rotateDegree.toFloat())
+                return@run Bitmap.createBitmap(
+                    bitmap,
+                    0,
+                    0,
+                    bitmap.width,
+                    bitmap.height,
+                    this,
+                    true
+                )
+            }
+
+            mOnImageCreatedListener?.invoke(rotatedBitmap)
             image.close()
         }
 
@@ -95,6 +120,9 @@ class PSCameraManagerImpl @Inject constructor(
         mImageReader = null
         mCaptureSession = null
         mPreviewSurface.release()
+        if (this::mImageReaderSurface.isInitialized) {
+            mImageReaderSurface.release()
+        }
     }
 
     override fun switchCamera() {
@@ -126,21 +154,23 @@ class PSCameraManagerImpl @Inject constructor(
             return
         }
 
-        if (mIsPreviewOnly || mImageReader == null || mCaptureSession == null) {
+        if (mIsPreviewOnly
+            || mImageReader == null
+            || mCaptureSession == null
+            || !this::mImageReaderSurface.isInitialized
+        ) {
             return
         }
         try {
 
             val builder = mCameraDevice!!.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
-            builder.addTarget(mImageReader!!.surface)
+            builder.addTarget(mImageReaderSurface)
             mCaptureSession!!.stopRepeating()
-            mCaptureSession!!.abortCaptures()
             mCaptureSession!!.capture(
                 builder.build(),
                 null,
                 mBackgroundHandler
             )
-
 
         } catch (e: CameraAccessException) {
             e.printStackTrace()
@@ -207,7 +237,7 @@ class PSCameraManagerImpl @Inject constructor(
         if (mPreviewImageView!!.isAvailable) {
             val surfaceTexture = mPreviewImageView!!.surfaceTexture
             val optimalPreviewSize =
-                CameraCalculatorHelper.getBestCameraPhotoPreviewSize(
+                CameraHelper.getBestCameraPhotoPreviewSize(
                     context,
                     mCurrentCameraId,
                     cameraManager,
@@ -242,7 +272,7 @@ class PSCameraManagerImpl @Inject constructor(
                     if (surface == null) return
 
                     val optimalPreviewSize =
-                        CameraCalculatorHelper.getBestCameraPhotoPreviewSize(
+                        CameraHelper.getBestCameraPhotoPreviewSize(
                             context,
                             mCurrentCameraId,
                             cameraManager,
@@ -267,17 +297,9 @@ class PSCameraManagerImpl @Inject constructor(
             val sessionSurfaces = arrayListOf<Surface>()
             sessionSurfaces.add(mPreviewSurface)
             if (!mIsPreviewOnly) {
-                val imageSize =
-                    CameraCalculatorHelper.getBestPhotoSize(
-                        context,
-                        mCurrentCameraId,
-                        cameraManager,
-                        w,
-                        h
-                    )
                 mImageReader = ImageReader.newInstance(
-                    imageSize.width,
-                    imageSize.height,
+                    w,
+                    h,
                     ImageFormat.JPEG,
                     1
                 )
@@ -285,7 +307,8 @@ class PSCameraManagerImpl @Inject constructor(
                     mOnImageAvailableListener,
                     mBackgroundHandler
                 )
-                sessionSurfaces.add(mImageReader!!.surface)
+                mImageReaderSurface = mImageReader!!.surface
+                sessionSurfaces.add(mImageReaderSurface)
             }
             mCameraDevice!!.createCaptureSession(
                 sessionSurfaces,

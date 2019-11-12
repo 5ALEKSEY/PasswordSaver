@@ -14,7 +14,7 @@ import java.io.File
 import javax.inject.Inject
 
 
-class PSGalleryManagerImpl @Inject constructor(val context: Context): IPSGalleryManager {
+class PSGalleryManagerImpl @Inject constructor(private val context: Context) : IPSGalleryManager {
 
     lateinit var onImagePickedFromGallery: (imageUriPath: String) -> Unit
 
