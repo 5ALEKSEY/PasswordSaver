@@ -2,6 +2,7 @@ package com.ak.passwordsaver.presentation.screens.addnew
 
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
+import com.ak.passwordsaver.model.internalstorage.IPSInternalStorageManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
@@ -27,6 +28,8 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
     lateinit var mAddNewPasswordInteractor: AddNewPasswordInteractor
     @Inject
     lateinit var mBitmapDecoderManager: IBitmapDecoderManager
+    @Inject
+    lateinit var mPSInternalStorageManager: IPSInternalStorageManager
 
     private val mPasswordNameChangeSubject = BehaviorSubject.create<String>()
     private var mSelectedGalleryAvatarPath: String? = null
@@ -65,8 +68,24 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
     }
 
     fun onGalleryAvatarSelected(avatarUriPath: String) {
-        mSelectedGalleryAvatarPath = avatarUriPath
-        viewState.displayPasswordAvatarChooserImage(mBitmapDecoderManager.decodeBitmap(avatarUriPath))
+        val bitmapImage = mBitmapDecoderManager.decodeBitmap(avatarUriPath)
+        bitmapImage?.let {
+            val fileImagePath = mPSInternalStorageManager.saveBitmapImage(it)
+            if (fileImagePath != null) {
+                mSelectedGalleryAvatarPath = fileImagePath
+                viewState.displayPasswordAvatarChooserImage(it)
+            } else {
+                viewState.showShortTimeMessage("aaaaa, blyat'")
+            }
+        }
+    }
+
+    fun onCameraImageSelected(fileImagePath: String) {
+        val bitmap = mPSInternalStorageManager.getBitmapIamageFromPath(fileImagePath)
+        bitmap?.let {
+            mSelectedGalleryAvatarPath = fileImagePath
+            viewState.displayPasswordAvatarChooserImage(it)
+        }
     }
 
     fun onAvatarRemoved() {

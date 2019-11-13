@@ -3,6 +3,7 @@ package com.ak.passwordsaver.di
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.di.modules.*
 import com.ak.passwordsaver.presentation.screens.addnew.AddNewPasswordPresenter
+import com.ak.passwordsaver.presentation.screens.addnew.camera.CameraPickImagePresenter
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.presentation.screens.home.HomePresenter
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListPresenter
@@ -34,4 +35,5 @@ interface AppComponent {
     fun inject(presenter: SettingsPresenter)
     fun inject(presenter: DesignSettingsPresenter)
     fun inject(presenter: PrivacySettingsPresenter)
+    fun inject(presenter: CameraPickImagePresenter)
 }

@@ -1,6 +1,7 @@
 package com.ak.passwordsaver.presentation.screens.addnew
 
 import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -95,7 +96,9 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
                             { avatarChooseActionCode ->
                                 when (avatarChooseActionCode) {
                                     PhotoChooserBottomSheetDialog.CAMERA_CHOOSE_ACTION_ID -> {
-                                        CameraPickImageActivity.startCameraPickActivityForResult(this@AddNewPasswordActivity)
+                                        CameraPickImageActivity.startCameraPickActivityForResult(
+                                            this@AddNewPasswordActivity
+                                        )
                                     }
                                     PhotoChooserBottomSheetDialog.GALLERY_CHOOSE_ACTION_ID -> {
                                         openGalleryForImagePick()
@@ -217,8 +220,7 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
     }
 
     private fun initGalleryManager() {
-        mGalleryManager =
-            PSGalleryManagerImpl(this)
+        mGalleryManager = PSGalleryManagerImpl(this)
         mGalleryManager.onImagePickedFromGallery = mAddNewPasswordPresenter::onGalleryAvatarSelected
     }
 
@@ -242,6 +244,14 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
         super.onActivityResult(requestCode, resultCode, data)
         if (this::mGalleryManager.isInitialized) {
             mGalleryManager.onActivityResult(requestCode, resultCode, data)
+        }
+        if (requestCode == AppConstants.CAMERA_IMAGE_PICK_REQUEST_CODE
+            && resultCode == Activity.RESULT_OK
+            && data != null
+            && data.hasExtra(CameraPickImageActivity.PICKED_IMAGE_PATH_KEY_EXTRA)
+        ) {
+            val filePath = data.getStringExtra(CameraPickImageActivity.PICKED_IMAGE_PATH_KEY_EXTRA)
+            mAddNewPasswordPresenter.onCameraImageSelected(filePath)
         }
     }
 }

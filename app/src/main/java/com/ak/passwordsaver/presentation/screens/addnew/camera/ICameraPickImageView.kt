@@ -4,7 +4,8 @@ import android.graphics.Bitmap
 import com.ak.passwordsaver.presentation.base.ui.IBaseAppView
 
 interface ICameraPickImageView: IBaseAppView {
-    fun takeImageAction()
     fun displayPreviewImageStrategy(previewBitmap: Bitmap)
     fun displayTakeImageStrategy()
+    fun sendSuccessImagePickResult(filePath: String)
+    fun sendCancelResult()
 }

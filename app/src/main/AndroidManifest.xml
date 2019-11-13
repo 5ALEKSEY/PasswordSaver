@@ -16,12 +16,18 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".presentation.screens.addnew.camera.CameraPickImageActivity"></activity>
-        <activity android:name=".presentation.screens.settings.privacy.PrivacySettingsActivity" />
+        <activity
+                android:name=".presentation.screens.addnew.camera.CameraPickImageActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".presentation.screens.settings.privacy.PrivacySettingsActivity"
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".presentation.screens.settings.design.DesignSettingsActivity"
                 android:screenOrientation="portrait" />
-        <activity android:name=".presentation.screens.auth.SecurityActivity" />
+        <activity
+                android:name=".presentation.screens.auth.SecurityActivity"
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".presentation.screens.addnew.AddNewPasswordActivity"
                 android:screenOrientation="portrait"

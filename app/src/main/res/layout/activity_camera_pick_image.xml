@@ -58,7 +58,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-                android:id="@+id/iv_start_take_image_panel_action"
+                android:id="@+id/iv_remove_picked_image_panel_action"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="?android:selectableItemBackgroundBorderless"

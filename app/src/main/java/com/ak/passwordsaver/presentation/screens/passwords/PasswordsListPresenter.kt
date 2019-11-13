@@ -4,6 +4,7 @@ import android.util.Log
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.model.PasswordShowingType
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
+import com.ak.passwordsaver.model.internalstorage.IPSInternalStorageManager
 import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
@@ -23,7 +24,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     @Inject
     lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
     @Inject
-    lateinit var mBitmapDecoderManager: IBitmapDecoderManager
+    lateinit var mPSInternalStorageManager: IPSInternalStorageManager
 
     private var mCurrentPasswordId = 0L
 
@@ -120,7 +121,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         val showingType = mSettingsPreferencesManager.getPasswordShowingType()
         val resultList = arrayListOf<PasswordItemModel>()
         entitiesList.forEach {
-            val avatarBitmap = mBitmapDecoderManager.decodeBitmap(it.passwordAvatarPath)
+            val avatarBitmap = mPSInternalStorageManager.getBitmapIamageFromPath(it.passwordAvatarPath)
             resultList.add(
                 PasswordItemModel(
                     it.passwordId!!,

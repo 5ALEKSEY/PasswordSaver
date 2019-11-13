@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
-import android.util.Log
 import android.view.TextureView
 import android.view.View
 import android.view.WindowManager
@@ -18,11 +17,14 @@ import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.setVisibilityInvisible
+import com.arellomobile.mvp.presenter.InjectPresenter
 import javax.inject.Inject
 
 class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
 
     companion object {
+        const val PICKED_IMAGE_PATH_KEY_EXTRA = "picked_image_path"
+
         fun startCameraPickActivityForResult(context: FragmentActivity, fragment: Fragment) {
             val intent = getCameraPickActivityIntent(context)
             context.startActivityFromFragment(
@@ -41,6 +43,8 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
             Intent(context, CameraPickImageActivity::class.java)
     }
 
+    @InjectPresenter
+    lateinit var mCameraPickImagePresenter: CameraPickImagePresenter
     @Inject
     lateinit var mPSCameraManager: IPSCameraManager
 
@@ -48,10 +52,14 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
     private val mCancelPickButton: View by bindView(R.id.iv_camera_pick_image_cancel_action)
     private val mTakeImageButton: View by bindView(R.id.btn_take_image_action)
     private val mPreviewImage: ImageView by bindView(R.id.iv_preview_image)
-    private val mStartTakeImagePanelButton: View by bindView(R.id.iv_start_take_image_panel_action)
+    private val mRemovePickedImagePanelButton: View by bindView(R.id.iv_remove_picked_image_panel_action)
     private val mChooseImagePanelButton: View by bindView(R.id.iv_choose_image_panel_action)
 
     override fun getScreenLayoutResId() = R.layout.activity_camera_pick_image
+
+    override fun onBackPressed() {
+        sendCancelResult()
+    }
 
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
@@ -60,25 +68,28 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
         mPSCameraManager.initCameraManager(false, mCameraPreviewView)
 
         mTakeImageButton.setOnClickListener {
-            takeImageAction()
+            mPSCameraManager.takeImage {
+                runOnUiThread { mCameraPickImagePresenter.onImagePicked(it) }
+            }
         }
 
         mCancelPickButton.setOnClickListener {
-            setResult(Activity.RESULT_CANCELED)
-            finish()
+            sendCancelResult()
         }
 
         displayTakeImageStrategy()
 
-        mStartTakeImagePanelButton.setOnClickListener {
-            displayTakeImageStrategy()
+        mRemovePickedImagePanelButton.setOnClickListener {
+            mCameraPickImagePresenter.onPickedImageRemoved()
+        }
+        mChooseImagePanelButton.setOnClickListener {
+            mCameraPickImagePresenter.savePickedImageAndFinish()
         }
     }
 
     private fun initWindow() {
-        // hide status bar
         window?.apply {
-            addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)  // hide status bar
             navigationBarColor = getColorCompat(R.color.colorBlack)
         }
     }
@@ -93,20 +104,11 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
         mPSCameraManager.closeCamera()
     }
 
-    override fun takeImageAction() {
-        mPSCameraManager.takeImage {
-            runOnUiThread {
-                displayPreviewImageStrategy(it)
-            }
-            Log.d("dded", "ded")
-        }
-    }
-
     override fun displayPreviewImageStrategy(previewBitmap: Bitmap) {
         mTakeImageButton.setVisibilityInvisible(false)
         mPreviewImage.setVisibility(true)
         mPreviewImage.setImageBitmap(previewBitmap)
-        mStartTakeImagePanelButton.setVisibility(true)
+        mRemovePickedImagePanelButton.setVisibility(true)
         mChooseImagePanelButton.setVisibility(true)
         mPSCameraManager.closeCamera()
     }
@@ -115,8 +117,20 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
         mTakeImageButton.setVisibility(true)
         mPreviewImage.setVisibility(false)
         mPreviewImage.setImageBitmap(null)
-        mStartTakeImagePanelButton.setVisibility(false)
+        mRemovePickedImagePanelButton.setVisibility(false)
         mChooseImagePanelButton.setVisibility(false)
         mPSCameraManager.openCamera()
+    }
+
+    override fun sendSuccessImagePickResult(filePath: String) {
+        val resultIntent = Intent()
+        resultIntent.putExtra(PICKED_IMAGE_PATH_KEY_EXTRA, filePath)
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+    }
+
+    override fun sendCancelResult() {
+        setResult(Activity.RESULT_CANCELED)
+        finish()
     }
 }
