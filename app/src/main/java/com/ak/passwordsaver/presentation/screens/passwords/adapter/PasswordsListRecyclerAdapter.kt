@@ -38,6 +38,14 @@ class PasswordsListRecyclerAdapter(
         diffResult.dispatchUpdatesTo(this)
     }
 
+    fun setItemsActionModeState(isInActionMode: Boolean) {
+        for (i in 0 until mItemsList.size) {
+            val itemModel = mItemsList[i]
+            itemModel.isInActionModeState = isInActionMode
+            changePasswordItem(itemModel, i)
+        }
+    }
+
     fun setPasswordContentVisibility(passwordId: Long, isContentVisible: Boolean) {
         val index = mItemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
         mItemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }

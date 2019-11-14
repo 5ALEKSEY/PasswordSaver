@@ -63,7 +63,7 @@ class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>()
     }
 
     fun onDeleteAction() {
-        if (!mSelectedPasswordsIdsList.isEmpty()) {
+        if (mSelectedPasswordsIdsList.isNotEmpty()) {
             Observable.fromIterable(mSelectedPasswordsIdsList)
                 .map { passwordId ->
                     PasswordDBEntity(passwordId)

@@ -2,6 +2,7 @@ package com.ak.passwordsaver.presentation.screens.passwords.adapter
 
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.ak.passwordsaver.R
@@ -11,6 +12,7 @@ import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import de.hdodenhof.circleimageview.CircleImageView
+import org.jetbrains.anko.childrenSequence
 
 class PasswordsListItemViewHolder(
     itemView: View,
@@ -26,7 +28,7 @@ class PasswordsListItemViewHolder(
 
     private val mPasswordNameTextView: TextView by bindView(R.id.tv_password_name)
     private val mPasswordContentTextView: TextView by bindView(R.id.tv_password_content)
-    private val mPasswordItemRoot: View by bindView(R.id.cl_password_item_root)
+    private val mPasswordItemRoot: ViewGroup by bindView(R.id.cl_password_item_root)
     private val mPasswordAvatarImageView: CircleImageView by bindView(R.id.iv_password_avatar)
     private val mVisibilityPasswordButton: Button by bindView(R.id.btn_password_visibility_action)
 
@@ -36,10 +38,6 @@ class PasswordsListItemViewHolder(
         mPasswordContentTextView.setVisibility(passwordItemModel.isPasswordContentNeeds)
 
         mVisibilityPasswordButton.text = getVisibilityPasswordButtonText(passwordItemModel.isPasswordContentVisible)
-        mVisibilityPasswordButton.setOnClickListener {
-            onVisibilityPasswordAction.invoke(passwordItemModel.passwordId, !passwordItemModel.isPasswordContentVisible)
-        }
-
         itemView.setOnClickListener {
             onPasswordItemSingleClick.invoke(passwordItemModel.passwordId)
         }
@@ -48,6 +46,8 @@ class PasswordsListItemViewHolder(
             onPasswordItemLongClick.invoke(passwordItemModel.passwordId)
             return@setOnLongClickListener true
         }
+
+        initAdditionalItemClickListeners(passwordItemModel)
 
         val rootBackgroundResource = getRootItemBackground(passwordItemModel.isItemSelected)
         mPasswordItemRoot.setBackgroundResource(rootBackgroundResource)
@@ -66,6 +66,25 @@ class PasswordsListItemViewHolder(
                 textSizeInPx,
                 PSUtils.getAbbreviationFormPasswordName(passwordItemModel.name)
             )
+        }
+    }
+
+    private fun initAdditionalItemClickListeners(passwordItemModel: PasswordItemModel) {
+        if (passwordItemModel.isInActionModeState) {
+            for (i in 0..mPasswordItemRoot.childCount) {
+                mPasswordItemRoot.getChildAt(i)?.apply {
+                    isClickable = false
+                    isFocusable = false
+                }
+            }
+        } else {
+            // init additional listeners
+            mVisibilityPasswordButton.setOnClickListener {
+                onVisibilityPasswordAction.invoke(
+                    passwordItemModel.passwordId,
+                    !passwordItemModel.isPasswordContentVisible
+                )
+            }
         }
     }
 

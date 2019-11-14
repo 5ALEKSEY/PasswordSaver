@@ -144,6 +144,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     override fun displaySelectedMode() {
         val activityOfFragment = activity
+        mPasswordsAdapter.setItemsActionModeState(true)
         if (mToolbarActionMode == null && activityOfFragment != null && activityOfFragment is AppCompatActivity) {
             mToolbarActionMode = activityOfFragment.startSupportActionMode(object : ActionMode.Callback {
                 override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
@@ -173,6 +174,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     }
 
     override fun hideSelectedMode() {
+        mPasswordsAdapter.setItemsActionModeState(false)
         mPasswordsActionModePresenter.onSelectedModeFinished()
         mToolbarActionMode?.finish()
         mToolbarActionMode = null
