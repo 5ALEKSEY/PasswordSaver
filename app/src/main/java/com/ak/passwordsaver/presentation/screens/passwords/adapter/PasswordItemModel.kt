@@ -9,7 +9,8 @@ data class PasswordItemModel constructor(
     val password: String,
     val isPasswordContentNeeds: Boolean,
     var isItemSelected: Boolean = false,
-    var isPasswordContentVisible: Boolean = false
+    var isPasswordContentVisible: Boolean = false,
+    var isInActionModeState: Boolean = false
 ) {
     companion object {
         fun getSearchingTempModel(passwordId: Long) =
@@ -23,7 +24,8 @@ data class PasswordItemModel constructor(
                 || this.password != passwordItemModel.password
                 || this.isPasswordContentNeeds != passwordItemModel.isPasswordContentNeeds
                 || this.isItemSelected != passwordItemModel.isItemSelected
-                || this.isPasswordContentVisible != passwordItemModel.isPasswordContentVisible)
+                || this.isPasswordContentVisible != passwordItemModel.isPasswordContentVisible
+                || this.isInActionModeState != passwordItemModel.isInActionModeState)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
