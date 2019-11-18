@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.PSUtils
@@ -11,16 +12,16 @@ import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.setVisibility
+import com.ak.passwordsaver.utils.extensions.setVisibilityInvisible
 import de.hdodenhof.circleimageview.CircleImageView
-import org.jetbrains.anko.childrenSequence
 
 class PasswordsListItemViewHolder(
     itemView: View,
     private val onVisibilityPasswordAction: (passwordId: Long, newVisibilityState: Boolean) -> Unit,
+    private val onShowPasswordItemActions: (passwordId: Long) -> Unit,
     private val onPasswordItemSingleClick: (passwordId: Long) -> Unit,
     private val onPasswordItemLongClick: (passwordId: Long) -> Unit
-) :
-    RecyclerView.ViewHolder(itemView) {
+) : RecyclerView.ViewHolder(itemView) {
 
     companion object {
         const val SECURE_PASSWORD_CONTENT_SYMBOL = "*"
@@ -30,20 +31,25 @@ class PasswordsListItemViewHolder(
     private val mPasswordContentTextView: TextView by bindView(R.id.tv_password_content)
     private val mPasswordItemRoot: ViewGroup by bindView(R.id.cl_password_item_root)
     private val mPasswordAvatarImageView: CircleImageView by bindView(R.id.iv_password_avatar)
-    private val mVisibilityPasswordButton: Button by bindView(R.id.btn_password_visibility_action)
+    private val mShowPasswordButton: Button by bindView(R.id.btn_password_visibility_action)
+    private val mSelectedStateImageView: ImageView by bindView(R.id.iv_item_selected)
+    private val mShowPasswordItemActionsButton: ImageView by bindView(R.id.iv_password_item_action)
 
     fun bindPasswordListItemView(passwordItemModel: PasswordItemModel) {
         mPasswordNameTextView.text = passwordItemModel.name
         mPasswordContentTextView.text = getPasswordContentText(passwordItemModel)
         mPasswordContentTextView.setVisibility(passwordItemModel.isPasswordContentNeeds)
 
-        mVisibilityPasswordButton.text = getVisibilityPasswordButtonText(passwordItemModel.isPasswordContentVisible)
+        mShowPasswordButton.text = getVisibilityPasswordButtonText(
+            passwordItemModel.isPasswordContentVisible
+        )
+
         itemView.setOnClickListener {
-            onPasswordItemSingleClick.invoke(passwordItemModel.passwordId)
+            onPasswordItemSingleClick(passwordItemModel.passwordId)
         }
 
         itemView.setOnLongClickListener {
-            onPasswordItemLongClick.invoke(passwordItemModel.passwordId)
+            onPasswordItemLongClick(passwordItemModel.passwordId)
             return@setOnLongClickListener true
         }
 
@@ -51,6 +57,14 @@ class PasswordsListItemViewHolder(
 
         val rootBackgroundResource = getRootItemBackground(passwordItemModel.isItemSelected)
         mPasswordItemRoot.setBackgroundResource(rootBackgroundResource)
+
+        if (!passwordItemModel.isInActionModeState) {
+            mSelectedStateImageView.setVisibilityInvisible(false)
+        } else {
+            mSelectedStateImageView.setVisibilityInvisible(passwordItemModel.isItemSelected)
+        }
+
+        mShowPasswordItemActionsButton.setVisibilityInvisible(!passwordItemModel.isInActionModeState)
 
         if (passwordItemModel.passwordAvatarBitmap != null) {
             mPasswordAvatarImageView.setImageBitmap(passwordItemModel.passwordAvatarBitmap)
@@ -79,11 +93,16 @@ class PasswordsListItemViewHolder(
             }
         } else {
             // init additional listeners
-            mVisibilityPasswordButton.setOnClickListener {
-                onVisibilityPasswordAction.invoke(
-                    passwordItemModel.passwordId,
+            val passwordId = passwordItemModel.passwordId
+            mShowPasswordButton.setOnClickListener {
+                onVisibilityPasswordAction(
+                    passwordId,
                     !passwordItemModel.isPasswordContentVisible
                 )
+            }
+
+            mShowPasswordItemActionsButton.setOnClickListener {
+                onShowPasswordItemActions(passwordId)
             }
         }
     }

@@ -11,6 +11,7 @@ interface IPasswordsListView : IBaseAppView {
     fun setPasswordVisibilityInCardMode(passwordId: Long, contentVisibilityState: Boolean)
     fun enableToolbarScrolling()
     fun disableToolbarScrolling()
+    fun showPasswordActionsDialog(passwordId: Long, passwordName: String)
     // security
     fun startSecurityAuthAction()
 }

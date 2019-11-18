@@ -24,6 +24,7 @@ import com.ak.passwordsaver.presentation.screens.passwords.actionMode.IPasswords
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsActionModePresenter
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordsListRecyclerAdapter
+import com.ak.passwordsaver.presentation.screens.passwords.ui.PasswordActionsBottomSheetDialog
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.turnOffToolbarScrolling
@@ -100,6 +101,10 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
         mToolbar.turnOffToolbarScrolling(mAppBarLayout)
     }
 
+    override fun showPasswordActionsDialog(passwordId: Long, passwordName: String) {
+        PasswordActionsBottomSheetDialog.show(childFragmentManager)
+    }
+
     private fun initToolbar() {
         if (activity is AppCompatActivity) {
             val appCompatActivity = activity as AppCompatActivity
@@ -111,6 +116,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     private fun initRecyclerView() {
         mPasswordsAdapter = PasswordsListRecyclerAdapter(
             mPasswordsListPresenter::passwordShowActionRequired,
+            mPasswordsListPresenter::onShowPasswordActions,
             mPasswordsActionModePresenter::onPasswordItemSingleClick,
             mPasswordsActionModePresenter::onPasswordItemLongClick
         )

@@ -10,16 +10,24 @@ import com.ak.passwordsaver.R
 
 class PasswordsListRecyclerAdapter(
     private val onShowPasswordAction: (passwordId: Long, newVisibilityState: Boolean) -> Unit,
+    private val onShowPasswordItemActions: (passwordId: Long) -> Unit,
     private val onPasswordItemSingleClick: (passwordId: Long) -> Unit,
     private val onPasswordItemLongClick: (passwordId: Long) -> Unit
-) :
-    RecyclerView.Adapter<PasswordsListItemViewHolder>() {
+) : RecyclerView.Adapter<PasswordsListItemViewHolder>() {
 
     private var mItemsList = arrayListOf<PasswordItemModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PasswordsListItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.passwords_item_layout, parent, false)
-        return PasswordsListItemViewHolder(view, onShowPasswordAction, onPasswordItemSingleClick, onPasswordItemLongClick)
+        val view = LayoutInflater
+            .from(parent.context)
+            .inflate(R.layout.passwords_item_layout, parent, false)
+        return PasswordsListItemViewHolder(
+            view,
+            onShowPasswordAction,
+            onShowPasswordItemActions,
+            onPasswordItemSingleClick,
+            onPasswordItemLongClick
+        )
     }
 
     override fun getItemCount() = mItemsList.size

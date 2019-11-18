@@ -8,7 +8,6 @@ import com.ak.passwordsaver.model.internalstorage.IPSInternalStorageManager
 import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
-import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
 import com.ak.passwordsaver.presentation.screens.passwords.logic.PasswordsListInteractor
 import com.arellomobile.mvp.InjectViewState
@@ -18,6 +17,10 @@ import javax.inject.Inject
 
 @InjectViewState
 class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
+
+    companion object {
+        private const val SHOW_PASSWORD_ACTIONS_VIBRATE_IN_MILLIS = 200L
+    }
 
     @Inject
     lateinit var mPasswordsListInteractor: PasswordsListInteractor
@@ -55,6 +58,15 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         showPasswordAction(isVisiblePasswordContent, passwordId)
     }
 
+    fun onShowPasswordActions(passwordId: Long) {
+        mCurrentPasswordId = passwordId
+        viewState.invokeVibration(SHOW_PASSWORD_ACTIONS_VIBRATE_IN_MILLIS)
+        getPasswordDataAndStartAction {
+            viewState.showPasswordActionsDialog(it.passwordId!!, it.passwordName)
+            mCurrentPasswordId = 0L
+        }
+    }
+
     private fun showPasswordAction(newVisibilityState: Boolean, passwordId: Long) {
         val showingType = mSettingsPreferencesManager.getPasswordShowingType()
 
@@ -64,7 +76,10 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         } else {
             // open state
             when (showingType) {
-                PasswordShowingType.TOAST -> getPasswordDataAndStartAction(viewState::openPasswordToastMode)
+                PasswordShowingType.TOAST -> getPasswordDataAndStartAction {
+                    viewState.openPasswordToastMode(it.passwordName, it.passwordContent)
+                    mCurrentPasswordId = 0L
+                }
                 PasswordShowingType.IN_CARD -> viewState.setPasswordVisibilityInCardMode(
                     passwordId,
                     true
@@ -73,13 +88,13 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         }
     }
 
-    private fun getPasswordDataAndStartAction(action: (name: String, content: String) -> Unit) {
+    private inline fun getPasswordDataAndStartAction(crossinline action: (entity: PasswordDBEntity) -> Unit) {
         mPasswordsListInteractor.getPasswordById(mCurrentPasswordId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { entity ->
-                    action.invoke(entity.passwordName, entity.passwordContent)
+                    action(entity)
                 },
                 { throwable ->
                     Log.d("dddd", "dddd")

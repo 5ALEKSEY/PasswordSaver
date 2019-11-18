@@ -4,7 +4,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         xmlns:tools="http://schemas.android.com/tools"
-        tools:background="@drawable/bg_top_rounded_rectangle">
+        tools:background="@drawable/bg_top_rounded_rectangle_accent">
 
     <View
             android:layout_width="35dp"

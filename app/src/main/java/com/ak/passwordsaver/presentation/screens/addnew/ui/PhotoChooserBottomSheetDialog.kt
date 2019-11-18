@@ -14,7 +14,6 @@ import android.widget.ImageView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.screens.addnew.camera.manager.IPSCameraManager
 import com.ak.passwordsaver.presentation.screens.addnew.gallery.manager.IPSGalleryManager
-import com.ak.passwordsaver.presentation.screens.addnew.gallery.manager.PSGalleryManagerImpl
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -43,7 +42,7 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
     private var mFragmentView: View? = null
     private lateinit var mCameraPreviewView: TextureView
 
-    override fun getTheme() = R.style.BaseBottomSheetDialog
+    override fun getTheme() = R.style.PhotoChooserBottomSheetDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +57,7 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        mFragmentView = inflater.inflate(R.layout.layout_photo_chooser_button, container, false)
+        mFragmentView = inflater.inflate(R.layout.layout_photo_chooser_dialog, container, false)
         return mFragmentView
     }
 

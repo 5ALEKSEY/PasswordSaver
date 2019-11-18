@@ -10,12 +10,20 @@
         <item name="actionModeCloseDrawable">@drawable/ic_close</item>
     </style>
 
-    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/bg_top_rounded_rectangle</item>
+    <style name="AccentBottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_top_rounded_rectangle_accent</item>
     </style>
 
-    <style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
-        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    <style name="WhiteBottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_top_rounded_rectangle_white</item>
+    </style>
+
+    <style name="PhotoChooserBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AccentBottomSheet</item>
+    </style>
+
+    <style name="PasswordActionsBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/WhiteBottomSheet</item>
     </style>
 
     <style name="PSButtonStyle">
