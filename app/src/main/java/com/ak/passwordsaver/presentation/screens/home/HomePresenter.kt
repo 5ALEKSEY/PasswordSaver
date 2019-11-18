@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 class HomePresenter : BasePSPresenter<IHomeView>() {
 
     companion object {
-        private const val BACK_ACTION_CLICK_DELAY_IN_MILLIS = 500L
+        private const val BACK_ACTION_CLICK_DELAY_IN_MILLIS = 1000L
     }
 
     private var mIsFinishScreenAllow = false
