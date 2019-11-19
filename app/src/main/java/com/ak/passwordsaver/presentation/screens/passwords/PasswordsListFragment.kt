@@ -51,6 +51,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     private val mProgressBar: ProgressBar by bindView(R.id.pb_passwords_loading)
 
     private var mToolbarActionMode: ActionMode? = null
+    private var mPasswordActionsDialog: PasswordActionsBottomSheetDialog? = null
     private lateinit var mPasswordsAdapter: PasswordsListRecyclerAdapter
 
     override fun getFragmentLayoutResId() = R.layout.fragment_passwords_list
@@ -70,6 +71,11 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     override fun onPause() {
         super.onPause()
         hideSelectedMode()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hidePasswordActionsDialog()
     }
 
     override fun displayPasswords(passwordModelsList: List<PasswordItemModel>) {
@@ -102,7 +108,24 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     }
 
     override fun showPasswordActionsDialog(passwordId: Long, passwordName: String) {
-        PasswordActionsBottomSheetDialog.show(childFragmentManager)
+        mPasswordActionsDialog = PasswordActionsBottomSheetDialog.showDialog(childFragmentManager)
+        mPasswordActionsDialog?.onChoosePasswordActionListener = { actionId ->
+            when(actionId) {
+                PasswordActionsBottomSheetDialog.COPY_PASSWORD_CONTENT_ACTION -> {
+
+                }
+                PasswordActionsBottomSheetDialog.EDIT_PASSWORD_ITEM_ACTION -> {
+
+                }
+                PasswordActionsBottomSheetDialog.DELETE_PASSWORD_ITEM_ACTION -> {
+                    mPasswordsActionModePresenter.onDeleteAction(listOf(passwordId))
+                }
+            }
+        }
+    }
+
+    override fun hidePasswordActionsDialog() {
+        mPasswordActionsDialog?.dismiss()
     }
 
     private fun initToolbar() {
@@ -156,7 +179,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
                 override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                     return when (item?.itemId) {
                         R.id.action_delete_selected_passwords -> {
-                            mPasswordsActionModePresenter.onDeleteAction()
+                            mPasswordsActionModePresenter.onDeleteSelectedInActionMode()
                             true
                         }
                         else -> false

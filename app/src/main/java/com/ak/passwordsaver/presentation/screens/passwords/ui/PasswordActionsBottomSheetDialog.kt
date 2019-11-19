@@ -13,13 +13,18 @@ class PasswordActionsBottomSheetDialog : BottomSheetDialogFragment() {
 
     companion object {
         private const val BOTTOM_SHEET_DIALOG_TAG = "PasswordActionsBottomSheetDialog"
+        const val COPY_PASSWORD_CONTENT_ACTION = 1
+        const val EDIT_PASSWORD_ITEM_ACTION = 2
+        const val DELETE_PASSWORD_ITEM_ACTION = 3
 
-        fun show(fragmentManager: FragmentManager): PasswordActionsBottomSheetDialog {
+        fun showDialog(fragmentManager: FragmentManager): PasswordActionsBottomSheetDialog {
             val sheetDialogInstance = PasswordActionsBottomSheetDialog()
             sheetDialogInstance.show(fragmentManager, BOTTOM_SHEET_DIALOG_TAG)
             return sheetDialogInstance
         }
     }
+
+    lateinit var onChoosePasswordActionListener: (chooseActionId: Int) -> Unit
 
     private var mFragmentView: View? = null
 
@@ -35,5 +40,25 @@ class PasswordActionsBottomSheetDialog : BottomSheetDialogFragment() {
     ): View? {
         mFragmentView = inflater.inflate(R.layout.layout_password_actions_dialog, container, false)
         return mFragmentView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<View>(R.id.tv_copy_password_content_action).setOnClickListener {
+            publishPasswordActionChoose(COPY_PASSWORD_CONTENT_ACTION)
+        }
+        view.findViewById<View>(R.id.tv_edit_password_item_action).setOnClickListener {
+            publishPasswordActionChoose(EDIT_PASSWORD_ITEM_ACTION)
+        }
+        view.findViewById<View>(R.id.tv_delete_password_item_action).setOnClickListener {
+            publishPasswordActionChoose(DELETE_PASSWORD_ITEM_ACTION)
+        }
+    }
+
+    private fun publishPasswordActionChoose(passwordActionId: Int) {
+        if (this::onChoosePasswordActionListener.isInitialized) {
+            onChoosePasswordActionListener(passwordActionId)
+        }
+        dialog?.dismiss()
     }
 }

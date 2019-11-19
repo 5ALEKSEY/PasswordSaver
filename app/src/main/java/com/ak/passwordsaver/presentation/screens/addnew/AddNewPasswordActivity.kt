@@ -91,7 +91,7 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
                     is PermissionResult.PermissionGranted -> {
                         Log.d("Alex_testing", "Granted")
                         dismissPasswordAvatarChooserDialog()
-                        mAvatarChooserDialog = PhotoChooserBottomSheetDialog.show(supportFragmentManager)
+                        mAvatarChooserDialog = PhotoChooserBottomSheetDialog.showDialog(supportFragmentManager)
                         mAvatarChooserDialog.onChooseAvatarActionListener =
                             { avatarChooseActionCode ->
                                 when (avatarChooseActionCode) {

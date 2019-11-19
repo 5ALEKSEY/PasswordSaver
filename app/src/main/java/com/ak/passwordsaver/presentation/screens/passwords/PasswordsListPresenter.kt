@@ -40,6 +40,10 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         loadPasswords()
     }
 
+    fun deletePassword(passwordId: Long) {
+
+    }
+
     fun onSecurityAuthSuccessful() {
         showPasswordAction(true, mCurrentPasswordId)
     }

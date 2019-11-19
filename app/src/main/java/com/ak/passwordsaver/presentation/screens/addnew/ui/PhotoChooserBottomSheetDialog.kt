@@ -25,7 +25,7 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
         const val CAMERA_CHOOSE_ACTION_ID = 1
         const val GALLERY_CHOOSE_ACTION_ID = 2
 
-        fun show(fragmentManager: FragmentManager): PhotoChooserBottomSheetDialog {
+        fun showDialog(fragmentManager: FragmentManager): PhotoChooserBottomSheetDialog {
             val sheetDialogInstance = PhotoChooserBottomSheetDialog()
             sheetDialogInstance.show(fragmentManager, BOTTOM_SHEET_DIALOG_TAG)
             return sheetDialogInstance

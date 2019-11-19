@@ -62,26 +62,37 @@ class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>()
         mSelectedPasswordsIdsList.clear()
     }
 
-    fun onDeleteAction() {
-        if (mSelectedPasswordsIdsList.isNotEmpty()) {
-            Observable.fromIterable(mSelectedPasswordsIdsList)
-                .map { passwordId ->
-                    PasswordDBEntity(passwordId)
-                }
-                .toList()
-                .flatMap(this::getDeletePasswordsSingle)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        viewState.hideSelectedMode()
-                        viewState.showShortTimeMessage("deleted")
-                    },
-                    { throwable ->
-                        viewState.showShortTimeMessage(throwable.message ?: "unknown")
-                    })
-                .let(this::bindDisposable)
+    fun onDeleteAction(passwordIds: List<Long>) {
+        // TODO: refactor with passwords repository
+        if (passwordIds.isNotEmpty()) {
+            deletePasswordsList(passwordIds)
         }
+    }
+
+    fun onDeleteSelectedInActionMode() {
+        if (mSelectedPasswordsIdsList.isNotEmpty()) {
+            deletePasswordsList(mSelectedPasswordsIdsList)
+        }
+    }
+
+    private fun deletePasswordsList(passwordIds: List<Long>) {
+        Observable.fromIterable(passwordIds)
+            .map { passwordId ->
+                PasswordDBEntity(passwordId)
+            }
+            .toList()
+            .flatMap(this::getDeletePasswordsSingle)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                    viewState.hideSelectedMode()
+                    viewState.showShortTimeMessage("deleted")
+                },
+                { throwable ->
+                    viewState.showShortTimeMessage(throwable.message ?: "unknown")
+                })
+            .let(this::bindDisposable)
     }
 
     private fun getDeletePasswordsSingle(list: List<PasswordDBEntity>) =
