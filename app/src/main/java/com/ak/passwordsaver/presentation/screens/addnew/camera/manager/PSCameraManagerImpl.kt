@@ -83,11 +83,24 @@ class PSCameraManagerImpl @Inject constructor(
         this.mIsPreviewOnly = isPreviewOnly
         this.mPreviewImageView = previewImageView
         try {
-            cameraManager.cameraIdList.forEach {
-                val characteristics = cameraManager.getCameraCharacteristics(it)
+            for (cameraId in cameraManager.cameraIdList) {
+                val characteristics = cameraManager.getCameraCharacteristics(cameraId)
+                if (characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP) == null) {
+                    continue
+                }
+
+                val cap = characteristics.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
+                val isCompatible =
+                    cap?.contains(CameraMetadata.REQUEST_AVAILABLE_CAPABILITIES_BACKWARD_COMPATIBLE)
+                        ?: false
+
+                if (!isCompatible) {
+                    continue
+                }
+
                 when (characteristics.get(CameraCharacteristics.LENS_FACING)) {
-                    CameraCharacteristics.LENS_FACING_BACK -> mFacingBackCameraId = it
-                    CameraCharacteristics.LENS_FACING_FRONT -> mFacingFrontCameraId = it
+                    CameraCharacteristics.LENS_FACING_BACK -> mFacingBackCameraId = cameraId
+                    CameraCharacteristics.LENS_FACING_FRONT -> mFacingFrontCameraId = cameraId
                 }
             }
         } catch (e: CameraAccessException) {
