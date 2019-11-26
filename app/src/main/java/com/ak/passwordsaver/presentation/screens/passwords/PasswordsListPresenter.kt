@@ -20,7 +20,8 @@ import javax.inject.Inject
 class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
 
     companion object {
-        private const val SHOW_PASSWORD_ACTIONS_VIBRATE_IN_MILLIS = 100L
+        private const val SHOW_PASSWORD_ACTION_CODE = 1
+        private const val DISPLAY_PASSWORD_ACTIONS_ACTION_CODE = 2
     }
 
     @Inject
@@ -33,6 +34,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     lateinit var mDataBufferManager: IDataBufferManager
 
     private var mCurrentPasswordId = 0L
+    private var mActionAfterAuth = -1
 
     init {
         PSApplication.appInstance.getApplicationComponent().inject(this)
@@ -44,26 +46,38 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     fun onSecurityAuthSuccessful() {
-        showPasswordAction(true, mCurrentPasswordId)
+        if (mActionAfterAuth == -1) {
+            return
+        }
+        when (mActionAfterAuth) {
+            SHOW_PASSWORD_ACTION_CODE -> startShowingPassword(true, mCurrentPasswordId)
+            DISPLAY_PASSWORD_ACTIONS_ACTION_CODE -> viewState.showPasswordActionsDialog()
+        }
+        mActionAfterAuth = -1
     }
 
     fun onSecurityAuthCanceled() {
         Log.d("Alex_tester", "canceled")
+        mActionAfterAuth = -1
     }
 
     fun passwordShowActionRequired(passwordId: Long, isVisiblePasswordContent: Boolean) {
         mCurrentPasswordId = passwordId
-        val isAuthEnabled = mSettingsPreferencesManager.isPincodeEnabled()
-        if (isVisiblePasswordContent && isAuthEnabled) {
+        if (isVisiblePasswordContent && isAuthEnabled()) {
+            mActionAfterAuth = SHOW_PASSWORD_ACTION_CODE
             viewState.startSecurityAuthAction()
             return
         }
-        showPasswordAction(isVisiblePasswordContent, passwordId)
+        startShowingPassword(isVisiblePasswordContent, passwordId)
     }
 
     fun onShowPasswordActions(passwordId: Long) {
         mCurrentPasswordId = passwordId
-        viewState.invokeVibration(SHOW_PASSWORD_ACTIONS_VIBRATE_IN_MILLIS)
+        if (isAuthEnabled()) {
+            mActionAfterAuth = DISPLAY_PASSWORD_ACTIONS_ACTION_CODE
+            viewState.startSecurityAuthAction()
+            return
+        }
         viewState.showPasswordActionsDialog()
     }
 
@@ -94,7 +108,9 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
             .let(this::bindDisposable)
     }
 
-    private fun showPasswordAction(newVisibilityState: Boolean, passwordId: Long) {
+    private fun isAuthEnabled() = mSettingsPreferencesManager.isPincodeEnabled()
+
+    private fun startShowingPassword(newVisibilityState: Boolean, passwordId: Long) {
         val showingType = mSettingsPreferencesManager.getPasswordShowingType()
 
         if (showingType == PasswordShowingType.IN_CARD && !newVisibilityState) {
