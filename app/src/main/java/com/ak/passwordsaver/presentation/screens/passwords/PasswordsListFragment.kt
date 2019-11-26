@@ -107,18 +107,18 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
         mToolbar.turnOffToolbarScrolling(mAppBarLayout)
     }
 
-    override fun showPasswordActionsDialog(passwordId: Long, passwordName: String) {
+    override fun showPasswordActionsDialog() {
         mPasswordActionsDialog = PasswordActionsBottomSheetDialog.showDialog(childFragmentManager)
         mPasswordActionsDialog?.onChoosePasswordActionListener = { actionId ->
             when(actionId) {
                 PasswordActionsBottomSheetDialog.COPY_PASSWORD_CONTENT_ACTION -> {
-
+                    mPasswordsListPresenter.onCopyPasswordAction()
                 }
                 PasswordActionsBottomSheetDialog.EDIT_PASSWORD_ITEM_ACTION -> {
-
+                    mPasswordsListPresenter.onEditPasswordAction()
                 }
                 PasswordActionsBottomSheetDialog.DELETE_PASSWORD_ITEM_ACTION -> {
-                    mPasswordsActionModePresenter.onDeleteAction(listOf(passwordId))
+                    mPasswordsListPresenter.onDeletePasswordAction()
                 }
             }
         }

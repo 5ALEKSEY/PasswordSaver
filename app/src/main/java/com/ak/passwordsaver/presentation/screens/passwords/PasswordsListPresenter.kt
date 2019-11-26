@@ -19,7 +19,7 @@ import javax.inject.Inject
 class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
 
     companion object {
-        private const val SHOW_PASSWORD_ACTIONS_VIBRATE_IN_MILLIS = 200L
+        private const val SHOW_PASSWORD_ACTIONS_VIBRATE_IN_MILLIS = 100L
     }
 
     @Inject
@@ -38,10 +38,6 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         loadPasswords()
-    }
-
-    fun deletePassword(passwordId: Long) {
-
     }
 
     fun onSecurityAuthSuccessful() {
@@ -65,10 +61,30 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     fun onShowPasswordActions(passwordId: Long) {
         mCurrentPasswordId = passwordId
         viewState.invokeVibration(SHOW_PASSWORD_ACTIONS_VIBRATE_IN_MILLIS)
-        getPasswordDataAndStartAction {
-            viewState.showPasswordActionsDialog(it.passwordId!!, it.passwordName)
-            mCurrentPasswordId = 0L
-        }
+        viewState.showPasswordActionsDialog()
+    }
+
+    // from actions bottom sheet dialog
+    fun onCopyPasswordAction() {
+
+    }
+
+    fun onEditPasswordAction() {
+
+    }
+
+    fun onDeletePasswordAction() {
+        mPasswordsListInteractor.deletePasswordsById(listOf(mCurrentPasswordId))
+            .observeOn(AndroidSchedulers.mainThread())
+            .doFinally { mCurrentPasswordId = 0L }
+            .subscribe(
+                {
+                    viewState.showShortTimeMessage("deleted")
+                },
+                { throwable ->
+                    viewState.showShortTimeMessage(throwable.message ?: "unknown")
+                })
+            .let(this::bindDisposable)
     }
 
     private fun showPasswordAction(newVisibilityState: Boolean, passwordId: Long) {

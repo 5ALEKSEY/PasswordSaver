@@ -21,5 +21,5 @@ interface PasswordsDAO {
     fun insertNewPassword(vararg passwordDBEntity: PasswordDBEntity): List<Long>
 
     @Delete
-    fun deletePasswords(vararg passwordDBEntity: PasswordDBEntity)
+    fun deletePasswords(vararg passwordDBEntity: PasswordDBEntity): Int
 }

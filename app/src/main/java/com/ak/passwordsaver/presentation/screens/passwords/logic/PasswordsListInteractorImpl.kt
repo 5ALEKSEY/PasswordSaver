@@ -7,6 +7,7 @@ import com.ak.passwordsaver.presentation.screens.passwords.usecases.PasswordsLis
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -28,7 +29,14 @@ class PasswordsListInteractorImpl @Inject constructor(
             .flatMap { entity -> getInvokedDecryptionUseCase(listOf(entity)) }
             .map { it[0] }
 
-    //------------------------------------------ Decrypt passwords data ------------------------------------------------
+    override fun deletePasswordsById(passwordIds: List<Long>) =
+        Observable.fromIterable(passwordIds)
+            .map { passwordId ->
+                PasswordDBEntity(passwordId)
+            }
+            .toList()
+            .flatMap(this::getInvokedDeletePasswordsUseCase)
+            .subscribeOn(Schedulers.io())
 
     private fun getInvokedDecryptionUseCase(passwordDBEntities: List<PasswordDBEntity>) =
         Observable.fromIterable(passwordDBEntities)
@@ -51,10 +59,6 @@ class PasswordsListInteractorImpl @Inject constructor(
             }
         }.toObservable()
 
-    //------------------------------------------------------------------------------------------------------------------
-
-    //---------------------------------------------- Get passwords data ------------------------------------------------
-
     private fun getInvokedPasswordsUseCase() =
         mPsDatabase.getPasswordsDao().getAllPasswords()
             .subscribeOn(Schedulers.io())
@@ -63,5 +67,10 @@ class PasswordsListInteractorImpl @Inject constructor(
         mPsDatabase.getPasswordsDao().getPasswordById(passwordId)
             .subscribeOn(Schedulers.io())
 
-    //------------------------------------------------------------------------------------------------------------------
+    private fun getInvokedDeletePasswordsUseCase(passwordIds: List<PasswordDBEntity>) =
+        Single.fromCallable {
+            val deletedRows = mPsDatabase.getPasswordsDao().deletePasswords(*passwordIds.toTypedArray())
+            return@fromCallable deletedRows > 0
+        }
+            .subscribeOn(Schedulers.io())
 }

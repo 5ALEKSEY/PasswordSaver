@@ -1,21 +1,17 @@
 package com.ak.passwordsaver.presentation.screens.passwords.actionMode
 
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.model.db.PSDatabase
-import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
+import com.ak.passwordsaver.presentation.screens.passwords.logic.PasswordsListInteractor
 import com.arellomobile.mvp.InjectViewState
-import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 @InjectViewState
 class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>() {
 
     @Inject
-    lateinit var mDatabase: PSDatabase
+    lateinit var mPasswordsListInteractor: PasswordsListInteractor
 
     private var mSelectedPasswordsIdsList = arrayListOf<Long>()
     private var mIsSelectedModeActive = false
@@ -62,41 +58,21 @@ class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>()
         mSelectedPasswordsIdsList.clear()
     }
 
-    fun onDeleteAction(passwordIds: List<Long>) {
-        // TODO: refactor with passwords repository
-        if (passwordIds.isNotEmpty()) {
-            deletePasswordsList(passwordIds)
-        }
-    }
-
     fun onDeleteSelectedInActionMode() {
         if (mSelectedPasswordsIdsList.isNotEmpty()) {
-            deletePasswordsList(mSelectedPasswordsIdsList)
+            mPasswordsListInteractor.deletePasswordsById(mSelectedPasswordsIdsList)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    {
+                        viewState.hideSelectedMode()
+                        viewState.showShortTimeMessage("deleted")
+                    },
+                    { throwable ->
+                        viewState.showShortTimeMessage(throwable.message ?: "unknown")
+                    })
+                .let(this::bindDisposable)
         }
     }
-
-    private fun deletePasswordsList(passwordIds: List<Long>) {
-        Observable.fromIterable(passwordIds)
-            .map { passwordId ->
-                PasswordDBEntity(passwordId)
-            }
-            .toList()
-            .flatMap(this::getDeletePasswordsSingle)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    viewState.hideSelectedMode()
-                    viewState.showShortTimeMessage("deleted")
-                },
-                { throwable ->
-                    viewState.showShortTimeMessage(throwable.message ?: "unknown")
-                })
-            .let(this::bindDisposable)
-    }
-
-    private fun getDeletePasswordsSingle(list: List<PasswordDBEntity>) =
-        Single.fromCallable { mDatabase.getPasswordsDao().deletePasswords(*list.toTypedArray()) }
 
     private fun getActionModeTitleText() = mSelectedPasswordsIdsList.size.toString()
 }
