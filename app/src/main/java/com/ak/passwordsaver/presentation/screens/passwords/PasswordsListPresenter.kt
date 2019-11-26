@@ -9,7 +9,8 @@ import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
-import com.ak.passwordsaver.presentation.screens.passwords.logic.PasswordsListInteractor
+import com.ak.passwordsaver.presentation.screens.passwords.logic.IDataBufferManager
+import com.ak.passwordsaver.presentation.screens.passwords.logic.IPasswordsListInteractor
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -23,11 +24,13 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     @Inject
-    lateinit var mPasswordsListInteractor: PasswordsListInteractor
+    lateinit var mPasswordsListInteractor: IPasswordsListInteractor
     @Inject
     lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
     @Inject
     lateinit var mPSInternalStorageManager: IPSInternalStorageManager
+    @Inject
+    lateinit var mDataBufferManager: IDataBufferManager
 
     private var mCurrentPasswordId = 0L
 
@@ -66,7 +69,11 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
 
     // from actions bottom sheet dialog
     fun onCopyPasswordAction() {
-
+        getPasswordDataAndStartAction {
+            mDataBufferManager.copyStringData(it.passwordContent)
+            viewState.showShortTimeMessage("Copied to clipboard")
+            mCurrentPasswordId = 0L
+        }
     }
 
     fun onEditPasswordAction() {

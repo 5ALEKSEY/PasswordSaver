@@ -10,6 +10,8 @@ import com.ak.passwordsaver.presentation.screens.addnew.camera.manager.IPSCamera
 import com.ak.passwordsaver.presentation.screens.addnew.camera.manager.PSCameraManagerImpl
 import com.ak.passwordsaver.presentation.screens.addnew.gallery.manager.IPSGalleryManager
 import com.ak.passwordsaver.presentation.screens.addnew.gallery.manager.PSGalleryManagerImpl
+import com.ak.passwordsaver.presentation.screens.passwords.logic.DataBufferManagerImpl
+import com.ak.passwordsaver.presentation.screens.passwords.logic.IDataBufferManager
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
@@ -36,4 +38,8 @@ interface ManagersModule {
     @Binds
     @Singleton
     fun providePSInternalStorageManager(psInternalStorageManagerImpl: PSInternalStorageManagerImpl): IPSInternalStorageManager
+
+    @Binds
+    @Singleton
+    fun provideDataBufferManager(dataBufferManagerImpl: DataBufferManagerImpl): IDataBufferManager
 }

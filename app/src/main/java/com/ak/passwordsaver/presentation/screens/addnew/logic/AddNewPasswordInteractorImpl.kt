@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class AddNewPasswordInteractorImpl @Inject constructor(
     val mPsDatabase: PSDatabase
-) : AddNewPasswordInteractor {
+) : IAddNewPasswordInteractor {
 
     private val mPasswordDataCheckUseCase: PasswordDataCheckUseCase = PasswordDataCheckUseCase()
     private val mEncryptionUseCase: EncryptionUseCase = EncryptionUseCase()

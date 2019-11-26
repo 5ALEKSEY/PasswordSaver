@@ -7,13 +7,12 @@ import com.ak.passwordsaver.presentation.screens.passwords.usecases.PasswordsLis
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class PasswordsListInteractorImpl @Inject constructor(
     val mPsDatabase: PSDatabase
-) : PasswordsListInteractor {
+) : IPasswordsListInteractor {
 
     private val mEncryptionUseCase: EncryptionUseCase = EncryptionUseCase()
     private val mPasswordsListSortUserCase: PasswordsListSortUseCase = PasswordsListSortUseCase()

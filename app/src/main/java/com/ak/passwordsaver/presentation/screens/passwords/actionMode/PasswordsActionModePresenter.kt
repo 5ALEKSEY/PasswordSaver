@@ -2,7 +2,7 @@ package com.ak.passwordsaver.presentation.screens.passwords.actionMode
 
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
-import com.ak.passwordsaver.presentation.screens.passwords.logic.PasswordsListInteractor
+import com.ak.passwordsaver.presentation.screens.passwords.logic.IPasswordsListInteractor
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
@@ -11,7 +11,7 @@ import javax.inject.Inject
 class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>() {
 
     @Inject
-    lateinit var mPasswordsListInteractor: PasswordsListInteractor
+    lateinit var mPasswordsListInteractor: IPasswordsListInteractor
 
     private var mSelectedPasswordsIdsList = arrayListOf<Long>()
     private var mIsSelectedModeActive = false

@@ -6,7 +6,7 @@ import com.ak.passwordsaver.model.internalstorage.IPSInternalStorageManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
-import com.ak.passwordsaver.presentation.screens.addnew.logic.AddNewPasswordInteractor
+import com.ak.passwordsaver.presentation.screens.addnew.logic.IAddNewPasswordInteractor
 import com.ak.passwordsaver.presentation.screens.addnew.logic.usecases.PasswordDataCheckException
 import com.ak.passwordsaver.utils.PSUtils
 import com.arellomobile.mvp.InjectViewState
@@ -25,7 +25,7 @@ class AddNewPasswordPresenter : BasePSPresenter<IAddNewPasswordView>() {
     private var mIsAvatarDisplayed = false
 
     @Inject
-    lateinit var mAddNewPasswordInteractor: AddNewPasswordInteractor
+    lateinit var mAddNewPasswordInteractor: IAddNewPasswordInteractor
     @Inject
     lateinit var mBitmapDecoderManager: IBitmapDecoderManager
     @Inject
