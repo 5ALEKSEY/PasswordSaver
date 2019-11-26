@@ -16,6 +16,6 @@ object AppConstants {
     const val TEXT_INPUT_DEBOUNCE = 200L
     const val BLOCK_SECURITY_INPUT_DELAY = 60.toLong() // 60 seconds
     const val BLOCK_SECURITY_INTERVAL = 1.toLong() // 1 second
-    const val PASSWORDS_LIST_COLUMN_COUNT = 2
+    const val PASSWORDS_LIST_COLUMN_COUNT = 1
     const val TOOLBAR_SCROLL_MIN_PASSWORDS_SIZE = 4
 }

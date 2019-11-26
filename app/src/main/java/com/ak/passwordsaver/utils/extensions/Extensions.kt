@@ -6,8 +6,20 @@ import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.Toolbar
 import android.util.TypedValue
 import android.view.View
+import android.widget.ImageView
 import com.ak.passwordsaver.PSApplication
-import de.hdodenhof.circleimageview.CircleImageView
+import android.graphics.Bitmap
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import android.graphics.RectF
+
+
+
+
+
+
 
 
 fun Float.dpToPx(): Int {
@@ -18,7 +30,7 @@ fun Float.dpToPx(): Int {
     ).toInt()
 }
 
-fun CircleImageView.drawTextInner(
+fun ImageView.drawTextInner(
     imageSizeInPx: Int,
     fillColor: Int,
     textColor: Int,
@@ -42,7 +54,7 @@ fun CircleImageView.drawTextInner(
     setImageBitmap(bitmap)
 }
 
-fun CircleImageView.drawTextInner(
+fun ImageView.drawTextInner(
     fillColor: Int,
     textColor: Int,
     textSizeInPx: Int,
@@ -84,6 +96,26 @@ fun View.setVisibilityInvisible(isVisible: Boolean) {
     } else {
         View.INVISIBLE
     }
+}
+
+fun Bitmap.roundBitmap(radiusValue: Int): Bitmap {
+    val dstBitmap = Bitmap.createBitmap(
+        width,
+        height,
+        Bitmap.Config.ARGB_8888
+    )
+
+    val canvas = Canvas(dstBitmap)
+    val paint = Paint()
+    paint.isAntiAlias = true
+
+    val rect = Rect(0, 0, width, height)
+    val rectF = RectF(rect)
+    canvas.drawRoundRect(rectF, radiusValue.toFloat(), radiusValue.toFloat(), paint)
+    paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
+    canvas.drawBitmap(this, 0F, 0F, paint)
+    recycle()
+    return dstBitmap
 }
 
 private fun changeAppBarLayoutScrollBehavior(appBarLayout: AppBarLayout, isScrollNeeds: Boolean) {

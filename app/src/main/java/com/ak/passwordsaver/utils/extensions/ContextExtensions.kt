@@ -33,7 +33,6 @@ fun Context.vibrate(vibrateDuration: Long = 200L) {
                 )
             )
         } else {
-            //deprecated in API 26
             it.vibrate(500)
         }
     }

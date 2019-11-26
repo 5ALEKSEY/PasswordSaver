@@ -13,7 +13,6 @@ import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.setVisibilityInvisible
-import de.hdodenhof.circleimageview.CircleImageView
 
 class PasswordsListItemViewHolder(
     itemView: View,
@@ -30,7 +29,7 @@ class PasswordsListItemViewHolder(
     private val mPasswordNameTextView: TextView by bindView(R.id.tv_password_name)
     private val mPasswordContentTextView: TextView by bindView(R.id.tv_password_content)
     private val mPasswordItemRoot: ViewGroup by bindView(R.id.cl_password_item_root)
-    private val mPasswordAvatarImageView: CircleImageView by bindView(R.id.iv_password_avatar)
+    private val mPasswordAvatarImageView: ImageView by bindView(R.id.iv_password_avatar)
     private val mShowPasswordButton: Button by bindView(R.id.btn_password_visibility_action)
     private val mSelectedStateImageView: ImageView by bindView(R.id.iv_item_selected)
     private val mShowPasswordItemActionsButton: ImageView by bindView(R.id.iv_password_item_action)
