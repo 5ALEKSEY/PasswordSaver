@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addneweditold.gallery.manager
+package com.ak.passwordsaver.presentation.screens.passwordmanage.gallery.manager
 
 import android.app.Activity
 import android.content.Context
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class PSGalleryManagerImpl @Inject constructor(private val context: Context) : IPSGalleryManager {
 
-    lateinit var onImagePickedFromGallery: (imageUriPath: String) -> Unit
+    private lateinit var onImagePickedFromGallery: (imageUriPath: String) -> Unit
 
     override fun getLastGalleryImage(): Bitmap? {
         val projection = arrayOf(
@@ -75,9 +75,13 @@ class PSGalleryManagerImpl @Inject constructor(private val context: Context) : I
         }
     }
 
+    override fun setOnImagePickedListener(listener: (imageUriPath: String) -> Unit) {
+        onImagePickedFromGallery = listener
+    }
+
     private fun pushPickedImageUriPath(imageUriPath: String) {
         if (this::onImagePickedFromGallery.isInitialized) {
-            onImagePickedFromGallery.invoke(imageUriPath)
+            onImagePickedFromGallery(imageUriPath)
         }
     }
 

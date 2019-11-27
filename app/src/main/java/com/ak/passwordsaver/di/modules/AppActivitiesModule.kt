@@ -1,8 +1,8 @@
 package com.ak.passwordsaver.di.modules
 
 import com.ak.passwordsaver.di.scopes.ActivityScope
-import com.ak.passwordsaver.presentation.screens.addneweditold.AddNewPasswordActivity
-import com.ak.passwordsaver.presentation.screens.addneweditold.camera.CameraPickImageActivity
+import com.ak.passwordsaver.presentation.screens.passwordmanage.AddNewPasswordActivity
+import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.CameraPickImageActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.home.HomeActivity
 import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsActivity

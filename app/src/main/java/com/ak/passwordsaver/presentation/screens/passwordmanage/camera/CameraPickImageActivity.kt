@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addneweditold.camera
+package com.ak.passwordsaver.presentation.screens.passwordmanage.camera
 
 import android.app.Activity
 import android.content.Intent
@@ -12,7 +12,7 @@ import android.widget.ImageView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
-import com.ak.passwordsaver.presentation.screens.addneweditold.camera.manager.IPSCameraManager
+import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.manager.IPSCameraManager
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.setVisibility

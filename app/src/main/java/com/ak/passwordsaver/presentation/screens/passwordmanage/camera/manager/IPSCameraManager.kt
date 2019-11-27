@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addneweditold.camera.manager
+package com.ak.passwordsaver.presentation.screens.passwordmanage.camera.manager
 
 import android.graphics.Bitmap
 import android.view.TextureView

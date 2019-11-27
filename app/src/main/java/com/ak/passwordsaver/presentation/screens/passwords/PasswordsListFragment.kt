@@ -17,7 +17,7 @@ import android.widget.ProgressBar
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
-import com.ak.passwordsaver.presentation.screens.addneweditold.AddNewPasswordActivity
+import com.ak.passwordsaver.presentation.screens.passwordmanage.AddNewPasswordActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.IPasswordsActionModeView

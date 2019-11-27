@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addneweditold
+package com.ak.passwordsaver.presentation.screens.passwordmanage
 
 import android.graphics.Bitmap
 import com.ak.passwordsaver.presentation.base.ui.IBaseAppView

@@ -2,8 +2,8 @@ package com.ak.passwordsaver.di
 
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.di.modules.*
-import com.ak.passwordsaver.presentation.screens.addneweditold.AddNewPasswordPresenter
-import com.ak.passwordsaver.presentation.screens.addneweditold.camera.CameraPickImagePresenter
+import com.ak.passwordsaver.presentation.screens.passwordmanage.AddNewPasswordPresenter
+import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.CameraPickImagePresenter
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.presentation.screens.home.HomePresenter
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListPresenter

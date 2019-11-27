@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addneweditold
+package com.ak.passwordsaver.presentation.screens.passwordmanage
 
 import android.Manifest
 import android.app.Activity
@@ -20,9 +20,9 @@ import android.widget.Toast
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
-import com.ak.passwordsaver.presentation.screens.addneweditold.camera.CameraPickImageActivity
-import com.ak.passwordsaver.presentation.screens.addneweditold.gallery.manager.PSGalleryManagerImpl
-import com.ak.passwordsaver.presentation.screens.addneweditold.ui.PhotoChooserBottomSheetDialog
+import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.CameraPickImageActivity
+import com.ak.passwordsaver.presentation.screens.passwordmanage.gallery.manager.IPSGalleryManager
+import com.ak.passwordsaver.presentation.screens.passwordmanage.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.getColorCompat
@@ -34,6 +34,7 @@ import com.eazypermissions.coroutinespermission.PermissionManager
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
@@ -47,18 +48,19 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
     @InjectPresenter
     lateinit var mAddNewPasswordPresenter: AddNewPasswordPresenter
     private lateinit var mAvatarChooserDialog: PhotoChooserBottomSheetDialog
-    private lateinit var mGalleryManager: PSGalleryManagerImpl
+    @Inject
+    private lateinit var mGalleryManager: IPSGalleryManager
 
-    private val mToolbar: Toolbar by bindView(R.id.tb_add_new_password_bar)
+    private val mToolbar: Toolbar by bindView(R.id.tb_manage_password_bar)
     private val mPasswordNameEditText: EditText by bindView(R.id.tiet_password_name_field)
     private val mPasswordNameInputLayout: TextInputLayout by bindView(R.id.til_password_name_layout)
     private val mPasswordContentEditText: EditText by bindView(R.id.tiet_password_content_field)
     private val mPasswordContentInputLayout: TextInputLayout by bindView(R.id.til_password_content_layout)
     private val mPasswordAvatar: CircleImageView by bindView(R.id.iv_password_avatar_chooser)
     private val mAvatarImageDescView: View by bindView(R.id.ll_avatar_chooser_image_desc)
-    private val mSavePasswordActionButton: View by bindView(R.id.btn_save_password_action)
+    private val mSavePasswordActionButton: View by bindView(R.id.btn_manage_password_action)
 
-    override fun getScreenLayoutResId() = R.layout.activity_add_new_password
+    override fun getScreenLayoutResId() = R.layout.activity_manage_password
 
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
@@ -220,8 +222,7 @@ class AddNewPasswordActivity : BasePSFragmentActivity(), IAddNewPasswordView {
     }
 
     private fun initGalleryManager() {
-        mGalleryManager = PSGalleryManagerImpl(this)
-        mGalleryManager.onImagePickedFromGallery = mAddNewPasswordPresenter::onGalleryAvatarSelected
+        mGalleryManager.setOnImagePickedListener(mAddNewPasswordPresenter::onGalleryAvatarSelected)
     }
 
     private fun initToolbar() {

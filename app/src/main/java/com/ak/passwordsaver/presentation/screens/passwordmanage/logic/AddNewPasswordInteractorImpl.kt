@@ -1,9 +1,9 @@
-package com.ak.passwordsaver.presentation.screens.addneweditold.logic
+package com.ak.passwordsaver.presentation.screens.passwordmanage.logic
 
 import com.ak.passwordsaver.model.db.PSDatabase
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.presentation.base.encryption.EncryptionUseCase
-import com.ak.passwordsaver.presentation.screens.addneweditold.logic.usecases.PasswordDataCheckUseCase
+import com.ak.passwordsaver.presentation.screens.passwordmanage.logic.usecases.PasswordDataCheckUseCase
 import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.schedulers.Schedulers

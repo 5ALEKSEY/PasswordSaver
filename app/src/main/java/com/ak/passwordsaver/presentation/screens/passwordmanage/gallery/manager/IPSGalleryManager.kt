@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addneweditold.gallery.manager
+package com.ak.passwordsaver.presentation.screens.passwordmanage.gallery.manager
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -11,4 +11,5 @@ interface IPSGalleryManager {
     fun openGalleryForImagePick(parentActivity: FragmentActivity, fragment: Fragment)
     fun openGalleryForImagePick(activity: AppCompatActivity)
     fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?)
+    fun setOnImagePickedListener(listener: (imageUriPath: String) -> Unit)
 }

@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addneweditold.ui
+package com.ak.passwordsaver.presentation.screens.passwordmanage.ui
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -12,8 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.screens.addneweditold.camera.manager.IPSCameraManager
-import com.ak.passwordsaver.presentation.screens.addneweditold.gallery.manager.IPSGalleryManager
+import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.manager.IPSCameraManager
+import com.ak.passwordsaver.presentation.screens.passwordmanage.gallery.manager.IPSGalleryManager
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
