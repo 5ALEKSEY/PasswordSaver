@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addnew.logic.usecases
+package com.ak.passwordsaver.presentation.screens.addneweditold.logic.usecases
 
 class PasswordDataCheckUseCase {
 

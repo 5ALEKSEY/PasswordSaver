@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addnew
+package com.ak.passwordsaver.presentation.screens.addneweditold
 
 import android.Manifest
 import android.app.Activity
@@ -20,9 +20,9 @@ import android.widget.Toast
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
-import com.ak.passwordsaver.presentation.screens.addnew.camera.CameraPickImageActivity
-import com.ak.passwordsaver.presentation.screens.addnew.gallery.manager.PSGalleryManagerImpl
-import com.ak.passwordsaver.presentation.screens.addnew.ui.PhotoChooserBottomSheetDialog
+import com.ak.passwordsaver.presentation.screens.addneweditold.camera.CameraPickImageActivity
+import com.ak.passwordsaver.presentation.screens.addneweditold.gallery.manager.PSGalleryManagerImpl
+import com.ak.passwordsaver.presentation.screens.addneweditold.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.getColorCompat

@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.di.modules
 
 import com.ak.passwordsaver.di.scopes.FragmentScope
-import com.ak.passwordsaver.presentation.screens.addnew.ui.PhotoChooserBottomSheetDialog
+import com.ak.passwordsaver.presentation.screens.addneweditold.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListFragment
 import com.ak.passwordsaver.presentation.screens.settings.SettingsFragment
 import dagger.Module

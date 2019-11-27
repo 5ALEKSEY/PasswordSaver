@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addnew.camera
+package com.ak.passwordsaver.presentation.screens.addneweditold.camera
 
 class CameraSize(val width: Int, val height: Int) {
     val widthRation

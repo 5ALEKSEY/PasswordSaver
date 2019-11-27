@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addnew.logic.usecases
+package com.ak.passwordsaver.presentation.screens.addneweditold.logic.usecases
 
 data class PasswordDataCheckException(
     val emptyFields: List<Int>,

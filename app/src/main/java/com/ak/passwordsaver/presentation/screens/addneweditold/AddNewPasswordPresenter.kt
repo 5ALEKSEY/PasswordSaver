@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addnew
+package com.ak.passwordsaver.presentation.screens.addneweditold
 
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
@@ -6,8 +6,8 @@ import com.ak.passwordsaver.model.internalstorage.IPSInternalStorageManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
-import com.ak.passwordsaver.presentation.screens.addnew.logic.IAddNewPasswordInteractor
-import com.ak.passwordsaver.presentation.screens.addnew.logic.usecases.PasswordDataCheckException
+import com.ak.passwordsaver.presentation.screens.addneweditold.logic.IAddNewPasswordInteractor
+import com.ak.passwordsaver.presentation.screens.addneweditold.logic.usecases.PasswordDataCheckException
 import com.ak.passwordsaver.utils.PSUtils
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.BackpressureStrategy

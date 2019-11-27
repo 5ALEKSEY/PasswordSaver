@@ -17,7 +17,7 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name=".presentation.screens.addnew.camera.CameraPickImageActivity"
+                android:name=".presentation.screens.addneweditold.camera.CameraPickImageActivity"
                 android:screenOrientation="portrait" />
         <activity
                 android:name=".presentation.screens.settings.privacy.PrivacySettingsActivity"
@@ -29,7 +29,7 @@
                 android:name=".presentation.screens.auth.SecurityActivity"
                 android:screenOrientation="portrait" />
         <activity
-                android:name=".presentation.screens.addnew.AddNewPasswordActivity"
+                android:name=".presentation.screens.addneweditold.AddNewPasswordActivity"
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize" />
         <activity

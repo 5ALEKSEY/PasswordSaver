@@ -5,7 +5,7 @@
         android:id="@+id/cl_camera_pick_image_root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.screens.addnew.camera.CameraPickImageActivity">
+        tools:context=".presentation.screens.addneweditold.camera.CameraPickImageActivity">
 
     <TextureView
             android:id="@+id/texv_camera_pick_image_preview"

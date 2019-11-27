@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addnew.camera.manager
+package com.ak.passwordsaver.presentation.screens.addneweditold.camera.manager
 
 import android.Manifest
 import android.content.Context
@@ -15,7 +15,7 @@ import android.util.Log
 import android.view.Surface
 import android.view.TextureView
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
-import com.ak.passwordsaver.presentation.screens.addnew.camera.CameraHelper
+import com.ak.passwordsaver.presentation.screens.addneweditold.camera.CameraHelper
 import javax.inject.Inject
 
 

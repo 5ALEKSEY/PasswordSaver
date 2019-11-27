@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addnew.gallery.manager
+package com.ak.passwordsaver.presentation.screens.addneweditold.gallery.manager
 
 import android.app.Activity
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.presentation.screens.addnew.camera
+package com.ak.passwordsaver.presentation.screens.addneweditold.camera
 
 import android.graphics.Bitmap
 import com.ak.passwordsaver.PSApplication
