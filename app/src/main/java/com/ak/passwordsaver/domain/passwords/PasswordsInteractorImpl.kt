@@ -46,7 +46,8 @@ class PasswordsInteractorImpl @Inject constructor(
         updatePasswords(listOf(passwordDBEntity))
 
     override fun updatePasswords(passwordDBEntities: List<PasswordDBEntity>): Single<Boolean> =
-        passwordsRepository.updatePasswords(passwordDBEntities)
+        getInvokedEncryptionUseCase(passwordDBEntities)
+            .flatMap { encryptedEntities -> passwordsRepository.updatePasswords(encryptedEntities) }
 
     private fun getInvokedDecryptionUseCase(passwordDBEntities: List<PasswordDBEntity>) =
         Observable.fromIterable(passwordDBEntities)
@@ -90,6 +91,7 @@ class PasswordsInteractorImpl @Inject constructor(
                 { entity -> encryptPasswordContent(entity.passwordContent) },
                 { oldEntity, encryptedPassword ->
                     PasswordDBEntity(
+                        oldEntity.passwordId,
                         oldEntity.passwordName,
                         encryptedPassword,
                         oldEntity.passwordAvatarPath
