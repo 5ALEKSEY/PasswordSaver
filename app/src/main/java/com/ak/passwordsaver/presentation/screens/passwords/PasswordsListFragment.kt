@@ -17,9 +17,10 @@ import android.widget.ProgressBar
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
-import com.ak.passwordsaver.presentation.screens.passwordmanage.AddNewPasswordActivity
+import com.ak.passwordsaver.presentation.screens.passwordmanage.add.AddNewPasswordActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
+import com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswordActivity
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.IPasswordsActionModeView
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsActionModePresenter
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
@@ -62,8 +63,8 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
         initToolbar()
 
         mAddNewPasswordButton.setOnClickListener {
-            if (context != null) {
-                AddNewPasswordActivity.startActivity(context!!)
+            context?.let {
+                AddNewPasswordActivity.startActivity(it)
             }
         }
     }
@@ -121,6 +122,12 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     override fun hidePasswordActionsDialog() {
         mPasswordActionsDialog?.dismiss()
+    }
+
+    override fun showEditPasswordScreen(passwordId: Long) {
+        context?.let {
+            EditPasswordActivity.startActivity(it, passwordId)
+        }
     }
 
     private fun initToolbar() {

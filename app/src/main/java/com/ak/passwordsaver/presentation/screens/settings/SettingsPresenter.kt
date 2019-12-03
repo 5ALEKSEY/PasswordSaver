@@ -2,7 +2,7 @@ package com.ak.passwordsaver.presentation.screens.settings
 
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
+import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.sections.SectionSettingsListItemModel
 import com.arellomobile.mvp.InjectViewState

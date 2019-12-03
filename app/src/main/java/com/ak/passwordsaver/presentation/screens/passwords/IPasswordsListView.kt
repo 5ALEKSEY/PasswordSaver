@@ -13,6 +13,7 @@ interface IPasswordsListView : IBaseAppView {
     fun disableToolbarScrolling()
     fun showPasswordActionsDialog()
     fun hidePasswordActionsDialog()
+    fun showEditPasswordScreen(passwordId: Long)
     // security
     fun startSecurityAuthAction()
 }

@@ -1,9 +1,9 @@
 package com.ak.passwordsaver.di.modules
 
-import com.ak.passwordsaver.model.internalstorage.IPSInternalStorageManager
-import com.ak.passwordsaver.model.internalstorage.PSInternalStorageManagerImpl
-import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
-import com.ak.passwordsaver.model.preferences.SettingsPreferencesManagerImpl
+import com.ak.passwordsaver.data.model.internalstorage.IPSInternalStorageManager
+import com.ak.passwordsaver.data.model.internalstorage.PSInternalStorageManagerImpl
+import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManager
+import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManagerImpl
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.BitmapDecoderManagerImpl
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.manager.IPSCameraManager

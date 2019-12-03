@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.presentation.screens.settings.privacy
 
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
+import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchSettingsListItemModel

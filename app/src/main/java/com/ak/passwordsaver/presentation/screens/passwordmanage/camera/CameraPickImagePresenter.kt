@@ -2,7 +2,7 @@ package com.ak.passwordsaver.presentation.screens.passwordmanage.camera
 
 import android.graphics.Bitmap
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.model.internalstorage.IPSInternalStorageManager
+import com.ak.passwordsaver.data.model.internalstorage.IPSInternalStorageManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.Single

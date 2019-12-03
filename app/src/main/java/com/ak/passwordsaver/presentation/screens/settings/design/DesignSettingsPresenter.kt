@@ -1,8 +1,8 @@
 package com.ak.passwordsaver.presentation.screens.settings.design
 
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.model.PasswordShowingType
-import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
+import com.ak.passwordsaver.data.model.PasswordShowingType
+import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerSettingsListItemModel
 import com.arellomobile.mvp.InjectViewState

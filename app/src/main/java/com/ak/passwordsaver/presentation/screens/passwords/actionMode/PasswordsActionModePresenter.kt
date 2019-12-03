@@ -1,8 +1,8 @@
 package com.ak.passwordsaver.presentation.screens.passwords.actionMode
 
 import com.ak.passwordsaver.PSApplication
+import com.ak.passwordsaver.domain.passwords.IPasswordsInteractor
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
-import com.ak.passwordsaver.presentation.screens.passwords.logic.IPasswordsListInteractor
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
@@ -11,7 +11,7 @@ import javax.inject.Inject
 class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>() {
 
     @Inject
-    lateinit var mPasswordsListInteractor: IPasswordsListInteractor
+    lateinit var mPasswordsInteractor: IPasswordsInteractor
 
     private var mSelectedPasswordsIdsList = arrayListOf<Long>()
     private var mIsSelectedModeActive = false
@@ -60,7 +60,7 @@ class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>()
 
     fun onDeleteSelectedInActionMode() {
         if (mSelectedPasswordsIdsList.isNotEmpty()) {
-            mPasswordsListInteractor.deletePasswordsById(mSelectedPasswordsIdsList)
+            mPasswordsInteractor.deletePasswordsByIds(mSelectedPasswordsIdsList)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {

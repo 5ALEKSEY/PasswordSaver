@@ -2,15 +2,15 @@ package com.ak.passwordsaver.presentation.screens.passwords
 
 import android.util.Log
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.model.PasswordShowingType
-import com.ak.passwordsaver.model.db.entities.PasswordDBEntity
-import com.ak.passwordsaver.model.internalstorage.IPSInternalStorageManager
-import com.ak.passwordsaver.model.preferences.SettingsPreferencesManager
+import com.ak.passwordsaver.data.model.PasswordShowingType
+import com.ak.passwordsaver.data.model.db.entities.PasswordDBEntity
+import com.ak.passwordsaver.data.model.internalstorage.IPSInternalStorageManager
+import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManager
+import com.ak.passwordsaver.domain.passwords.IPasswordsInteractor
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
 import com.ak.passwordsaver.presentation.screens.passwords.logic.IDataBufferManager
-import com.ak.passwordsaver.presentation.screens.passwords.logic.IPasswordsListInteractor
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -25,7 +25,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     @Inject
-    lateinit var mPasswordsListInteractor: IPasswordsListInteractor
+    lateinit var mPasswordsInteractor: IPasswordsInteractor
     @Inject
     lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
     @Inject
@@ -91,11 +91,12 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     fun onEditPasswordAction() {
-
+        viewState.showEditPasswordScreen(mCurrentPasswordId)
+        mCurrentPasswordId = 0L
     }
 
     fun onDeletePasswordAction() {
-        mPasswordsListInteractor.deletePasswordsById(listOf(mCurrentPasswordId))
+        mPasswordsInteractor.deletePasswordById(mCurrentPasswordId)
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { mCurrentPasswordId = 0L }
             .subscribe(
@@ -132,7 +133,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     private inline fun getPasswordDataAndStartAction(crossinline action: (entity: PasswordDBEntity) -> Unit) {
-        mPasswordsListInteractor.getPasswordById(mCurrentPasswordId)
+        mPasswordsInteractor.getPasswordById(mCurrentPasswordId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -146,7 +147,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     private fun loadPasswords() {
-        mPasswordsListInteractor.getAndListenAllPasswords()
+        mPasswordsInteractor.getAllPasswords()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
@@ -179,7 +180,8 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
         val showingType = mSettingsPreferencesManager.getPasswordShowingType()
         val resultList = arrayListOf<PasswordItemModel>()
         entitiesList.forEach {
-            val avatarBitmap = mPSInternalStorageManager.getBitmapIamageFromPath(it.passwordAvatarPath)
+            val avatarBitmap =
+                mPSInternalStorageManager.getBitmapImageFromPath(it.passwordAvatarPath)
             resultList.add(
                 PasswordItemModel(
                     it.passwordId!!,
