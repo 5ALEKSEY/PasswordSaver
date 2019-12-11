@@ -1,7 +1,5 @@
 package com.ak.passwordsaver.presentation.screens.passwords
 
-import android.app.Activity
-import android.content.Intent
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.app.AppCompatActivity
@@ -18,8 +16,6 @@ import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.passwordmanage.add.AddNewPasswordActivity
-import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
-import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswordActivity
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.IPasswordsActionModeView
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsActionModePresenter
@@ -213,33 +209,5 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     override fun showSelectStateForItem(isSelected: Boolean, passwordId: Long) {
         mPasswordsAdapter.setSelectedStateForPasswordItemId(isSelected, passwordId)
-    }
-
-    //----------------------------------------------------------------------------------------------
-
-    //--------------------------------------- Security ---------------------------------------------
-
-    override fun startSecurityAuthAction() {
-        activity?.let {
-            SecurityActivity.startSecurityForResult(
-                activity!!,
-                this,
-                SecurityPresenter.AUTH_SECURITY_ACTION_TYPE
-            )
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            AppConstants.SECURITY_REQUEST_CODE -> handleSecurityAuthResult(resultCode)
-        }
-    }
-
-    private fun handleSecurityAuthResult(resultCode: Int) {
-        when (resultCode) {
-            Activity.RESULT_OK -> mPasswordsListPresenter.onSecurityAuthSuccessful()
-            Activity.RESULT_CANCELED -> mPasswordsListPresenter.onSecurityAuthCanceled()
-        }
     }
 }

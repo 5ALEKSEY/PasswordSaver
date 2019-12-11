@@ -5,6 +5,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.view.MenuItem
+import android.view.WindowManager
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListFragment
@@ -27,6 +28,11 @@ class HomeActivity : BasePSFragmentActivity(), BottomNavigationView.OnNavigation
         mBottomMenu.setOnNavigationItemSelectedListener(this)
     }
 
+    override fun initViewBeforePresenterAttach() {
+        super.initViewBeforePresenterAttach()
+        setSecureRecentAppsScreenState(mHomePresenter.getSecureApplicationState())
+    }
+
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         return when (menuItem.itemId) {
             R.id.action_passwords_list -> {
@@ -47,6 +53,14 @@ class HomeActivity : BasePSFragmentActivity(), BottomNavigationView.OnNavigation
 
     override fun finishScreen() {
         finish()
+    }
+
+    private fun setSecureRecentAppsScreenState(isSecure: Boolean) {
+        if (isSecure) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        } else {
+            window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+        }
     }
 
     private fun showFragment(fragment: Fragment) {

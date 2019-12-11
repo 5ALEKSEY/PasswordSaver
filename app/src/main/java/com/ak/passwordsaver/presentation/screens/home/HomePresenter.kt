@@ -1,12 +1,14 @@
 package com.ak.passwordsaver.presentation.screens.home
 
 import com.ak.passwordsaver.PSApplication
+import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
 @InjectViewState
 class HomePresenter : BasePSPresenter<IHomeView>() {
@@ -14,6 +16,9 @@ class HomePresenter : BasePSPresenter<IHomeView>() {
     companion object {
         private const val BACK_ACTION_CLICK_DELAY_IN_MILLIS = 1000L
     }
+
+    @Inject
+    lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
 
     private var mIsFinishScreenAllow = false
 
@@ -36,4 +41,6 @@ class HomePresenter : BasePSPresenter<IHomeView>() {
             .subscribe { mIsFinishScreenAllow = false }
             .let(this::bindDisposable)
     }
+
+    fun getSecureApplicationState() = mSettingsPreferencesManager.isPincodeEnabled()
 }

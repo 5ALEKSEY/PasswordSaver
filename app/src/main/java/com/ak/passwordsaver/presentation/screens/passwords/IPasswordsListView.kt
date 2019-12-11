@@ -14,6 +14,4 @@ interface IPasswordsListView : IBaseAppView {
     fun showPasswordActionsDialog()
     fun hidePasswordActionsDialog()
     fun showEditPasswordScreen(passwordId: Long)
-    // security
-    fun startSecurityAuthAction()
 }
