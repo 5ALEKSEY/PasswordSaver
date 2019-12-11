@@ -1,4 +1,4 @@
-package com.ak.passwordsaver.data.model.preferences
+package com.ak.passwordsaver.data.model.preferences.settings
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -8,9 +8,9 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class SettingsPreferencesManagerImpl @Inject constructor(
-    @Named(AppModule.SETTINGS_PREFERENCES) val mSettingsPreferences: SharedPreferences,
-    val mContext: Context
-) : SettingsPreferencesManager {
+    @Named(AppModule.SETTINGS_PREFERENCES) private val mSettingsPreferences: SharedPreferences,
+    private val mContext: Context
+) : ISettingsPreferencesManager {
 
     companion object {
         const val PASSWORD_SHOWING_TYPE_SHARED_KEY = "password_showing_type"

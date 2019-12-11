@@ -1,8 +1,8 @@
-package com.ak.passwordsaver.data.model.preferences
+package com.ak.passwordsaver.data.model.preferences.settings
 
 import com.ak.passwordsaver.data.model.PasswordShowingType
 
-interface SettingsPreferencesManager {
+interface ISettingsPreferencesManager {
     fun getPasswordShowingType(): PasswordShowingType
     fun setPasswordShowingType(passwordShowingType: PasswordShowingType)
     fun getStringListOfPasswordShowingTypes(): List<String>

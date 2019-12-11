@@ -151,6 +151,8 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         )
     }
 
+    override fun isAuthCheckNeedsForScreen() = false
+
     private fun setSecurityInputTypeIcon(isPincode: Boolean) {
         (if (!isPincode) R.drawable.ic_pincode_input_type
         else R.drawable.ic_pattern_input_type).let(mSecurityInputTypeImageView::setImageResource)

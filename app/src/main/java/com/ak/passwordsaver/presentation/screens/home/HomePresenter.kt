@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.presentation.screens.home
 
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManager
+import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.arellomobile.mvp.InjectViewState
 import io.reactivex.Completable
@@ -18,7 +18,7 @@ class HomePresenter : BasePSPresenter<IHomeView>() {
     }
 
     @Inject
-    lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
+    lateinit var mSettingsPreferencesManager: ISettingsPreferencesManager
 
     private var mIsFinishScreenAllow = false
 

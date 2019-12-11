@@ -2,8 +2,12 @@ package com.ak.passwordsaver.di.modules
 
 import com.ak.passwordsaver.data.model.internalstorage.IPSInternalStorageManager
 import com.ak.passwordsaver.data.model.internalstorage.PSInternalStorageManagerImpl
-import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManager
-import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManagerImpl
+import com.ak.passwordsaver.data.model.preferences.auth.AuthPreferencesManagerImpl
+import com.ak.passwordsaver.data.model.preferences.auth.IAuthPreferencesManager
+import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
+import com.ak.passwordsaver.data.model.preferences.settings.SettingsPreferencesManagerImpl
+import com.ak.passwordsaver.presentation.base.managers.auth.IPSAuthManager
+import com.ak.passwordsaver.presentation.base.managers.auth.PSAuthManagerImpl
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.BitmapDecoderManagerImpl
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.manager.IPSCameraManager
@@ -21,7 +25,11 @@ interface ManagersModule {
 
     @Binds
     @Singleton
-    fun provideSettingsPreferencesManager(settingsPreferencesManagerImpl: SettingsPreferencesManagerImpl): SettingsPreferencesManager
+    fun provideSettingsPreferencesManager(settingsPreferencesManagerImpl: SettingsPreferencesManagerImpl): ISettingsPreferencesManager
+
+    @Binds
+    @Singleton
+    fun provideAuthPreferencesManager(authPreferencesManagerImpl: AuthPreferencesManagerImpl): IAuthPreferencesManager
 
     @Binds
     @Singleton
@@ -42,4 +50,8 @@ interface ManagersModule {
     @Binds
     @Singleton
     fun provideDataBufferManager(dataBufferManagerImpl: DataBufferManagerImpl): IDataBufferManager
+
+    @Binds
+    @Singleton
+    fun provideAuthAppManager(authAppManager: PSAuthManagerImpl): IPSAuthManager
 }

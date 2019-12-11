@@ -2,7 +2,7 @@ package com.ak.passwordsaver.presentation.screens.settings.design
 
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.data.model.PasswordShowingType
-import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManager
+import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerSettingsListItemModel
 import com.arellomobile.mvp.InjectViewState
@@ -16,7 +16,7 @@ class DesignSettingsPresenter : BasePSPresenter<IDesignSettingsView>() {
     }
 
     @Inject
-    lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
+    lateinit var mSettingsPreferencesManager: ISettingsPreferencesManager
 
     init {
         PSApplication.appInstance.getApplicationComponent().inject(this)

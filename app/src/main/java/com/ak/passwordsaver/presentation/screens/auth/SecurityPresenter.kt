@@ -2,7 +2,7 @@ package com.ak.passwordsaver.presentation.screens.auth
 
 import android.util.Log
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManager
+import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.arellomobile.mvp.InjectViewState
@@ -27,7 +27,7 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
     }
 
     @Inject
-    lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
+    lateinit var mSettingsPreferencesManager: ISettingsPreferencesManager
 
     var mAuthActionType = AUTH_SECURITY_ACTION_TYPE
     private var mIsPincodeAuthMethod = true

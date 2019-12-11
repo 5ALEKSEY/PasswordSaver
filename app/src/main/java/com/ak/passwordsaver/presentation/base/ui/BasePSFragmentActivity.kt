@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.annotation.LayoutRes
 import android.support.v4.app.Fragment
+import com.ak.passwordsaver.presentation.base.managers.auth.IPSAuthManager
 import com.ak.passwordsaver.utils.extensions.showToastMessage
 import com.ak.passwordsaver.utils.extensions.vibrate
 import com.arellomobile.mvp.MvpAppCompatActivity
@@ -17,6 +18,9 @@ abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView, Ha
 
     @Inject
     lateinit var mFragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+
+    @Inject
+    lateinit var mPSAuthManager: IPSAuthManager
 
     @LayoutRes
     abstract fun getScreenLayoutResId(): Int
@@ -34,6 +38,28 @@ abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView, Ha
         mvpDelegate.onAttach()
     }
 
+    override fun onStart() {
+        super.onStart()
+        mPSAuthManager.apply {
+            setManagedForAuthActivity(this@BasePSFragmentActivity)
+            setAuthFailedListener {
+                finishAffinity()
+            }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (mPSAuthManager.isApplicationLocked() && isAuthCheckNeedsForScreen()) {
+            mPSAuthManager.startAuthAction()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        mPSAuthManager.onAuthResultReceived(requestCode, resultCode)
+    }
+
     override fun supportFragmentInjector(): AndroidInjector<Fragment> {
         return mFragmentDispatchingAndroidInjector
     }
@@ -49,4 +75,6 @@ abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView, Ha
     protected open fun initViewBeforePresenterAttach() {
 
     }
+
+    protected open fun isAuthCheckNeedsForScreen() = true
 }

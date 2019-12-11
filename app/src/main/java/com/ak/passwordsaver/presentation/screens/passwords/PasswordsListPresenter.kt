@@ -5,7 +5,7 @@ import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.data.model.PasswordShowingType
 import com.ak.passwordsaver.data.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.data.model.internalstorage.IPSInternalStorageManager
-import com.ak.passwordsaver.data.model.preferences.SettingsPreferencesManager
+import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.domain.passwords.IPasswordsInteractor
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
@@ -22,7 +22,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     @Inject
     lateinit var mPasswordsInteractor: IPasswordsInteractor
     @Inject
-    lateinit var mSettingsPreferencesManager: SettingsPreferencesManager
+    lateinit var mSettingsPreferencesManager: ISettingsPreferencesManager
     @Inject
     lateinit var mPSInternalStorageManager: IPSInternalStorageManager
     @Inject
