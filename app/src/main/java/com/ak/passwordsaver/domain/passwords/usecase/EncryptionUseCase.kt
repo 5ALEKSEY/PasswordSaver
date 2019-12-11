@@ -13,29 +13,31 @@ class EncryptionUseCase {
     private var mEncryptor: ECSymmetric = ECSymmetric()
 
     @Throws(Exception::class)
-    fun encrypt(valueForEncrypt: String, onEncrypted: (encryptedValue: String) -> Unit) {
+    fun encrypt(valueForEncrypt: String, onEncrypted: (encryptedValue: String) -> Unit, onError: (throwable: Throwable) -> Unit) {
         mEncryptor.encrypt(valueForEncrypt,
             ENCRYPTION_KEY, object : ECResultListener {
             override fun onFailure(message: String, e: Exception) {
+                onError(e)
                 throw e
             }
 
             override fun <T> onSuccess(result: T) {
-                onEncrypted.invoke(result.toString())
+                onEncrypted(result.toString())
             }
         })
     }
 
     @Throws(Exception::class)
-    fun decrypt(valueForDecrypt: String, onDecrypted: (decryptedValue: String) -> Unit) {
+    fun decrypt(valueForDecrypt: String, onDecrypted: (decryptedValue: String) -> Unit, onError: (throwable: Throwable) -> Unit) {
         mEncryptor.decrypt(valueForDecrypt,
             ENCRYPTION_KEY, object : ECResultListener {
             override fun onFailure(message: String, e: Exception) {
+                onError(e)
                 throw e
             }
 
             override fun <T> onSuccess(result: T) {
-                onDecrypted.invoke(result.toString())
+                onDecrypted(result.toString())
             }
         })
     }

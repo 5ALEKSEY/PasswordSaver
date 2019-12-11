@@ -61,13 +61,11 @@ class PasswordsInteractorImpl @Inject constructor(
 
     private fun decryptPasswordContent(encryptedPasswordContent: String) =
         Single.create<String> { emitter ->
-            try {
-                mEncryptionUseCase.decrypt(encryptedPasswordContent) {
-                    emitter.onSuccess(it)
-                }
-            } catch (e: Exception) {
-                emitter.onError(e)
-            }
+            mEncryptionUseCase.decrypt(
+                encryptedPasswordContent,
+                { decryptedContent -> emitter.onSuccess(decryptedContent) },
+                { throwable -> emitter.onError(throwable) }
+            )
         }.toObservable()
 
     private fun getInvokedPasswordsDataCheckUseCase(passwordDBEntities: List<PasswordDBEntity>) =
@@ -93,20 +91,18 @@ class PasswordsInteractorImpl @Inject constructor(
                     PasswordDBEntity(
                         oldEntity.passwordId,
                         oldEntity.passwordName,
-                        encryptedPassword,
-                        oldEntity.passwordAvatarPath
+                        oldEntity.passwordAvatarPath,
+                        encryptedPassword
                     )
                 })
             .toList()
 
     private fun encryptPasswordContent(passwordContent: String) =
         Single.create<String> { emitter ->
-            try {
-                mEncryptionUseCase.encrypt(passwordContent) {
-                    emitter.onSuccess(it)
-                }
-            } catch (e: Exception) {
-                emitter.onError(e)
-            }
+            mEncryptionUseCase.encrypt(
+                passwordContent,
+                { encryptedContent -> emitter.onSuccess(encryptedContent) },
+                { throwable -> emitter.onError(throwable) }
+            )
         }.toObservable()
 }
