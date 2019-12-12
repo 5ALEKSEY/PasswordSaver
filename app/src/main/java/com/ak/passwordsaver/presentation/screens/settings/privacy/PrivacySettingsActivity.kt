@@ -73,7 +73,7 @@ class PrivacySettingsActivity : BasePSFragmentActivity(), IPrivacySettingsView {
     private fun initRecyclerView() {
         mSettingsRecyclerAdapter = SettingsRecyclerViewAdapter(
             mPrivacySettingsPresenter::onSwitchSettingsItemChanged,
-            null,
+            mPrivacySettingsPresenter::onSpinnerItemChanged,
             null,
             mPrivacySettingsPresenter::onTextSettingsItemClicked
         )

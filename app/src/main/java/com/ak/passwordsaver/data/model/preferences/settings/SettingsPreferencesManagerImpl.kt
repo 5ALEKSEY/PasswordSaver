@@ -5,7 +5,7 @@ import android.content.SharedPreferences
 import com.ak.passwordsaver.di.modules.AppModule
 import com.ak.passwordsaver.data.model.PasswordShowingType
 import com.ak.passwordsaver.presentation.base.managers.auth.AppLockState
-import com.ak.passwordsaver.presentation.base.managers.auth.AppLockStateConverter
+import com.ak.passwordsaver.presentation.base.managers.auth.AppLockStateHelper
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -36,6 +36,9 @@ class SettingsPreferencesManagerImpl @Inject constructor(
     override fun getStringListOfPasswordShowingTypes() =
         PasswordShowingType.getListOfTypesMessages(mContext)
 
+    override fun getLockAppStatesList() =
+        AppLockStateHelper.getAppLockStateStringList(mContext)
+
     override fun isPincodeEnabled() =
         mSettingsPreferences.getBoolean(IS_PINCODE_ENABLED_SHARED_KEY, false)
 
@@ -52,7 +55,7 @@ class SettingsPreferencesManagerImpl @Inject constructor(
 
     override fun getLockAppStateChoose(): AppLockState {
         val lockStateId = mSettingsPreferences.getInt(APP_LOCK_STATE_ID_SHARED_KEY, 0)
-        return AppLockStateConverter.convertFromLockStateId(lockStateId)
+        return AppLockStateHelper.convertFromLockStateId(lockStateId)
     }
 
     override fun setLockAppStateChoose(appLockState: AppLockState) {
