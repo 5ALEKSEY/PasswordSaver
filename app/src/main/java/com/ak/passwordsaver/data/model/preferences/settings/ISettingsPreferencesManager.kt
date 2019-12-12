@@ -1,6 +1,7 @@
 package com.ak.passwordsaver.data.model.preferences.settings
 
 import com.ak.passwordsaver.data.model.PasswordShowingType
+import com.ak.passwordsaver.presentation.base.managers.auth.AppLockState
 
 interface ISettingsPreferencesManager {
     fun getPasswordShowingType(): PasswordShowingType
@@ -11,6 +12,8 @@ interface ISettingsPreferencesManager {
     fun setPincodeEnableState(isEnabled: Boolean)
     fun isPatternEnabled(): Boolean
     fun setPatternEnableState(isEnabled: Boolean)
+    fun getLockAppStateChoose(): AppLockState
+    fun setLockAppStateChoose(appLockState: AppLockState)
     fun getUserPincodeValue(): String
     fun setUserPincodeValue(newPincodeValue: String)
     fun getUserPatternValue(): String

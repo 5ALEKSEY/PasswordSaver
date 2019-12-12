@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.ak.passwordsaver.di.modules.AppModule
 import com.ak.passwordsaver.data.model.PasswordShowingType
+import com.ak.passwordsaver.presentation.base.managers.auth.AppLockState
+import com.ak.passwordsaver.presentation.base.managers.auth.AppLockStateConverter
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -16,6 +18,7 @@ class SettingsPreferencesManagerImpl @Inject constructor(
         const val PASSWORD_SHOWING_TYPE_SHARED_KEY = "password_showing_type"
         const val IS_PINCODE_ENABLED_SHARED_KEY = "is_pincode_enabled"
         const val IS_PATTERN_ENABLED_SHARED_KEY = "is_pattern_enabled"
+        const val APP_LOCK_STATE_ID_SHARED_KEY = "app_lock_state_id"
         const val PINCODE_VALUE_SHARED_KEY = "pincode_value"
         const val PATTERN_VALUE_SHARED_KEY = "pattern_value"
         const val BLOCK_SECURITY_INPUT_TIME_SHARED_KEY = "block_security_input_time"
@@ -25,7 +28,9 @@ class SettingsPreferencesManagerImpl @Inject constructor(
         PasswordShowingType.getTypeByNumber(mSettingsPreferences.getInt(PASSWORD_SHOWING_TYPE_SHARED_KEY, 0))
 
     override fun setPasswordShowingType(passwordShowingType: PasswordShowingType) {
-        mSettingsPreferences.edit().putInt(PASSWORD_SHOWING_TYPE_SHARED_KEY, passwordShowingType.number).apply()
+        mSettingsPreferences.edit()
+            .putInt(PASSWORD_SHOWING_TYPE_SHARED_KEY, passwordShowingType.number)
+            .apply()
     }
 
     override fun getStringListOfPasswordShowingTypes() =
@@ -43,6 +48,17 @@ class SettingsPreferencesManagerImpl @Inject constructor(
 
     override fun setPatternEnableState(isEnabled: Boolean) {
         mSettingsPreferences.edit().putBoolean(IS_PATTERN_ENABLED_SHARED_KEY, isEnabled).apply()
+    }
+
+    override fun getLockAppStateChoose(): AppLockState {
+        val lockStateId = mSettingsPreferences.getInt(APP_LOCK_STATE_ID_SHARED_KEY, 0)
+        return AppLockStateConverter.convertFromLockStateId(lockStateId)
+    }
+
+    override fun setLockAppStateChoose(appLockState: AppLockState) {
+        mSettingsPreferences.edit()
+            .putInt(APP_LOCK_STATE_ID_SHARED_KEY, appLockState.lockStateId)
+            .apply()
     }
 
     override fun getUserPincodeValue() =

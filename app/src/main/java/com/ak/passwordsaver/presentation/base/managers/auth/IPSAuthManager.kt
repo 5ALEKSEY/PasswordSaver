@@ -7,6 +7,6 @@ interface IPSAuthManager {
     fun setAuthFailedListener(listener: () -> Unit)
     fun startAuthAction()
     fun onAuthResultReceived(requestCode: Int, resultCode: Int)
-    fun isApplicationLocked(): Boolean
-    fun lockApplication()
+    fun isAppLocked(): Boolean
+    fun setAppLockState(isLocked: Boolean)
 }
