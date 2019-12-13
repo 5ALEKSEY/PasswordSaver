@@ -26,6 +26,7 @@ import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.hideKeyBoard
+import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
@@ -72,7 +73,7 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
             InputFilter.LengthFilter(AppConstants.PASSWORD_CONTENT_MAX_LENGTH)
         )
 
-        mPasswordAvatar.setOnClickListener {
+        mPasswordAvatar.setSafeClickListener {
             GlobalScope.launch {
 
                 val permissionResult = PermissionManager.requestPermissions(
@@ -132,7 +133,7 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
             InputFilter.LengthFilter(AppConstants.PASSWORD_NAME_MAX_LENGTH)
         )
 
-        mManagePasswordActionButton.setOnClickListener {
+        mManagePasswordActionButton.setSafeClickListener {
             managePasswordAction()
         }
     }

@@ -23,6 +23,7 @@ import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemM
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordsListRecyclerAdapter
 import com.ak.passwordsaver.presentation.screens.passwords.ui.PasswordActionsBottomSheetDialog
 import com.ak.passwordsaver.utils.bindView
+import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.turnOffToolbarScrolling
 import com.ak.passwordsaver.utils.extensions.turnOnToolbarScrolling
@@ -58,7 +59,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
         initRecyclerView()
         initToolbar()
 
-        mAddNewPasswordButton.setOnClickListener {
+        mAddNewPasswordButton.setSafeClickListener {
             context?.let {
                 AddNewPasswordActivity.startActivity(it)
             }

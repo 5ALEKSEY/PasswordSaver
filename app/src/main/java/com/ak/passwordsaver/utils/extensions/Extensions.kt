@@ -1,26 +1,22 @@
 package com.ak.passwordsaver.utils.extensions
 
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffXfermode
+import android.graphics.Rect
+import android.graphics.RectF
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import com.ak.passwordsaver.PSApplication
-import android.graphics.Bitmap
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
-import android.graphics.RectF
-
-
-
-
-
-
-
+import com.ak.passwordsaver.presentation.base.constants.AppConstants
+import java.util.*
 
 fun Float.dpToPx(): Int {
     return TypedValue.applyDimension(
@@ -116,6 +112,31 @@ fun Bitmap.roundBitmap(radiusValue: Int): Bitmap {
     canvas.drawBitmap(this, 0F, 0F, paint)
     recycle()
     return dstBitmap
+}
+
+inline fun View.setSafeClickListener(
+    allowedClickDelayInMillis: Long = AppConstants.VIEW_SAFE_CLICK_DELAY_IN_MILLIS,
+    crossinline listener: (view: View?) -> Unit
+) {
+    setOnClickListener(object : View.OnClickListener {
+        private var lastClickTime = 0L
+
+        override fun onClick(v: View?) {
+            val clickTimeInMillis = Calendar.getInstance().timeInMillis
+            val clickDelayInMillis = clickTimeInMillis - lastClickTime
+            Log.d(
+                "ClickLogs",
+                "lastClick: $lastClickTime, clickTime: $clickTimeInMillis, clickDelay: $clickDelayInMillis"
+            )
+            if (clickDelayInMillis < allowedClickDelayInMillis) {
+                Log.d("ClickLogs", "returned")
+                return
+            }
+            lastClickTime = clickTimeInMillis
+            Log.d("ClickLogs", "lambda onClicked")
+            listener(v)
+        }
+    })
 }
 
 private fun changeAppBarLayoutScrollBehavior(appBarLayout: AppBarLayout, isScrollNeeds: Boolean) {

@@ -8,6 +8,7 @@ import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.BaseSettingsViewHolder
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
+import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 
 class TextAdapterDelegate(
     private val viewType: Int,
@@ -40,6 +41,8 @@ class SettingsTextHolder(
 ) : BaseSettingsViewHolder<TextSettingsListItemModel>(itemView) {
 
     override fun setViewHolderData(itemModel: TextSettingsListItemModel) {
-        itemView.setOnClickListener { onTextSettingsClicked.invoke(itemModel.settingId) }
+        itemView.setSafeClickListener {
+            onTextSettingsClicked(itemModel.settingId)
+        }
     }
 }

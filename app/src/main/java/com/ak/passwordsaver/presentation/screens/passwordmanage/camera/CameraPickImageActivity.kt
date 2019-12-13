@@ -15,6 +15,7 @@ import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.manager.IPSCameraManager
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.getColorCompat
+import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.setVisibilityInvisible
 import com.arellomobile.mvp.presenter.InjectPresenter
@@ -67,22 +68,22 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
 
         mPSCameraManager.initCameraManager(false, mCameraPreviewView)
 
-        mTakeImageButton.setOnClickListener {
+        mTakeImageButton.setSafeClickListener {
             mPSCameraManager.takeImage {
                 runOnUiThread { mCameraPickImagePresenter.onImagePicked(it) }
             }
         }
 
-        mCancelPickButton.setOnClickListener {
+        mCancelPickButton.setSafeClickListener {
             sendCancelResult()
         }
 
         displayTakeImageStrategy()
 
-        mRemovePickedImagePanelButton.setOnClickListener {
+        mRemovePickedImagePanelButton.setSafeClickListener {
             mCameraPickImagePresenter.onPickedImageRemoved()
         }
-        mChooseImagePanelButton.setOnClickListener {
+        mChooseImagePanelButton.setSafeClickListener {
             mCameraPickImagePresenter.savePickedImageAndFinish()
         }
     }

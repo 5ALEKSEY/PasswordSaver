@@ -5,12 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.BaseSettingsViewHolder
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import com.ak.passwordsaver.utils.bindView
+import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 
 class SectionAdapterDelegate(
     private val viewType: Int,
@@ -46,6 +46,6 @@ class SettingsSectionHolder(
 
     override fun setViewHolderData(itemModel: SectionSettingsListItemModel) {
         mSectionImageView.setImageResource(itemModel.imageRes)
-        itemView.setOnClickListener { onSectionSettingsClicked.invoke(itemModel.settingId) }
+        itemView.setSafeClickListener { onSectionSettingsClicked(itemModel.settingId) }
     }
 }

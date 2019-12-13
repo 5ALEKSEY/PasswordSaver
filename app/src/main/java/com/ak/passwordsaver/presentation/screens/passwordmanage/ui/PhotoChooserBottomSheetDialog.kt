@@ -15,6 +15,7 @@ import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.manager.IPSCameraManager
 import com.ak.passwordsaver.presentation.screens.passwordmanage.gallery.manager.IPSGalleryManager
 import com.ak.passwordsaver.utils.extensions.getColorCompat
+import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -75,12 +76,12 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
                 setImageDrawable(ColorDrawable(noLastImageColor))
             }
         }
-        view.findViewById<View>(R.id.v_choose_camera_action).setOnClickListener {
+        view.findViewById<View>(R.id.v_choose_camera_action).setSafeClickListener {
             if (this::onChooseAvatarActionListener.isInitialized) {
                 onChooseAvatarActionListener.invoke(CAMERA_CHOOSE_ACTION_ID)
             }
         }
-        view.findViewById<View>(R.id.v_choose_gallery_action).setOnClickListener {
+        view.findViewById<View>(R.id.v_choose_gallery_action).setSafeClickListener {
             if (this::onChooseAvatarActionListener.isInitialized) {
                 onChooseAvatarActionListener.invoke(GALLERY_CHOOSE_ACTION_ID)
             }

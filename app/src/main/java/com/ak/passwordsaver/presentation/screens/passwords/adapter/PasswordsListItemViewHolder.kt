@@ -11,6 +11,7 @@ import com.ak.passwordsaver.utils.PSUtils
 import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.getColorCompat
+import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.setVisibilityInvisible
 
@@ -24,6 +25,7 @@ class PasswordsListItemViewHolder(
 
     companion object {
         const val SECURE_PASSWORD_CONTENT_SYMBOL = "*"
+        const val PASSWORD_SHOW_ACTION_CLICK_DELAY_IN_MILLIS = 700L
     }
 
     private val mPasswordNameTextView: TextView by bindView(R.id.tv_password_name)
@@ -93,14 +95,14 @@ class PasswordsListItemViewHolder(
         } else {
             // init additional listeners
             val passwordId = passwordItemModel.passwordId
-            mShowPasswordButton.setOnClickListener {
+            mShowPasswordButton.setSafeClickListener(PASSWORD_SHOW_ACTION_CLICK_DELAY_IN_MILLIS) {
                 onVisibilityPasswordAction(
                     passwordId,
                     !passwordItemModel.isPasswordContentVisible
                 )
             }
 
-            mShowPasswordItemActionsButton.setOnClickListener {
+            mShowPasswordItemActionsButton.setSafeClickListener {
                 onShowPasswordItemActions(passwordId)
             }
         }

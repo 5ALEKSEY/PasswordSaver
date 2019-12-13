@@ -18,4 +18,5 @@ object AppConstants {
     const val BLOCK_SECURITY_INTERVAL = 1.toLong() // 1 second
     const val PASSWORDS_LIST_COLUMN_COUNT = 1
     const val TOOLBAR_SCROLL_MIN_PASSWORDS_SIZE = 4
+    const val VIEW_SAFE_CLICK_DELAY_IN_MILLIS = 900L
 }

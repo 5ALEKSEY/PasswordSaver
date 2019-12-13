@@ -13,10 +13,10 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.texts.TextAdapterDelegate
 
 class SettingsRecyclerViewAdapter constructor(
-    onSwitchSettingsChanged: ((settingId: Int, isChecked: Boolean) -> Unit)? = null,
-    onSpinnerSettingsChanged: ((settingId: Int, newDataId: Int) -> Unit)? = null,
-    onSectionSettingsClicked: ((settingId: Int) -> Unit)? = null,
-    onTextSettingsClicked: ((settingId: Int) -> Unit)? = null
+    private val onSwitchSettingsChanged: ((settingId: Int, isChecked: Boolean) -> Unit)? = null,
+    private val onSpinnerSettingsChanged: ((settingId: Int, newDataId: Int) -> Unit)? = null,
+    private val onSectionSettingsClicked: ((settingId: Int) -> Unit)? = null,
+    private val onTextSettingsClicked: ((settingId: Int) -> Unit)? = null
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {

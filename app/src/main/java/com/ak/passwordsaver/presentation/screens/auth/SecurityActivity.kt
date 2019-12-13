@@ -19,6 +19,7 @@ import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.auth.security.patterncode.PatternAuthView
 import com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeAuthView
 import com.ak.passwordsaver.utils.bindView
+import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.vibrate
 import com.arellomobile.mvp.presenter.InjectPresenter
 
@@ -30,6 +31,7 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         private const val PINCODE_INPUT_VALUES_COUNT = 4
         private const val SWITCH_AUTH_METHOD_DURATION = 200L
         private const val LOCK_VIBRATION_DELAY = 800L
+        private const val CHANGE_AUTH_INPUT_METHOD_CLICK_DELAY = 400L
 
         fun startSecurityForResult(
             context: FragmentActivity,
@@ -76,7 +78,7 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         mPincodeAuthView.mOnFinishedAction = mSecurityPresenter::onUserAuthFinished
         mPincodeAuthView.setPincodeValuesCount(PINCODE_INPUT_VALUES_COUNT)
 
-        mSecurityInputTypeImageView.setOnClickListener {
+        mSecurityInputTypeImageView.setSafeClickListener(CHANGE_AUTH_INPUT_METHOD_CLICK_DELAY) {
             mSecurityPresenter.onSecurityInputTypeChangeClicked()
         }
     }

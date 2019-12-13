@@ -48,6 +48,7 @@ class SettingsSpinnerHolder(
         val arrayAdapter = ArrayAdapter<String>(itemView.context, R.layout.default_spinner_item)
         val spinnerItems = itemModel.spinnerItems
         arrayAdapter.addAll(spinnerItems)
+        itemView.setOnClickListener { mSpinner.performClick() }
         mSpinner.adapter = arrayAdapter
         mSpinner.setSelection(itemModel.selectedItemPosition)
         mSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
