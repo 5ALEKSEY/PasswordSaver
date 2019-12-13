@@ -29,5 +29,7 @@ class PSAuthManagerImpl @Inject constructor(
         }
     }
 
+    override fun isLockAppSetAllowable() = isAppSecureEnabled() && !isAppLocked()
+
     private fun isAppSecureEnabled() = settingsPreferencesManager.isPincodeEnabled()
 }
