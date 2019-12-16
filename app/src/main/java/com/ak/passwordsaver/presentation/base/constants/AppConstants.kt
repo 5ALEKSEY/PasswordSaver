@@ -3,9 +3,10 @@ package com.ak.passwordsaver.presentation.base.constants
 object AppConstants {
     // Request codes
     const val AVATAR_PERMISSIONS_REQUEST_CODE = 1
-    const val SECURITY_REQUEST_CODE = 2
-    const val GALLERY_IMAGE_PICK_REQUEST_CODE = 3
-    const val CAMERA_IMAGE_PICK_REQUEST_CODE = 4
+    const val SECURITY_AUTH_ACTION_REQUEST_CODE = 2
+    const val SECURITY_CHANGE_ACTION_REQUEST_CODE = 3
+    const val GALLERY_IMAGE_PICK_REQUEST_CODE = 4
+    const val CAMERA_IMAGE_PICK_REQUEST_CODE = 5
 
     // create password
     const val PASSWORD_NAME_MAX_LENGTH = 20

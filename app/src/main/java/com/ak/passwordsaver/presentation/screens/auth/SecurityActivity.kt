@@ -14,7 +14,6 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.auth.security.patterncode.PatternAuthView
 import com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeAuthView
@@ -36,15 +35,20 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         fun startSecurityForResult(
             context: FragmentActivity,
             fragment: Fragment,
-            securityAction: Int
+            securityAction: Int,
+            requestCode: Int
         ) {
             val intent = getSecurityActivityIntent(context, securityAction)
-            context.startActivityFromFragment(fragment, intent, AppConstants.SECURITY_REQUEST_CODE)
+            context.startActivityFromFragment(fragment, intent, requestCode)
         }
 
-        fun startSecurityForResult(context: FragmentActivity, securityAction: Int) {
+        fun startSecurityForResult(
+            context: FragmentActivity,
+            securityAction: Int,
+            requestCode: Int
+        ) {
             val intent = getSecurityActivityIntent(context, securityAction)
-            context.startActivityForResult(intent, AppConstants.SECURITY_REQUEST_CODE)
+            context.startActivityForResult(intent, requestCode)
         }
 
         private fun getSecurityActivityIntent(

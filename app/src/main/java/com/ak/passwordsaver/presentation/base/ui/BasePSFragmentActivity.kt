@@ -47,14 +47,15 @@ abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView, Ha
         if (mPSAuthManager.isAppLocked() && isAuthCheckNeedsForScreen()) {
             SecurityActivity.startSecurityForResult(
                 this,
-                SecurityPresenter.AUTH_SECURITY_ACTION_TYPE
+                SecurityPresenter.AUTH_SECURITY_ACTION_TYPE,
+                AppConstants.SECURITY_AUTH_ACTION_REQUEST_CODE
             )
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AppConstants.SECURITY_REQUEST_CODE) {
+        if (requestCode == AppConstants.SECURITY_AUTH_ACTION_REQUEST_CODE) {
             when (resultCode) {
                 Activity.RESULT_OK -> mPSAuthManager.setAppLockState(false)
                 else -> {

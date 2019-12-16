@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
 import com.ak.passwordsaver.R
+import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
@@ -90,6 +91,10 @@ class PrivacySettingsActivity : BasePSFragmentActivity(), IPrivacySettingsView {
     }
 
     private fun openSecurityScreen(securityAction: Int) {
-        SecurityActivity.startSecurityForResult(this, securityAction)
+        SecurityActivity.startSecurityForResult(
+            this,
+            securityAction,
+            AppConstants.SECURITY_CHANGE_ACTION_REQUEST_CODE
+        )
     }
 }

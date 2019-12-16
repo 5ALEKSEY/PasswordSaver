@@ -62,7 +62,8 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
             SecurityActivity.startSecurityForResult(
                 it,
                 this,
-                SecurityPresenter.AUTH_SECURITY_ACTION_TYPE
+                SecurityPresenter.AUTH_SECURITY_ACTION_TYPE,
+                AppConstants.SECURITY_AUTH_ACTION_REQUEST_CODE
             )
         }
     }
@@ -95,7 +96,7 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
-            AppConstants.SECURITY_REQUEST_CODE -> handleSecurityAuthResult(resultCode)
+            AppConstants.SECURITY_AUTH_ACTION_REQUEST_CODE -> handleSecurityAuthResult(resultCode)
         }
     }
 
