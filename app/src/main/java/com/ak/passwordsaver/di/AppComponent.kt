@@ -16,6 +16,7 @@ import com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswor
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListPresenter
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsActionModePresenter
 import com.ak.passwordsaver.presentation.screens.settings.SettingsPresenter
+import com.ak.passwordsaver.presentation.screens.settings.about.AboutSettingsPresenter
 import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsPresenter
 import com.ak.passwordsaver.presentation.screens.settings.privacy.PrivacySettingsPresenter
 import dagger.Component
@@ -45,4 +46,5 @@ interface AppComponent {
     fun inject(presenter: DesignSettingsPresenter)
     fun inject(presenter: PrivacySettingsPresenter)
     fun inject(presenter: CameraPickImagePresenter)
+    fun inject(presenter: AboutSettingsPresenter)
 }

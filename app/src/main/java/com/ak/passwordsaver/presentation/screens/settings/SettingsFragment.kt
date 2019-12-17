@@ -12,6 +12,7 @@ import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
+import com.ak.passwordsaver.presentation.screens.settings.about.AboutSettingsActivity
 import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecyclerViewAdapter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsActivity
@@ -54,7 +55,9 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
     }
 
     override fun showAboutScreen() {
-
+        context?.let {
+            AboutSettingsActivity.startActivity(it)
+        }
     }
 
     override fun startAuthAndOpenPrivacySettings() {
