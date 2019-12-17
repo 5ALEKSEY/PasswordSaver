@@ -42,7 +42,7 @@ class PasswordsListRecyclerAdapter(
 
         mItemsList.clear()
         mItemsList.addAll(passwordModels)
-        diffResult.dispatchUpdatesTo(getListUpdateLogger())
+        diffResult.dispatchUpdatesTo(getListUpdateHandler())
         diffResult.dispatchUpdatesTo(this)
     }
 
@@ -79,7 +79,7 @@ class PasswordsListRecyclerAdapter(
         }
     }
 
-    private fun getListUpdateLogger(): ListUpdateCallback {
+    private fun getListUpdateHandler(): ListUpdateCallback {
         return object : ListUpdateCallback {
             override fun onChanged(p0: Int, p1: Int, p2: Any?) {
                 Log.d("TEMPTAG", "onChanged p0=$p0, p1=$p1")

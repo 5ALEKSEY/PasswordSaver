@@ -44,7 +44,7 @@ class PSApplication : Application(), HasActivityInjector, LifecycleObserver {
         Stetho.initializeWithDefaults(this)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppProcessBackgrounded() {
         if (mAuthManager.isLockAppSetAllowable()) {
             mAuthManager.setAppLockState(true)
