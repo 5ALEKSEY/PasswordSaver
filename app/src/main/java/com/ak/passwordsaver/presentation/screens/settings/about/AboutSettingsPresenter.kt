@@ -31,12 +31,12 @@ class AboutSettingsPresenter : BasePSPresenter<IAboutSettingsView>() {
     }
 
     private fun loadAboutActions() {
-        val designSectionItemModel = SectionSettingsListItemModel(
-            REPORT_ABOUT_ACTION_ID,
-            "Report",
-            R.drawable.ic_report_action
-        )
-        viewState.displayAboutActions(listOf(designSectionItemModel))
+//        val designSectionItemModel = SectionSettingsListItemModel(
+//            REPORT_ABOUT_ACTION_ID,
+//            "Report",
+//            R.drawable.ic_report_action
+//        )
+//        viewState.displayAboutActions(listOf(designSectionItemModel))
     }
 
     private fun loadApplicationVersion() {
