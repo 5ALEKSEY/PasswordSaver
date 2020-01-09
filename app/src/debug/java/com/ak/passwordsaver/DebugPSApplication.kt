@@ -6,6 +6,7 @@ class DebugPSApplication : PSApplication() {
 
     override fun onCreate() {
         super.onCreate()
+
         // Init Stetho
         Stetho.initializeWithDefaults(this)
     }
