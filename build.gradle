@@ -30,7 +30,6 @@ task clean(type: Delete) {
 ext {
     // VERSION config
     appVersionName = "1.0.0"
-
     appVersionCode = 1
 
     // SDK config
