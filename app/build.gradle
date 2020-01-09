@@ -43,6 +43,8 @@ android {
         release {
             minifyEnabled true
             debuggable false
+            versionNameSuffix 'release'
+
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "int", "DATA_BASE_VERSION", DATA_BASE_VERSION
             buildConfigField "String", "DATA_BASE_NAME", DATA_BASE_NAME
@@ -51,9 +53,17 @@ android {
         debug {
             minifyEnabled false
             debuggable true
+            versionNameSuffix 'debug'
+
             buildConfigField "int", "DATA_BASE_VERSION", DATA_BASE_VERSION
             buildConfigField "String", "DATA_BASE_NAME", DATA_BASE_NAME
             buildConfigField "String", "FULL_VERSION_NAME", "\"v. " + VERSION_NAME + "-debug\""
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "PasswordSaver_${VERSION_NAME}_${variant.buildType.name}.apk"
         }
     }
 }
@@ -121,4 +131,7 @@ dependencies {
 
     // lifecycle
     implementation "android.arch.lifecycle:extensions:1.1.1"
+
+    // GSON
+    implementation "com.google.code.gson:gson:2.8.6"
 }
