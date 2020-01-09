@@ -6,18 +6,16 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.OnLifecycleEvent
 import android.arch.lifecycle.ProcessLifecycleOwner
-import android.util.Log
 import com.ak.passwordsaver.di.AppComponent
 import com.ak.passwordsaver.di.DaggerAppComponent
 import com.ak.passwordsaver.di.modules.AppModule
 import com.ak.passwordsaver.presentation.base.managers.auth.IPSAuthManager
-import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import javax.inject.Inject
 
-class PSApplication : Application(), HasActivityInjector, LifecycleObserver {
+open class PSApplication : Application(), HasActivityInjector, LifecycleObserver {
 
     companion object {
         lateinit var appInstance: PSApplication
@@ -39,9 +37,6 @@ class PSApplication : Application(), HasActivityInjector, LifecycleObserver {
 
         mAppComponent = buildApplicationDaggerComponent()
         mAppComponent.inject(this)
-
-        // Init Stetho
-        Stetho.initializeWithDefaults(this)
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
