@@ -11,14 +11,13 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @InjectViewState
-class HomePresenter : BasePSPresenter<IHomeView>() {
+class HomePresenter @Inject constructor(
+    private val settingsPreferencesManager: ISettingsPreferencesManager
+) : BasePSPresenter<IHomeView>() {
 
     companion object {
         private const val BACK_ACTION_CLICK_DELAY_IN_MILLIS = 1000L
     }
-
-    @Inject
-    lateinit var mSettingsPreferencesManager: ISettingsPreferencesManager
 
     private var mIsFinishScreenAllow = false
 
@@ -46,5 +45,5 @@ class HomePresenter : BasePSPresenter<IHomeView>() {
             .let(this::bindDisposable)
     }
 
-    fun getSecureApplicationState() = mSettingsPreferencesManager.isPincodeEnabled()
+    fun getSecureApplicationState() = settingsPreferencesManager.isPincodeEnabled()
 }
