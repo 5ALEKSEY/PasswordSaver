@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/cl_camera_pick_image_root_layout"
@@ -8,7 +8,7 @@
         tools:context=".presentation.screens.passwordmanage.camera.CameraPickImageActivity">
 
     <TextureView
-            android:id="@+id/texv_camera_pick_image_preview"
+            android:id="@+id/texvCameraPickImagePreview"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -17,7 +17,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-            android:id="@+id/iv_preview_image"
+            android:id="@+id/ivPreviewImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
@@ -27,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-            android:id="@+id/iv_camera_pick_image_cancel_action"
+            android:id="@+id/ivCameraPickImageCancelAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?android:selectableItemBackgroundBorderless"
@@ -36,8 +36,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_back_action" />
 
-    <android.support.constraint.ConstraintLayout
-            android:id="@+id/cl_camera_actions_panel_container"
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/vCameraActionsPanelContainer"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:background="@color/camera_pick_image_panel_background"
@@ -46,7 +46,7 @@
             app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-                android:id="@+id/btn_take_image_action"
+                android:id="@+id/btnTakeImageAction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
@@ -58,29 +58,29 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-                android:id="@+id/iv_remove_picked_image_panel_action"
+                android:id="@+id/ivRemovePickedImagePanelAction"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:tint="@color/colorWhite"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btn_take_image_action"
+                app:layout_constraintEnd_toStartOf="@+id/btnTakeImageAction"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_close" />
 
         <ImageView
-                android:id="@+id/iv_choose_image_panel_action"
+                android:id="@+id/ivChooseImagePanelAction"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:tint="@color/colorWhite"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btn_take_image_action"
+                app:layout_constraintStart_toEndOf="@+id/btnTakeImageAction"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_check" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

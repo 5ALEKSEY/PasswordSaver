@@ -3,10 +3,10 @@ package com.ak.passwordsaver.presentation.screens.home
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
-import com.arellomobile.mvp.InjectViewState
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import moxy.InjectViewState
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -32,7 +32,11 @@ class HomePresenter : BasePSPresenter<IHomeView>() {
             return
         }
 
-        Completable.timer(BACK_ACTION_CLICK_DELAY_IN_MILLIS, TimeUnit.MILLISECONDS, Schedulers.computation())
+        Completable.timer(
+            BACK_ACTION_CLICK_DELAY_IN_MILLIS,
+            TimeUnit.MILLISECONDS,
+            Schedulers.computation()
+        )
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
                 mIsFinishScreenAllow = true

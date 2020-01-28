@@ -2,16 +2,14 @@ package com.ak.passwordsaver.presentation.screens.settings.design
 
 import android.content.Context
 import android.content.Intent
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.Toolbar
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecyclerViewAdapter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
-import com.ak.passwordsaver.utils.bindView
-import com.arellomobile.mvp.presenter.InjectPresenter
+import kotlinx.android.synthetic.main.activity_design_settings.*
+import moxy.presenter.InjectPresenter
 
 class DesignSettingsActivity : BasePSFragmentActivity(), IDesignSettingsView {
 
@@ -23,9 +21,6 @@ class DesignSettingsActivity : BasePSFragmentActivity(), IDesignSettingsView {
 
     @InjectPresenter
     lateinit var mDesignSettingsPresenter: DesignSettingsPresenter
-
-    private val mToolbar: Toolbar by bindView(R.id.tb_design_settings_bar)
-    private val mDesignSettingsRecyclerView: RecyclerView by bindView(R.id.rv_design_settings_items_list)
 
     private lateinit var mSettingsRecyclerAdapter: SettingsRecyclerViewAdapter
 
@@ -42,9 +37,9 @@ class DesignSettingsActivity : BasePSFragmentActivity(), IDesignSettingsView {
     }
 
     private fun initToolbar() {
-        setSupportActionBar(mToolbar)
+        setSupportActionBar(tbDesignSettingsBar)
         supportActionBar?.title = "Design"
-        mToolbar.setNavigationOnClickListener { finish() }
+        tbDesignSettingsBar.setNavigationOnClickListener { finish() }
     }
 
     private fun initRecyclerView() {
@@ -54,7 +49,7 @@ class DesignSettingsActivity : BasePSFragmentActivity(), IDesignSettingsView {
             null,
             null
         )
-        mDesignSettingsRecyclerView.apply {
+        rvDesignSettingsItemsList.apply {
             adapter = mSettingsRecyclerAdapter
             val linLayoutManager = LinearLayoutManager(
                 this@DesignSettingsActivity,

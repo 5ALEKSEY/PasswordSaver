@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.data.model.db
 
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.RoomDatabase
+import androidx.room.Database
+import androidx.room.RoomDatabase
 import com.ak.passwordsaver.BuildConfig
 import com.ak.passwordsaver.data.model.db.daos.PasswordsDAO
 import com.ak.passwordsaver.data.model.db.entities.PasswordDBEntity

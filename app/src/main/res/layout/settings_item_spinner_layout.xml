@@ -1,52 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
     <TextView
-            android:textSize="18sp"
-            android:textColor="@color/primaryText"
-            tools:text="Setting name"
+            android:id="@+id/tvSettingName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="10dp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            android:id="@+id/tv_setting_name"
             android:layout_marginEnd="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/s_setting_spinner_chooser"/>
+            android:textColor="@color/primaryText"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/sSettingSpinnerChooser"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Setting name" />
 
     <TextView
-            android:textSize="16sp"
-            android:textColor="@color/secondaryText"
-            tools:text="Description ede ded ed ededededde dedededde dedededededede ededededdededd deddededede dedededed"
-            android:layout_marginStart="12dp"
-            app:layout_constraintHorizontal_bias="0"
+            android:id="@+id/tvSettingDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_setting_name"
-            android:id="@+id/tv_setting_description"
+            android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="10dp"
+            android:textColor="@color/secondaryText"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/s_setting_spinner_chooser"/>
+            app:layout_constraintEnd_toStartOf="@+id/sSettingSpinnerChooser"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSettingName"
+            tools:text="Description ede ded ed ededededde dedededde dedededededede ededededdededd deddededede dedededed" />
 
     <Spinner
-            android:id="@+id/s_setting_spinner_chooser"
+            android:id="@+id/sSettingSpinnerChooser"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textAlignment="textEnd"
-            android:background="@android:color/transparent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="16dp"
-            app:layout_constraintTop_toTopOf="@+id/tv_setting_name"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_setting_description"/>
+            android:background="@android:color/transparent"
+            android:textAlignment="textEnd"
+            app:layout_constraintBottom_toBottomOf="@+id/tvSettingDescription"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvSettingName" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

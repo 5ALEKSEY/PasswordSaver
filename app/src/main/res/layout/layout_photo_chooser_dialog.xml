@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -10,13 +10,13 @@
             android:layout_width="35dp"
             android:layout_height="4dp"
             android:background="@drawable/bg_rounded_radius_rectangle"
-            app:layout_constraintBottom_toTopOf="@+id/texv_photo_chooser_camera_preview"
+            app:layout_constraintBottom_toTopOf="@+id/texvPhotoChooserCameraPreview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-            android:id="@+id/iv_photo_chooser_gallery_preview"
+            android:id="@+id/ivPhotoChooserGalleryPreview"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_marginTop="24dp"
@@ -28,10 +28,10 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/texv_photo_chooser_camera_preview" />
+            app:layout_constraintStart_toEndOf="@+id/texvPhotoChooserCameraPreview" />
 
     <View
-            android:id="@+id/v_choose_gallery_action"
+            android:id="@+id/vChooseGalleryAction"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:background="@drawable/bg_rounded_rectangle"
@@ -42,13 +42,13 @@
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="16dp"
             android:foreground="?android:attr/selectableItemBackground"
-            app:layout_constraintStart_toEndOf="@+id/v_choose_camera_action"
+            app:layout_constraintStart_toEndOf="@+id/vChooseCameraAction"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     <TextureView
-            android:id="@+id/texv_photo_chooser_camera_preview"
+            android:id="@+id/texvPhotoChooserCameraPreview"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_marginTop="24dp"
@@ -56,12 +56,12 @@
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_photo_chooser_gallery_preview"
+            app:layout_constraintEnd_toStartOf="@id/ivPhotoChooserGalleryPreview"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     <View
-            android:id="@+id/v_choose_camera_action"
+            android:id="@+id/vChooseCameraAction"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:background="@drawable/bg_rounded_rectangle"
@@ -73,7 +73,7 @@
             android:layout_marginBottom="16dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/v_choose_gallery_action"
+            app:layout_constraintEnd_toStartOf="@id/vChooseGalleryAction"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -81,10 +81,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/texv_photo_chooser_camera_preview"
-            app:layout_constraintEnd_toEndOf="@+id/texv_photo_chooser_camera_preview"
-            app:layout_constraintStart_toStartOf="@+id/texv_photo_chooser_camera_preview"
-            app:layout_constraintTop_toTopOf="@+id/texv_photo_chooser_camera_preview">
+            app:layout_constraintBottom_toBottomOf="@+id/texvPhotoChooserCameraPreview"
+            app:layout_constraintEnd_toEndOf="@+id/texvPhotoChooserCameraPreview"
+            app:layout_constraintStart_toStartOf="@+id/texvPhotoChooserCameraPreview"
+            app:layout_constraintTop_toTopOf="@+id/texvPhotoChooserCameraPreview">
 
         <ImageView
                 android:id="@+id/imageView"
@@ -110,10 +110,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="@+id/v_choose_gallery_action"
-            app:layout_constraintEnd_toEndOf="@+id/iv_photo_chooser_gallery_preview"
-            app:layout_constraintStart_toStartOf="@+id/v_choose_gallery_action"
-            app:layout_constraintTop_toTopOf="@+id/v_choose_gallery_action">
+            app:layout_constraintBottom_toBottomOf="@+id/vChooseGalleryAction"
+            app:layout_constraintEnd_toEndOf="@+id/ivPhotoChooserGalleryPreview"
+            app:layout_constraintStart_toStartOf="@+id/vChooseGalleryAction"
+            app:layout_constraintTop_toTopOf="@+id/vChooseGalleryAction">
 
         <ImageView
                 android:id="@+id/imageView2"
@@ -134,4 +134,4 @@
 
     </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

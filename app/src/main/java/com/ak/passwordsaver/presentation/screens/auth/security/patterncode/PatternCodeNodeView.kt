@@ -2,22 +2,19 @@ package com.ak.passwordsaver.presentation.screens.auth.security.patterncode
 
 import android.content.Context
 import android.graphics.PorterDuff
-import android.support.annotation.ColorInt
-import android.support.annotation.DrawableRes
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.ImageView
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.getColorCompat
+import kotlinx.android.synthetic.main.layout_pattern_code_node_view.view.*
 
 class PatternCodeNodeView(context: Context?, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs) {
 
     private val mFailedColor by lazy { context!!.getColorCompat(R.color.failed_action_color) }
-
-    private val mPatterNodeView: ImageView by bindView(R.id.iv_node_pattern_view)
 
     private val mInitPatterNodeEnableState = false
     private var mIsPatternNodeEnabled = mInitPatterNodeEnableState
@@ -29,7 +26,7 @@ class PatternCodeNodeView(context: Context?, attrs: AttributeSet?) :
 
     fun setNodeEnableState(isEnabled: Boolean) {
         @DrawableRes val backgroundRes = getBackgroundDrawable(isEnabled)
-        mPatterNodeView.setImageDrawable(context.getDrawable(backgroundRes))
+        ivNodePatternView.setImageDrawable(context.getDrawable(backgroundRes))
         mIsPatternNodeEnabled = isEnabled
     }
 
@@ -38,7 +35,7 @@ class PatternCodeNodeView(context: Context?, attrs: AttributeSet?) :
     }
 
     private fun setPatternNodeColor(@ColorInt color: Int) {
-        val drawable = mPatterNodeView.drawable
+        val drawable = ivNodePatternView.drawable
         drawable.setColorFilter(
             color,
             PorterDuff.Mode.MULTIPLY

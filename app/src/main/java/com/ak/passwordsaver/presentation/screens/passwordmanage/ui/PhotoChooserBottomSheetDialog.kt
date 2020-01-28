@@ -2,21 +2,21 @@ package com.ak.passwordsaver.presentation.screens.passwordmanage.ui
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.annotation.ColorInt
-import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.annotation.ColorInt
+import androidx.fragment.app.FragmentManager
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.manager.IPSCameraManager
 import com.ak.passwordsaver.presentation.screens.passwordmanage.gallery.manager.IPSGalleryManager
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.setSafeClickListener
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.android.support.AndroidSupportInjection
+import kotlinx.android.synthetic.main.layout_photo_chooser_dialog.view.*
 import javax.inject.Inject
 
 class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
@@ -64,9 +64,9 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mCameraPreviewView = view.findViewById(R.id.texv_photo_chooser_camera_preview)
+        mCameraPreviewView = view.findViewById(R.id.texvPhotoChooserCameraPreview)
         mPSCameraManager.initCameraManager(true, mCameraPreviewView)
-        view.findViewById<ImageView>(R.id.iv_photo_chooser_gallery_preview).apply {
+        view.ivPhotoChooserGalleryPreview.apply {
             val lastGalleryImage = mPSGalleryManager.getLastGalleryImage()
             if (lastGalleryImage != null) {
                 setImageBitmap(lastGalleryImage)
@@ -76,12 +76,12 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
                 setImageDrawable(ColorDrawable(noLastImageColor))
             }
         }
-        view.findViewById<View>(R.id.v_choose_camera_action).setSafeClickListener {
+        view.vChooseCameraAction.setSafeClickListener {
             if (this::onChooseAvatarActionListener.isInitialized) {
                 onChooseAvatarActionListener.invoke(CAMERA_CHOOSE_ACTION_ID)
             }
         }
-        view.findViewById<View>(R.id.v_choose_gallery_action).setSafeClickListener {
+        view.vChooseGalleryAction.setSafeClickListener {
             if (this::onChooseAvatarActionListener.isInitialized) {
                 onChooseAvatarActionListener.invoke(GALLERY_CHOOSE_ACTION_ID)
             }

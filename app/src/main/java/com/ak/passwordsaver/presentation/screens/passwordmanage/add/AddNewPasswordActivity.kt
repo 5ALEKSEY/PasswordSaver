@@ -2,10 +2,8 @@ package com.ak.passwordsaver.presentation.screens.passwordmanage.add
 
 import android.content.Context
 import android.content.Intent
-import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.screens.passwordmanage.BaseManagePasswordActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
-
+import moxy.presenter.InjectPresenter
 
 class AddNewPasswordActivity : BaseManagePasswordActivity<AddNewPasswordPresenter>(),
     IAddNewPasswordView {

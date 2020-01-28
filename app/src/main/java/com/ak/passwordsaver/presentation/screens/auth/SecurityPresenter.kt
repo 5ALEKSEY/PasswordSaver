@@ -5,10 +5,10 @@ import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
-import com.arellomobile.mvp.InjectViewState
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import moxy.InjectViewState
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 

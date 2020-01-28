@@ -1,8 +1,8 @@
 package com.ak.passwordsaver.presentation.screens.settings.adapter
 
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegatesManager
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.sections.SectionAdapterDelegate

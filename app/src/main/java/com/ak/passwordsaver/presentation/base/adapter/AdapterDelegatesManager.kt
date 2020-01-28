@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.presentation.base.adapter
 
-import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 
 class AdapterDelegatesManager<T> {
     private val mAdapterDelegates = arrayListOf<AdapterDelegate<T>>()

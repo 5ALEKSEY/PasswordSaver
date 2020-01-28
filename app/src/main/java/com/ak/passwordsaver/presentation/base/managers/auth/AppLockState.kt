@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.presentation.base.managers.auth
 
 import android.content.Context
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.managers.auth.AppLockStateConstants.FIVE_MINUTES_STATE_DELAY
 import com.ak.passwordsaver.presentation.base.managers.auth.AppLockStateConstants.FIVE_MINUTES_STATE_ID

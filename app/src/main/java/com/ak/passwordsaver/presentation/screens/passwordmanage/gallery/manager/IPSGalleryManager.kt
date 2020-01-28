@@ -2,9 +2,9 @@ package com.ak.passwordsaver.presentation.screens.passwordmanage.gallery.manager
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 
 interface IPSGalleryManager {
     fun getLastGalleryImage(): Bitmap?

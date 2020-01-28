@@ -4,8 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.support.design.widget.TextInputLayout
-import android.support.v7.widget.Toolbar
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
@@ -14,7 +12,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.Toast
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
@@ -22,7 +19,6 @@ import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.CameraPickImageActivity
 import com.ak.passwordsaver.presentation.screens.passwordmanage.gallery.manager.IPSGalleryManager
 import com.ak.passwordsaver.presentation.screens.passwordmanage.ui.PhotoChooserBottomSheetDialog
-import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.hideKeyBoard
@@ -30,7 +26,7 @@ import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
-import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_manage_password.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -42,16 +38,6 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
     lateinit var mGalleryManager: IPSGalleryManager
     private lateinit var mAvatarChooserDialog: PhotoChooserBottomSheetDialog
 
-    protected val mPasswordNameEditText: EditText by bindView(R.id.tiet_password_name_field)
-    protected val mPasswordContentEditText: EditText by bindView(R.id.tiet_password_content_field)
-
-    private val mToolbar: Toolbar by bindView(R.id.tb_manage_password_bar)
-    private val mPasswordNameInputLayout: TextInputLayout by bindView(R.id.til_password_name_layout)
-    private val mPasswordContentInputLayout: TextInputLayout by bindView(R.id.til_password_content_layout)
-    private val mPasswordAvatar: CircleImageView by bindView(R.id.iv_password_avatar_chooser)
-    private val mAvatarImageDescView: View by bindView(R.id.ll_avatar_chooser_image_desc)
-    private val mManagePasswordActionButton: View by bindView(R.id.btn_manage_password_action)
-
     protected abstract fun getPresenter(): ManagePresenter
 
     override fun getScreenLayoutResId() = R.layout.activity_manage_password
@@ -61,7 +47,7 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
         initGalleryManager()
         initToolbar()
 
-        mPasswordContentEditText.setOnEditorActionListener { _, actionId, _ ->
+        tietPasswordContentField.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_DONE) {
                 managePasswordAction()
                 true
@@ -69,11 +55,11 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
                 false
             }
         }
-        mPasswordContentEditText.filters = arrayOf(
+        tietPasswordContentField.filters = arrayOf(
             InputFilter.LengthFilter(AppConstants.PASSWORD_CONTENT_MAX_LENGTH)
         )
 
-        mPasswordAvatar.setSafeClickListener {
+        ivPasswordAvatarChooser.setSafeClickListener {
             GlobalScope.launch {
 
                 val permissionResult = PermissionManager.requestPermissions(
@@ -116,7 +102,7 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
             }
         }
 
-        mPasswordNameEditText.addTextChangedListener(object : TextWatcher {
+        tietPasswordNameField.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
             }
@@ -129,11 +115,11 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
                 getPresenter().onPasswordNameTextChanged(s.toString())
             }
         })
-        mPasswordNameEditText.filters = arrayOf(
+        tietPasswordNameField.filters = arrayOf(
             InputFilter.LengthFilter(AppConstants.PASSWORD_NAME_MAX_LENGTH)
         )
 
-        mManagePasswordActionButton.setSafeClickListener {
+        btnManagePasswordAction.setSafeClickListener {
             managePasswordAction()
         }
     }
@@ -162,19 +148,19 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
     }
 
     override fun displayPasswordNameInputError(errorMessage: String) {
-        mPasswordNameInputLayout.error = errorMessage
+        tilPasswordNameLayout.error = errorMessage
     }
 
     override fun hidePasswordNameInputError() {
-        mPasswordNameInputLayout.error = null
+        tilPasswordNameLayout.error = null
     }
 
     override fun displayPasswordContentInputError(errorMessage: String) {
-        mPasswordContentInputLayout.error = errorMessage
+        tilPasswordContentLayout.error = errorMessage
     }
 
     override fun hidePasswordContentInputError() {
-        mPasswordContentInputLayout.error = null
+        tilPasswordContentLayout.error = null
     }
 
     override fun drawTextForPasswordAvatar(text: String) {
@@ -183,19 +169,19 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
         val textColor = getColorCompat(R.color.colorWhite)
         val textSizeInPx = resources.getDimensionPixelSize(R.dimen.add_avatar_inner_text_size)
 
-        mPasswordAvatar.drawTextInner(fillColor, textColor, textSizeInPx, text)
-        mAvatarImageDescView.setVisibility(!isTextDrawNeeds)
+        ivPasswordAvatarChooser.drawTextInner(fillColor, textColor, textSizeInPx, text)
+        lvAvatarChooserImageDesc.setVisibility(!isTextDrawNeeds)
     }
 
     override fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap?) {
         getPresenter().onAvatarDisplayStateChanged(true)
-        mPasswordAvatar.setImageBitmap(bitmapImage)
-        mAvatarImageDescView.visibility = View.GONE
+        ivPasswordAvatarChooser.setImageBitmap(bitmapImage)
+        lvAvatarChooserImageDesc.visibility = View.GONE
     }
 
     override fun deletePasswordAvatarChooserImage() {
         getPresenter().onAvatarDisplayStateChanged(false)
-        getPresenter().onPasswordNameTextChanged(mPasswordNameEditText.text.toString())
+        getPresenter().onPasswordNameTextChanged(tietPasswordNameField.text.toString())
     }
 
     override fun dismissPasswordAvatarChooserDialog() {
@@ -221,9 +207,9 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
     }
 
     private fun initToolbar() {
-        setSupportActionBar(mToolbar)
+        setSupportActionBar(tbManagePasswordBar)
         supportActionBar?.title = getToolbarTitleText()
-        mToolbar.setNavigationOnClickListener { finish() }
+        tbManagePasswordBar.setNavigationOnClickListener { finish() }
     }
 
     protected abstract fun getToolbarTitleText(): String
@@ -233,8 +219,8 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
         hidePasswordNameInputError()
         hidePasswordContentInputError()
         getPresenter().onManagePasswordAction(
-            mPasswordNameEditText.text.toString(),
-            mPasswordContentEditText.text.toString()
+            tietPasswordNameField.text.toString(),
+            tietPasswordContentField.text.toString()
         )
     }
 

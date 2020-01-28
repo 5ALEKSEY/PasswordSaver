@@ -1,17 +1,12 @@
 package com.ak.passwordsaver.presentation.screens.passwords
 
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.view.ActionMode
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SimpleItemAnimator
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ActionMode
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
@@ -22,13 +17,12 @@ import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsA
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordsListRecyclerAdapter
 import com.ak.passwordsaver.presentation.screens.passwords.ui.PasswordActionsBottomSheetDialog
-import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.turnOffToolbarScrolling
 import com.ak.passwordsaver.utils.extensions.turnOnToolbarScrolling
-import com.arellomobile.mvp.presenter.InjectPresenter
-
+import kotlinx.android.synthetic.main.fragment_passwords_list.*
+import moxy.presenter.InjectPresenter
 
 class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsActionModeView {
 
@@ -41,25 +35,18 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     @InjectPresenter
     lateinit var mPasswordsActionModePresenter: PasswordsActionModePresenter
 
-    private val mAppBarLayout: AppBarLayout by bindView(R.id.abl_passwords_list_bar_layout)
-    private val mToolbar: Toolbar by bindView(R.id.tb_passwords_list_bar)
-    private val mPasswordsRecyclerView: RecyclerView by bindView(R.id.rv_passwords_list)
-    private val mAddNewPasswordButton: FloatingActionButton by bindView(R.id.fab_add_new_password_action)
-    private val mEmptyView: View by bindView(R.id.l_empty_view)
-    private val mProgressBar: ProgressBar by bindView(R.id.pb_passwords_loading)
-
-    private var mToolbarActionMode: ActionMode? = null
+    private var tbPasswordsListBarActionMode: ActionMode? = null
     private var mPasswordActionsDialog: PasswordActionsBottomSheetDialog? = null
     private lateinit var mPasswordsAdapter: PasswordsListRecyclerAdapter
 
     override fun getFragmentLayoutResId() = R.layout.fragment_passwords_list
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun initViewAfterPresenterAttach() {
+        super.initViewAfterPresenterAttach()
         initRecyclerView()
         initToolbar()
 
-        mAddNewPasswordButton.setSafeClickListener {
+        fabAddNewPasswordAction.setSafeClickListener {
             context?.let {
                 AddNewPasswordActivity.startActivity(it)
             }
@@ -76,11 +63,11 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     }
 
     override fun setLoadingState(isLoading: Boolean) {
-        mProgressBar.setVisibility(isLoading)
+        pbPasswordsLoading.setVisibility(isLoading)
     }
 
     override fun setEmptyPasswordsState(isEmptyViewVisible: Boolean) {
-        mEmptyView.setVisibility(isEmptyViewVisible)
+        incEmptyView.setVisibility(isEmptyViewVisible)
     }
 
     override fun openPasswordToastMode(passwordName: String, passwordContent: String) {
@@ -88,22 +75,25 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
         showShortTimeMessage(message)
     }
 
-    override fun setPasswordVisibilityInCardMode(passwordId: Long, contentVisibilityState: Boolean) {
+    override fun setPasswordVisibilityInCardMode(
+        passwordId: Long,
+        contentVisibilityState: Boolean
+    ) {
         mPasswordsAdapter.setPasswordContentVisibility(passwordId, contentVisibilityState)
     }
 
     override fun enableToolbarScrolling() {
-        mToolbar.turnOnToolbarScrolling(mAppBarLayout)
+        tbPasswordsListBar.turnOnToolbarScrolling(ablPasswordsListBarLayout)
     }
 
     override fun disableToolbarScrolling() {
-        mToolbar.turnOffToolbarScrolling(mAppBarLayout)
+        tbPasswordsListBar.turnOffToolbarScrolling(ablPasswordsListBarLayout)
     }
 
     override fun showPasswordActionsDialog() {
         mPasswordActionsDialog = PasswordActionsBottomSheetDialog.showDialog(childFragmentManager)
         mPasswordActionsDialog?.onChoosePasswordActionListener = { actionId ->
-            when(actionId) {
+            when (actionId) {
                 PasswordActionsBottomSheetDialog.COPY_PASSWORD_CONTENT_ACTION -> {
                     mPasswordsListPresenter.onCopyPasswordAction()
                 }
@@ -130,7 +120,7 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
     private fun initToolbar() {
         if (activity is AppCompatActivity) {
             val appCompatActivity = activity as AppCompatActivity
-            appCompatActivity.setSupportActionBar(mToolbar)
+            appCompatActivity.setSupportActionBar(tbPasswordsListBar)
             appCompatActivity.supportActionBar?.title = "Passwords list"
         }
     }
@@ -143,69 +133,70 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
             mPasswordsActionModePresenter::onPasswordItemLongClick
         )
 
-        mPasswordsRecyclerView.adapter = mPasswordsAdapter
-        mPasswordsRecyclerView.layoutManager = GridLayoutManager(
+        rvPasswordsList.adapter = mPasswordsAdapter
+        rvPasswordsList.layoutManager = GridLayoutManager(
             context,
             AppConstants.PASSWORDS_LIST_COLUMN_COUNT,
             GridLayoutManager.VERTICAL,
             false
         )
-        mPasswordsRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        rvPasswordsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) {
-                    mAddNewPasswordButton.hide()
+                    fabAddNewPasswordAction.hide()
                 } else {
-                    mAddNewPasswordButton.show()
+                    fabAddNewPasswordAction.show()
                 }
 
                 super.onScrolled(recyclerView, dx, dy)
             }
         })
-        (mPasswordsRecyclerView.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        (rvPasswordsList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
     }
 
     //------------------------------------- Action mode --------------------------------------------
 
     override fun showSelectedItemsQuantityText(text: String) {
-        mToolbarActionMode?.title = text
+        tbPasswordsListBarActionMode?.title = text
     }
 
     override fun displaySelectedMode() {
         val activityOfFragment = activity
         mPasswordsAdapter.setItemsActionModeState(true)
-        if (mToolbarActionMode == null && activityOfFragment != null && activityOfFragment is AppCompatActivity) {
-            mToolbarActionMode = activityOfFragment.startSupportActionMode(object : ActionMode.Callback {
-                override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-                    return when (item?.itemId) {
-                        R.id.action_delete_selected_passwords -> {
-                            mPasswordsActionModePresenter.onDeleteSelectedInActionMode()
-                            true
+        if (tbPasswordsListBarActionMode == null && activityOfFragment != null && activityOfFragment is AppCompatActivity) {
+            tbPasswordsListBarActionMode =
+                activityOfFragment.startSupportActionMode(object : ActionMode.Callback {
+                    override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                        return when (item?.itemId) {
+                            R.id.action_delete_selected_passwords -> {
+                                mPasswordsActionModePresenter.onDeleteSelectedInActionMode()
+                                true
+                            }
+                            else -> false
                         }
-                        else -> false
                     }
-                }
 
-                override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                    mode?.menuInflater?.inflate(R.menu.passwords_list_action_mode_menu, menu)
-                    return true
-                }
+                    override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                        mode?.menuInflater?.inflate(R.menu.passwords_list_action_mode_menu, menu)
+                        return true
+                    }
 
-                override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
-                    return false
-                }
+                    override fun onPrepareActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                        return false
+                    }
 
-                override fun onDestroyActionMode(p0: ActionMode?) {
-                    hideSelectedMode()
-                }
-            })
+                    override fun onDestroyActionMode(p0: ActionMode?) {
+                        hideSelectedMode()
+                    }
+                })
         }
     }
 
     override fun hideSelectedMode() {
         mPasswordsAdapter.setItemsActionModeState(false)
         mPasswordsActionModePresenter.onSelectedModeFinished()
-        mToolbarActionMode?.finish()
-        mToolbarActionMode = null
+        tbPasswordsListBarActionMode?.finish()
+        tbPasswordsListBarActionMode = null
     }
 
     override fun showSelectStateForItem(isSelected: Boolean, passwordId: Long) {

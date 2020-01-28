@@ -3,22 +3,23 @@ package com.ak.passwordsaver.presentation.base.ui
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.support.annotation.LayoutRes
-import android.support.v4.app.Fragment
+import androidx.annotation.LayoutRes
+import androidx.fragment.app.Fragment
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.managers.auth.IPSAuthManager
 import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.utils.extensions.showToastMessage
 import com.ak.passwordsaver.utils.extensions.vibrate
-import com.arellomobile.mvp.MvpAppCompatActivity
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import moxy.MvpAppCompatActivity
 import javax.inject.Inject
 
-abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView, HasSupportFragmentInjector {
+abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView,
+    HasSupportFragmentInjector {
 
     @Inject
     lateinit var mFragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>

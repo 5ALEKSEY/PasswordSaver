@@ -8,7 +8,6 @@ import android.net.Uri
 import java.io.FileNotFoundException
 import javax.inject.Inject
 
-
 class BitmapDecoderManagerImpl @Inject constructor(private val context: Context) :
     IBitmapDecoderManager {
 

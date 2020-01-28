@@ -1,14 +1,13 @@
 package com.ak.passwordsaver.presentation.screens.auth.security.pincode
 
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.vibrate
+import kotlinx.android.synthetic.main.layout_pincode_number_view.view.*
 
 class PincodeNumberView(context: Context?, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs), View.OnClickListener {
@@ -22,8 +21,6 @@ class PincodeNumberView(context: Context?, attrs: AttributeSet?) :
     private lateinit var mSecondaryText: String
     private lateinit var mNumberClickListener: (pincodeValue: String) -> Unit
 
-    private val mPrimaryTextView: TextView by bindView(R.id.tv_primary_number_text)
-    private val mSecondaryTextView: TextView by bindView(R.id.tv_secondary_number_text)
 
     init {
         val inflater = LayoutInflater.from(context)
@@ -61,7 +58,7 @@ class PincodeNumberView(context: Context?, attrs: AttributeSet?) :
     }
 
     private fun initTextContent() {
-        mPrimaryTextView.text = mPrimaryText
-        mSecondaryTextView.text = mSecondaryText
+        tvPrimaryNumberText.text = mPrimaryText
+        tvSecondaryNumberText.text = mSecondaryText
     }
 }

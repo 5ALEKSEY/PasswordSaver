@@ -7,15 +7,15 @@ import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.RectF
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CoordinatorLayout
-import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
+import androidx.appcompat.widget.Toolbar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
+import com.google.android.material.appbar.AppBarLayout
 import java.util.*
 
 fun Float.dpToPx(): Int {

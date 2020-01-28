@@ -1,16 +1,15 @@
 package com.ak.passwordsaver.presentation.screens.settings.adapter.items.sections
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.BaseSettingsViewHolder
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
-import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.setSafeClickListener
+import kotlinx.android.synthetic.main.settings_item_section_layout.view.*
 
 class SectionAdapterDelegate(
     private val viewType: Int,
@@ -42,10 +41,8 @@ class SettingsSectionHolder(
     private val onSectionSettingsClicked: (settingId: Int) -> Unit
 ) : BaseSettingsViewHolder<SectionSettingsListItemModel>(itemView) {
 
-    private val mSectionImageView: ImageView by bindView(R.id.iv_settings_section_image)
-
     override fun setViewHolderData(itemModel: SectionSettingsListItemModel) {
-        mSectionImageView.setImageResource(itemModel.imageRes)
+        itemView.ivSettingsSectionImage.setImageResource(itemModel.imageRes)
         itemView.setSafeClickListener { onSectionSettingsClicked(itemModel.settingId) }
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:background="?android:attr/selectableItemBackground"
@@ -7,7 +7,7 @@
         android:layout_height="wrap_content">
 
     <ImageView
-            android:id="@+id/iv_settings_section_image"
+            android:id="@+id/ivSettingsSectionImage"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_margin="8dp"
@@ -17,15 +17,15 @@
             tools:src="@drawable/ic_privacy_section_action" />
 
     <TextView
-            android:id="@+id/tv_setting_name"
+            android:id="@+id/tvSettingName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:textColor="@color/primaryText"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_settings_section_image"
-            app:layout_constraintStart_toEndOf="@+id/iv_settings_section_image"
-            app:layout_constraintTop_toTopOf="@+id/iv_settings_section_image"
+            app:layout_constraintBottom_toBottomOf="@+id/ivSettingsSectionImage"
+            app:layout_constraintStart_toEndOf="@+id/ivSettingsSectionImage"
+            app:layout_constraintTop_toTopOf="@+id/ivSettingsSectionImage"
             tools:text="Privacy" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

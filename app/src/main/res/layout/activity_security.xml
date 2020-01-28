@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -8,7 +8,7 @@
         tools:context=".presentation.screens.auth.SecurityActivity">
 
     <ImageView
-            android:id="@+id/iv_security_input_type_change_action"
+            android:id="@+id/ivSecurityInputTypeChangeAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackgroundBorderless"
@@ -20,7 +20,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-            android:id="@+id/iv_security_screen_logo"
+            android:id="@+id/ivSecurityScreenLogo"
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:src="@mipmap/ic_launcher"
@@ -30,7 +30,7 @@
             tools:ignore="ContentDescription" />
 
     <TextView
-            android:id="@+id/tv_security_message_text"
+            android:id="@+id/tvSecurityMessageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/iconsAndText"
@@ -39,11 +39,11 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_security_screen_logo"
+            app:layout_constraintTop_toBottomOf="@+id/ivSecurityScreenLogo"
             android:text="Incorrect password. Please, try again" />
 
     <RelativeLayout
-            android:id="@+id/rl_auth_container"
+            android:id="@+id/vAuthContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -51,10 +51,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_security_message_text">
+            app:layout_constraintTop_toBottomOf="@+id/tvSecurityMessageText">
 
         <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeAuthView
-                android:id="@+id/v_pincode_auth_view"
+                android:id="@+id/cPincodeAuthView"
                 android:layout_width="match_parent"
                 android:layout_centerInParent="true"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
                 tools:visibility="gone" />
 
         <com.ak.passwordsaver.presentation.screens.auth.security.patterncode.PatternAuthView
-                android:id="@+id/v_pattern_auth_view"
+                android:id="@+id/vPatternAuthView"
                 android:layout_width="256dp"
                 android:layout_height="256dp"
                 android:layout_centerInParent="true"
@@ -74,18 +74,18 @@
 
     </RelativeLayout>
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.Guideline
             android:id="@+id/guideline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.15" />
 
-    <android.support.constraint.Guideline
+    <androidx.constraintlayout.Guideline
             android:id="@+id/guideline2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.9" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

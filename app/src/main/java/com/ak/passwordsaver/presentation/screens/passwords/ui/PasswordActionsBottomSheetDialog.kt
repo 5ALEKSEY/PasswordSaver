@@ -1,14 +1,15 @@
 package com.ak.passwordsaver.presentation.screens.passwords.ui
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.BottomSheetDialogFragment
-import android.support.v4.app.FragmentManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentManager
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.extensions.setSafeClickListener
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.layout_password_actions_dialog.view.*
 
 class PasswordActionsBottomSheetDialog : BottomSheetDialogFragment() {
 
@@ -45,13 +46,13 @@ class PasswordActionsBottomSheetDialog : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.findViewById<View>(R.id.tv_copy_password_content_action).setSafeClickListener {
+        view.tvCopyPasswordContentAction.setSafeClickListener {
             publishPasswordActionChoose(COPY_PASSWORD_CONTENT_ACTION)
         }
-        view.findViewById<View>(R.id.tv_edit_password_item_action).setSafeClickListener {
+        view.tvEditPasswordItemAction.setSafeClickListener {
             publishPasswordActionChoose(EDIT_PASSWORD_ITEM_ACTION)
         }
-        view.findViewById<View>(R.id.tv_delete_password_item_action).setSafeClickListener {
+        view.tvDeletePasswordItemAction.setSafeClickListener {
             publishPasswordActionChoose(DELETE_PASSWORD_ITEM_ACTION)
         }
     }

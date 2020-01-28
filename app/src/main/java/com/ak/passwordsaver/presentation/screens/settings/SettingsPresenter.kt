@@ -5,7 +5,7 @@ import com.ak.passwordsaver.R
 import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.sections.SectionSettingsListItemModel
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState

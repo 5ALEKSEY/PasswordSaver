@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.presentation.screens.auth.security.patterncode
 
 import android.graphics.Path
-import android.support.annotation.ColorInt
+import androidx.annotation.ColorInt
 
 data class PatternLinePath(
     @field:ColorInt

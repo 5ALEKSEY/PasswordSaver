@@ -1,31 +1,30 @@
 package com.ak.passwordsaver.presentation.screens.home
 
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
 import android.view.MenuItem
 import android.view.WindowManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListFragment
 import com.ak.passwordsaver.presentation.screens.settings.SettingsFragment
-import com.ak.passwordsaver.utils.bindView
-import com.arellomobile.mvp.presenter.InjectPresenter
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.activity_home.*
+import moxy.presenter.InjectPresenter
 
-class HomeActivity : BasePSFragmentActivity(), BottomNavigationView.OnNavigationItemSelectedListener, IHomeView {
+class HomeActivity : BasePSFragmentActivity(),
+    BottomNavigationView.OnNavigationItemSelectedListener, IHomeView {
 
     @InjectPresenter
     lateinit var mHomePresenter: HomePresenter
-
-    private val mBottomMenu: BottomNavigationView by bindView(R.id.bnv_bottom_bar)
 
     override fun getScreenLayoutResId() = R.layout.activity_home
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         showFragment(PasswordsListFragment.getInstance())
-        mBottomMenu.setOnNavigationItemSelectedListener(this)
+        bnvBottomBar.setOnNavigationItemSelectedListener(this)
     }
 
     override fun initViewBeforePresenterAttach() {
@@ -71,5 +70,5 @@ class HomeActivity : BasePSFragmentActivity(), BottomNavigationView.OnNavigation
             .commit()
     }
 
-    private fun getFragmentContainerId() = R.id.fl_fragments_container
+    private fun getFragmentContainerId() = R.id.cFragmentsContainer
 }

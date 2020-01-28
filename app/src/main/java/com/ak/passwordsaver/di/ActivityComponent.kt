@@ -9,5 +9,4 @@ import dagger.Component
     dependencies = [AppComponent::class]
 )
 @ActivityScope
-interface ActivityComponent {
-}
+interface ActivityComponent

@@ -1,16 +1,14 @@
 package com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Switch
-import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.BaseSettingsViewHolder
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
-import com.ak.passwordsaver.utils.bindView
+import kotlinx.android.synthetic.main.settings_item_switch_layout.view.*
 
 class SwitchAdapterDelegate(
     private val viewType: Int,
@@ -27,7 +25,10 @@ class SwitchAdapterDelegate(
         return SettingsSwitchHolder(itemView, onSwitchSettingsChanged)
     }
 
-    override fun onBindViewHolder(item: SettingsListItemModel, viewHolder: RecyclerView.ViewHolder) {
+    override fun onBindViewHolder(
+        item: SettingsListItemModel,
+        viewHolder: RecyclerView.ViewHolder
+    ) {
         val itemModel = item as SwitchSettingsListItemModel
         val holder = viewHolder as SettingsSwitchHolder
         holder.bindViewHolder(itemModel)
@@ -39,14 +40,13 @@ class SettingsSwitchHolder(
     private val onSwitchSettingsChanged: (settingId: Int, isChecked: Boolean) -> Unit
 ) : BaseSettingsViewHolder<SwitchSettingsListItemModel>(itemView) {
 
-    private val mSwitch: Switch by bindView(R.id.s_setting_enabling_state)
-    private val mDescription: TextView by bindView(R.id.tv_setting_description)
-
     override fun setViewHolderData(itemModel: SwitchSettingsListItemModel) {
-        mSwitch.isChecked = itemModel.isChecked
-        mDescription.text = itemModel.settingDescription
-        itemView.setOnClickListener { mSwitch.isChecked = !mSwitch.isChecked }
-        mSwitch.setOnCheckedChangeListener { _, isChecked ->
+        itemView.sSettingEnablingState.isChecked = itemModel.isChecked
+        itemView.tvSettingDescription.text = itemModel.settingDescription
+        itemView.setOnClickListener {
+            itemView.sSettingEnablingState.isChecked = !itemView.sSettingEnablingState.isChecked
+        }
+        itemView.sSettingEnablingState.setOnCheckedChangeListener { _, isChecked ->
             onSwitchSettingsChanged.invoke(adapterPosition, isChecked)
         }
     }

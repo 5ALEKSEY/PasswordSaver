@@ -7,7 +7,12 @@ import android.graphics.Bitmap
 import android.graphics.ImageFormat
 import android.graphics.Matrix
 import android.graphics.SurfaceTexture
-import android.hardware.camera2.*
+import android.hardware.camera2.CameraAccessException
+import android.hardware.camera2.CameraCaptureSession
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraDevice
+import android.hardware.camera2.CameraManager
+import android.hardware.camera2.CameraMetadata
 import android.media.ImageReader
 import android.os.Handler
 import android.os.HandlerThread
@@ -17,7 +22,6 @@ import android.view.TextureView
 import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.CameraHelper
 import javax.inject.Inject
-
 
 class PSCameraManagerImpl @Inject constructor(
     private val context: Context,
@@ -264,42 +268,46 @@ class PSCameraManagerImpl @Inject constructor(
         } else {
             mPreviewImageView!!.surfaceTextureListener =
                 object : TextureView.SurfaceTextureListener {
-                override fun onSurfaceTextureSizeChanged(surface: SurfaceTexture?, w: Int, h: Int) {
-                    Log.d("d", "d")
-                }
+                    override fun onSurfaceTextureSizeChanged(
+                        surface: SurfaceTexture?,
+                        w: Int,
+                        h: Int
+                    ) {
+                        Log.d("d", "d")
+                    }
 
-                override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
-                    Log.d("d", "ss")
-                }
+                    override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
+                        Log.d("d", "ss")
+                    }
 
-                override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
-                    Log.d("d", "ss")
-                    return true
-                }
+                    override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
+                        Log.d("d", "ss")
+                        return true
+                    }
 
-                override fun onSurfaceTextureAvailable(
-                    surface: SurfaceTexture?,
-                    width: Int,
-                    height: Int
-                ) {
-                    if (surface == null) return
+                    override fun onSurfaceTextureAvailable(
+                        surface: SurfaceTexture?,
+                        width: Int,
+                        height: Int
+                    ) {
+                        if (surface == null) return
 
-                    val optimalPreviewSize =
-                        CameraHelper.getBestCameraPhotoPreviewSize(
-                            context,
-                            mCurrentCameraId,
-                            cameraManager,
-                            width,
-                            height
+                        val optimalPreviewSize =
+                            CameraHelper.getBestCameraPhotoPreviewSize(
+                                context,
+                                mCurrentCameraId,
+                                cameraManager,
+                                width,
+                                height
+                            )
+
+                        createCameraPreviewSession(
+                            surface,
+                            optimalPreviewSize.width,
+                            optimalPreviewSize.height
                         )
-
-                    createCameraPreviewSession(
-                        surface,
-                        optimalPreviewSize.width,
-                        optimalPreviewSize.height
-                    )
+                    }
                 }
-            }
         }
     }
 

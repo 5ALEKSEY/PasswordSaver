@@ -3,8 +3,8 @@ package com.ak.passwordsaver.presentation.screens.passwords.actionMode
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.domain.passwords.IPasswordsInteractor
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
-import com.arellomobile.mvp.InjectViewState
 import io.reactivex.android.schedulers.AndroidSchedulers
+import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState

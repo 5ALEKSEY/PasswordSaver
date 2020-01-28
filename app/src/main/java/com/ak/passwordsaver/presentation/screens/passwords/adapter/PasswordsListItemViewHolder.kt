@@ -1,19 +1,15 @@
 package com.ak.passwordsaver.presentation.screens.passwords.adapter
 
-import android.support.v7.widget.RecyclerView
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.utils.PSUtils
-import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.setVisibilityInvisible
+import kotlinx.android.synthetic.main.passwords_item_layout.view.*
 
 class PasswordsListItemViewHolder(
     itemView: View,
@@ -28,20 +24,12 @@ class PasswordsListItemViewHolder(
         const val PASSWORD_SHOW_ACTION_CLICK_DELAY_IN_MILLIS = 700L
     }
 
-    private val mPasswordNameTextView: TextView by bindView(R.id.tv_password_name)
-    private val mPasswordContentTextView: TextView by bindView(R.id.tv_password_content)
-    private val mPasswordItemRoot: ViewGroup by bindView(R.id.cl_password_item_root)
-    private val mPasswordAvatarImageView: ImageView by bindView(R.id.iv_password_avatar)
-    private val mShowPasswordButton: Button by bindView(R.id.btn_password_visibility_action)
-    private val mSelectedStateImageView: ImageView by bindView(R.id.iv_item_selected)
-    private val mShowPasswordItemActionsButton: ImageView by bindView(R.id.iv_password_item_action)
-
     fun bindPasswordListItemView(passwordItemModel: PasswordItemModel) {
-        mPasswordNameTextView.text = passwordItemModel.name
-        mPasswordContentTextView.text = getPasswordContentText(passwordItemModel)
-        mPasswordContentTextView.setVisibility(passwordItemModel.isPasswordContentNeeds)
+        itemView.tvPasswordName.text = passwordItemModel.name
+        itemView.tvPasswordContent.text = getPasswordContentText(passwordItemModel)
+        itemView.tvPasswordContent.setVisibility(passwordItemModel.isPasswordContentNeeds)
 
-        mShowPasswordButton.text = getVisibilityPasswordButtonText(
+        itemView.btnPasswordVisibilityAction.text = getVisibilityPasswordButtonText(
             passwordItemModel.isPasswordContentVisible
         )
 
@@ -57,24 +45,26 @@ class PasswordsListItemViewHolder(
         initAdditionalItemClickListeners(passwordItemModel)
 
         val rootBackgroundResource = getRootItemBackground(passwordItemModel.isItemSelected)
-        mPasswordItemRoot.setBackgroundResource(rootBackgroundResource)
+        itemView.vPasswordItemRoot.setBackgroundResource(rootBackgroundResource)
 
         if (!passwordItemModel.isInActionModeState) {
-            mSelectedStateImageView.setVisibilityInvisible(false)
+            itemView.ivItemSelected.setVisibilityInvisible(false)
         } else {
-            mSelectedStateImageView.setVisibilityInvisible(passwordItemModel.isItemSelected)
+            itemView.ivItemSelected.setVisibilityInvisible(passwordItemModel.isItemSelected)
         }
 
-        mShowPasswordItemActionsButton.setVisibilityInvisible(!passwordItemModel.isInActionModeState)
+        itemView.ivPasswordItemAction.setVisibilityInvisible(!passwordItemModel.isInActionModeState)
 
         if (passwordItemModel.passwordAvatarBitmap != null) {
-            mPasswordAvatarImageView.setImageBitmap(passwordItemModel.passwordAvatarBitmap)
+            itemView.ivPasswordAvatar.setImageBitmap(passwordItemModel.passwordAvatarBitmap)
         } else {
             val fillColor = itemView.context.getColorCompat(R.color.colorPrimary)
             val textColor = itemView.context.getColorCompat(R.color.colorWhite)
-            val textSizeInPx = itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_inner_text_size)
-            val avatarSizeInPx = itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_avatar_size)
-            mPasswordAvatarImageView.drawTextInner(
+            val textSizeInPx =
+                itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_inner_text_size)
+            val avatarSizeInPx =
+                itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_avatar_size)
+            itemView.ivPasswordAvatar.drawTextInner(
                 avatarSizeInPx,
                 fillColor,
                 textColor,
@@ -86,8 +76,8 @@ class PasswordsListItemViewHolder(
 
     private fun initAdditionalItemClickListeners(passwordItemModel: PasswordItemModel) {
         if (passwordItemModel.isInActionModeState) {
-            for (i in 0..mPasswordItemRoot.childCount) {
-                mPasswordItemRoot.getChildAt(i)?.apply {
+            for (i in 0..itemView.vPasswordItemRoot.childCount) {
+                itemView.vPasswordItemRoot.getChildAt(i)?.apply {
                     isClickable = false
                     isFocusable = false
                 }
@@ -95,14 +85,16 @@ class PasswordsListItemViewHolder(
         } else {
             // init additional listeners
             val passwordId = passwordItemModel.passwordId
-            mShowPasswordButton.setSafeClickListener(PASSWORD_SHOW_ACTION_CLICK_DELAY_IN_MILLIS) {
+            itemView.btnPasswordVisibilityAction.setSafeClickListener(
+                PASSWORD_SHOW_ACTION_CLICK_DELAY_IN_MILLIS
+            ) {
                 onVisibilityPasswordAction(
                     passwordId,
                     !passwordItemModel.isPasswordContentVisible
                 )
             }
 
-            mShowPasswordItemActionsButton.setSafeClickListener {
+            itemView.ivPasswordItemAction.setSafeClickListener {
                 onShowPasswordItemActions(passwordId)
             }
         }

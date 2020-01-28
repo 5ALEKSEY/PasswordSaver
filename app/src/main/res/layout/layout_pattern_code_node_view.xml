@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="@dimen/pattern_code_node_size"
         android:layout_height="@dimen/pattern_code_node_size">
 
     <ImageView
-            android:id="@+id/iv_node_pattern_view"
+            android:id="@+id/ivNodePatternView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_enabled_pattern_node"
@@ -16,4 +16,4 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:background="@drawable/bg_disabled_pattern_node" />
 
-</android.support.constraint.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

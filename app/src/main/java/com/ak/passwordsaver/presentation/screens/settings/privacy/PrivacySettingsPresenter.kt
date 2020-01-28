@@ -1,7 +1,6 @@
 package com.ak.passwordsaver.presentation.screens.settings.privacy
 
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.data.model.PasswordShowingType
 import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.managers.auth.AppLockStateHelper
@@ -9,8 +8,7 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.items.Settings
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners.SpinnerSettingsListItemModel
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.switches.SwitchSettingsListItemModel
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.texts.TextSettingsListItemModel
-import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsPresenter
-import com.arellomobile.mvp.InjectViewState
+import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState

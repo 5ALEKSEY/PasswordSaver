@@ -5,15 +5,15 @@
         tools:background="@color/security_background_color"
         tools:layout_height="match_parent"
         tools:layout_width="match_parent"
-        tools:parentTag="android.support.constraint.ConstraintLayout">
+        tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?android:attr/selectableItemBackgroundBorderless">
 
         <TextView
-                android:id="@+id/tv_primary_number_text"
+                android:id="@+id/tvPrimaryNumberText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -25,7 +25,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-                android:id="@+id/tv_secondary_number_text"
+                android:id="@+id/tvSecondaryNumberText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -35,8 +35,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_primary_number_text" />
+                app:layout_constraintTop_toBottomOf="@+id/tvPrimaryNumberText" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </merge>

@@ -13,7 +13,7 @@ class DataBufferManagerImpl @Inject constructor(
         private const val COPIED_CLIP_DATA_LABEL = "ps_clip_label"
     }
 
-    private val mClipboardManager:ClipboardManager by lazy {
+    private val mClipboardManager: ClipboardManager by lazy {
         context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     }
 

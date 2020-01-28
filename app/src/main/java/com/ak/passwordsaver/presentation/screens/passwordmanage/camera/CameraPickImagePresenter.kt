@@ -4,10 +4,10 @@ import android.graphics.Bitmap
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.data.model.internalstorage.IPSInternalStorageManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
-import com.arellomobile.mvp.InjectViewState
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState

@@ -1,18 +1,16 @@
 package com.ak.passwordsaver.presentation.screens.settings.adapter.items.spinners
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.adapter.AdapterDelegate
 import com.ak.passwordsaver.presentation.screens.settings.adapter.BaseSettingsViewHolder
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
-import com.ak.passwordsaver.utils.bindView
+import kotlinx.android.synthetic.main.settings_item_spinner_layout.view.*
 
 class SpinnerAdapterDelegate(
     private val viewType: Int,
@@ -29,7 +27,10 @@ class SpinnerAdapterDelegate(
         return SettingsSpinnerHolder(itemView, onSpinnerSettingsChanged)
     }
 
-    override fun onBindViewHolder(item: SettingsListItemModel, viewHolder: RecyclerView.ViewHolder) {
+    override fun onBindViewHolder(
+        item: SettingsListItemModel,
+        viewHolder: RecyclerView.ViewHolder
+    ) {
         val itemModel = item as SpinnerSettingsListItemModel
         val holder = viewHolder as SettingsSpinnerHolder
         holder.bindViewHolder(itemModel)
@@ -41,24 +42,27 @@ class SettingsSpinnerHolder(
     private val onSpinnerSettingsChanged: (settingId: Int, newDataId: Int) -> Unit
 ) : BaseSettingsViewHolder<SpinnerSettingsListItemModel>(itemView) {
 
-    private val mSpinner: Spinner by bindView(R.id.s_setting_spinner_chooser)
-    private val mDescription: TextView by bindView(R.id.tv_setting_description)
-
     override fun setViewHolderData(itemModel: SpinnerSettingsListItemModel) {
         val arrayAdapter = ArrayAdapter<String>(itemView.context, R.layout.default_spinner_item)
         val spinnerItems = itemModel.spinnerItems
         arrayAdapter.addAll(spinnerItems)
-        itemView.setOnClickListener { mSpinner.performClick() }
-        mSpinner.adapter = arrayAdapter
-        mSpinner.setSelection(itemModel.selectedItemPosition)
-        mSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
+        itemView.setOnClickListener { itemView.sSettingSpinnerChooser.performClick() }
+        itemView.sSettingSpinnerChooser.adapter = arrayAdapter
+        itemView.sSettingSpinnerChooser.setSelection(itemModel.selectedItemPosition)
+        itemView.sSettingSpinnerChooser.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                onSpinnerSettingsChanged.invoke(adapterPosition, position)
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    onSpinnerSettingsChanged.invoke(adapterPosition, position)
+                }
             }
-        }
-        mDescription.text = itemModel.settingDescription
+        itemView.tvSettingDescription.text = itemModel.settingDescription
     }
 }

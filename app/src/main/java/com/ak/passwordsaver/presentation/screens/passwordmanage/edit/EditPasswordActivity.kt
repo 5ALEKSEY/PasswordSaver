@@ -4,7 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.ak.passwordsaver.presentation.screens.passwordmanage.BaseManagePasswordActivity
-import com.arellomobile.mvp.presenter.InjectPresenter
+import kotlinx.android.synthetic.main.activity_manage_password.*
+import moxy.presenter.InjectPresenter
 
 class EditPasswordActivity : BaseManagePasswordActivity<EditPasswordPresenter>(),
     IEditPasswordView {
@@ -40,7 +41,7 @@ class EditPasswordActivity : BaseManagePasswordActivity<EditPasswordPresenter>()
     }
 
     override fun displayPasswordData(passwordName: String, passwordContent: String) {
-        mPasswordNameEditText.setText(passwordName)
-        mPasswordContentEditText.setText(passwordContent)
+        tietPasswordNameField.setText(passwordName)
+        tietPasswordContentField.setText(passwordContent)
     }
 }

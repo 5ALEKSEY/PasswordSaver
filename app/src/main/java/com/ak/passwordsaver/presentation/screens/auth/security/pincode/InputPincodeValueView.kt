@@ -4,16 +4,13 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.support.constraint.ConstraintLayout
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.utils.bindView
+import kotlinx.android.synthetic.main.layout_input_pincode_value_view.view.*
 
 class InputPincodeValueView(context: Context?, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs) {
@@ -22,8 +19,6 @@ class InputPincodeValueView(context: Context?, attrs: AttributeSet?) :
         private const val SHOW_HIDE_ANIMATION_DURATION = 150L
     }
 
-    private val mInputPincodeValueTextView: TextView by bindView(R.id.tv_input_pincode_value_text)
-    private val mInputPincodeSecretImageView: ImageView by bindView(R.id.iv_input_pincode_secret_image)
     private var mIsSecretPincodeState = false
 
     init {
@@ -33,19 +28,19 @@ class InputPincodeValueView(context: Context?, attrs: AttributeSet?) :
 
     fun showInputPincodeValue(value: String) {
         mIsSecretPincodeState = false
-        mInputPincodeSecretImageView.visibility = View.INVISIBLE
-        mInputPincodeValueTextView.text = value
-        mInputPincodeValueTextView.visibility = View.VISIBLE
-        getAppearAnimationForView(mInputPincodeValueTextView).start()
+        ivInputPincodeSecretImage.visibility = View.INVISIBLE
+        tvInputPincodeValueText.text = value
+        tvInputPincodeValueText.visibility = View.VISIBLE
+        getAppearAnimationForView(tvInputPincodeValueText).start()
     }
 
     fun setSecretStateForPincodeValue() {
         if (!mIsSecretPincodeState) {
-            getDisappearAnimationForView(mInputPincodeValueTextView).start()
+            getDisappearAnimationForView(tvInputPincodeValueText).start()
             postDelayed(
                 {
-                    mInputPincodeValueTextView.visibility = View.INVISIBLE
-                    mInputPincodeSecretImageView.visibility = View.VISIBLE
+                    tvInputPincodeValueText.visibility = View.INVISIBLE
+                    ivInputPincodeSecretImage.visibility = View.VISIBLE
                 },
                 SHOW_HIDE_ANIMATION_DURATION
             )

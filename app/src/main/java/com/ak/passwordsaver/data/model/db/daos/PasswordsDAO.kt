@@ -1,6 +1,11 @@
 package com.ak.passwordsaver.data.model.db.daos
 
-import android.arch.persistence.room.*
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import androidx.room.Update
 import com.ak.passwordsaver.data.model.db.entities.PasswordDBEntity
 import io.reactivex.Flowable
 import io.reactivex.Single

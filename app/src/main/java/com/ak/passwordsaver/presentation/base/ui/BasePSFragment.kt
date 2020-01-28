@@ -2,33 +2,37 @@ package com.ak.passwordsaver.presentation.base.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.support.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.LayoutRes
 import com.ak.passwordsaver.utils.extensions.showToastMessage
 import com.ak.passwordsaver.utils.extensions.vibrate
-import com.arellomobile.mvp.MvpAppCompatFragment
 import dagger.android.support.AndroidSupportInjection
+import moxy.MvpAppCompatFragment
 
 abstract class BasePSFragment : MvpAppCompatFragment(), IBaseAppView {
 
     @LayoutRes
     abstract fun getFragmentLayoutResId(): Int
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return inflater.inflate(getFragmentLayoutResId(), container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewBeforePresenterAttach()
         mvpDelegate.onAttach()
+        initViewAfterPresenterAttach()
     }
 
     override fun showShortTimeMessage(message: String) {
@@ -39,7 +43,7 @@ abstract class BasePSFragment : MvpAppCompatFragment(), IBaseAppView {
         context?.vibrate(vibrateDuration)
     }
 
-    protected open fun initViewBeforePresenterAttach() {
+    protected open fun initViewAfterPresenterAttach() {
 
     }
 }

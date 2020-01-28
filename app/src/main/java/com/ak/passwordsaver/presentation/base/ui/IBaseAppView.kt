@@ -1,6 +1,6 @@
 package com.ak.passwordsaver.presentation.base.ui
 
-import com.arellomobile.mvp.MvpView
+import moxy.MvpView
 
 interface IBaseAppView : MvpView {
     fun showShortTimeMessage(message: String)

@@ -3,22 +3,19 @@ package com.ak.passwordsaver.presentation.screens.passwordmanage.camera
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
-import android.view.TextureView
-import android.view.View
 import android.view.WindowManager
-import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.manager.IPSCameraManager
-import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.setVisibilityInvisible
-import com.arellomobile.mvp.presenter.InjectPresenter
+import kotlinx.android.synthetic.main.activity_camera_pick_image.*
+import moxy.presenter.InjectPresenter
 import javax.inject.Inject
 
 class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
@@ -49,13 +46,6 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
     @Inject
     lateinit var mPSCameraManager: IPSCameraManager
 
-    private val mCameraPreviewView: TextureView by bindView(R.id.texv_camera_pick_image_preview)
-    private val mCancelPickButton: View by bindView(R.id.iv_camera_pick_image_cancel_action)
-    private val mTakeImageButton: View by bindView(R.id.btn_take_image_action)
-    private val mPreviewImage: ImageView by bindView(R.id.iv_preview_image)
-    private val mRemovePickedImagePanelButton: View by bindView(R.id.iv_remove_picked_image_panel_action)
-    private val mChooseImagePanelButton: View by bindView(R.id.iv_choose_image_panel_action)
-
     override fun getScreenLayoutResId() = R.layout.activity_camera_pick_image
 
     override fun onBackPressed() {
@@ -66,24 +56,24 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
         super.initViewBeforePresenterAttach()
         initWindow()
 
-        mPSCameraManager.initCameraManager(false, mCameraPreviewView)
+        mPSCameraManager.initCameraManager(false, texvCameraPickImagePreview)
 
-        mTakeImageButton.setSafeClickListener {
+        btnTakeImageAction.setSafeClickListener {
             mPSCameraManager.takeImage {
                 runOnUiThread { mCameraPickImagePresenter.onImagePicked(it) }
             }
         }
 
-        mCancelPickButton.setSafeClickListener {
+        ivCameraPickImageCancelAction.setSafeClickListener {
             sendCancelResult()
         }
 
         displayTakeImageStrategy()
 
-        mRemovePickedImagePanelButton.setSafeClickListener {
+        ivRemovePickedImagePanelAction.setSafeClickListener {
             mCameraPickImagePresenter.onPickedImageRemoved()
         }
-        mChooseImagePanelButton.setSafeClickListener {
+        ivChooseImagePanelAction.setSafeClickListener {
             mCameraPickImagePresenter.savePickedImageAndFinish()
         }
     }
@@ -106,20 +96,20 @@ class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
     }
 
     override fun displayPreviewImageStrategy(previewBitmap: Bitmap) {
-        mTakeImageButton.setVisibilityInvisible(false)
-        mPreviewImage.setVisibility(true)
-        mPreviewImage.setImageBitmap(previewBitmap)
-        mRemovePickedImagePanelButton.setVisibility(true)
-        mChooseImagePanelButton.setVisibility(true)
+        btnTakeImageAction.setVisibilityInvisible(false)
+        ivPreviewImage.setVisibility(true)
+        ivPreviewImage.setImageBitmap(previewBitmap)
+        ivRemovePickedImagePanelAction.setVisibility(true)
+        ivChooseImagePanelAction.setVisibility(true)
         mPSCameraManager.closeCamera()
     }
 
     override fun displayTakeImageStrategy() {
-        mTakeImageButton.setVisibility(true)
-        mPreviewImage.setVisibility(false)
-        mPreviewImage.setImageBitmap(null)
-        mRemovePickedImagePanelButton.setVisibility(false)
-        mChooseImagePanelButton.setVisibility(false)
+        btnTakeImageAction.setVisibility(true)
+        ivPreviewImage.setVisibility(false)
+        ivPreviewImage.setImageBitmap(null)
+        ivRemovePickedImagePanelAction.setVisibility(false)
+        ivChooseImagePanelAction.setVisibility(false)
         mPSCameraManager.openCamera()
     }
 

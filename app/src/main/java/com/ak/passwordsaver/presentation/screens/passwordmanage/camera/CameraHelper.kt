@@ -82,7 +82,10 @@ object CameraHelper {
         return (sensorOrientation + deviceOrientation + 360) % 360
     }
 
-    private fun getBestPhotoSize(pictureSizes: List<CameraSize>, previewSize: CameraSize): CameraSize {
+    private fun getBestPhotoSize(
+        pictureSizes: List<CameraSize>,
+        previewSize: CameraSize
+    ): CameraSize {
 
         val bestCandidatesList = ArrayList<CameraSize>()
         val worstCandidatesList = ArrayList<CameraSize>()

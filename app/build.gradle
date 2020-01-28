@@ -6,10 +6,9 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
-def appVersion = '28.0.0'
 def daggerVersion = '2.16'
 def moxyVersion = '1.5.3'
-def roomVersion = '1.1.1'
+def roomVersion = '2.2.3'
 def glideVersion = '4.9.0'
 def circleImageViewVersion = '2.2.0'
 def rxJavaVersion = '2.2.2'
@@ -35,7 +34,7 @@ android {
         targetSdkVersion TARGET_SDK_VERSION
         versionCode VERSION_CODE
         versionName VERSION_NAME
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -61,6 +60,11 @@ android {
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "PasswordSaver_${VERSION_NAME}_${variant.buildType.name}.apk"
@@ -75,12 +79,13 @@ kapt {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation "com.android.support:appcompat-v7:$appVersion"
-    implementation "com.android.support:design:$appVersion"
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     // Dagger 2
     implementation "com.google.dagger:dagger:$daggerVersion"
@@ -89,16 +94,14 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     // Moxy 1
-    implementation "com.arello-mobile:moxy:$moxyVersion"
-    kapt "com.arello-mobile:moxy-compiler:$moxyVersion"
-    implementation "com.arello-mobile:moxy-android:$moxyVersion"
-    implementation "com.arello-mobile:moxy-app-compat:$moxyVersion"
+    implementation 'com.github.moxy-community:moxy:2.0.2'
+    implementation 'com.github.moxy-community:moxy-androidx:2.0.2'
 
     // Room
-    implementation "android.arch.persistence.room:runtime:$roomVersion"
-    kapt "android.arch.persistence.room:compiler:$roomVersion"
-    androidTestImplementation "android.arch.persistence.room:testing:$roomVersion"
-    implementation "android.arch.persistence.room:rxjava2:$roomVersion"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+    androidTestImplementation "androidx.room:room-testing:$roomVersion"
+    implementation "androidx.room:room-rxjava2:$roomVersion"
 
     // Circle image view
     implementation "de.hdodenhof:circleimageview:$circleImageViewVersion"
@@ -108,8 +111,8 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
 
     // Recycler and card views
-    implementation "com.android.support:cardview-v7:$appVersion"
-    implementation "com.android.support:recyclerview-v7:$appVersion"
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     // rx
     implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
@@ -130,7 +133,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0"
 
     // lifecycle
-    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     // GSON
     implementation "com.google.code.gson:gson:2.8.6"

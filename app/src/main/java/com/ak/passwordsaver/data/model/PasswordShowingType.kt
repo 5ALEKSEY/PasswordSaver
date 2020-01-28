@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.data.model
 
 import android.content.Context
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.ak.passwordsaver.R
 
 enum class PasswordShowingType(val number: Int, @StringRes val messageStringResId: Int) {

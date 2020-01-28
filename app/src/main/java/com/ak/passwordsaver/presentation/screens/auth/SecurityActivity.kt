@@ -6,22 +6,17 @@ import android.animation.ObjectAnimator
 import android.app.Activity
 import android.content.Intent
 import android.os.Handler
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentActivity
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
-import com.ak.passwordsaver.presentation.screens.auth.security.patterncode.PatternAuthView
-import com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeAuthView
-import com.ak.passwordsaver.utils.bindView
 import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.vibrate
-import com.arellomobile.mvp.presenter.InjectPresenter
-
+import kotlinx.android.synthetic.main.activity_security.*
+import moxy.presenter.InjectPresenter
 
 class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
 
@@ -63,11 +58,6 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     @InjectPresenter
     lateinit var mSecurityPresenter: SecurityPresenter
 
-    private val mPincodeAuthView: PincodeAuthView by bindView(R.id.v_pincode_auth_view)
-    private val mPatternAuthView: PatternAuthView by bindView(R.id.v_pattern_auth_view)
-    private val mSecurityMessageText: TextView by bindView(R.id.tv_security_message_text)
-    private val mSecurityInputTypeImageView: ImageView by bindView(R.id.iv_security_input_type_change_action)
-
     override fun getScreenLayoutResId() = R.layout.activity_security
 
     override fun onBackPressed() {
@@ -78,45 +68,45 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
         super.initViewBeforePresenterAttach()
         intent?.let { initAuthState(it) }
 
-        mPatternAuthView.mOnFinishedAction = mSecurityPresenter::onUserAuthFinished
-        mPincodeAuthView.mOnFinishedAction = mSecurityPresenter::onUserAuthFinished
-        mPincodeAuthView.setPincodeValuesCount(PINCODE_INPUT_VALUES_COUNT)
+        vPatternAuthView.mOnFinishedAction = mSecurityPresenter::onUserAuthFinished
+        cPincodeAuthView.mOnFinishedAction = mSecurityPresenter::onUserAuthFinished
+        cPincodeAuthView.setPincodeValuesCount(PINCODE_INPUT_VALUES_COUNT)
 
-        mSecurityInputTypeImageView.setSafeClickListener(CHANGE_AUTH_INPUT_METHOD_CLICK_DELAY) {
+        ivSecurityInputTypeChangeAction.setSafeClickListener(CHANGE_AUTH_INPUT_METHOD_CLICK_DELAY) {
             mSecurityPresenter.onSecurityInputTypeChangeClicked()
         }
     }
 
     override fun showSecurityMessage(message: String, withAnimation: Boolean) {
-        mSecurityMessageText.visibility = View.VISIBLE
-        mSecurityMessageText.text = message
+        tvSecurityMessageText.visibility = View.VISIBLE
+        tvSecurityMessageText.text = message
         if (withAnimation) {
             val shakeAnimation = AnimationUtils.loadAnimation(this, R.anim.small_shake)
-            mSecurityMessageText.startAnimation(shakeAnimation)
+            tvSecurityMessageText.startAnimation(shakeAnimation)
         }
     }
 
     override fun hideSecurityMessage() {
-        mSecurityMessageText.visibility = View.INVISIBLE
+        tvSecurityMessageText.visibility = View.INVISIBLE
     }
 
     override fun showFailedPincodeAuthAction() {
-        mPincodeAuthView.setFailedAuthViewState()
+        cPincodeAuthView.setFailedAuthViewState()
     }
 
     override fun showFailedPatternAuthAction() {
-        mPatternAuthView.setFailedAuthViewState()
+        vPatternAuthView.setFailedAuthViewState()
     }
 
     override fun lockSecurityInputViews() {
         vibrate(LOCK_VIBRATION_DELAY)
-        mPincodeAuthView.setPincodeInputLockedState(true)
-        mPatternAuthView.setAuthViewInputLockState(true)
+        cPincodeAuthView.setPincodeInputLockedState(true)
+        vPatternAuthView.setAuthViewInputLockState(true)
     }
 
     override fun unlockSecurityInputViews() {
-        mPincodeAuthView.setPincodeInputLockedState(false)
-        mPatternAuthView.setAuthViewInputLockState(false)
+        cPincodeAuthView.setPincodeInputLockedState(false)
+        vPatternAuthView.setAuthViewInputLockState(false)
     }
 
     override fun sendAuthActionResult(isSuccessfully: Boolean) {
@@ -128,8 +118,8 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     override fun switchAuthMethod(isPincode: Boolean, withAnimation: Boolean) {
         val switchDuration = if (withAnimation) SWITCH_AUTH_METHOD_DURATION else 0L
 
-        val appearView = if (isPincode) mPincodeAuthView else mPatternAuthView
-        val disappearView = if (!isPincode) mPincodeAuthView else mPatternAuthView
+        val appearView = if (isPincode) cPincodeAuthView else vPatternAuthView
+        val disappearView = if (!isPincode) cPincodeAuthView else vPatternAuthView
 
         val appearAnim = getAppearAnimationForView(appearView, switchDuration)
         val disappearAnim = getDisappearAnimationForView(disappearView, switchDuration)
@@ -143,11 +133,11 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
     }
 
     override fun lockSwitchAuthMethod() {
-        mSecurityInputTypeImageView.visibility = View.GONE
+        ivSecurityInputTypeChangeAction.visibility = View.GONE
     }
 
     override fun unlockSwitchAuthMethod() {
-        mSecurityInputTypeImageView.visibility = View.VISIBLE
+        ivSecurityInputTypeChangeAction.visibility = View.VISIBLE
     }
 
     private fun initAuthState(intent: Intent) {
@@ -161,7 +151,7 @@ class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
 
     private fun setSecurityInputTypeIcon(isPincode: Boolean) {
         (if (!isPincode) R.drawable.ic_pincode_input_type
-        else R.drawable.ic_pattern_input_type).let(mSecurityInputTypeImageView::setImageResource)
+        else R.drawable.ic_pattern_input_type).let(ivSecurityInputTypeChangeAction::setImageResource)
     }
 
     private fun getAppearAnimationForView(view: View, duration: Long): AnimatorSet {
