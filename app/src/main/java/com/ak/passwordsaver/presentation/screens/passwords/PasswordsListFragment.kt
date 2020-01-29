@@ -41,8 +41,8 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     override fun getFragmentLayoutResId() = R.layout.fragment_passwords_list
 
-    override fun initViewAfterPresenterAttach() {
-        super.initViewAfterPresenterAttach()
+    override fun initViewBeforePresenterAttach() {
+        super.initViewBeforePresenterAttach()
         initRecyclerView()
         initToolbar()
 

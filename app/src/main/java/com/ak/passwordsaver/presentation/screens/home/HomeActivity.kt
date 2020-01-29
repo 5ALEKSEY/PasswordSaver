@@ -10,14 +10,23 @@ import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListFragment
 import com.ak.passwordsaver.presentation.screens.settings.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.Lazy
 import kotlinx.android.synthetic.main.activity_home.*
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
+import javax.inject.Inject
 
 class HomeActivity : BasePSFragmentActivity(),
     BottomNavigationView.OnNavigationItemSelectedListener, IHomeView {
 
+    @Inject
+    lateinit var daggerPresenter: Lazy<HomePresenter>
+
     @InjectPresenter
     lateinit var mHomePresenter: HomePresenter
+
+    @ProvidePresenter
+    fun providePresenter(): HomePresenter = daggerPresenter.get()
 
     override fun getScreenLayoutResId() = R.layout.activity_home
 

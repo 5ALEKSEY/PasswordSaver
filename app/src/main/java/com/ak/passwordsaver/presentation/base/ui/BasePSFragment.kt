@@ -31,8 +31,8 @@ abstract class BasePSFragment : MvpAppCompatFragment(), IBaseAppView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViewBeforePresenterAttach()
         mvpDelegate.onAttach()
-        initViewAfterPresenterAttach()
     }
 
     override fun showShortTimeMessage(message: String) {
@@ -43,7 +43,7 @@ abstract class BasePSFragment : MvpAppCompatFragment(), IBaseAppView {
         context?.vibrate(vibrateDuration)
     }
 
-    protected open fun initViewAfterPresenterAttach() {
+    protected open fun initViewBeforePresenterAttach() {
 
     }
 }

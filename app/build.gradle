@@ -37,6 +37,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        disableEmptyStrategyCheck: 'true',
+                        enableEmptyStrategyHelper: 'false',
+                ]
+            }
+        }
     }
     buildTypes {
         release {
@@ -93,9 +102,10 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
-    // Moxy 1
+    // Moxy 2
     implementation 'com.github.moxy-community:moxy:2.0.2'
     implementation 'com.github.moxy-community:moxy-androidx:2.0.2'
+    kapt 'com.github.moxy-community:moxy-compiler:2.0.2'
 
     // Room
     implementation "androidx.room:room-runtime:$roomVersion"

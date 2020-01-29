@@ -31,8 +31,8 @@ class SettingsFragment : BasePSFragment(), ISettingsView {
 
     override fun getFragmentLayoutResId() = R.layout.fragment_settings
 
-    override fun initViewAfterPresenterAttach() {
-        super.initViewAfterPresenterAttach()
+    override fun initViewBeforePresenterAttach() {
+        super.initViewBeforePresenterAttach()
         initToolbar()
         initRecyclerView()
     }
