@@ -17,9 +17,9 @@ import javax.inject.Inject
 abstract class BaseManagePasswordPresenter<MV : IBaseManagePasswordView> : BasePSPresenter<MV>() {
 
     @Inject
-    lateinit var mBitmapDecoderManager: IBitmapDecoderManager
+    lateinit var bitmapDecoderManager: IBitmapDecoderManager
     @Inject
-    lateinit var mPSInternalStorageManager: IPSInternalStorageManager
+    lateinit var internalStorageManager: IPSInternalStorageManager
 
     private var mNameChangeDis: Disposable? = null
     private var mIsAvatarDisplayed = false
@@ -47,9 +47,9 @@ abstract class BaseManagePasswordPresenter<MV : IBaseManagePasswordView> : BaseP
     }
 
     fun onGalleryAvatarSelected(avatarUriPath: String) {
-        val bitmapImage = mBitmapDecoderManager.decodeBitmap(avatarUriPath)
+        val bitmapImage = bitmapDecoderManager.decodeBitmap(avatarUriPath)
         bitmapImage?.let {
-            val fileImagePath = mPSInternalStorageManager.saveBitmapImage(it)
+            val fileImagePath = internalStorageManager.saveBitmapImage(it)
             if (fileImagePath != null) {
                 mSelectedAvatarPath = fileImagePath
                 viewState.displayPasswordAvatarChooserImage(it)
@@ -60,7 +60,7 @@ abstract class BaseManagePasswordPresenter<MV : IBaseManagePasswordView> : BaseP
     }
 
     fun onCameraImageSelected(fileImagePath: String) {
-        val bitmap = mPSInternalStorageManager.getBitmapImageFromPath(fileImagePath)
+        val bitmap = internalStorageManager.getBitmapImageFromPath(fileImagePath)
         bitmap?.let {
             mSelectedAvatarPath = fileImagePath
             viewState.displayPasswordAvatarChooserImage(it)

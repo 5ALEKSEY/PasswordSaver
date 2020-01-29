@@ -13,7 +13,7 @@ import com.ak.passwordsaver.utils.extensions.getColorCompat
 import kotlinx.android.synthetic.main.activity_about_settings.*
 import moxy.presenter.InjectPresenter
 
-class AboutSettingsActivity : BasePSFragmentActivity(), IAboutSettingsView {
+class AboutSettingsActivity : BasePSFragmentActivity<AboutSettingsPresenter>(), IAboutSettingsView {
 
     companion object {
         fun startActivity(context: Context) {

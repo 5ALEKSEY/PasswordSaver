@@ -11,7 +11,8 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.items.Settings
 import kotlinx.android.synthetic.main.activity_design_settings.*
 import moxy.presenter.InjectPresenter
 
-class DesignSettingsActivity : BasePSFragmentActivity(), IDesignSettingsView {
+class DesignSettingsActivity : BasePSFragmentActivity<DesignSettingsPresenter>(),
+    IDesignSettingsView {
 
     companion object {
         fun startActivity(context: Context) {

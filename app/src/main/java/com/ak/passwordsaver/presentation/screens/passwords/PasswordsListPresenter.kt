@@ -17,16 +17,12 @@ import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState
-class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
-
-    @Inject
-    lateinit var mPasswordsInteractor: IPasswordsInteractor
-    @Inject
-    lateinit var mSettingsPreferencesManager: ISettingsPreferencesManager
-    @Inject
-    lateinit var mPSInternalStorageManager: IPSInternalStorageManager
-    @Inject
-    lateinit var mDataBufferManager: IDataBufferManager
+class PasswordsListPresenter @Inject constructor(
+    private val passwordsInteractor: IPasswordsInteractor,
+    private val settingsPreferencesManager: ISettingsPreferencesManager,
+    private val internalStorageManager: IPSInternalStorageManager,
+    private val dataBufferManager: IDataBufferManager
+) : BasePSPresenter<IPasswordsListView>() {
 
     private var mCurrentPasswordId = 0L
 
@@ -52,7 +48,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     // from actions bottom sheet dialog
     fun onCopyPasswordAction() {
         getPasswordDataAndStartAction {
-            mDataBufferManager.copyStringData(it.passwordContent)
+            dataBufferManager.copyStringData(it.passwordContent)
             viewState.showShortTimeMessage("Copied to clipboard")
             mCurrentPasswordId = 0L
         }
@@ -64,7 +60,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     fun onDeletePasswordAction() {
-        mPasswordsInteractor.deletePasswordById(mCurrentPasswordId)
+        passwordsInteractor.deletePasswordById(mCurrentPasswordId)
             .observeOn(AndroidSchedulers.mainThread())
             .doFinally { mCurrentPasswordId = 0L }
             .subscribe(
@@ -78,7 +74,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     private fun startShowingPassword(newVisibilityState: Boolean, passwordId: Long) {
-        val showingType = mSettingsPreferencesManager.getPasswordShowingType()
+        val showingType = settingsPreferencesManager.getPasswordShowingType()
 
         if (showingType == PasswordShowingType.IN_CARD && !newVisibilityState) {
             // hide password content for 'in card' mode
@@ -99,7 +95,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     private inline fun getPasswordDataAndStartAction(crossinline action: (entity: PasswordDBEntity) -> Unit) {
-        mPasswordsInteractor.getPasswordById(mCurrentPasswordId)
+        passwordsInteractor.getPasswordById(mCurrentPasswordId)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
@@ -113,7 +109,7 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     private fun loadPasswords() {
-        mPasswordsInteractor.getAllPasswords()
+        passwordsInteractor.getAllPasswords()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
@@ -143,11 +139,11 @@ class PasswordsListPresenter : BasePSPresenter<IPasswordsListView>() {
     }
 
     private fun convertDBEntitiesList(entitiesList: List<PasswordDBEntity>): List<PasswordItemModel> {
-        val showingType = mSettingsPreferencesManager.getPasswordShowingType()
+        val showingType = settingsPreferencesManager.getPasswordShowingType()
         val resultList = arrayListOf<PasswordItemModel>()
         entitiesList.forEach {
             val avatarBitmap =
-                mPSInternalStorageManager.getBitmapImageFromPath(it.passwordAvatarPath)
+                internalStorageManager.getBitmapImageFromPath(it.passwordAvatarPath)
             resultList.add(
                 PasswordItemModel(
                     it.passwordId!!,

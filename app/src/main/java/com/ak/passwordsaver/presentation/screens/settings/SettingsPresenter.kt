@@ -9,16 +9,15 @@ import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState
-class SettingsPresenter : BasePSPresenter<ISettingsView>() {
+class SettingsPresenter @Inject constructor(
+    private val settingsPreferencesManager: ISettingsPreferencesManager
+) : BasePSPresenter<ISettingsView>() {
 
     companion object {
         const val DESIGN_SECTION_SETTING_ID = 1
         const val PRIVACY_SECTION_SETTING_ID = 2
         const val ABOUT_SECTION_SETTING_ID = 3
     }
-
-    @Inject
-    lateinit var mSettingsPreferencesManager: ISettingsPreferencesManager
 
     init {
         PSApplication.appInstance.getApplicationComponent().inject(this)
@@ -35,7 +34,7 @@ class SettingsPresenter : BasePSPresenter<ISettingsView>() {
                 viewState.showDesignSettings()
             }
             PRIVACY_SECTION_SETTING_ID -> {
-                val isAuthEnabled = mSettingsPreferencesManager.isPincodeEnabled()
+                val isAuthEnabled = settingsPreferencesManager.isPincodeEnabled()
                 if (isAuthEnabled) {
                     viewState.startAuthAndOpenPrivacySettings()
                 } else {

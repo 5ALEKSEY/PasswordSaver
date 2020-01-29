@@ -9,10 +9,9 @@ import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState
-class EditPasswordPresenter : BaseManagePasswordPresenter<IEditPasswordView>() {
-
-    @Inject
-    lateinit var mPasswordsInteractor: IPasswordsInteractor
+class EditPasswordPresenter @Inject constructor(
+    private val passwordsInteractor: IPasswordsInteractor
+) : BaseManagePasswordPresenter<IEditPasswordView>() {
 
     private var mPasswordEntityForEdit: PasswordDBEntity? = null
 
@@ -21,7 +20,7 @@ class EditPasswordPresenter : BaseManagePasswordPresenter<IEditPasswordView>() {
     }
 
     fun loadPasswordData(passwordId: Long) {
-        mPasswordsInteractor.getPasswordById(passwordId)
+        passwordsInteractor.getPasswordById(passwordId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { passwordEntity ->
@@ -50,7 +49,7 @@ class EditPasswordPresenter : BaseManagePasswordPresenter<IEditPasswordView>() {
             it.passwordAvatarPath = mSelectedAvatarPath ?: ""
         }
 
-        mPasswordsInteractor.updatePassword(updatedPassword)
+        passwordsInteractor.updatePassword(updatedPassword)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { isSuccess ->

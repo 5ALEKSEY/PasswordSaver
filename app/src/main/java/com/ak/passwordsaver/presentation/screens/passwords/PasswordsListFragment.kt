@@ -21,10 +21,14 @@ import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.turnOffToolbarScrolling
 import com.ak.passwordsaver.utils.extensions.turnOnToolbarScrolling
+import dagger.Lazy
 import kotlinx.android.synthetic.main.fragment_passwords_list.*
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
+import javax.inject.Inject
 
-class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsActionModeView {
+class PasswordsListFragment : BasePSFragment<PasswordsListPresenter>(), IPasswordsListView,
+    IPasswordsActionModeView {
 
     companion object {
         fun getInstance() = PasswordsListFragment()
@@ -32,8 +36,15 @@ class PasswordsListFragment : BasePSFragment(), IPasswordsListView, IPasswordsAc
 
     @InjectPresenter
     lateinit var mPasswordsListPresenter: PasswordsListPresenter
+
     @InjectPresenter
     lateinit var mPasswordsActionModePresenter: PasswordsActionModePresenter
+
+    @Inject
+    lateinit var daggerActionModePresenter: Lazy<PasswordsActionModePresenter>
+
+    @ProvidePresenter
+    fun provideActionModePresenter(): PasswordsActionModePresenter = daggerActionModePresenter.get()
 
     private var tbPasswordsListBarActionMode: ActionMode? = null
     private var mPasswordActionsDialog: PasswordActionsBottomSheetDialog? = null

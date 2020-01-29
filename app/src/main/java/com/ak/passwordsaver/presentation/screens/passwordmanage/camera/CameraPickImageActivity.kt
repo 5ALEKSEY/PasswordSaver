@@ -18,7 +18,8 @@ import kotlinx.android.synthetic.main.activity_camera_pick_image.*
 import moxy.presenter.InjectPresenter
 import javax.inject.Inject
 
-class CameraPickImageActivity : BasePSFragmentActivity(), ICameraPickImageView {
+class CameraPickImageActivity : BasePSFragmentActivity<CameraPickImagePresenter>(),
+    ICameraPickImageView {
 
     companion object {
         const val PICKED_IMAGE_PATH_KEY_EXTRA = "picked_image_path"

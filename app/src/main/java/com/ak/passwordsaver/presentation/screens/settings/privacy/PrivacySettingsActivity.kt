@@ -14,7 +14,8 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.items.Settings
 import kotlinx.android.synthetic.main.activity_privacy_settings.*
 import moxy.presenter.InjectPresenter
 
-class PrivacySettingsActivity : BasePSFragmentActivity(), IPrivacySettingsView {
+class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>(),
+    IPrivacySettingsView {
 
     companion object {
         fun startActivity(context: Context) {

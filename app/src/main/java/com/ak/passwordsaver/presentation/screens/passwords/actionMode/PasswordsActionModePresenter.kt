@@ -8,10 +8,9 @@ import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState
-class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>() {
-
-    @Inject
-    lateinit var mPasswordsInteractor: IPasswordsInteractor
+class PasswordsActionModePresenter @Inject constructor(
+    private val passwordsInteractor: IPasswordsInteractor
+) : BasePSPresenter<IPasswordsActionModeView>() {
 
     private var mSelectedPasswordsIdsList = arrayListOf<Long>()
     private var mIsSelectedModeActive = false
@@ -60,7 +59,7 @@ class PasswordsActionModePresenter : BasePSPresenter<IPasswordsActionModeView>()
 
     fun onDeleteSelectedInActionMode() {
         if (mSelectedPasswordsIdsList.isNotEmpty()) {
-            mPasswordsInteractor.deletePasswordsByIds(mSelectedPasswordsIdsList)
+            passwordsInteractor.deletePasswordsByIds(mSelectedPasswordsIdsList)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {

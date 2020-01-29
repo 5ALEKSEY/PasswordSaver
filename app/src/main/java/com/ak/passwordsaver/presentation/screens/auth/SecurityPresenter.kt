@@ -13,7 +13,9 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @InjectViewState
-class SecurityPresenter : BasePSPresenter<ISecurityView>() {
+class SecurityPresenter @Inject constructor(
+    private val settingsPreferencesManager: ISettingsPreferencesManager
+) : BasePSPresenter<ISecurityView>() {
 
     companion object {
         const val AUTH_SECURITY_ACTION_TYPE = 1
@@ -25,9 +27,6 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
         private const val MAX_FAILED_ATTEMPTS_COUNT = 5
         private const val MIN_CODE_LENGTH = 5
     }
-
-    @Inject
-    lateinit var mSettingsPreferencesManager: ISettingsPreferencesManager
 
     var mAuthActionType = AUTH_SECURITY_ACTION_TYPE
     private var mIsPincodeAuthMethod = true
@@ -54,10 +53,10 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
         when (mAuthActionType) {
             AUTH_SECURITY_ACTION_TYPE -> {
                 viewState.switchAuthMethod(mIsPincodeAuthMethod)
-                if (mSettingsPreferencesManager.isPatternEnabled()) {
+                if (settingsPreferencesManager.isPatternEnabled()) {
                     viewState.unlockSwitchAuthMethod()
                 }
-                val blockSecurityInputTime = mSettingsPreferencesManager.getBlockSecurityInputTime()
+                val blockSecurityInputTime = settingsPreferencesManager.getBlockSecurityInputTime()
                 val leftBlockInterval = (System.currentTimeMillis() - blockSecurityInputTime) / 1000
                 if (leftBlockInterval > AppConstants.BLOCK_SECURITY_INPUT_DELAY) {
                     resetAttemptsAndUnlockSecurityInput()
@@ -125,12 +124,12 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
                     viewState.hideSecurityMessage()
                     when (mAuthActionType) {
                         ADD_PINCODE_SECURITY_ACTION_TYPE -> {
-                            mSettingsPreferencesManager.setPincodeEnableState(true)
-                            mSettingsPreferencesManager.setUserPincodeValue(mAddSecurityConfirmCode)
+                            settingsPreferencesManager.setPincodeEnableState(true)
+                            settingsPreferencesManager.setUserPincodeValue(mAddSecurityConfirmCode)
                         }
                         ADD_PATTERN_SECURITY_ACTION_TYPE -> {
-                            mSettingsPreferencesManager.setPatternEnableState(true)
-                            mSettingsPreferencesManager.setUserPatternValue(mAddSecurityConfirmCode)
+                            settingsPreferencesManager.setPatternEnableState(true)
+                            settingsPreferencesManager.setUserPatternValue(mAddSecurityConfirmCode)
                         }
                     }
                     viewState.sendAuthActionResult(true)
@@ -175,7 +174,7 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
                 showFailedActionViewState()
             }
             else -> {
-                mSettingsPreferencesManager.setBlockSecurityInputTime(System.currentTimeMillis())
+                settingsPreferencesManager.setBlockSecurityInputTime(System.currentTimeMillis())
                 startBlockSecurityInputTimer(AppConstants.BLOCK_SECURITY_INPUT_DELAY)
                 viewState.lockSecurityInputViews()
             }
@@ -183,8 +182,8 @@ class SecurityPresenter : BasePSPresenter<ISecurityView>() {
     }
 
     private fun isSuccessfulUserInputCode(inputCode: String): Boolean {
-        val userPincode = mSettingsPreferencesManager.getUserPincodeValue()
-        val userPatternCode = mSettingsPreferencesManager.getUserPatternValue()
+        val userPincode = settingsPreferencesManager.getUserPincodeValue()
+        val userPatternCode = settingsPreferencesManager.getUserPatternValue()
         val codeForCheck = if (mIsPincodeAuthMethod) userPincode else userPatternCode
         return inputCode == codeForCheck
     }

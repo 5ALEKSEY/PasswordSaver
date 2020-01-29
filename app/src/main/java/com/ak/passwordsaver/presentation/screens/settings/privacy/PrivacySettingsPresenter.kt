@@ -12,7 +12,9 @@ import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState
-class PrivacySettingsPresenter : BasePSPresenter<IPrivacySettingsView>() {
+class PrivacySettingsPresenter @Inject constructor(
+    private val settingsPreferencesManager: ISettingsPreferencesManager
+) : BasePSPresenter<IPrivacySettingsView>() {
 
     companion object {
         private const val PINCODE_ENABLE_SETTINGS_ID = 1
@@ -21,9 +23,6 @@ class PrivacySettingsPresenter : BasePSPresenter<IPrivacySettingsView>() {
         private const val PATTERN_ENABLE_SETTINGS_ID = 4
         private const val PATTERN_CHANGE_SETTINGS_ID = 5
     }
-
-    @Inject
-    lateinit var mSettingsPreferencesManager: ISettingsPreferencesManager
 
     init {
         PSApplication.appInstance.getApplicationComponent().inject(this)
@@ -64,7 +63,7 @@ class PrivacySettingsPresenter : BasePSPresenter<IPrivacySettingsView>() {
     fun onSpinnerItemChanged(settingId: Int, newDataId: Int) {
         when (settingId) {
             LOCK_DELAY_CHANGE_SETTINGS_ID -> {
-                mSettingsPreferencesManager.setLockAppStateChoose(
+                settingsPreferencesManager.setLockAppStateChoose(
                     AppLockStateHelper.convertFromLockStateId(newDataId)
                 )
             }
@@ -73,7 +72,7 @@ class PrivacySettingsPresenter : BasePSPresenter<IPrivacySettingsView>() {
 
     fun loadSettingsData() {
         // Pincode
-        val isPincodeEnabled = mSettingsPreferencesManager.isPincodeEnabled()
+        val isPincodeEnabled = settingsPreferencesManager.isPincodeEnabled()
         val pincodeSwitchItemModel = SwitchSettingsListItemModel(
             PINCODE_ENABLE_SETTINGS_ID,
             "Pincode",
@@ -91,8 +90,8 @@ class PrivacySettingsPresenter : BasePSPresenter<IPrivacySettingsView>() {
             items.add(pincodeChangeTextItemModel)
 
             // Change lock delay
-            val selectedDelayId = mSettingsPreferencesManager.getLockAppStateChoose().lockStateId
-            val lockDelaysList = mSettingsPreferencesManager.getLockAppStatesList()
+            val selectedDelayId = settingsPreferencesManager.getLockAppStateChoose().lockStateId
+            val lockDelaysList = settingsPreferencesManager.getLockAppStatesList()
             val lockDelayChangeSpinnerItemModel = SpinnerSettingsListItemModel(
                 LOCK_DELAY_CHANGE_SETTINGS_ID,
                 "Lock delay",
@@ -103,7 +102,7 @@ class PrivacySettingsPresenter : BasePSPresenter<IPrivacySettingsView>() {
             items.add(lockDelayChangeSpinnerItemModel)
 
             // Pattern
-            val isPatternEnabled = mSettingsPreferencesManager.isPatternEnabled()
+            val isPatternEnabled = settingsPreferencesManager.isPatternEnabled()
             val patternSwitchItemModel = SwitchSettingsListItemModel(
                 PATTERN_ENABLE_SETTINGS_ID,
                 "Pattern",
@@ -126,13 +125,13 @@ class PrivacySettingsPresenter : BasePSPresenter<IPrivacySettingsView>() {
     }
 
     private fun deleteUserPincodeData() {
-        mSettingsPreferencesManager.setPincodeEnableState(false)
-        mSettingsPreferencesManager.setUserPincodeValue("")
+        settingsPreferencesManager.setPincodeEnableState(false)
+        settingsPreferencesManager.setUserPincodeValue("")
         deleteUserPatternCodeData()
     }
 
     private fun deleteUserPatternCodeData() {
-        mSettingsPreferencesManager.setPatternEnableState(false)
-        mSettingsPreferencesManager.setUserPatternValue("")
+        settingsPreferencesManager.setPatternEnableState(false)
+        settingsPreferencesManager.setUserPatternValue("")
     }
 }

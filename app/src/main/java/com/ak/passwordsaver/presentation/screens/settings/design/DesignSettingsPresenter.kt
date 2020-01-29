@@ -9,14 +9,13 @@ import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState
-class DesignSettingsPresenter : BasePSPresenter<IDesignSettingsView>() {
+class DesignSettingsPresenter @Inject constructor(
+    private val settingsPreferencesManager: ISettingsPreferencesManager
+) : BasePSPresenter<IDesignSettingsView>() {
 
     companion object {
         const val SHOWING_TYPE_SETTING_ID = 1
     }
-
-    @Inject
-    lateinit var mSettingsPreferencesManager: ISettingsPreferencesManager
 
     init {
         PSApplication.appInstance.getApplicationComponent().inject(this)
@@ -30,7 +29,7 @@ class DesignSettingsPresenter : BasePSPresenter<IDesignSettingsView>() {
     fun settingSpinnerItemChanged(settingId: Int, newDataId: Int) {
         when (settingId) {
             SHOWING_TYPE_SETTING_ID -> {
-                mSettingsPreferencesManager.setPasswordShowingType(
+                settingsPreferencesManager.setPasswordShowingType(
                     PasswordShowingType.getTypeByNumber(
                         newDataId
                     )
@@ -41,8 +40,8 @@ class DesignSettingsPresenter : BasePSPresenter<IDesignSettingsView>() {
 
     private fun loadSettingsData() {
         // Showing Type
-        val showingType = mSettingsPreferencesManager.getPasswordShowingType()
-        val showingTypeList = mSettingsPreferencesManager.getStringListOfPasswordShowingTypes()
+        val showingType = settingsPreferencesManager.getPasswordShowingType()
+        val showingTypeList = settingsPreferencesManager.getStringListOfPasswordShowingTypes()
         val showingTypeSpinnerItem =
             SpinnerSettingsListItemModel(
                 SHOWING_TYPE_SETTING_ID,

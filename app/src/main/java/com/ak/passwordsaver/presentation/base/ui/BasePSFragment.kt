@@ -6,12 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.utils.extensions.showToastMessage
 import com.ak.passwordsaver.utils.extensions.vibrate
+import dagger.Lazy
 import dagger.android.support.AndroidSupportInjection
 import moxy.MvpAppCompatFragment
+import moxy.presenter.ProvidePresenter
+import javax.inject.Inject
 
-abstract class BasePSFragment : MvpAppCompatFragment(), IBaseAppView {
+abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFragment(),
+    IBaseAppView {
+
+    @Inject
+    lateinit var daggerPresenter: Lazy<Presenter>
+
+    @ProvidePresenter
+    fun providePresenter(): Presenter = daggerPresenter.get()
 
     @LayoutRes
     abstract fun getFragmentLayoutResId(): Int

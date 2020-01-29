@@ -11,10 +11,9 @@ import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState
-class CameraPickImagePresenter : BasePSPresenter<ICameraPickImageView>() {
-
-    @Inject
-    lateinit var mPSInternalStorageManager: IPSInternalStorageManager
+class CameraPickImagePresenter @Inject constructor(
+    private val internalStorageManager: IPSInternalStorageManager
+) : BasePSPresenter<ICameraPickImageView>() {
 
     private var mPickedImageBitmap: Bitmap? = null
 
@@ -37,7 +36,7 @@ class CameraPickImagePresenter : BasePSPresenter<ICameraPickImageView>() {
             return
         }
 
-        Single.fromCallable { mPSInternalStorageManager.saveBitmapImage(mPickedImageBitmap!!) }
+        Single.fromCallable { internalStorageManager.saveBitmapImage(mPickedImageBitmap!!) }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(

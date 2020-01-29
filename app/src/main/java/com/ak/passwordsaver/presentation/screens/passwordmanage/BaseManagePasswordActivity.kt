@@ -32,10 +32,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPresenter<*>>
-    : BasePSFragmentActivity(), IBaseManagePasswordView {
+    : BasePSFragmentActivity<ManagePresenter>(), IBaseManagePasswordView {
 
     @Inject
     lateinit var mGalleryManager: IPSGalleryManager
+
     private lateinit var mAvatarChooserDialog: PhotoChooserBottomSheetDialog
 
     protected abstract fun getPresenter(): ManagePresenter

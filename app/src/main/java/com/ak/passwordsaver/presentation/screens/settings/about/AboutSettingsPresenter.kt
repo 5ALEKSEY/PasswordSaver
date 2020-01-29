@@ -4,9 +4,10 @@ import com.ak.passwordsaver.BuildConfig
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import moxy.InjectViewState
+import javax.inject.Inject
 
 @InjectViewState
-class AboutSettingsPresenter : BasePSPresenter<IAboutSettingsView>() {
+class AboutSettingsPresenter @Inject constructor() : BasePSPresenter<IAboutSettingsView>() {
 
     companion object {
         const val REPORT_ABOUT_ACTION_ID = 0

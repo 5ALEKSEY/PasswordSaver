@@ -18,7 +18,7 @@ import com.ak.passwordsaver.presentation.screens.settings.privacy.PrivacySetting
 import kotlinx.android.synthetic.main.fragment_settings.*
 import moxy.presenter.InjectPresenter
 
-class SettingsFragment : BasePSFragment(), ISettingsView {
+class SettingsFragment : BasePSFragment<SettingsPresenter>(), ISettingsView {
 
     companion object {
         fun getInstance() = SettingsFragment()

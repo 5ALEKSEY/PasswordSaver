@@ -5,20 +5,24 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.managers.auth.IPSAuthManager
 import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.utils.extensions.showToastMessage
 import com.ak.passwordsaver.utils.extensions.vibrate
+import dagger.Lazy
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import moxy.MvpAppCompatActivity
+import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
 
-abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView,
+abstract class BasePSFragmentActivity<Presenter : BasePSPresenter<*>> : MvpAppCompatActivity(),
+    IBaseAppView,
     HasSupportFragmentInjector {
 
     @Inject
@@ -26,6 +30,12 @@ abstract class BasePSFragmentActivity : MvpAppCompatActivity(), IBaseAppView,
 
     @Inject
     lateinit var mPSAuthManager: IPSAuthManager
+
+    @Inject
+    lateinit var daggerPresenter: Lazy<Presenter>
+
+    @ProvidePresenter
+    fun providePresenter(): Presenter = daggerPresenter.get()
 
     @LayoutRes
     abstract fun getScreenLayoutResId(): Int

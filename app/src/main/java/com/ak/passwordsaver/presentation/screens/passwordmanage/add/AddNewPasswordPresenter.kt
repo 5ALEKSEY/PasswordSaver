@@ -9,17 +9,16 @@ import moxy.InjectViewState
 import javax.inject.Inject
 
 @InjectViewState
-class AddNewPasswordPresenter : BaseManagePasswordPresenter<IAddNewPasswordView>() {
-
-    @Inject
-    lateinit var mPasswordsInteractor: IPasswordsInteractor
+class AddNewPasswordPresenter @Inject constructor(
+    private val passwordsInteractor: IPasswordsInteractor
+) : BaseManagePasswordPresenter<IAddNewPasswordView>() {
 
     init {
         PSApplication.appInstance.getApplicationComponent().inject(this)
     }
 
     override fun onManagePasswordAction(name: String, content: String) {
-        mPasswordsInteractor.addNewPassword(
+        passwordsInteractor.addNewPassword(
             PasswordDBEntity(
                 name,
                 content,

@@ -18,7 +18,7 @@ import com.ak.passwordsaver.utils.extensions.vibrate
 import kotlinx.android.synthetic.main.activity_security.*
 import moxy.presenter.InjectPresenter
 
-class SecurityActivity : BasePSFragmentActivity(), ISecurityView {
+class SecurityActivity : BasePSFragmentActivity<SecurityPresenter>(), ISecurityView {
 
     companion object {
         private const val IS_AUTH_ACTION_KEY_EXTRA = "is_auth_action"
