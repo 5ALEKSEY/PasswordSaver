@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.ak.passwordsaver.presentation.screens.passwordmanage.BaseManagePasswordActivity
 import kotlinx.android.synthetic.main.activity_manage_password.*
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
 class EditPasswordActivity : BaseManagePasswordActivity<EditPasswordPresenter>(),
     IEditPasswordView {
@@ -22,9 +23,12 @@ class EditPasswordActivity : BaseManagePasswordActivity<EditPasswordPresenter>()
     }
 
     @InjectPresenter
-    lateinit var mEditPasswordPresenter: EditPasswordPresenter
+    lateinit var editPasswordPresenter: EditPasswordPresenter
 
-    override fun getPresenter() = mEditPasswordPresenter
+    @ProvidePresenter
+    fun providePresenter(): EditPasswordPresenter = daggerPresenter
+
+    override fun getPresenter() = editPasswordPresenter
 
     override fun getToolbarTitleText() = "Edit password"
 
@@ -34,7 +38,7 @@ class EditPasswordActivity : BaseManagePasswordActivity<EditPasswordPresenter>()
         if (!intent.hasExtra(PASSWORD_ID_FOR_EDIT_EXTRA_KEY)) {
             finish()
         } else {
-            mEditPasswordPresenter.loadPasswordData(
+            editPasswordPresenter.loadPasswordData(
                 intent.getLongExtra(PASSWORD_ID_FOR_EDIT_EXTRA_KEY, 0L)
             )
         }

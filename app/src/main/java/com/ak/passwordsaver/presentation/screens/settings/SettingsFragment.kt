@@ -17,6 +17,7 @@ import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsA
 import com.ak.passwordsaver.presentation.screens.settings.privacy.PrivacySettingsActivity
 import kotlinx.android.synthetic.main.fragment_settings.*
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
 class SettingsFragment : BasePSFragment<SettingsPresenter>(), ISettingsView {
 
@@ -25,9 +26,12 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(), ISettingsView {
     }
 
     @InjectPresenter
-    lateinit var mSettingsPresenter: SettingsPresenter
+    lateinit var settingsPresenter: SettingsPresenter
 
-    private lateinit var mSettingsRecyclerAdapter: SettingsRecyclerViewAdapter
+    @ProvidePresenter
+    fun providePresenter(): SettingsPresenter = daggerPresenter
+
+    private lateinit var settingsRecyclerAdapter: SettingsRecyclerViewAdapter
 
     override fun getFragmentLayoutResId() = R.layout.fragment_settings
 
@@ -67,7 +71,7 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(), ISettingsView {
     }
 
     override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
-        mSettingsRecyclerAdapter.addSettingsList(settingsItems)
+        settingsRecyclerAdapter.addSettingsList(settingsItems)
     }
 
     private fun initToolbar() {
@@ -79,13 +83,13 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(), ISettingsView {
     }
 
     private fun initRecyclerView() {
-        mSettingsRecyclerAdapter = SettingsRecyclerViewAdapter(
+        settingsRecyclerAdapter = SettingsRecyclerViewAdapter(
             null,
             null,
-            mSettingsPresenter::onSectionClicked,
+            settingsPresenter::onSectionClicked,
             null
         )
-        rvSettingsItemsList.adapter = mSettingsRecyclerAdapter
+        rvSettingsItemsList.adapter = settingsRecyclerAdapter
         val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         rvSettingsItemsList.layoutManager = linearLayoutManager
         rvSettingsItemsList.addItemDecoration(

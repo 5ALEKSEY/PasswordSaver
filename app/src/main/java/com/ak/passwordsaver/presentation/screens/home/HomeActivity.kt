@@ -12,12 +12,16 @@ import com.ak.passwordsaver.presentation.screens.settings.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home.*
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
 class HomeActivity : BasePSFragmentActivity<HomePresenter>(),
     BottomNavigationView.OnNavigationItemSelectedListener, IHomeView {
 
     @InjectPresenter
-    lateinit var mHomePresenter: HomePresenter
+    lateinit var homePresenter: HomePresenter
+
+    @ProvidePresenter
+    fun providePresenter(): HomePresenter = daggerPresenter
 
     override fun getScreenLayoutResId() = R.layout.activity_home
 
@@ -29,7 +33,7 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(),
 
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
-        setSecureRecentAppsScreenState(mHomePresenter.getSecureApplicationState())
+        setSecureRecentAppsScreenState(homePresenter.getSecureApplicationState())
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
@@ -47,7 +51,7 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(),
     }
 
     override fun onBackPressed() {
-        mHomePresenter.finishScreenAction()
+        homePresenter.finishScreenAction()
     }
 
     override fun finishScreen() {

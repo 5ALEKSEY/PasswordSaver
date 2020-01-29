@@ -12,13 +12,11 @@ import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.utils.extensions.showToastMessage
 import com.ak.passwordsaver.utils.extensions.vibrate
-import dagger.Lazy
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import moxy.MvpAppCompatActivity
-import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
 
 abstract class BasePSFragmentActivity<Presenter : BasePSPresenter<*>> : MvpAppCompatActivity(),
@@ -32,10 +30,7 @@ abstract class BasePSFragmentActivity<Presenter : BasePSPresenter<*>> : MvpAppCo
     lateinit var mPSAuthManager: IPSAuthManager
 
     @Inject
-    lateinit var daggerPresenter: Lazy<Presenter>
-
-    @ProvidePresenter
-    fun providePresenter(): Presenter = daggerPresenter.get()
+    lateinit var daggerPresenter: Presenter
 
     @LayoutRes
     abstract fun getScreenLayoutResId(): Int

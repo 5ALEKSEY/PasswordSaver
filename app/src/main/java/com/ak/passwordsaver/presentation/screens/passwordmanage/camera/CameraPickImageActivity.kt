@@ -16,6 +16,7 @@ import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.ak.passwordsaver.utils.extensions.setVisibilityInvisible
 import kotlinx.android.synthetic.main.activity_camera_pick_image.*
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
 
 class CameraPickImageActivity : BasePSFragmentActivity<CameraPickImagePresenter>(),
@@ -43,9 +44,13 @@ class CameraPickImageActivity : BasePSFragmentActivity<CameraPickImagePresenter>
     }
 
     @InjectPresenter
-    lateinit var mCameraPickImagePresenter: CameraPickImagePresenter
+    lateinit var cameraPickImagePresenter: CameraPickImagePresenter
+
+    @ProvidePresenter
+    fun providePresenter(): CameraPickImagePresenter = daggerPresenter
+
     @Inject
-    lateinit var mPSCameraManager: IPSCameraManager
+    lateinit var cameraManager: IPSCameraManager
 
     override fun getScreenLayoutResId() = R.layout.activity_camera_pick_image
 
@@ -57,11 +62,11 @@ class CameraPickImageActivity : BasePSFragmentActivity<CameraPickImagePresenter>
         super.initViewBeforePresenterAttach()
         initWindow()
 
-        mPSCameraManager.initCameraManager(false, texvCameraPickImagePreview)
+        cameraManager.initCameraManager(false, texvCameraPickImagePreview)
 
         btnTakeImageAction.setSafeClickListener {
-            mPSCameraManager.takeImage {
-                runOnUiThread { mCameraPickImagePresenter.onImagePicked(it) }
+            cameraManager.takeImage {
+                runOnUiThread { cameraPickImagePresenter.onImagePicked(it) }
             }
         }
 
@@ -72,10 +77,10 @@ class CameraPickImageActivity : BasePSFragmentActivity<CameraPickImagePresenter>
         displayTakeImageStrategy()
 
         ivRemovePickedImagePanelAction.setSafeClickListener {
-            mCameraPickImagePresenter.onPickedImageRemoved()
+            cameraPickImagePresenter.onPickedImageRemoved()
         }
         ivChooseImagePanelAction.setSafeClickListener {
-            mCameraPickImagePresenter.savePickedImageAndFinish()
+            cameraPickImagePresenter.savePickedImageAndFinish()
         }
     }
 
@@ -88,12 +93,12 @@ class CameraPickImageActivity : BasePSFragmentActivity<CameraPickImagePresenter>
 
     override fun onResume() {
         super.onResume()
-        mPSCameraManager.openCamera()
+        cameraManager.openCamera()
     }
 
     override fun onPause() {
         super.onPause()
-        mPSCameraManager.closeCamera()
+        cameraManager.closeCamera()
     }
 
     override fun displayPreviewImageStrategy(previewBitmap: Bitmap) {
@@ -102,7 +107,7 @@ class CameraPickImageActivity : BasePSFragmentActivity<CameraPickImagePresenter>
         ivPreviewImage.setImageBitmap(previewBitmap)
         ivRemovePickedImagePanelAction.setVisibility(true)
         ivChooseImagePanelAction.setVisibility(true)
-        mPSCameraManager.closeCamera()
+        cameraManager.closeCamera()
     }
 
     override fun displayTakeImageStrategy() {
@@ -111,7 +116,7 @@ class CameraPickImageActivity : BasePSFragmentActivity<CameraPickImagePresenter>
         ivPreviewImage.setImageBitmap(null)
         ivRemovePickedImagePanelAction.setVisibility(false)
         ivChooseImagePanelAction.setVisibility(false)
-        mPSCameraManager.openCamera()
+        cameraManager.openCamera()
     }
 
     override fun sendSuccessImagePickResult(filePath: String) {

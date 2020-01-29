@@ -17,6 +17,7 @@ import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.vibrate
 import kotlinx.android.synthetic.main.activity_security.*
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
 class SecurityActivity : BasePSFragmentActivity<SecurityPresenter>(), ISecurityView {
 
@@ -56,7 +57,10 @@ class SecurityActivity : BasePSFragmentActivity<SecurityPresenter>(), ISecurityV
     }
 
     @InjectPresenter
-    lateinit var mSecurityPresenter: SecurityPresenter
+    lateinit var securityPresenter: SecurityPresenter
+
+    @ProvidePresenter
+    fun providePresenter(): SecurityPresenter = daggerPresenter
 
     override fun getScreenLayoutResId() = R.layout.activity_security
 
@@ -68,12 +72,12 @@ class SecurityActivity : BasePSFragmentActivity<SecurityPresenter>(), ISecurityV
         super.initViewBeforePresenterAttach()
         intent?.let { initAuthState(it) }
 
-        vPatternAuthView.mOnFinishedAction = mSecurityPresenter::onUserAuthFinished
-        cPincodeAuthView.mOnFinishedAction = mSecurityPresenter::onUserAuthFinished
+        vPatternAuthView.mOnFinishedAction = securityPresenter::onUserAuthFinished
+        cPincodeAuthView.mOnFinishedAction = securityPresenter::onUserAuthFinished
         cPincodeAuthView.setPincodeValuesCount(PINCODE_INPUT_VALUES_COUNT)
 
         ivSecurityInputTypeChangeAction.setSafeClickListener(CHANGE_AUTH_INPUT_METHOD_CLICK_DELAY) {
-            mSecurityPresenter.onSecurityInputTypeChangeClicked()
+            securityPresenter.onSecurityInputTypeChangeClicked()
         }
     }
 
@@ -141,7 +145,7 @@ class SecurityActivity : BasePSFragmentActivity<SecurityPresenter>(), ISecurityV
     }
 
     private fun initAuthState(intent: Intent) {
-        mSecurityPresenter.mAuthActionType = intent.getIntExtra(
+        securityPresenter.mAuthActionType = intent.getIntExtra(
             IS_AUTH_ACTION_KEY_EXTRA,
             -1
         )

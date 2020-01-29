@@ -10,6 +10,7 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecycl
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import kotlinx.android.synthetic.main.activity_design_settings.*
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
 class DesignSettingsActivity : BasePSFragmentActivity<DesignSettingsPresenter>(),
     IDesignSettingsView {
@@ -21,9 +22,12 @@ class DesignSettingsActivity : BasePSFragmentActivity<DesignSettingsPresenter>()
     }
 
     @InjectPresenter
-    lateinit var mDesignSettingsPresenter: DesignSettingsPresenter
+    lateinit var designSettingsPresenter: DesignSettingsPresenter
 
-    private lateinit var mSettingsRecyclerAdapter: SettingsRecyclerViewAdapter
+    @ProvidePresenter
+    fun providePresenter(): DesignSettingsPresenter = daggerPresenter
+
+    private lateinit var settingsRecyclerAdapter: SettingsRecyclerViewAdapter
 
     override fun getScreenLayoutResId() = R.layout.activity_design_settings
 
@@ -34,7 +38,7 @@ class DesignSettingsActivity : BasePSFragmentActivity<DesignSettingsPresenter>()
     }
 
     override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
-        mSettingsRecyclerAdapter.addSettingsList(settingsItems)
+        settingsRecyclerAdapter.addSettingsList(settingsItems)
     }
 
     private fun initToolbar() {
@@ -44,14 +48,14 @@ class DesignSettingsActivity : BasePSFragmentActivity<DesignSettingsPresenter>()
     }
 
     private fun initRecyclerView() {
-        mSettingsRecyclerAdapter = SettingsRecyclerViewAdapter(
+        settingsRecyclerAdapter = SettingsRecyclerViewAdapter(
             null,
-            mDesignSettingsPresenter::settingSpinnerItemChanged,
+            designSettingsPresenter::settingSpinnerItemChanged,
             null,
             null
         )
         rvDesignSettingsItemsList.apply {
-            adapter = mSettingsRecyclerAdapter
+            adapter = settingsRecyclerAdapter
             val linLayoutManager = LinearLayoutManager(
                 this@DesignSettingsActivity,
                 LinearLayoutManager.VERTICAL,

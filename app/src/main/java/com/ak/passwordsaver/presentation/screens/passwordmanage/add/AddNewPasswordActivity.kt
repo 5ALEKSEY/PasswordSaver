@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import com.ak.passwordsaver.presentation.screens.passwordmanage.BaseManagePasswordActivity
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
 class AddNewPasswordActivity : BaseManagePasswordActivity<AddNewPasswordPresenter>(),
     IAddNewPasswordView {
@@ -15,9 +16,12 @@ class AddNewPasswordActivity : BaseManagePasswordActivity<AddNewPasswordPresente
     }
 
     @InjectPresenter
-    lateinit var mAddNewPasswordPresenter: AddNewPasswordPresenter
+    lateinit var addNewPasswordPresenter: AddNewPasswordPresenter
 
-    override fun getPresenter() = mAddNewPasswordPresenter
+    @ProvidePresenter
+    fun providePresenter(): AddNewPasswordPresenter = daggerPresenter
+
+    override fun getPresenter() = addNewPasswordPresenter
 
     override fun getToolbarTitleText() = "Add new password"
 }

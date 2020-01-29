@@ -13,6 +13,7 @@ import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecycl
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
 import kotlinx.android.synthetic.main.activity_privacy_settings.*
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
 class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>(),
     IPrivacySettingsView {
@@ -24,9 +25,12 @@ class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>
     }
 
     @InjectPresenter
-    lateinit var mPrivacySettingsPresenter: PrivacySettingsPresenter
+    lateinit var privacySettingsPresenter: PrivacySettingsPresenter
 
-    private lateinit var mSettingsRecyclerAdapter: SettingsRecyclerViewAdapter
+    @ProvidePresenter
+    fun providePresenter(): PrivacySettingsPresenter = daggerPresenter
+
+    private lateinit var settingsRecyclerAdapter: SettingsRecyclerViewAdapter
 
     override fun getScreenLayoutResId() = R.layout.activity_privacy_settings
 
@@ -38,7 +42,7 @@ class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>
 
     override fun onResume() {
         super.onResume()
-        mPrivacySettingsPresenter.loadSettingsData()
+        privacySettingsPresenter.loadSettingsData()
     }
 
     override fun openAddPincodeScreen() {
@@ -58,7 +62,7 @@ class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>
     }
 
     override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
-        mSettingsRecyclerAdapter.addSettingsList(settingsItems)
+        settingsRecyclerAdapter.addSettingsList(settingsItems)
     }
 
     private fun initToolbar() {
@@ -68,14 +72,14 @@ class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>
     }
 
     private fun initRecyclerView() {
-        mSettingsRecyclerAdapter = SettingsRecyclerViewAdapter(
-            mPrivacySettingsPresenter::onSwitchSettingsItemChanged,
-            mPrivacySettingsPresenter::onSpinnerItemChanged,
+        settingsRecyclerAdapter = SettingsRecyclerViewAdapter(
+            privacySettingsPresenter::onSwitchSettingsItemChanged,
+            privacySettingsPresenter::onSpinnerItemChanged,
             null,
-            mPrivacySettingsPresenter::onTextSettingsItemClicked
+            privacySettingsPresenter::onTextSettingsItemClicked
         )
         rvPrivacySettingsItemsList.apply {
-            adapter = mSettingsRecyclerAdapter
+            adapter = settingsRecyclerAdapter
             val linLayoutManager = LinearLayoutManager(
                 this@PrivacySettingsActivity,
                 LinearLayoutManager.VERTICAL,

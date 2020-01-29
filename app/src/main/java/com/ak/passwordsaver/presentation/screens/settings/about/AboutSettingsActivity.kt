@@ -12,6 +12,7 @@ import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.getColorCompat
 import kotlinx.android.synthetic.main.activity_about_settings.*
 import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 
 class AboutSettingsActivity : BasePSFragmentActivity<AboutSettingsPresenter>(), IAboutSettingsView {
 
@@ -22,9 +23,12 @@ class AboutSettingsActivity : BasePSFragmentActivity<AboutSettingsPresenter>(), 
     }
 
     @InjectPresenter
-    lateinit var mAboutSettingsPresenter: AboutSettingsPresenter
+    lateinit var aboutSettingsPresenter: AboutSettingsPresenter
 
-    private lateinit var mAboutRecyclerAdapter: SettingsRecyclerViewAdapter
+    @ProvidePresenter
+    fun providePresenter(): AboutSettingsPresenter = daggerPresenter
+
+    private lateinit var aboutRecyclerAdapter: SettingsRecyclerViewAdapter
 
     override fun getScreenLayoutResId() = R.layout.activity_about_settings
 
@@ -40,7 +44,7 @@ class AboutSettingsActivity : BasePSFragmentActivity<AboutSettingsPresenter>(), 
     }
 
     override fun displayAboutActions(settingsItems: List<SettingsListItemModel>) {
-        mAboutRecyclerAdapter.addSettingsList(settingsItems)
+        aboutRecyclerAdapter.addSettingsList(settingsItems)
     }
 
     override fun startReportAction() {
@@ -53,14 +57,14 @@ class AboutSettingsActivity : BasePSFragmentActivity<AboutSettingsPresenter>(), 
     }
 
     private fun initRecyclerView() {
-        mAboutRecyclerAdapter = SettingsRecyclerViewAdapter(
+        aboutRecyclerAdapter = SettingsRecyclerViewAdapter(
             null,
             null,
-            mAboutSettingsPresenter::onAboutActionClicked,
+            aboutSettingsPresenter::onAboutActionClicked,
             null
         )
         rvAboutActionsList.apply {
-            adapter = mAboutRecyclerAdapter
+            adapter = aboutRecyclerAdapter
             val linearLayoutManager = LinearLayoutManager(
                 this@AboutSettingsActivity,
                 LinearLayoutManager.VERTICAL,

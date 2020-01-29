@@ -35,10 +35,13 @@ class PasswordsListFragment : BasePSFragment<PasswordsListPresenter>(), IPasswor
     }
 
     @InjectPresenter
-    lateinit var mPasswordsListPresenter: PasswordsListPresenter
+    lateinit var passwordsListPresenter: PasswordsListPresenter
+
+    @ProvidePresenter
+    fun providePresenter(): PasswordsListPresenter = daggerPresenter
 
     @InjectPresenter
-    lateinit var mPasswordsActionModePresenter: PasswordsActionModePresenter
+    lateinit var passwordsActionModePresenter: PasswordsActionModePresenter
 
     @Inject
     lateinit var daggerActionModePresenter: Lazy<PasswordsActionModePresenter>
@@ -106,13 +109,13 @@ class PasswordsListFragment : BasePSFragment<PasswordsListPresenter>(), IPasswor
         mPasswordActionsDialog?.onChoosePasswordActionListener = { actionId ->
             when (actionId) {
                 PasswordActionsBottomSheetDialog.COPY_PASSWORD_CONTENT_ACTION -> {
-                    mPasswordsListPresenter.onCopyPasswordAction()
+                    passwordsListPresenter.onCopyPasswordAction()
                 }
                 PasswordActionsBottomSheetDialog.EDIT_PASSWORD_ITEM_ACTION -> {
-                    mPasswordsListPresenter.onEditPasswordAction()
+                    passwordsListPresenter.onEditPasswordAction()
                 }
                 PasswordActionsBottomSheetDialog.DELETE_PASSWORD_ITEM_ACTION -> {
-                    mPasswordsListPresenter.onDeletePasswordAction()
+                    passwordsListPresenter.onDeletePasswordAction()
                 }
             }
         }
@@ -138,10 +141,10 @@ class PasswordsListFragment : BasePSFragment<PasswordsListPresenter>(), IPasswor
 
     private fun initRecyclerView() {
         mPasswordsAdapter = PasswordsListRecyclerAdapter(
-            mPasswordsListPresenter::passwordShowActionRequired,
-            mPasswordsListPresenter::onShowPasswordActions,
-            mPasswordsActionModePresenter::onPasswordItemSingleClick,
-            mPasswordsActionModePresenter::onPasswordItemLongClick
+            passwordsListPresenter::passwordShowActionRequired,
+            passwordsListPresenter::onShowPasswordActions,
+            passwordsActionModePresenter::onPasswordItemSingleClick,
+            passwordsActionModePresenter::onPasswordItemLongClick
         )
 
         rvPasswordsList.adapter = mPasswordsAdapter
@@ -180,7 +183,7 @@ class PasswordsListFragment : BasePSFragment<PasswordsListPresenter>(), IPasswor
                     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                         return when (item?.itemId) {
                             R.id.action_delete_selected_passwords -> {
-                                mPasswordsActionModePresenter.onDeleteSelectedInActionMode()
+                                passwordsActionModePresenter.onDeleteSelectedInActionMode()
                                 true
                             }
                             else -> false
@@ -205,7 +208,7 @@ class PasswordsListFragment : BasePSFragment<PasswordsListPresenter>(), IPasswor
 
     override fun hideSelectedMode() {
         mPasswordsAdapter.setItemsActionModeState(false)
-        mPasswordsActionModePresenter.onSelectedModeFinished()
+        passwordsActionModePresenter.onSelectedModeFinished()
         tbPasswordsListBarActionMode?.finish()
         tbPasswordsListBarActionMode = null
     }
