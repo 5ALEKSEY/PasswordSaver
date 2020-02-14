@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.utils.extensions.showToastMessage
 import com.ak.passwordsaver.utils.extensions.vibrate
@@ -22,6 +24,8 @@ abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFrag
     @LayoutRes
     abstract fun getFragmentLayoutResId(): Int
 
+    protected lateinit var navController: NavController
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
@@ -37,6 +41,7 @@ abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFrag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        navController = Navigation.findNavController(view)
         initViewBeforePresenterAttach()
         mvpDelegate.onAttach()
     }

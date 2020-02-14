@@ -6,8 +6,9 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: 'kotlin-kapt'
 
+def navVersion = "2.3.0-alpha01"
 def daggerVersion = '2.16'
-def moxyVersion = '1.5.3'
+def moxyVersion = '2.0.2'
 def roomVersion = '2.2.3'
 def glideVersion = '4.9.0'
 def circleImageViewVersion = '2.2.0'
@@ -103,9 +104,9 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
 
     // Moxy 2
-    implementation 'com.github.moxy-community:moxy:2.0.2'
-    implementation 'com.github.moxy-community:moxy-androidx:2.0.2'
-    kapt 'com.github.moxy-community:moxy-compiler:2.0.2'
+    implementation "com.github.moxy-community:moxy:$moxyVersion"
+    implementation "com.github.moxy-community:moxy-androidx:$moxyVersion"
+    kapt "com.github.moxy-community:moxy-compiler:$moxyVersion"
 
     // Room
     implementation "androidx.room:room-runtime:$roomVersion"
@@ -147,4 +148,12 @@ dependencies {
 
     // GSON
     implementation "com.google.code.gson:gson:2.8.6"
+
+    // Java language implementation
+    implementation "androidx.navigation:navigation-fragment:$navVersion"
+    implementation "androidx.navigation:navigation-ui:$navVersion"
+
+    // Kotlin
+    implementation "androidx.navigation:navigation-fragment-ktx:$navVersion"
+    implementation "androidx.navigation:navigation-ui-ktx:$navVersion"
 }

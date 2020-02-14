@@ -1,7 +1,5 @@
 package com.ak.passwordsaver.presentation.screens.settings.privacy
 
-import android.content.Context
-import android.content.Intent
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.passwordsaver.R
@@ -17,12 +15,6 @@ import moxy.presenter.ProvidePresenter
 
 class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>(),
     IPrivacySettingsView {
-
-    companion object {
-        fun startActivity(context: Context) {
-            context.startActivity(Intent(context, PrivacySettingsActivity::class.java))
-        }
-    }
 
     @InjectPresenter
     lateinit var privacySettingsPresenter: PrivacySettingsPresenter

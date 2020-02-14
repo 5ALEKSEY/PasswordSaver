@@ -10,20 +10,13 @@ import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
-import com.ak.passwordsaver.presentation.screens.settings.about.AboutSettingsActivity
 import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecyclerViewAdapter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
-import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsActivity
-import com.ak.passwordsaver.presentation.screens.settings.privacy.PrivacySettingsActivity
 import kotlinx.android.synthetic.main.fragment_settings.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
 class SettingsFragment : BasePSFragment<SettingsPresenter>(), ISettingsView {
-
-    companion object {
-        fun getInstance() = SettingsFragment()
-    }
 
     @InjectPresenter
     lateinit var settingsPresenter: SettingsPresenter
@@ -43,19 +36,19 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(), ISettingsView {
 
     override fun showDesignSettings() {
         context?.let {
-            DesignSettingsActivity.startActivity(it)
+            navController.navigate(R.id.action_settingsFragment_to_designSettingsActivity)
         }
     }
 
     override fun showPrivacySettings() {
         context?.let {
-            PrivacySettingsActivity.startActivity(it)
+            navController.navigate(R.id.action_settingsFragment_to_privacySettingsActivity)
         }
     }
 
     override fun showAboutScreen() {
         context?.let {
-            AboutSettingsActivity.startActivity(it)
+            navController.navigate(R.id.action_settingsFragment_to_aboutSettingsActivity)
         }
     }
 

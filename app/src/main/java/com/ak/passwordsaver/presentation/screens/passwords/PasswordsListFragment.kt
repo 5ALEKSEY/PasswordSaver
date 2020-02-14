@@ -30,10 +30,6 @@ import javax.inject.Inject
 class PasswordsListFragment : BasePSFragment<PasswordsListPresenter>(), IPasswordsListView,
     IPasswordsActionModeView {
 
-    companion object {
-        fun getInstance() = PasswordsListFragment()
-    }
-
     @InjectPresenter
     lateinit var passwordsListPresenter: PasswordsListPresenter
 

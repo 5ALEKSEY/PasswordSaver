@@ -1,21 +1,16 @@
 package com.ak.passwordsaver.presentation.screens.home
 
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.WindowManager
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
-import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListFragment
-import com.ak.passwordsaver.presentation.screens.settings.SettingsFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_home.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
-class HomeActivity : BasePSFragmentActivity<HomePresenter>(),
-    BottomNavigationView.OnNavigationItemSelectedListener, IHomeView {
+class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
 
     @InjectPresenter
     lateinit var homePresenter: HomePresenter
@@ -27,27 +22,8 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        showFragment(PasswordsListFragment.getInstance())
-        bnvBottomBar.setOnNavigationItemSelectedListener(this)
-    }
-
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
         setSecureRecentAppsScreenState(homePresenter.getSecureApplicationState())
-    }
-
-    override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        return when (menuItem.itemId) {
-            R.id.action_passwords_list -> {
-                showFragment(PasswordsListFragment.getInstance())
-                true
-            }
-            R.id.action_settings -> {
-                showFragment(SettingsFragment.getInstance())
-                true
-            }
-            else -> false
-        }
+        initBottomNavigationView()
     }
 
     override fun onBackPressed() {
@@ -58,6 +34,13 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(),
         finish()
     }
 
+    private fun initBottomNavigationView() {
+        NavigationUI.setupWithNavController(
+            bnvBottomBar,
+            Navigation.findNavController(this, R.id.bottomNavHostFragment)
+        )
+    }
+
     private fun setSecureRecentAppsScreenState(isSecure: Boolean) {
         if (isSecure) {
             window.addFlags(WindowManager.LayoutParams.FLAG_SECURE)
@@ -65,14 +48,4 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(),
             window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
         }
     }
-
-    private fun showFragment(fragment: Fragment) {
-        val fragmentTransaction = supportFragmentManager.beginTransaction()
-
-        fragmentTransaction.replace(getFragmentContainerId(), fragment)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .commit()
-    }
-
-    private fun getFragmentContainerId() = R.id.cFragmentsContainer
 }

@@ -1,7 +1,5 @@
 package com.ak.passwordsaver.presentation.screens.settings.about
 
-import android.content.Context
-import android.content.Intent
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.passwordsaver.R
@@ -15,12 +13,6 @@ import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
 class AboutSettingsActivity : BasePSFragmentActivity<AboutSettingsPresenter>(), IAboutSettingsView {
-
-    companion object {
-        fun startActivity(context: Context) {
-            context.startActivity(Intent(context, AboutSettingsActivity::class.java))
-        }
-    }
 
     @InjectPresenter
     lateinit var aboutSettingsPresenter: AboutSettingsPresenter
