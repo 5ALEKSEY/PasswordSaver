@@ -12,7 +12,10 @@
             tools:layout="@layout/fragment_passwords_list" >
         <action
                 android:id="@+id/action_passwordsListFragment_to_editPasswordActivity4"
-                app:destination="@id/editPasswordActivity4" />
+                app:destination="@id/editPasswordActivity" />
+        <action
+                android:id="@+id/action_passwordsListFragment_to_addNewPasswordActivity"
+                app:destination="@id/addNewPasswordActivity" />
     </fragment>
     <fragment
             android:id="@+id/settingsFragment"
@@ -46,8 +49,14 @@
             android:label="activity_about_settings"
             tools:layout="@layout/activity_about_settings" />
     <activity
-            android:id="@+id/editPasswordActivity4"
+            android:id="@+id/editPasswordActivity"
             android:name="com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswordActivity"
-            android:label="EditPasswordActivity" />
+            android:label="EditPasswordActivity"
+            tools:layout="@layout/activity_manage_password"/>
+    <activity
+            android:id="@+id/addNewPasswordActivity"
+            android:name="com.ak.passwordsaver.presentation.screens.passwordmanage.add.AddNewPasswordActivity"
+            android:label="AddNewPasswordActivity"
+            tools:layout="@layout/activity_manage_password"/>
 
 </navigation>
