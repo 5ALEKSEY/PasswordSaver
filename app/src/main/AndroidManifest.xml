@@ -17,19 +17,10 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name=".presentation.screens.settings.about.AboutSettingsActivity"
-                android:screenOrientation="portrait"/>
-        <activity
                 android:name=".presentation.screens.passwordmanage.edit.EditPasswordActivity"
-                android:screenOrientation="portrait"/>
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".presentation.screens.passwordmanage.camera.CameraPickImageActivity"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".presentation.screens.settings.privacy.PrivacySettingsActivity"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".presentation.screens.settings.design.DesignSettingsActivity"
                 android:screenOrientation="portrait" />
         <activity
                 android:name=".presentation.screens.auth.SecurityActivity"

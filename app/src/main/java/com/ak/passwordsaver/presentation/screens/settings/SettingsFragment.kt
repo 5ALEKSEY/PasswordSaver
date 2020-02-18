@@ -36,19 +36,19 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(), ISettingsView {
 
     override fun showDesignSettings() {
         context?.let {
-            navController.navigate(R.id.action_settingsFragment_to_designSettingsActivity)
+            navController.navigate(R.id.action_settingsFragment_to_designSettingsFragment)
         }
     }
 
     override fun showPrivacySettings() {
         context?.let {
-            navController.navigate(R.id.action_settingsFragment_to_privacySettingsActivity)
+            navController.navigate(R.id.action_settingsFragment_to_privacySettingsFragment)
         }
     }
 
     override fun showAboutScreen() {
         context?.let {
-            navController.navigate(R.id.action_settingsFragment_to_aboutSettingsActivity)
+            navController.navigate(R.id.action_settingsFragment_to_aboutSettingsFragment)
         }
     }
 
@@ -68,10 +68,11 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(), ISettingsView {
     }
 
     private fun initToolbar() {
-        if (activity is AppCompatActivity) {
-            val appCompatActivity = activity as AppCompatActivity
-            appCompatActivity.setSupportActionBar(tbSettingsBar)
-            appCompatActivity.supportActionBar?.title = "Settings"
+        if (activity != null && activity is AppCompatActivity) {
+            (activity as AppCompatActivity).apply {
+                setSupportActionBar(tbSettingsBar)
+                supportActionBar?.title = "Settings"
+            }
         }
     }
 

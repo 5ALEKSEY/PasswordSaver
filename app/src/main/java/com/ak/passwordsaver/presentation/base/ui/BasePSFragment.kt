@@ -47,11 +47,11 @@ abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFrag
     }
 
     override fun showShortTimeMessage(message: String) {
-        context?.showToastMessage(message)
+        showToastMessage(message)
     }
 
     override fun invokeVibration(vibrateDuration: Long) {
-        context?.vibrate(vibrateDuration)
+        vibrate(vibrateDuration)
     }
 
     protected open fun initViewBeforePresenterAttach() {

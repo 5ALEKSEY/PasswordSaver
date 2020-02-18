@@ -1,20 +1,18 @@
 package com.ak.passwordsaver.presentation.screens.settings.privacy
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.base.constants.AppConstants
-import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
-import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
+import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecyclerViewAdapter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
-import kotlinx.android.synthetic.main.activity_privacy_settings.*
+import kotlinx.android.synthetic.main.fragment_privacy_settings.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
-class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>(),
-    IPrivacySettingsView {
+class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(), IPrivacySettingsView {
 
     @InjectPresenter
     lateinit var privacySettingsPresenter: PrivacySettingsPresenter
@@ -24,7 +22,7 @@ class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>
 
     private lateinit var settingsRecyclerAdapter: SettingsRecyclerViewAdapter
 
-    override fun getScreenLayoutResId() = R.layout.activity_privacy_settings
+    override fun getFragmentLayoutResId() = R.layout.fragment_privacy_settings
 
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
@@ -58,9 +56,13 @@ class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>
     }
 
     private fun initToolbar() {
-        setSupportActionBar(tbPrivacySettingsBar)
-        supportActionBar?.title = "Privacy"
-        tbPrivacySettingsBar.setNavigationOnClickListener { finish() }
+        if (activity != null && activity is AppCompatActivity) {
+            (activity as AppCompatActivity).apply {
+                setSupportActionBar(tbPrivacySettingsBar)
+                supportActionBar?.title = "Privacy"
+                tbPrivacySettingsBar.setNavigationOnClickListener { finish() }
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -73,7 +75,7 @@ class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>
         rvPrivacySettingsItemsList.apply {
             adapter = settingsRecyclerAdapter
             val linLayoutManager = LinearLayoutManager(
-                this@PrivacySettingsActivity,
+                context,
                 LinearLayoutManager.VERTICAL,
                 false
             )
@@ -83,10 +85,10 @@ class PrivacySettingsActivity : BasePSFragmentActivity<PrivacySettingsPresenter>
     }
 
     private fun openSecurityScreen(securityAction: Int) {
-        SecurityActivity.startSecurityForResult(
-            this,
-            securityAction,
-            AppConstants.SECURITY_CHANGE_ACTION_REQUEST_CODE
-        )
+//        SecurityActivity.startSecurityForResult(
+//            this,
+//            securityAction,
+//            AppConstants.SECURITY_CHANGE_ACTION_REQUEST_CODE
+//        )
     }
 }

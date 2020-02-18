@@ -6,9 +6,6 @@ import com.ak.passwordsaver.presentation.screens.home.HomeActivity
 import com.ak.passwordsaver.presentation.screens.passwordmanage.add.AddNewPasswordActivity
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.CameraPickImageActivity
 import com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswordActivity
-import com.ak.passwordsaver.presentation.screens.settings.about.AboutSettingsActivity
-import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsActivity
-import com.ak.passwordsaver.presentation.screens.settings.privacy.PrivacySettingsActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -34,17 +31,5 @@ interface AppActivitiesModule {
 
     @ActivityScope
     @ContributesAndroidInjector(modules = [ActivityModule::class])
-    fun injectDesignSettingsActivity(): DesignSettingsActivity
-
-    @ActivityScope
-    @ContributesAndroidInjector(modules = [ActivityModule::class])
-    fun injectPrivacySettingsActivity(): PrivacySettingsActivity
-
-    @ActivityScope
-    @ContributesAndroidInjector(modules = [ActivityModule::class])
     fun injectCameraPickImageActivity(): CameraPickImageActivity
-
-    @ActivityScope
-    @ContributesAndroidInjector(modules = [ActivityModule::class])
-    fun injectAboutSettingsActivity(): AboutSettingsActivity
 }

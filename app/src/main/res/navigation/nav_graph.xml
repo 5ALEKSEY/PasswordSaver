@@ -9,7 +9,7 @@
             android:id="@+id/passwordsListFragment"
             android:name="com.ak.passwordsaver.presentation.screens.passwords.PasswordsListFragment"
             android:label="PasswordsListFragment"
-            tools:layout="@layout/fragment_passwords_list" >
+            tools:layout="@layout/fragment_passwords_list">
         <action
                 android:id="@+id/action_passwordsListFragment_to_editPasswordActivity4"
                 app:destination="@id/editPasswordActivity" />
@@ -23,40 +23,44 @@
             android:label="SettingsFragment"
             tools:layout="@layout/fragment_settings">
         <action
-                android:id="@+id/action_settingsFragment_to_designSettingsActivity"
-                app:destination="@id/designSettingsActivity" />
+                android:id="@+id/action_settingsFragment_to_designSettingsFragment"
+                app:destination="@id/designSettingsFragment"
+                app:enterAnim="@anim/push_down_in"
+                app:exitAnim="@anim/push_down_out" />
         <action
-                android:id="@+id/action_settingsFragment_to_privacySettingsActivity"
-                app:destination="@id/privacySettingsActivity" />
+                android:id="@+id/action_settingsFragment_to_privacySettingsFragment"
+                app:destination="@id/privacySettingsFragment" />
         <action
-                android:id="@+id/action_settingsFragment_to_aboutSettingsActivity"
-                app:destination="@id/aboutSettingsActivity" />
+                android:id="@+id/action_settingsFragment_to_aboutSettingsFragment"
+                app:destination="@id/aboutSettingsFragment" />
     </fragment>
 
-    <activity
-            android:id="@+id/designSettingsActivity"
-            android:name="com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsActivity"
-            android:label="activity_design_settings"
-            tools:layout="@layout/activity_design_settings" />
-    <activity
-            android:id="@+id/privacySettingsActivity"
-            android:name="com.ak.passwordsaver.presentation.screens.settings.privacy.PrivacySettingsActivity"
-            android:label="activity_privacy_settings"
-            tools:layout="@layout/activity_privacy_settings" />
-    <activity
-            android:id="@+id/aboutSettingsActivity"
-            android:name="com.ak.passwordsaver.presentation.screens.settings.about.AboutSettingsActivity"
-            android:label="activity_about_settings"
-            tools:layout="@layout/activity_about_settings" />
     <activity
             android:id="@+id/editPasswordActivity"
             android:name="com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswordActivity"
             android:label="EditPasswordActivity"
-            tools:layout="@layout/activity_manage_password"/>
+            tools:layout="@layout/activity_manage_password" />
     <activity
             android:id="@+id/addNewPasswordActivity"
             android:name="com.ak.passwordsaver.presentation.screens.passwordmanage.add.AddNewPasswordActivity"
             android:label="AddNewPasswordActivity"
-            tools:layout="@layout/activity_manage_password"/>
+            tools:layout="@layout/activity_manage_password" />
+
+    <!--Settings-->
+    <fragment
+            android:id="@+id/designSettingsFragment"
+            android:name="com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsFragment"
+            android:label="DesignSettingsFragment"
+            tools:layout="@layout/fragment_design_settings" />
+    <fragment
+            android:id="@+id/privacySettingsFragment"
+            android:name="com.ak.passwordsaver.presentation.screens.settings.privacy.PrivacySettingsFragment"
+            android:label="PrivacySettingsFragment"
+            tools:layout="@layout/fragment_privacy_settings" />
+    <fragment
+            android:id="@+id/aboutSettingsFragment"
+            android:name="com.ak.passwordsaver.presentation.screens.settings.about.AboutSettingsFragment"
+            android:label="AboutSettingsFragment"
+            tools:layout="@layout/fragment_about_settings" />
 
 </navigation>

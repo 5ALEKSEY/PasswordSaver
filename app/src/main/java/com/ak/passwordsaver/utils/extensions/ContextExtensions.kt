@@ -37,12 +37,27 @@ fun Context.vibrate(vibrateDuration: Long = 200L) {
     }
 }
 
-fun Context.showToastMessage(message: String, duration: Int = Toast.LENGTH_SHORT) {
+fun FragmentActivity.vibrate(vibrateDuration: Long = 200L) {
+    baseContext.vibrate(vibrateDuration)
+}
+
+fun Fragment.vibrate(vibrateDuration: Long = 200L) {
+    activity?.vibrate(vibrateDuration)
+}
+
+fun FragmentActivity.showToastMessage(message: String, duration: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, duration).show()
 }
 
-fun Context.getColorCompat(@ColorRes colorRes: Int) =
-    ContextCompat.getColor(this, colorRes)
+fun Fragment.showToastMessage(message: String, duration: Int = Toast.LENGTH_SHORT) {
+    activity?.showToastMessage(message, duration)
+}
+
+fun Context.getColorCompat(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
+
+fun FragmentActivity.getColorCompat(@ColorRes colorRes: Int) = baseContext.getColorCompat(colorRes)
+
+fun Fragment.getColorCompat(@ColorRes colorRes: Int) = activity?.getColorCompat(colorRes) ?: 0
 
 private fun Context.hideKeyBoard(focusedView: View) {
     val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager

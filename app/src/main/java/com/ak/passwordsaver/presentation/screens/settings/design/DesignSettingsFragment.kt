@@ -1,17 +1,17 @@
 package com.ak.passwordsaver.presentation.screens.settings.design
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
+import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecyclerViewAdapter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
-import kotlinx.android.synthetic.main.activity_design_settings.*
+import kotlinx.android.synthetic.main.fragment_design_settings.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
-class DesignSettingsActivity : BasePSFragmentActivity<DesignSettingsPresenter>(),
-    IDesignSettingsView {
+class DesignSettingsFragment : BasePSFragment<DesignSettingsPresenter>(), IDesignSettingsView {
 
     @InjectPresenter
     lateinit var designSettingsPresenter: DesignSettingsPresenter
@@ -21,7 +21,7 @@ class DesignSettingsActivity : BasePSFragmentActivity<DesignSettingsPresenter>()
 
     private lateinit var settingsRecyclerAdapter: SettingsRecyclerViewAdapter
 
-    override fun getScreenLayoutResId() = R.layout.activity_design_settings
+    override fun getFragmentLayoutResId() = R.layout.fragment_design_settings
 
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
@@ -34,9 +34,13 @@ class DesignSettingsActivity : BasePSFragmentActivity<DesignSettingsPresenter>()
     }
 
     private fun initToolbar() {
-        setSupportActionBar(tbDesignSettingsBar)
-        supportActionBar?.title = "Design"
-        tbDesignSettingsBar.setNavigationOnClickListener { finish() }
+        if (activity != null && activity is AppCompatActivity) {
+            (activity as AppCompatActivity).apply {
+                setSupportActionBar(tbDesignSettingsBar)
+                supportActionBar?.title = "Design"
+                tbDesignSettingsBar.setNavigationOnClickListener { finish() }
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -49,7 +53,7 @@ class DesignSettingsActivity : BasePSFragmentActivity<DesignSettingsPresenter>()
         rvDesignSettingsItemsList.apply {
             adapter = settingsRecyclerAdapter
             val linLayoutManager = LinearLayoutManager(
-                this@DesignSettingsActivity,
+                context,
                 LinearLayoutManager.VERTICAL,
                 false
             )
