@@ -43,6 +43,7 @@ android {
             annotationProcessorOptions {
                 arguments = [
                         disableEmptyStrategyCheck: 'true',
+                        defaultMoxyStrategy: 'moxy.viewstate.strategy.OneExecutionStateStrategy',
                         enableEmptyStrategyHelper: 'false',
                 ]
             }

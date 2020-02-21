@@ -26,7 +26,9 @@
                 android:id="@+id/action_settingsFragment_to_designSettingsFragment"
                 app:destination="@id/designSettingsFragment"
                 app:enterAnim="@anim/push_down_in"
-                app:exitAnim="@anim/push_down_out" />
+                app:exitAnim="@anim/push_down_out"
+                app:popExitAnim="@anim/push_down_out"
+                app:popEnterAnim="@anim/push_down_in"/>
         <action
                 android:id="@+id/action_settingsFragment_to_privacySettingsFragment"
                 app:destination="@id/privacySettingsFragment" />

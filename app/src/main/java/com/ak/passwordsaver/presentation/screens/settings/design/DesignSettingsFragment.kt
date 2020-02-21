@@ -38,7 +38,9 @@ class DesignSettingsFragment : BasePSFragment<DesignSettingsPresenter>(), IDesig
             (activity as AppCompatActivity).apply {
                 setSupportActionBar(tbDesignSettingsBar)
                 supportActionBar?.title = "Design"
-                tbDesignSettingsBar.setNavigationOnClickListener { finish() }
+                tbDesignSettingsBar.setNavigationOnClickListener {
+                    navController.popBackStack()
+                }
             }
         }
     }
