@@ -1,24 +1,25 @@
 package com.ak.passwordsaver.presentation.screens.passwordmanage.edit
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import com.ak.passwordsaver.presentation.screens.passwordmanage.BaseManagePasswordActivity
-import kotlinx.android.synthetic.main.activity_manage_password.*
+import androidx.navigation.NavController
+import com.ak.passwordsaver.R
+import com.ak.passwordsaver.presentation.screens.passwordmanage.BaseManagePasswordFragment
+import kotlinx.android.synthetic.main.fragment_manage_password.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
+import org.jetbrains.anko.bundleOf
 
-class EditPasswordActivity : BaseManagePasswordActivity<EditPasswordPresenter>(),
+class EditPasswordFragment : BaseManagePasswordFragment<EditPasswordPresenter>(),
     IEditPasswordView {
 
     companion object {
         private const val PASSWORD_ID_FOR_EDIT_EXTRA_KEY = "password_id_for_edit"
 
-        fun startActivity(context: Context, passwordId: Long) {
-            Intent(context, EditPasswordActivity::class.java).let {
-                it.putExtra(PASSWORD_ID_FOR_EDIT_EXTRA_KEY, passwordId)
-                context.startActivity(it)
-            }
+        fun navigateToEditPassword(navController: NavController, passwordId: Long) {
+            navController.navigate(
+                R.id.action_passwordsListFragment_to_editPasswordFragment,
+                bundleOf(PASSWORD_ID_FOR_EDIT_EXTRA_KEY to passwordId)
+            )
         }
     }
 
@@ -35,12 +36,12 @@ class EditPasswordActivity : BaseManagePasswordActivity<EditPasswordPresenter>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        if (!intent.hasExtra(PASSWORD_ID_FOR_EDIT_EXTRA_KEY)) {
-            finish()
-        } else {
+        if (arguments?.containsKey(PASSWORD_ID_FOR_EDIT_EXTRA_KEY) == true) {
             editPasswordPresenter.loadPasswordData(
-                intent.getLongExtra(PASSWORD_ID_FOR_EDIT_EXTRA_KEY, 0L)
+                arguments!!.getLong(PASSWORD_ID_FOR_EDIT_EXTRA_KEY, 0L)
             )
+        } else {
+            throw IllegalStateException("Can't open EditPasswordFragment without arguments")
         }
     }
 

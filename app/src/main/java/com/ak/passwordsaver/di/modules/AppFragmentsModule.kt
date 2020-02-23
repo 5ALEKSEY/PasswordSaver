@@ -1,6 +1,8 @@
 package com.ak.passwordsaver.di.modules
 
 import com.ak.passwordsaver.di.scopes.FragmentScope
+import com.ak.passwordsaver.presentation.screens.passwordmanage.add.AddNewPasswordFragment
+import com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswordFragment
 import com.ak.passwordsaver.presentation.screens.passwordmanage.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListFragment
 import com.ak.passwordsaver.presentation.screens.settings.SettingsFragment
@@ -33,6 +35,14 @@ interface AppFragmentsModule {
     @FragmentScope
     @ContributesAndroidInjector(modules = [FragmentModule::class])
     fun injectAboutSettingsFragment(): AboutSettingsFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = [FragmentModule::class])
+    fun injectAddNewPasswordFragment(): AddNewPasswordFragment
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = [FragmentModule::class])
+    fun injectEditPasswordFragment(): EditPasswordFragment
 
     @FragmentScope
     @ContributesAndroidInjector(modules = [FragmentModule::class])

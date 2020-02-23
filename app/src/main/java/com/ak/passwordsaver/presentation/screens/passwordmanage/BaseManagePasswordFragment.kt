@@ -4,35 +4,38 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Bundle
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
-import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
+import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.CameraPickImageActivity
 import com.ak.passwordsaver.presentation.screens.passwordmanage.gallery.manager.IPSGalleryManager
 import com.ak.passwordsaver.presentation.screens.passwordmanage.ui.PhotoChooserBottomSheetDialog
 import com.ak.passwordsaver.utils.extensions.drawTextInner
 import com.ak.passwordsaver.utils.extensions.getColorCompat
-import com.ak.passwordsaver.utils.extensions.hideKeyBoard
+import com.ak.passwordsaver.utils.extensions.hideKeyboard
 import com.ak.passwordsaver.utils.extensions.setSafeClickListener
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
-import kotlinx.android.synthetic.main.activity_manage_password.*
+import kotlinx.android.synthetic.main.fragment_manage_password.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPresenter<*>>
-    : BasePSFragmentActivity<ManagePresenter>(), IBaseManagePasswordView {
+abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPresenter<*>>
+    : BasePSFragment<ManagePresenter>(), IBaseManagePasswordView {
 
     @Inject
     lateinit var mGalleryManager: IPSGalleryManager
@@ -41,7 +44,12 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
 
     protected abstract fun getPresenter(): ManagePresenter
 
-    override fun getScreenLayoutResId() = R.layout.activity_manage_password
+    override fun getFragmentLayoutResId() = R.layout.fragment_manage_password
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
@@ -64,7 +72,7 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
             GlobalScope.launch {
 
                 val permissionResult = PermissionManager.requestPermissions(
-                    this@BaseManagePasswordActivity,
+                    this@BaseManagePasswordFragment,
                     AppConstants.AVATAR_PERMISSIONS_REQUEST_CODE,
                     Manifest.permission.CAMERA,
                     Manifest.permission.READ_EXTERNAL_STORAGE
@@ -75,7 +83,7 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
                         Log.d("Alex_testing", "Granted")
                         dismissPasswordAvatarChooserDialog()
                         mAvatarChooserDialog =
-                            PhotoChooserBottomSheetDialog.showDialog(supportFragmentManager)
+                            PhotoChooserBottomSheetDialog.showDialog(childFragmentManager)
                         mAvatarChooserDialog.onChooseAvatarActionListener =
                             { avatarChooseActionCode ->
                                 when (avatarChooseActionCode) {
@@ -130,13 +138,13 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
         dismissPasswordAvatarChooserDialog()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.add_new_password_menu, menu)
-        return super.onCreateOptionsMenu(menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.add_new_password_menu, menu)
+        return super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?) =
-        if (item != null && item.itemId == R.id.action_save_password) {
+    override fun onOptionsItemSelected(item: MenuItem) =
+        if (item.itemId == R.id.action_save_password) {
             managePasswordAction()
             true
         } else {
@@ -144,8 +152,8 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
         }
 
     override fun displaySuccessPasswordManageAction() {
-        Toast.makeText(this, "Successful", Toast.LENGTH_SHORT).show()
-        finish()
+        Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show()
+        navController.popBackStack()
     }
 
     override fun displayPasswordNameInputError(errorMessage: String) {
@@ -193,14 +201,16 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
 
     override fun openGalleryForImagePick() {
         if (this::mGalleryManager.isInitialized) {
-            mGalleryManager.openGalleryForImagePick(this)
+            activity?.let {
+                mGalleryManager.openGalleryForImagePick(it, this)
+            }
         }
     }
 
     override fun openCameraForImagePick() {
-        CameraPickImageActivity.startCameraPickActivityForResult(
-            this@BaseManagePasswordActivity
-        )
+        activity?.let {
+            CameraPickImageActivity.startCameraPickActivityForResult(it, this)
+        }
     }
 
     private fun initGalleryManager() {
@@ -208,15 +218,22 @@ abstract class BaseManagePasswordActivity<ManagePresenter : BaseManagePasswordPr
     }
 
     private fun initToolbar() {
-        setSupportActionBar(tbManagePasswordBar)
-        supportActionBar?.title = getToolbarTitleText()
-        tbManagePasswordBar.setNavigationOnClickListener { finish() }
+        if (activity != null && activity is AppCompatActivity) {
+            (activity as AppCompatActivity).apply {
+                setSupportActionBar(tbManagePasswordBar)
+                supportActionBar?.title = getToolbarTitleText()
+                tbManagePasswordBar.setNavigationOnClickListener {
+                    hideKeyboard()
+                    navController.popBackStack()
+                }
+            }
+        }
     }
 
     protected abstract fun getToolbarTitleText(): String
 
     private fun managePasswordAction() {
-        hideKeyBoard()
+        hideKeyboard()
         hidePasswordNameInputError()
         hidePasswordContentInputError()
         getPresenter().onManagePasswordAction(

@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.passwordsaver.R
+import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
+import com.ak.passwordsaver.presentation.screens.auth.SecurityActivity
 import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.SettingsRecyclerViewAdapter
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel
@@ -87,10 +89,11 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(), IPri
     }
 
     private fun openSecurityScreen(securityAction: Int) {
-//        SecurityActivity.startSecurityForResult(
-//            this,
-//            securityAction,
-//            AppConstants.SECURITY_CHANGE_ACTION_REQUEST_CODE
-//        )
+        SecurityActivity.startSecurityForResult(
+            requireActivity(),
+            this,
+            securityAction,
+            AppConstants.SECURITY_CHANGE_ACTION_REQUEST_CODE
+        )
     }
 }

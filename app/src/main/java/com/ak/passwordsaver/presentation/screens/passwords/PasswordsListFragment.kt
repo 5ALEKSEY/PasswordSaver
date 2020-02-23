@@ -10,8 +10,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
-import com.ak.passwordsaver.presentation.screens.passwordmanage.add.AddNewPasswordActivity
-import com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswordActivity
+import com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswordFragment
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.IPasswordsActionModeView
 import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsActionModePresenter
 import com.ak.passwordsaver.presentation.screens.passwords.adapter.PasswordItemModel
@@ -53,16 +52,16 @@ class PasswordsListFragment : BasePSFragment<PasswordsListPresenter>(), IPasswor
 
     override fun isBackPressEnabled() = false
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
-        initRecyclerView()
+    override fun onResume() {
+        super.onResume()
         initToolbar()
+        initRecyclerView()
 
         fabAddNewPasswordAction.setSafeClickListener {
-            context?.let {
-                AddNewPasswordActivity.startActivity(it)
-            }
+            navController.navigate(R.id.action_passwordsListFragment_to_addNewPasswordFragment)
         }
+
+        passwordsListPresenter.loadPasswords()
     }
 
     override fun onPause() {
@@ -124,9 +123,10 @@ class PasswordsListFragment : BasePSFragment<PasswordsListPresenter>(), IPasswor
     }
 
     override fun showEditPasswordScreen(passwordId: Long) {
-        context?.let {
-            EditPasswordActivity.startActivity(it, passwordId)
-        }
+        EditPasswordFragment.navigateToEditPassword(
+            navController,
+            passwordId
+        )
     }
 
     private fun initToolbar() {

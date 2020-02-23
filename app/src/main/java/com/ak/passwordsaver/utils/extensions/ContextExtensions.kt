@@ -22,6 +22,11 @@ fun Fragment.hideKeyboard() {
     activity?.hideKeyBoard()
 }
 
+private fun Context.hideKeyBoard(focusedView: View) {
+    val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+    imm?.hideSoftInputFromWindow(focusedView.windowToken, 0)
+}
+
 fun Context.vibrate(vibrateDuration: Long = 200L) {
     (this.getSystemService(Context.VIBRATOR_SERVICE) as? Vibrator)?.let {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -58,8 +63,3 @@ fun Context.getColorCompat(@ColorRes colorRes: Int) = ContextCompat.getColor(thi
 fun FragmentActivity.getColorCompat(@ColorRes colorRes: Int) = baseContext.getColorCompat(colorRes)
 
 fun Fragment.getColorCompat(@ColorRes colorRes: Int) = activity?.getColorCompat(colorRes) ?: 0
-
-private fun Context.hideKeyBoard(focusedView: View) {
-    val imm = this.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-    imm?.hideSoftInputFromWindow(focusedView.windowToken, 0)
-}

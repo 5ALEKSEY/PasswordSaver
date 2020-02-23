@@ -30,9 +30,26 @@ class PasswordsListPresenter @Inject constructor(
         PSApplication.appInstance.getApplicationComponent().inject(this)
     }
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-        loadPasswords()
+    fun loadPasswords() {
+        passwordsInteractor.getAllPasswords()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .doOnSubscribe {
+                viewState.setLoadingState(true)
+                viewState.setEmptyPasswordsState(false)
+            }
+            .subscribe(
+                { list ->
+                    val listForDisplay = convertDBEntitiesList(list)
+                    viewState.setLoadingState(false)
+                    viewState.displayPasswords(listForDisplay)
+                    viewState.setEmptyPasswordsState(list.isEmpty())
+                    handleListForDisplay(listForDisplay)
+                },
+                { throwable ->
+                    Log.d("de", "dede")
+                })
+            .let(this::bindDisposable)
     }
 
     fun passwordShowActionRequired(passwordId: Long, isVisiblePasswordContent: Boolean) {
@@ -104,28 +121,6 @@ class PasswordsListPresenter @Inject constructor(
                 },
                 { throwable ->
                     Log.d("dddd", "dddd")
-                })
-            .let(this::bindDisposable)
-    }
-
-    private fun loadPasswords() {
-        passwordsInteractor.getAllPasswords()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                viewState.setLoadingState(true)
-                viewState.setEmptyPasswordsState(false)
-            }
-            .subscribe(
-                { list ->
-                    val listForDisplay = convertDBEntitiesList(list)
-                    viewState.setLoadingState(false)
-                    viewState.displayPasswords(listForDisplay)
-                    viewState.setEmptyPasswordsState(list.isEmpty())
-                    handleListForDisplay(listForDisplay)
-                },
-                { throwable ->
-                    Log.d("de", "dede")
                 })
             .let(this::bindDisposable)
     }

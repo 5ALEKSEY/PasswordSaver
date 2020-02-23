@@ -11,11 +11,19 @@
             android:label="PasswordsListFragment"
             tools:layout="@layout/fragment_passwords_list">
         <action
-                android:id="@+id/action_passwordsListFragment_to_editPasswordActivity4"
-                app:destination="@id/editPasswordActivity" />
+                android:id="@+id/action_passwordsListFragment_to_editPasswordFragment"
+                app:destination="@id/editPasswordFragment"
+                app:enterAnim="@anim/push_down_in"
+                app:exitAnim="@anim/push_down_out"
+                app:popEnterAnim="@anim/push_up_out"
+                app:popExitAnim="@anim/push_up_in" />
         <action
-                android:id="@+id/action_passwordsListFragment_to_addNewPasswordActivity"
-                app:destination="@id/addNewPasswordActivity" />
+                android:id="@+id/action_passwordsListFragment_to_addNewPasswordFragment"
+                app:destination="@id/addNewPasswordFragment"
+                app:enterAnim="@anim/push_down_in"
+                app:exitAnim="@anim/push_down_out"
+                app:popEnterAnim="@anim/push_up_out"
+                app:popExitAnim="@anim/push_up_in" />
     </fragment>
     <fragment
             android:id="@+id/settingsFragment"
@@ -45,16 +53,16 @@
                 app:popExitAnim="@anim/push_up_in" />
     </fragment>
 
-    <activity
-            android:id="@+id/editPasswordActivity"
-            android:name="com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswordActivity"
-            android:label="EditPasswordActivity"
-            tools:layout="@layout/activity_manage_password" />
-    <activity
-            android:id="@+id/addNewPasswordActivity"
-            android:name="com.ak.passwordsaver.presentation.screens.passwordmanage.add.AddNewPasswordActivity"
-            android:label="AddNewPasswordActivity"
-            tools:layout="@layout/activity_manage_password" />
+    <fragment
+            android:id="@+id/editPasswordFragment"
+            android:name="com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswordFragment"
+            android:label="EditPasswordFragment"
+            tools:layout="@layout/fragment_manage_password" />
+    <fragment
+            android:id="@+id/addNewPasswordFragment"
+            android:name="com.ak.passwordsaver.presentation.screens.passwordmanage.add.AddNewPasswordFragment"
+            android:label="AddNewPasswordFragment"
+            tools:layout="@layout/fragment_manage_password" />
 
     <!--Settings-->
     <fragment

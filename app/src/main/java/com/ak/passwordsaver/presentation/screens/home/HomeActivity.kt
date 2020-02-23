@@ -25,10 +25,9 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
 
     private var currentMenuItemId = R.id.passwordsListFragment
 
-    private val bottomBarHideDestinations = arrayOf(
-        R.id.designSettingsFragment,
-        R.id.privacySettingsFragment,
-        R.id.aboutSettingsFragment
+    private val visibleBottomBarDestinations = arrayOf(
+        R.id.settingsFragment,
+        R.id.passwordsListFragment
     )
 
     private val homeNavController: NavController by lazy {
@@ -38,7 +37,7 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
     private val destChangeListener =
         NavController.OnDestinationChangedListener { _, destAction, _ ->
             if (destAction !is NavGraph) {
-                bnvBottomBar.setVisibility(destAction.id !in bottomBarHideDestinations)
+                bnvBottomBar.setVisibility(destAction.id in visibleBottomBarDestinations)
             }
         }
 
