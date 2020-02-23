@@ -48,7 +48,9 @@ class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(), IAboutSe
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
                 setSupportActionBar(tbAboutSettingsBar)
-                tbAboutSettingsBar.setNavigationOnClickListener { finish() }
+                tbAboutSettingsBar.setNavigationOnClickListener {
+                    navController.popBackStack()
+                }
             }
         }
     }

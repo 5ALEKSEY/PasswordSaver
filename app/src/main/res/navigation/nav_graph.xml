@@ -27,14 +27,22 @@
                 app:destination="@id/designSettingsFragment"
                 app:enterAnim="@anim/push_down_in"
                 app:exitAnim="@anim/push_down_out"
-                app:popExitAnim="@anim/push_down_out"
-                app:popEnterAnim="@anim/push_down_in"/>
+                app:popEnterAnim="@anim/push_up_out"
+                app:popExitAnim="@anim/push_up_in" />
         <action
                 android:id="@+id/action_settingsFragment_to_privacySettingsFragment"
-                app:destination="@id/privacySettingsFragment" />
+                app:destination="@id/privacySettingsFragment"
+                app:enterAnim="@anim/push_down_in"
+                app:exitAnim="@anim/push_down_out"
+                app:popEnterAnim="@anim/push_up_out"
+                app:popExitAnim="@anim/push_up_in" />
         <action
                 android:id="@+id/action_settingsFragment_to_aboutSettingsFragment"
-                app:destination="@id/aboutSettingsFragment" />
+                app:destination="@id/aboutSettingsFragment"
+                app:enterAnim="@anim/push_down_in"
+                app:exitAnim="@anim/push_down_out"
+                app:popEnterAnim="@anim/push_up_out"
+                app:popExitAnim="@anim/push_up_in" />
     </fragment>
 
     <activity

@@ -60,7 +60,9 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(), IPri
             (activity as AppCompatActivity).apply {
                 setSupportActionBar(tbPrivacySettingsBar)
                 supportActionBar?.title = "Privacy"
-                tbPrivacySettingsBar.setNavigationOnClickListener { finish() }
+                tbPrivacySettingsBar.setNavigationOnClickListener {
+                    navController.popBackStack()
+                }
             }
         }
     }

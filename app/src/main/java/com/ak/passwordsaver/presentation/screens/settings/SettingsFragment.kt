@@ -28,10 +28,13 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(), ISettingsView {
 
     override fun getFragmentLayoutResId() = R.layout.fragment_settings
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun isBackPressEnabled() = false
+
+    override fun onResume() {
+        super.onResume()
         initToolbar()
         initRecyclerView()
+        settingsPresenter.loadSettingsData()
     }
 
     override fun showDesignSettings() {

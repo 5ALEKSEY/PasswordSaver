@@ -5,8 +5,10 @@ import android.view.WindowManager
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.ak.passwordsaver.R
+import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
 import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
 import com.ak.passwordsaver.utils.extensions.setVisibility
 import kotlinx.android.synthetic.main.activity_home.*
@@ -20,6 +22,8 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
 
     @ProvidePresenter
     fun providePresenter(): HomePresenter = daggerPresenter
+
+    private var currentMenuItemId = R.id.passwordsListFragment
 
     private val bottomBarHideDestinations = arrayOf(
         R.id.designSettingsFragment,
@@ -41,6 +45,24 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
     override fun getScreenLayoutResId() = R.layout.activity_home
 
     override fun onBackPressed() {
+        val hostFragment = supportFragmentManager.findFragmentById(R.id.bottomNavHostFragment)
+                as NavHostFragment
+
+        // get current visible fragment in bav host container
+        val inflatedFragments = hostFragment.childFragmentManager.fragments
+        val currentFragment = if (inflatedFragments.isNotEmpty()) {
+            inflatedFragments[0] // first (top) element in fragments stack
+        } else {
+            null
+        }
+        if (currentFragment != null
+            && currentFragment is BasePSFragment<*>
+            && currentFragment.isBackPressEnabled()
+        ) {
+            super.onBackPressed()
+            return
+        }
+
         homePresenter.finishScreenAction()
     }
 
@@ -65,7 +87,14 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
     }
 
     private fun initBottomNavigationView(navController: NavController) {
-        NavigationUI.setupWithNavController(bnvBottomBar, navController)
+        bnvBottomBar.setOnNavigationItemSelectedListener { menuItem ->
+            if (currentMenuItemId == menuItem.itemId) {
+                // skip already selected menu item
+                return@setOnNavigationItemSelectedListener false
+            }
+            currentMenuItemId = menuItem.itemId
+            NavigationUI.onNavDestinationSelected(menuItem, navController)
+        }
     }
 
     private fun setSecureRecentAppsScreenState(isSecure: Boolean) {

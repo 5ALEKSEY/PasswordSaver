@@ -23,31 +23,7 @@ class SettingsPresenter @Inject constructor(
         PSApplication.appInstance.getApplicationComponent().inject(this)
     }
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-        loadSettingsData()
-    }
-
-    fun onSectionClicked(settingId: Int) {
-        when (settingId) {
-            DESIGN_SECTION_SETTING_ID -> {
-                viewState.showDesignSettings()
-            }
-            PRIVACY_SECTION_SETTING_ID -> {
-                val isAuthEnabled = settingsPreferencesManager.isPincodeEnabled()
-                if (isAuthEnabled) {
-                    viewState.startAuthAndOpenPrivacySettings()
-                } else {
-                    viewState.showPrivacySettings()
-                }
-            }
-            ABOUT_SECTION_SETTING_ID -> {
-                viewState.showAboutScreen()
-            }
-        }
-    }
-
-    private fun loadSettingsData() {
+    fun loadSettingsData() {
         val designSectionItemModel = SectionSettingsListItemModel(
             DESIGN_SECTION_SETTING_ID,
             "Design",
@@ -70,5 +46,24 @@ class SettingsPresenter @Inject constructor(
             aboutSectionItemModel
         )
         viewState.displayAppSettings(sections)
+    }
+
+    fun onSectionClicked(settingId: Int) {
+        when (settingId) {
+            DESIGN_SECTION_SETTING_ID -> {
+                viewState.showDesignSettings()
+            }
+            PRIVACY_SECTION_SETTING_ID -> {
+                val isAuthEnabled = settingsPreferencesManager.isPincodeEnabled()
+                if (isAuthEnabled) {
+                    viewState.startAuthAndOpenPrivacySettings()
+                } else {
+                    viewState.showPrivacySettings()
+                }
+            }
+            ABOUT_SECTION_SETTING_ID -> {
+                viewState.showAboutScreen()
+            }
+        }
     }
 }

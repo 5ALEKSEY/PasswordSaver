@@ -51,6 +51,8 @@ class PasswordsListFragment : BasePSFragment<PasswordsListPresenter>(), IPasswor
 
     override fun getFragmentLayoutResId() = R.layout.fragment_passwords_list
 
+    override fun isBackPressEnabled() = false
+
     override fun initViewBeforePresenterAttach() {
         super.initViewBeforePresenterAttach()
         initRecyclerView()
@@ -128,10 +130,11 @@ class PasswordsListFragment : BasePSFragment<PasswordsListPresenter>(), IPasswor
     }
 
     private fun initToolbar() {
-        if (activity is AppCompatActivity) {
-            val appCompatActivity = activity as AppCompatActivity
-            appCompatActivity.setSupportActionBar(tbPasswordsListBar)
-            appCompatActivity.supportActionBar?.title = "Passwords list"
+        if (activity != null && activity is AppCompatActivity) {
+            (activity as AppCompatActivity).apply {
+                setSupportActionBar(tbPasswordsListBar)
+                supportActionBar?.title = "Passwords list"
+            }
         }
     }
 

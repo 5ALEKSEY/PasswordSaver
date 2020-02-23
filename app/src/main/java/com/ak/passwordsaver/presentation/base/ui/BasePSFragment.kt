@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.annotation.LayoutRes
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -26,9 +27,19 @@ abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFrag
 
     protected lateinit var navController: NavController
 
+    open fun isBackPressEnabled() = true
+
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            onBackPressed()
+        }
+        callback.isEnabled = isBackPressEnabled()
     }
 
     override fun onCreateView(
@@ -56,5 +67,9 @@ abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFrag
 
     protected open fun initViewBeforePresenterAttach() {
 
+    }
+
+    protected open fun onBackPressed() {
+        navController.popBackStack()
     }
 }
