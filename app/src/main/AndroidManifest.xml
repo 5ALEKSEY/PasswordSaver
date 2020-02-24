@@ -17,12 +17,6 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name=".presentation.screens.passwordmanage.camera.CameraPickImageActivity"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".presentation.screens.auth.SecurityActivity"
-                android:screenOrientation="portrait" />
-        <activity
                 android:name=".presentation.screens.home.HomeActivity"
                 android:screenOrientation="portrait">
             <intent-filter>
@@ -31,6 +25,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+                android:name=".presentation.screens.passwordmanage.camera.CameraPickImageActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".presentation.screens.auth.SecurityActivity"
+                android:screenOrientation="portrait" />
     </application>
 
 </manifest>

@@ -61,6 +61,7 @@ android {
             buildConfigField "String", "FULL_VERSION_NAME", "\"v. " + VERSION_NAME + "\""
         }
         debug {
+            applicationIdSuffix '.debug'
             minifyEnabled false
             debuggable true
             versionNameSuffix 'debug'
