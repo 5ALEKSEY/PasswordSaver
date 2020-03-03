@@ -1,6 +1,6 @@
 package com.ak.passwordsaver.domain.passwords.usecase
 
-import com.ak.passwordsaver.data.model.db.entities.PasswordDBEntity
+import com.ak.domain.data.model.db.entities.PasswordDBEntity
 
 class PasswordsListSortUseCase {
 

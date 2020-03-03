@@ -1,9 +1,0 @@
-<resources>
-    <string name="app_name">PasswordSaver</string>
-    <string name="password_showing_dialog_type">Dialog</string>
-    <string name="password_showing_toast_type">Toast</string>
-    <string name="password_showing_in_card_type">In card</string>
-    <string name="immediately_lock_state">Immediately</string>
-    <string name="one_minute_lock_state">1 min</string>
-    <string name="five_minutes_lock_state">5 min</string>
-</resources>

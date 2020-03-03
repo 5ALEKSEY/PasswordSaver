@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.presentation.screens.home
 
+import com.ak.domain.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers

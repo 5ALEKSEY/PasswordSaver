@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.presentation.screens.settings.privacy
 
+import com.ak.domain.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.managers.auth.AppLockStateHelper
 import com.ak.passwordsaver.presentation.screens.settings.adapter.items.SettingsListItemModel

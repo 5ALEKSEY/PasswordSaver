@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/security_background_color"
+        tools:context=".auth.SecurityActivity">
+
+    <ImageView
+            android:id="@+id/ivSecurityInputTypeChangeAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:tint="@color/iconsAndText"
+            android:src="@drawable/ic_pattern_input_type"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/ivSecurityScreenLogo"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@mipmap/ic_launcher"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/guideline"
+            tools:ignore="ContentDescription" />
+
+    <TextView
+            android:id="@+id/tvSecurityMessageText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/iconsAndText"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivSecurityScreenLogo"
+            android:text="Incorrect password. Please, try again" />
+
+    <RelativeLayout
+            android:id="@+id/vAuthContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideline2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvSecurityMessageText">
+
+        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeAuthView
+                android:id="@+id/cPincodeAuthView"
+                android:layout_width="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_height="wrap_content"
+                tools:background="@color/colorAccent"
+                tools:visibility="gone" />
+
+        <com.ak.base.auth.security.patterncode.PatternAuthView
+                android:id="@+id/vPatternAuthView"
+                android:layout_width="256dp"
+                android:layout_height="256dp"
+                android:layout_centerInParent="true"
+                app:nodesNumber="nine"
+                app:patternLineWidth="12"
+                app:vibration="true"
+                tools:background="@color/colorAccent"
+                tools:visibility="visible" />
+
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.15" />
+
+    <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

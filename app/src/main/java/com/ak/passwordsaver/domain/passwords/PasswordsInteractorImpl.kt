@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.domain.passwords
 
-import com.ak.passwordsaver.data.model.db.entities.PasswordDBEntity
-import com.ak.passwordsaver.data.repository.passwords.IPasswordsRepository
+import com.ak.domain.data.model.db.entities.PasswordDBEntity
+import com.ak.domain.data.repository.passwords.IPasswordsRepository
 import com.ak.passwordsaver.domain.passwords.usecase.EncryptionUseCase
 import com.ak.passwordsaver.domain.passwords.usecase.PasswordDataCheckUseCase
 import com.ak.passwordsaver.domain.passwords.usecase.PasswordsListSortUseCase

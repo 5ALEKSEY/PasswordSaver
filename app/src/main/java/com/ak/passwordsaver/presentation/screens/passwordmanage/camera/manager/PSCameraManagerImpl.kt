@@ -19,7 +19,7 @@ import android.os.HandlerThread
 import android.util.Log
 import android.view.Surface
 import android.view.TextureView
-import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
+import com.ak.base.managers.bitmapdecoder.IBitmapDecoderManager
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.CameraHelper
 import javax.inject.Inject
 

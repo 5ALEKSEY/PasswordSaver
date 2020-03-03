@@ -2,8 +2,8 @@ package com.ak.passwordsaver.di.modules
 
 import android.content.Context
 import androidx.room.Room
+import com.ak.domain.data.model.db.PSDatabase
 import com.ak.passwordsaver.BuildConfig
-import com.ak.passwordsaver.data.model.db.PSDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

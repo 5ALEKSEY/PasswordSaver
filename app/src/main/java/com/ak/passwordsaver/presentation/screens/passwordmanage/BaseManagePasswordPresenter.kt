@@ -1,10 +1,10 @@
 package com.ak.passwordsaver.presentation.screens.passwordmanage
 
-import com.ak.passwordsaver.data.model.internalstorage.IPSInternalStorageManager
+import com.ak.base.managers.bitmapdecoder.IBitmapDecoderManager
+import com.ak.domain.data.model.internalstorage.IPSInternalStorageManager
 import com.ak.passwordsaver.domain.passwords.usecase.PasswordDataCheckException
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants
-import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
 import com.ak.passwordsaver.utils.PSUtils
 import io.reactivex.BackpressureStrategy
 import io.reactivex.android.schedulers.AndroidSchedulers

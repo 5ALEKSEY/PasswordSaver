@@ -1,6 +1,6 @@
 package com.ak.passwordsaver.domain.passwords
 
-import com.ak.passwordsaver.data.model.db.entities.PasswordDBEntity
+import com.ak.domain.data.model.db.entities.PasswordDBEntity
 import io.reactivex.Flowable
 import io.reactivex.Single
 

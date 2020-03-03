@@ -1,0 +1,48 @@
+def appCompat_version = '1.1.0'
+def androidXCore_version = '1.2.0'
+def androidMaterial_version = '1.1.0'
+def constraint_version = '1.1.3'
+def dagger_version = '2.16'
+def moxy_version = '2.0.2'
+def room_version = '2.2.4'
+def circleImageView_version = '2.2.0'
+def glide_version = '4.9.0'
+def recyclerView_version = '1.1.0'
+def cardView_version = '1.0.0'
+def rx_version = '2.2.2'
+def rxAndroid_version = '2.0.2'
+def stetho_version = '1.5.0'
+def easyCrypt_version = '1.3.3'
+def coroutinesPermission_version = '1.0.0'
+def kotlinCoroutines_version = '1.3.0'
+def lifecycle_version = '2.2.0'
+def gson_version = '2.8.6'
+def nav_version = '2.3.0-alpha02'
+
+ext.deps = [
+        kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
+        appCompat           : "androidx.appcompat:appcompat:$appCompat_version",
+        androidX            : "androidx.core:core-ktx:$androidXCore_version",
+        androidMaterial     : "com.google.android.material:material:$androidMaterial_version",
+        constraint          : "androidx.constraintlayout:constraintlayout:$constraint_version",
+        dagger              : ["com.google.dagger:dagger:$dagger_version", "com.google.dagger:dagger-android-support:$dagger_version"],
+        daggerKapt          : ["com.google.dagger:dagger-compiler:$dagger_version", "com.google.dagger:dagger-android-processor:$dagger_version"],
+        moxy                : ["com.github.moxy-community:moxy:$moxy_version", "com.github.moxy-community:moxy-androidx:$moxy_version"],
+        moxyKapt            : "com.github.moxy-community:moxy-compiler:$moxy_version",
+        room                : ["androidx.room:room-runtime:$room_version", "androidx.room:room-rxjava2:$room_version"],
+        roomKapt            : "androidx.room:room-compiler:$room_version",
+        circleImageView     : "de.hdodenhof:circleimageview:$circleImageView_version",
+        glide               : "com.github.bumptech.glide:glide:$glide_version",
+        glideKapt           : "com.github.bumptech.glide:compiler:$glide_version",
+        recyclerView        : "androidx.recyclerview:recyclerview:$recyclerView_version",
+        cardView            : "androidx.cardview:cardview:$cardView_version",
+        rx                  : "io.reactivex.rxjava2:rxjava:$rx_version",
+        rxAndroid           : "io.reactivex.rxjava2:rxandroid:$rxAndroid_version",
+        stethoDebugImpl     : "com.facebook.stetho:stetho:$stetho_version",
+        easycrypt           : "com.pvryan.easycrypt:easycrypt:$easyCrypt_version",
+        coroutinesPermission: "com.sagar:coroutinespermission:$coroutinesPermission_version",
+        kotlinCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutines_version",
+        lifecycle           : "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
+        gson                : "com.google.code.gson:gson:$gson_version",
+        navComponent        : ["androidx.navigation:navigation-fragment-ktx:$nav_version", "androidx.navigation:navigation-ui-ktx:$nav_version"]
+]

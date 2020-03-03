@@ -1,11 +1,11 @@
 package com.ak.passwordsaver.presentation.screens.passwords
 
 import android.util.Log
+import com.ak.domain.data.model.PasswordShowingType
+import com.ak.domain.data.model.db.entities.PasswordDBEntity
+import com.ak.domain.data.model.internalstorage.IPSInternalStorageManager
+import com.ak.domain.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.data.model.PasswordShowingType
-import com.ak.passwordsaver.data.model.db.entities.PasswordDBEntity
-import com.ak.passwordsaver.data.model.internalstorage.IPSInternalStorageManager
-import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
 import com.ak.passwordsaver.domain.passwords.IPasswordsInteractor
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import com.ak.passwordsaver.presentation.base.constants.AppConstants

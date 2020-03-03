@@ -1,5 +1,6 @@
 package com.ak.passwordsaver.di
 
+import com.ak.base.di.BaseComponent
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.di.modules.AppActivitiesModule
 import com.ak.passwordsaver.di.modules.AppFragmentsModule
@@ -34,6 +35,7 @@ import javax.inject.Singleton
 )
 @Singleton
 interface AppComponent {
+    fun initBaseComponent(): BaseComponent
 
     fun inject(app: PSApplication)
     fun inject(presenter: HomePresenter)

@@ -1,7 +1,7 @@
 package com.ak.passwordsaver.presentation.screens.passwordmanage.add
 
+import com.ak.domain.data.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.data.model.db.entities.PasswordDBEntity
 import com.ak.passwordsaver.domain.passwords.IPasswordsInteractor
 import com.ak.passwordsaver.presentation.screens.passwordmanage.BaseManagePasswordPresenter
 import io.reactivex.android.schedulers.AndroidSchedulers

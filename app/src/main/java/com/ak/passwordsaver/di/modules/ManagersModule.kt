@@ -1,15 +1,15 @@
 package com.ak.passwordsaver.di.modules
 
-import com.ak.passwordsaver.data.model.internalstorage.IPSInternalStorageManager
-import com.ak.passwordsaver.data.model.internalstorage.PSInternalStorageManagerImpl
-import com.ak.passwordsaver.data.model.preferences.auth.AuthPreferencesManagerImpl
-import com.ak.passwordsaver.data.model.preferences.auth.IAuthPreferencesManager
-import com.ak.passwordsaver.data.model.preferences.settings.ISettingsPreferencesManager
-import com.ak.passwordsaver.data.model.preferences.settings.SettingsPreferencesManagerImpl
+import com.ak.base.managers.bitmapdecoder.BitmapDecoderManagerImpl
+import com.ak.base.managers.bitmapdecoder.IBitmapDecoderManager
+import com.ak.domain.data.model.internalstorage.IPSInternalStorageManager
+import com.ak.domain.data.model.internalstorage.PSInternalStorageManagerImpl
+import com.ak.domain.preferences.auth.AuthPreferencesManagerImpl
+import com.ak.domain.preferences.auth.IAuthPreferencesManager
+import com.ak.domain.preferences.settings.ISettingsPreferencesManager
+import com.ak.domain.preferences.settings.SettingsPreferencesManagerImpl
 import com.ak.passwordsaver.presentation.base.managers.auth.IPSAuthManager
 import com.ak.passwordsaver.presentation.base.managers.auth.PSAuthManagerImpl
-import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.BitmapDecoderManagerImpl
-import com.ak.passwordsaver.presentation.base.managers.bitmapdecoder.IBitmapDecoderManager
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.manager.IPSCameraManager
 import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.manager.PSCameraManagerImpl
 import com.ak.passwordsaver.presentation.screens.passwordmanage.gallery.manager.IPSGalleryManager

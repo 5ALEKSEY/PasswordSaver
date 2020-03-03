@@ -1,8 +1,8 @@
 package com.ak.passwordsaver.presentation.screens.passwordmanage.camera
 
 import android.graphics.Bitmap
+import com.ak.domain.data.model.internalstorage.IPSInternalStorageManager
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.data.model.internalstorage.IPSInternalStorageManager
 import com.ak.passwordsaver.presentation.base.BasePSPresenter
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
