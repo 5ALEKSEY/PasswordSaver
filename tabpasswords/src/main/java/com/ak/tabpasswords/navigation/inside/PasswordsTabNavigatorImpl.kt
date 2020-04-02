@@ -5,8 +5,9 @@ import androidx.navigation.NavController
 import com.ak.tabpasswords.R
 import com.ak.tabpasswords.navigation.cross.IPasswordsTabCrossModuleNavigator
 import com.ak.tabpasswords.presentation.passwordmanage.edit.EditPasswordFragment
+import javax.inject.Inject
 
-internal class PasswordsTabNavigatorImpl : IPasswordsTabNavigator {
+internal class PasswordsTabNavigatorImpl @Inject constructor() : IPasswordsTabNavigator {
 
     private lateinit var crossModuleNavigator: IPasswordsTabCrossModuleNavigator
     private lateinit var passwordsModuleNavigator: NavController

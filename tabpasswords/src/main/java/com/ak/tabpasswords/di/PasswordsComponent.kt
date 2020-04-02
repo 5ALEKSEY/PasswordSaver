@@ -9,6 +9,7 @@ import com.ak.tabpasswords.di.module.PasswordsTabNavigationModule
 import com.ak.tabpasswords.presentation.passwordmanage.add.AddNewPasswordPresenter
 import com.ak.tabpasswords.presentation.passwordmanage.camera.CameraPickImagePresenter
 import com.ak.tabpasswords.presentation.passwordmanage.edit.EditPasswordPresenter
+import com.ak.tabpasswords.presentation.passwords.PasswordsListFragment
 import com.ak.tabpasswords.presentation.passwords.PasswordsListPresenter
 import dagger.Subcomponent
 
@@ -29,4 +30,6 @@ interface PasswordsComponent {
     fun inject(presenter: AddNewPasswordPresenter)
     fun inject(presenter: EditPasswordPresenter)
     fun inject(presenter: CameraPickImagePresenter)
+
+    fun inject(fragment: PasswordsListFragment)
 }
