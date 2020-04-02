@@ -1,5 +1,6 @@
 package com.ak.base.extensions
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -13,18 +14,20 @@ import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import com.ak.base.BaseApplication
 import com.ak.base.constants.AppConstants
 import com.google.android.material.appbar.AppBarLayout
 import java.util.*
 
-fun Float.dpToPx(): Int {
-    return TypedValue.applyDimension(
+fun Float.dpToPx(context: Context?) =
+    if (context != null) {
+        TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         this,
-        BaseApplication.appInstance.resources.displayMetrics
-    ).toInt()
-}
+            context.applicationContext.resources.displayMetrics
+        ).toInt()
+    } else {
+        this.toInt()
+    }
 
 fun ImageView.drawTextInner(
     imageSizeInPx: Int,

@@ -6,37 +6,48 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.ak.passwordsaver.appnavigator.IAppNavigator
+import com.ak.passwordsaver.auth.IPSAuthManager
 import com.ak.passwordsaver.di.AppComponent
 import com.ak.passwordsaver.di.DaggerAppComponent
 import com.ak.passwordsaver.di.modules.AppModule
-import com.ak.passwordsaver.presentation.base.managers.auth.IPSAuthManager
+import com.ak.tabpasswords.di.PasswordsComponent
+import com.ak.tabpasswords.di.PasswordsComponentProvider
+import com.ak.tabpasswords.navigation.cross.PasswordsTabCrossModuleNavigatorProvider
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import javax.inject.Inject
 
-open class PSApplication : Application(), HasActivityInjector, LifecycleObserver {
+open class PSApplication : Application(), HasActivityInjector, LifecycleObserver,
+    PasswordsComponentProvider, PasswordsTabCrossModuleNavigatorProvider {
 
     companion object {
         lateinit var appInstance: PSApplication
     }
 
-    private lateinit var mAppComponent: AppComponent
+    private var applicationDaggerComponent: AppComponent? = null
 
     @Inject
-    lateinit var mActivityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    internal lateinit var mActivityDispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
     @Inject
-    lateinit var mAuthManager: IPSAuthManager
+    internal lateinit var mAuthManager: IPSAuthManager
+    @Inject
+    internal lateinit var appNavigator: IAppNavigator
 
-    fun getApplicationComponent() = mAppComponent
+    fun getApplicationComponent(): AppComponent {
+        return applicationDaggerComponent
+            ?: throw IllegalStateException("Error!!! null dagger application component")
+    }
 
     override fun onCreate() {
         super.onCreate()
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         appInstance = this
 
-        mAppComponent = buildApplicationDaggerComponent()
-        mAppComponent.inject(this)
+        applicationDaggerComponent = buildApplicationDaggerComponent()?.apply {
+            inject(this@PSApplication)
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
@@ -57,4 +68,11 @@ open class PSApplication : Application(), HasActivityInjector, LifecycleObserver
 
     private fun buildApplicationDaggerComponent() =
         DaggerAppComponent.builder().appModule(AppModule(appInstance)).build()
+
+    override fun providePasswordsComponent(): PasswordsComponent {
+        return applicationDaggerComponent?.initPasswordsComponent()
+            ?: throw IllegalStateException("Error!!! null dagger application component")
+    }
+
+    override fun provideCrossNavigatorForPasswordsModule() = appNavigator
 }

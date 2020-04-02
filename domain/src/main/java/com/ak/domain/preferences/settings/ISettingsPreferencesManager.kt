@@ -1,7 +1,7 @@
 package com.ak.domain.preferences.settings
 
-import com.ak.passwordsaver.data.model.PasswordShowingType
-import com.ak.passwordsaver.presentation.base.managers.auth.AppLockState
+import com.ak.domain.data.model.PasswordShowingType
+import com.ak.domain.preferences.auth.AppLockState
 
 interface ISettingsPreferencesManager {
     fun getPasswordShowingType(): PasswordShowingType

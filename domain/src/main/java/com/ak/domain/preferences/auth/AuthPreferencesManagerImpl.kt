@@ -1,12 +1,12 @@
 package com.ak.domain.preferences.auth
 
 import android.content.SharedPreferences
-import com.ak.passwordsaver.di.modules.AppModule
+import com.ak.domain.di.module.DomainDataModule
 import javax.inject.Inject
 import javax.inject.Named
 
 class AuthPreferencesManagerImpl @Inject constructor(
-    @Named(AppModule.AUTH_PREFERENCES) private val authPreferences: SharedPreferences
+    @Named(DomainDataModule.AUTH_PREFERENCES) private val authPreferences: SharedPreferences
 ) : IAuthPreferencesManager {
 
     companion object {

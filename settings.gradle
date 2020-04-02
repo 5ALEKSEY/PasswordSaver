@@ -1,1 +1,1 @@
-include ':app', ':settings', ':base', /*':data',*/ ':domain', ':passwords'
+include ':app', ':tabpasswords', /*':settings',*/ ':base', /*':data',*/ ':domain'

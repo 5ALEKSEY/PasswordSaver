@@ -3,10 +3,6 @@
         xmlns:tools="http://schemas.android.com/tools"
         package="com.ak.passwordsaver">
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <application
             android:name=".PSApplication"
             android:allowBackup="true"
@@ -25,10 +21,10 @@
             </intent-filter>
         </activity>
         <activity
-                android:name=".presentation.screens.passwordmanage.camera.CameraPickImageActivity"
+                android:name="com.ak.tabpasswords.presentation.passwordmanage.camera.CameraPickImageActivity"
                 android:screenOrientation="portrait" />
         <activity
-                android:name=".presentation.screens.auth.SecurityActivity"
+                android:name=".auth.SecurityActivity"
                 android:screenOrientation="portrait" />
     </application>
 

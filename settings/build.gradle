@@ -1,35 +1,122 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
+
 apply plugin: 'kotlin-android'
+
 apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+def rootExtConfiguration = rootProject.extensions.getByName("ext")
+
+String VERSION_NAME = rootExtConfiguration["appVersionName"]
+int VERSION_CODE = rootExtConfiguration["appVersionCode"]
+
+int COMPILE_SDK_VERSION = rootExtConfiguration["compileSdkVersion"]
+int MIN_SDK_VERSION = rootExtConfiguration["minSdkVersion"]
+int TARGET_SDK_VERSION = rootExtConfiguration["targetSdkVersion"]
+
 android {
-    compileSdkVersion 28
-
-
+    compileSdkVersion COMPILE_SDK_VERSION
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-
+        applicationId "com.ak.passwordsaver"
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles 'consumer-rules.pro'
-    }
 
+        vectorDrawables.useSupportLibrary = true
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        disableEmptyStrategyCheck: 'true',
+                        defaultMoxyStrategy      : 'moxy.viewstate.strategy.OneExecutionStateStrategy',
+                        enableEmptyStrategyHelper: 'false',
+                ]
+            }
+        }
+    }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            debuggable false
+            versionNameSuffix 'release'
+
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "DATA_BASE_NAME", DATA_BASE_NAME
+            buildConfigField "String", "FULL_VERSION_NAME", "\"v. " + VERSION_NAME + "\""
+        }
+        debug {
+            applicationIdSuffix '.debug'
+            minifyEnabled false
+            debuggable true
+            versionNameSuffix 'debug'
+
+            buildConfigField "String", "DATA_BASE_NAME", DATA_BASE_NAME
+            buildConfigField "String", "FULL_VERSION_NAME", "\"v. " + VERSION_NAME + "-debug\""
         }
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "PasswordSaver_${VERSION_NAME}_${variant.buildType.name}.apk"
+        }
+    }
+}
+
+kapt {
+    generateStubs = true
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation project(':base')
+    implementation project(':domain')
+
+    implementation deps.kotlin
+    implementation deps.appCompat
+    implementation deps.androidX
+    implementation deps.androidMaterial
+    implementation deps.constraint
+
+    implementation deps.dagger
+    kapt deps.daggerKapt
+
+    implementation deps.moxy
+    kapt deps.moxyKapt
+
+    implementation deps.room
+    kapt deps.roomKapt
+
+    implementation deps.circleImageView
+
+    implementation deps.glide
+    kapt deps.glideKapt
+
+    implementation deps.recyclerView
+    implementation deps.cardView
+
+    implementation deps.rx
+    implementation deps.rxAndroid
+
+    debugImplementation deps.stethoDebugImpl
+
+    implementation deps.easycrypt
+
+    implementation deps.coroutinesPermission
+    implementation deps.kotlinCoroutines
+
+    implementation deps.lifecycle
+    implementation deps.gson
+    implementation deps.navComponent
 }

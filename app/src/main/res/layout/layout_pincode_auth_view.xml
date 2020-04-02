@@ -11,7 +11,7 @@
             android:layout_height="wrap_content"
             tools:background="@color/colorPrimary">
 
-        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeContentInputView
+        <com.ak.passwordsaver.auth.security.pincode.PincodeContentInputView
                 android:id="@+id/cPincodeInputView"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
@@ -31,7 +31,7 @@
                 app:layout_constraintEnd_toEndOf="@+id/cPincodeNumberView3"
                 app:layout_constraintStart_toStartOf="@+id/cPincodeNumberView1" />
 
-        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
+        <com.ak.passwordsaver.auth.security.pincode.PincodeNumberView
                 android:id="@+id/cPincodeNumberView1"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -43,7 +43,7 @@
                 app:pincodeValue="one"
                 app:primaryText="1" />
 
-        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
+        <com.ak.passwordsaver.auth.security.pincode.PincodeNumberView
                 android:id="@+id/cPincodeNumberView2"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -56,7 +56,7 @@
                 app:primaryText="2"
                 app:secondaryText="ABC" />
 
-        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
+        <com.ak.passwordsaver.auth.security.pincode.PincodeNumberView
                 android:id="@+id/cPincodeNumberView3"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -69,7 +69,7 @@
                 app:primaryText="3"
                 app:secondaryText="DEF" />
 
-        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
+        <com.ak.passwordsaver.auth.security.pincode.PincodeNumberView
                 android:id="@+id/cPincodeNumberView4"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -82,7 +82,7 @@
                 app:primaryText="4"
                 app:secondaryText="GHI" />
 
-        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
+        <com.ak.passwordsaver.auth.security.pincode.PincodeNumberView
                 android:id="@+id/cPincodeNumberView5"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -95,7 +95,7 @@
                 app:primaryText="5"
                 app:secondaryText="JKL" />
 
-        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
+        <com.ak.passwordsaver.auth.security.pincode.PincodeNumberView
                 android:id="@+id/cPincodeNumberView6"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -108,7 +108,7 @@
                 app:primaryText="6"
                 app:secondaryText="MNO" />
 
-        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
+        <com.ak.passwordsaver.auth.security.pincode.PincodeNumberView
                 android:id="@+id/cPincodeNumberView7"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -121,7 +121,7 @@
                 app:primaryText="7"
                 app:secondaryText="PQRS" />
 
-        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
+        <com.ak.passwordsaver.auth.security.pincode.PincodeNumberView
                 android:id="@+id/cPincodeNumberView8"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -134,7 +134,7 @@
                 app:primaryText="8"
                 app:secondaryText="TUV" />
 
-        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
+        <com.ak.passwordsaver.auth.security.pincode.PincodeNumberView
                 android:id="@+id/cPincodeNumberView9"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
@@ -147,7 +147,7 @@
                 app:primaryText="9"
                 app:secondaryText="WXYZ" />
 
-        <com.ak.passwordsaver.presentation.screens.auth.security.pincode.PincodeNumberView
+        <com.ak.passwordsaver.auth.security.pincode.PincodeNumberView
                 android:id="@+id/cPincodeNumberView0"
                 android:layout_width="64dp"
                 android:layout_height="64dp"

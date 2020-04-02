@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="add_password_avatar_size">150dp</dimen>
+    <dimen name="card_avatar_avatar_size">130dp</dimen>
+
+    <dimen name="add_avatar_inner_text_size">60sp</dimen>
+    <dimen name="card_avatar_inner_text_size">40sp</dimen>
+
+    <dimen name="about_image_launcher_size">150dp</dimen>
+    <dimen name="about_image_launcher_text_size">25sp</dimen>
+</resources>

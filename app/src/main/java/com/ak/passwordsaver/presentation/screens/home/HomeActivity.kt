@@ -7,10 +7,10 @@ import androidx.navigation.NavGraph
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.ak.base.extensions.setVisibility
+import com.ak.base.ui.BasePSFragment
 import com.ak.passwordsaver.R
-import com.ak.passwordsaver.presentation.base.ui.BasePSFragment
-import com.ak.passwordsaver.presentation.base.ui.BasePSFragmentActivity
-import com.ak.passwordsaver.utils.extensions.setVisibility
+import com.ak.passwordsaver.presentation.base.BasePSFragmentActivity
 import kotlinx.android.synthetic.main.activity_home.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter

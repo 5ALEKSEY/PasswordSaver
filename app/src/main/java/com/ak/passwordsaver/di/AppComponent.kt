@@ -1,52 +1,46 @@
 package com.ak.passwordsaver.di
 
-import com.ak.base.di.BaseComponent
+import com.ak.base.di.module.BaseManagersModule
+import com.ak.domain.di.module.DomainBusinessLogicModule
+import com.ak.domain.di.module.DomainDataModule
+import com.ak.domain.di.module.DomainManagersModule
+import com.ak.domain.di.module.DomainRepositoriesModule
 import com.ak.passwordsaver.PSApplication
+import com.ak.passwordsaver.auth.SecurityPresenter
 import com.ak.passwordsaver.di.modules.AppActivitiesModule
-import com.ak.passwordsaver.di.modules.AppFragmentsModule
 import com.ak.passwordsaver.di.modules.AppModule
 import com.ak.passwordsaver.di.modules.BusinessLogicModule
 import com.ak.passwordsaver.di.modules.DataBaseModule
 import com.ak.passwordsaver.di.modules.ManagersModule
-import com.ak.passwordsaver.di.modules.RepositoriesModule
-import com.ak.passwordsaver.presentation.screens.auth.SecurityPresenter
+import com.ak.passwordsaver.di.modules.NavigationModule
 import com.ak.passwordsaver.presentation.screens.home.HomePresenter
-import com.ak.passwordsaver.presentation.screens.passwordmanage.add.AddNewPasswordPresenter
-import com.ak.passwordsaver.presentation.screens.passwordmanage.camera.CameraPickImagePresenter
-import com.ak.passwordsaver.presentation.screens.passwordmanage.edit.EditPasswordPresenter
-import com.ak.passwordsaver.presentation.screens.passwords.PasswordsListPresenter
-import com.ak.passwordsaver.presentation.screens.passwords.actionMode.PasswordsActionModePresenter
-import com.ak.passwordsaver.presentation.screens.settings.SettingsPresenter
-import com.ak.passwordsaver.presentation.screens.settings.about.AboutSettingsPresenter
-import com.ak.passwordsaver.presentation.screens.settings.design.DesignSettingsPresenter
-import com.ak.passwordsaver.presentation.screens.settings.privacy.PrivacySettingsPresenter
+import com.ak.tabpasswords.di.PasswordsComponent
 import dagger.Component
 import javax.inject.Singleton
 
+
 @Component(
     modules = [
+        // App dagger modules
         AppModule::class,
         DataBaseModule::class,
         AppActivitiesModule::class,
-        AppFragmentsModule::class,
         ManagersModule::class,
         BusinessLogicModule::class,
-        RepositoriesModule::class]
+        NavigationModule::class,
+        // Domain dagger modules
+        DomainBusinessLogicModule::class,
+        DomainDataModule::class,
+        DomainManagersModule::class,
+        DomainRepositoriesModule::class,
+        // Base dagger modules
+        BaseManagersModule::class]
 )
 @Singleton
 interface AppComponent {
-    fun initBaseComponent(): BaseComponent
+    fun initPasswordsComponent(): PasswordsComponent
 
     fun inject(app: PSApplication)
     fun inject(presenter: HomePresenter)
-    fun inject(presenter: PasswordsListPresenter)
-    fun inject(presenter: AddNewPasswordPresenter)
-    fun inject(presenter: EditPasswordPresenter)
-    fun inject(presenter: PasswordsActionModePresenter)
     fun inject(presenter: SecurityPresenter)
-    fun inject(presenter: SettingsPresenter)
-    fun inject(presenter: DesignSettingsPresenter)
-    fun inject(presenter: PrivacySettingsPresenter)
-    fun inject(presenter: CameraPickImagePresenter)
-    fun inject(presenter: AboutSettingsPresenter)
 }

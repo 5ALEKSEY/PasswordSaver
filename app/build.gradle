@@ -63,6 +63,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
     applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "PasswordSaver_${VERSION_NAME}_${variant.buildType.name}.apk"
@@ -76,7 +80,7 @@ kapt {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':base')
+    implementation project(':tabpasswords')
 
     implementation deps.kotlin
     implementation deps.appCompat

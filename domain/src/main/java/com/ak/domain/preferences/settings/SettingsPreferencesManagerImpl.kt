@@ -3,15 +3,14 @@ package com.ak.domain.preferences.settings
 import android.content.Context
 import android.content.SharedPreferences
 import com.ak.domain.data.model.PasswordShowingType
-import com.ak.passwordsaver.data.model.PasswordShowingType
-import com.ak.passwordsaver.di.modules.AppModule
-import com.ak.passwordsaver.presentation.base.managers.auth.AppLockState
-import com.ak.passwordsaver.presentation.base.managers.auth.AppLockStateHelper
+import com.ak.domain.di.module.DomainDataModule
+import com.ak.domain.preferences.auth.AppLockState
+import com.ak.domain.preferences.auth.AppLockStateHelper
 import javax.inject.Inject
 import javax.inject.Named
 
 class SettingsPreferencesManagerImpl @Inject constructor(
-    @Named(AppModule.SETTINGS_PREFERENCES) private val mSettingsPreferences: SharedPreferences,
+    @Named(DomainDataModule.SETTINGS_PREFERENCES) private val mSettingsPreferences: SharedPreferences,
     private val mContext: Context
 ) : ISettingsPreferencesManager {
 
