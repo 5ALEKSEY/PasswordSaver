@@ -10,6 +10,8 @@ import androidx.navigation.ui.NavigationUI
 import com.ak.base.extensions.setVisibility
 import com.ak.base.ui.BasePSFragment
 import com.ak.passwordsaver.R
+import com.ak.passwordsaver.di.AppComponent
+import com.ak.passwordsaver.injector.ApplicationInjector
 import com.ak.passwordsaver.presentation.base.BasePSFragmentActivity
 import kotlinx.android.synthetic.main.activity_home.*
 import moxy.presenter.InjectPresenter
@@ -37,6 +39,7 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
     private val destChangeListener =
         NavController.OnDestinationChangedListener { _, destAction, _ ->
             if (destAction !is NavGraph) {
+                ApplicationInjector.onDestinationIdChanged(destAction.id)
                 bnvBottomBar.setVisibility(destAction.id in visibleBottomBarDestinations)
             }
         }
@@ -66,6 +69,7 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AppComponent.get().inject(this)
         super.onCreate(savedInstanceState)
         setSecureRecentAppsScreenState(homePresenter.getSecureApplicationState())
         initBottomNavigationView(homeNavController)

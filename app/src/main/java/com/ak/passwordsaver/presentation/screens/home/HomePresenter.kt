@@ -1,8 +1,8 @@
 package com.ak.passwordsaver.presentation.screens.home
 
 import com.ak.base.presenter.BasePSPresenter
-import com.ak.domain.preferences.settings.ISettingsPreferencesManager
-import com.ak.passwordsaver.PSApplication
+import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.passwordsaver.di.AppComponent
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -22,7 +22,7 @@ class HomePresenter @Inject constructor(
     private var mIsFinishScreenAllow = false
 
     init {
-        PSApplication.appInstance.getApplicationComponent().inject(this)
+        AppComponent.get().inject(this)
     }
 
     fun finishScreenAction() {

@@ -1,13 +1,14 @@
 package com.ak.passwordsaver.di.modules
 
 import android.content.Context
+import com.ak.passwordsaver.PSApplication
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class AppModule(private val appContext: Context) {
+class AppModule {
     @Provides
     @Singleton
-    fun provideApplicationContext() = appContext
+    fun provideApplicationContext(): Context = PSApplication.appContext.applicationContext
 }

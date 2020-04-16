@@ -1,0 +1,83 @@
+apply plugin: 'com.android.library'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+def rootExtConfiguration = rootProject.extensions.getByName("ext")
+
+String VERSION_NAME = rootExtConfiguration["appVersionName"]
+int VERSION_CODE = rootExtConfiguration["appVersionCode"]
+
+int COMPILE_SDK_VERSION = rootExtConfiguration["compileSdkVersion"]
+int MIN_SDK_VERSION = rootExtConfiguration["minSdkVersion"]
+int TARGET_SDK_VERSION = rootExtConfiguration["targetSdkVersion"]
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION
+    defaultConfig {
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        disableEmptyStrategyCheck: 'true',
+                        defaultMoxyStrategy: 'moxy.viewstate.strategy.OneExecutionStateStrategy',
+                        enableEmptyStrategyHelper: 'false',
+                ]
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+
+            buildConfigField "int", "DATA_BASE_VERSION", DATA_BASE_VERSION
+            buildConfigField "String", "DATA_BASE_NAME", DATA_BASE_NAME
+
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            buildConfigField "int", "DATA_BASE_VERSION", DATA_BASE_VERSION
+            buildConfigField "String", "DATA_BASE_NAME", DATA_BASE_NAME
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':core-repo-api')
+
+    implementation deps.kotlin
+    implementation deps.androidX
+
+    implementation deps.dagger
+    kapt deps.daggerKapt
+
+    implementation deps.moxy
+    kapt deps.moxyKapt
+
+    implementation deps.room
+    kapt deps.roomKapt
+
+    implementation deps.rx
+}

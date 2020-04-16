@@ -44,7 +44,6 @@ android {
             versionNameSuffix 'release'
 
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "DATA_BASE_NAME", DATA_BASE_NAME
             buildConfigField "String", "FULL_VERSION_NAME", "\"v. " + VERSION_NAME + "\""
         }
         debug {
@@ -53,7 +52,6 @@ android {
             debuggable true
             versionNameSuffix 'debug'
 
-            buildConfigField "String", "DATA_BASE_NAME", DATA_BASE_NAME
             buildConfigField "String", "FULL_VERSION_NAME", "\"v. " + VERSION_NAME + "-debug\""
         }
     }
@@ -80,7 +78,13 @@ kapt {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':tabpasswords')
+    implementation project(':base')
+    implementation project(':core-repo-api')
+    implementation project(':core-repo-impl')
+    implementation project(':feature-security-api')
+    implementation project(':feature-security-impl')
+    implementation project(':feature-tabpasswords-api')
+    implementation project(':feature-tabpasswords-impl')
 
     implementation deps.kotlin
     implementation deps.appCompat

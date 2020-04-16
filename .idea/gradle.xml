@@ -13,8 +13,12 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/base" />
-            <option value="$PROJECT_DIR$/domain" />
-            <option value="$PROJECT_DIR$/tabpasswords" />
+            <option value="$PROJECT_DIR$/core-repo-api" />
+            <option value="$PROJECT_DIR$/core-repo-impl" />
+            <option value="$PROJECT_DIR$/feature-security-api" />
+            <option value="$PROJECT_DIR$/feature-security-impl" />
+            <option value="$PROJECT_DIR$/feature-tabpasswords-api" />
+            <option value="$PROJECT_DIR$/feature-tabpasswords-impl" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

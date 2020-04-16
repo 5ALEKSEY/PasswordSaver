@@ -2,7 +2,6 @@ package com.ak.base.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,6 @@ import androidx.navigation.Navigation
 import com.ak.base.extensions.showToastMessage
 import com.ak.base.extensions.vibrate
 import com.ak.base.presenter.BasePSPresenter
-import dagger.android.support.AndroidSupportInjection
-import dagger.android.support.HasSupportFragmentInjector
 import moxy.MvpAppCompatFragment
 import javax.inject.Inject
 
@@ -27,13 +24,14 @@ abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFrag
     @LayoutRes
     abstract fun getFragmentLayoutResId(): Int
 
+    abstract fun injectFragment()
+
     protected lateinit var navController: NavController
 
     open fun isBackPressEnabled() = true
 
     override fun onAttach(context: Context) {
-        Log.d("AAAAAAA", "fragment: $this , activity: $activity , has activity support injector: ${activity is HasSupportFragmentInjector}")
-        AndroidSupportInjection.inject(this)
+        injectFragment()
         super.onAttach(context)
     }
 

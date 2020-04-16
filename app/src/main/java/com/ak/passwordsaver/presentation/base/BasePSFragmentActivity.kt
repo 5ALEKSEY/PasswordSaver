@@ -4,29 +4,20 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.showToastMessage
 import com.ak.base.extensions.vibrate
 import com.ak.base.presenter.BasePSPresenter
 import com.ak.base.ui.IBaseAppView
-import com.ak.passwordsaver.auth.IPSAuthManager
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import com.ak.feature_security_api.interfaces.IPSAuthManager
 import moxy.MvpAppCompatActivity
 import javax.inject.Inject
 
 abstract class BasePSFragmentActivity<Presenter : BasePSPresenter<*>> : MvpAppCompatActivity(),
-    IBaseAppView,
-    HasSupportFragmentInjector {
+    IBaseAppView {
 
     @Inject
-    lateinit var mFragmentDispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
-
-    @Inject
-    lateinit var mPSAuthManager: IPSAuthManager
+    lateinit var authManager: IPSAuthManager
 
     @Inject
     lateinit var daggerPresenter: Presenter
@@ -40,7 +31,6 @@ abstract class BasePSFragmentActivity<Presenter : BasePSPresenter<*>> : MvpAppCo
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(getScreenLayoutResId())
         initViewBeforePresenterAttach()
@@ -49,10 +39,10 @@ abstract class BasePSFragmentActivity<Presenter : BasePSPresenter<*>> : MvpAppCo
 
     override fun onResume() {
         super.onResume()
-        if (mPSAuthManager.isAppLocked() && isAuthCheckNeedsForScreen()) {
-            com.ak.passwordsaver.auth.SecurityActivity.startSecurityForResult(
+        if (authManager.isAppLocked() && isAuthCheckNeedsForScreen()) {
+            com.ak.feature_security_impl.auth.SecurityActivity.startSecurityForResult(
                 this,
-                com.ak.passwordsaver.auth.SecurityPresenter.AUTH_SECURITY_ACTION_TYPE,
+                IPSAuthManager.AUTH_SECURITY_ACTION_TYPE,
                 AppConstants.SECURITY_AUTH_ACTION_REQUEST_CODE
             )
         }
@@ -62,16 +52,12 @@ abstract class BasePSFragmentActivity<Presenter : BasePSPresenter<*>> : MvpAppCo
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == AppConstants.SECURITY_AUTH_ACTION_REQUEST_CODE) {
             when (resultCode) {
-                Activity.RESULT_OK -> mPSAuthManager.setAppLockState(false)
+                Activity.RESULT_OK -> authManager.setAppLockState(false)
                 else -> {
                     finishAffinity()
                 }
             }
         }
-    }
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment> {
-        return mFragmentDispatchingAndroidInjector
     }
 
     override fun showShortTimeMessage(message: String) {

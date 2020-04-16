@@ -1,46 +1,52 @@
 package com.ak.passwordsaver.di
 
-import com.ak.base.di.module.BaseManagersModule
-import com.ak.domain.di.module.DomainBusinessLogicModule
-import com.ak.domain.di.module.DomainDataModule
-import com.ak.domain.di.module.DomainManagersModule
-import com.ak.domain.di.module.DomainRepositoriesModule
+import com.ak.core_repo_api.api.CoreRepositoryApi
+import com.ak.feature_security_api.api.FeatureSecurityApi
 import com.ak.passwordsaver.PSApplication
-import com.ak.passwordsaver.auth.SecurityPresenter
-import com.ak.passwordsaver.di.modules.AppActivitiesModule
 import com.ak.passwordsaver.di.modules.AppModule
-import com.ak.passwordsaver.di.modules.BusinessLogicModule
-import com.ak.passwordsaver.di.modules.DataBaseModule
-import com.ak.passwordsaver.di.modules.ManagersModule
 import com.ak.passwordsaver.di.modules.NavigationModule
+import com.ak.passwordsaver.presentation.screens.home.HomeActivity
 import com.ak.passwordsaver.presentation.screens.home.HomePresenter
-import com.ak.tabpasswords.di.PasswordsComponent
 import dagger.Component
 import javax.inject.Singleton
 
-
 @Component(
     modules = [
-        // App dagger modules
         AppModule::class,
-        DataBaseModule::class,
-        AppActivitiesModule::class,
-        ManagersModule::class,
-        BusinessLogicModule::class,
-        NavigationModule::class,
-        // Domain dagger modules
-        DomainBusinessLogicModule::class,
-        DomainDataModule::class,
-        DomainManagersModule::class,
-        DomainRepositoriesModule::class,
-        // Base dagger modules
-        BaseManagersModule::class]
+        NavigationModule::class
+    ],
+    dependencies = [AppComponentDependencies::class]
 )
 @Singleton
-interface AppComponent {
-    fun initPasswordsComponent(): PasswordsComponent
+abstract class AppComponent {
 
-    fun inject(app: PSApplication)
-    fun inject(presenter: HomePresenter)
-    fun inject(presenter: SecurityPresenter)
+    companion object {
+        @Volatile
+        private var appComponent: AppComponent? = null
+
+        fun get() = if (appComponent != null) {
+            appComponent!!
+        } else {
+            throw IllegalStateException("AppComponent is null. init() should be called before")
+        }
+
+        fun initialize(dependencies: AppComponentDependencies): AppComponent {
+            if (appComponent == null) {
+                appComponent = DaggerAppComponent.builder()
+                    .appModule(AppModule())
+                    .appComponentDependencies(dependencies)
+                    .build()
+            }
+
+            return appComponent!!
+        }
+    }
+
+    abstract fun inject(app: PSApplication)
+    abstract fun inject(presenter: HomePresenter)
+    abstract fun inject(activity: HomeActivity)
+
+    @Component(dependencies = [FeatureSecurityApi::class, CoreRepositoryApi::class])
+    @Singleton
+    interface AppComponentDependenciesComponent : AppComponentDependencies
 }
