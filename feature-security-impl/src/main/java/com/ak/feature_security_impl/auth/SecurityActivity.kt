@@ -32,40 +32,30 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
         private const val LOCK_VIBRATION_DELAY = 800L
         private const val CHANGE_AUTH_INPUT_METHOD_CLICK_DELAY = 400L
 
-        fun startSecurityForResult(
-            context: FragmentActivity,
-            fragment: Fragment,
-            securityAction: Int,
-            requestCode: Int
-        ) {
-            val intent =
-                getSecurityActivityIntent(
-                    context,
-                    securityAction
-                )
+        fun startSecurityForResult(context: FragmentActivity, fragment: Fragment, securityAction: Int, requestCode: Int) {
+            val intent = getSecurityActivityIntent(context, securityAction)
             context.startActivityFromFragment(fragment, intent, requestCode)
+            applyStartSecurityAnim(context)
         }
 
-        fun startSecurityForResult(
-            context: FragmentActivity,
-            securityAction: Int,
-            requestCode: Int
-        ) {
-            val intent =
-                getSecurityActivityIntent(
-                    context,
-                    securityAction
-                )
+        fun startSecurityForResult(context: FragmentActivity, securityAction: Int, requestCode: Int) {
+            val intent = getSecurityActivityIntent(context, securityAction)
             context.startActivityForResult(intent, requestCode)
+            applyStartSecurityAnim(context)
         }
 
-        private fun getSecurityActivityIntent(
-            context: FragmentActivity,
-            securityAction: Int
-        ) =
+        private fun getSecurityActivityIntent(context: FragmentActivity, securityAction: Int) =
             Intent(context, SecurityActivity::class.java).apply {
                 putExtra(IS_AUTH_ACTION_KEY_EXTRA, securityAction)
             }
+
+        private fun applyStartSecurityAnim(context: FragmentActivity) {
+            context.overridePendingTransition(R.anim.security_fade_in_animation, R.anim.security_fade_out_animation)
+        }
+
+        private fun applyFinishSecurityAnim(context: FragmentActivity) {
+            context.overridePendingTransition(R.anim.security_fade_in_animation, R.anim.security_fade_out_animation)
+        }
     }
 
     @InjectPresenter
@@ -130,6 +120,7 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
         val result = if (isSuccessfully) Activity.RESULT_OK else Activity.RESULT_CANCELED
         setResult(result)
         finish()
+        applyFinishSecurityAnim(this)
     }
 
     override fun switchAuthMethod(isPincode: Boolean, withAnimation: Boolean) {
