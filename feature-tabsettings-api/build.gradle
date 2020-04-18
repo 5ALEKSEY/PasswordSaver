@@ -1,19 +1,49 @@
 apply plugin: 'com.android.library'
+
 apply plugin: 'kotlin-android'
+
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
+def rootExtConfiguration = rootProject.extensions.getByName("ext")
+
+String VERSION_NAME = rootExtConfiguration["appVersionName"]
+int VERSION_CODE = rootExtConfiguration["appVersionCode"]
+
+int COMPILE_SDK_VERSION = rootExtConfiguration["compileSdkVersion"]
+int MIN_SDK_VERSION = rootExtConfiguration["minSdkVersion"]
+int TARGET_SDK_VERSION = rootExtConfiguration["targetSdkVersion"]
+
 android {
-    compileSdkVersion 28
-
-
+    compileSdkVersion COMPILE_SDK_VERSION
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
+        versionCode VERSION_CODE
+        versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        disableEmptyStrategyCheck: 'true',
+                        defaultMoxyStrategy: 'moxy.viewstate.strategy.OneExecutionStateStrategy',
+                        enableEmptyStrategyHelper: 'false',
+                ]
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     buildTypes {
@@ -27,10 +57,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.2.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    implementation deps.kotlin
+    implementation deps.androidX
+
+    implementation deps.rx
 }

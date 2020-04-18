@@ -5,6 +5,7 @@ import com.ak.base.scopes.FeatureScope
 import com.ak.core_repo_api.api.CoreRepositoryApi
 import com.ak.feature_security_api.api.FeatureSecurityApi
 import com.ak.feature_security_impl.auth.SecurityActivity
+import com.ak.feature_security_impl.auth.SecurityPresenter
 import com.ak.feature_security_impl.di.modules.AppModule
 import com.ak.feature_security_impl.di.modules.SecurityManagerModule
 import dagger.Component
@@ -46,8 +47,8 @@ abstract class FeatureSecurityComponent : FeatureSecurityApi {
         }
     }
 
-    abstract fun provideSecurityScreenComponent(): SecurityScreenComponent
     abstract fun inject(activity: SecurityActivity)
+    abstract fun inject(presenter: SecurityPresenter)
 
     @Component(dependencies = [CoreRepositoryApi::class])
     @FeatureScope

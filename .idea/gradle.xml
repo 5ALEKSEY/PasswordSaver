@@ -19,6 +19,8 @@
             <option value="$PROJECT_DIR$/feature-security-impl" />
             <option value="$PROJECT_DIR$/feature-tabpasswords-api" />
             <option value="$PROJECT_DIR$/feature-tabpasswords-impl" />
+            <option value="$PROJECT_DIR$/feature-tabsettings-api" />
+            <option value="$PROJECT_DIR$/feature-tabsettings-impl" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

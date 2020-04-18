@@ -87,8 +87,8 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         FeatureSecurityComponent.get().inject(this)
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_security)
         initViewBeforePresenterAttach()
         mvpDelegate.onAttach()

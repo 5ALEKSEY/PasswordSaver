@@ -6,49 +6,6 @@
 
     <include app:graph="@navigation/passwords_nav_graph" />
 
-    <!--    <fragment-->
-    <!--            android:id="@+id/settingsFragment"-->
-    <!--            android:name="com.ak.settings.main.SettingsFragment"-->
-    <!--            android:label="SettingsFragment"-->
-    <!--            tools:layout="@layout/fragment_settings">-->
-    <!--        <action-->
-    <!--                android:id="@+id/action_settingsFragment_to_designSettingsFragment"-->
-    <!--                app:destination="@id/designSettingsFragment"-->
-    <!--                app:enterAnim="@anim/push_down_in"-->
-    <!--                app:exitAnim="@anim/push_down_out"-->
-    <!--                app:popEnterAnim="@anim/push_up_out"-->
-    <!--                app:popExitAnim="@anim/push_up_in" />-->
-    <!--        <action-->
-    <!--                android:id="@+id/action_settingsFragment_to_privacySettingsFragment"-->
-    <!--                app:destination="@id/privacySettingsFragment"-->
-    <!--                app:enterAnim="@anim/push_down_in"-->
-    <!--                app:exitAnim="@anim/push_down_out"-->
-    <!--                app:popEnterAnim="@anim/push_up_out"-->
-    <!--                app:popExitAnim="@anim/push_up_in" />-->
-    <!--        <action-->
-    <!--                android:id="@+id/action_settingsFragment_to_aboutSettingsFragment"-->
-    <!--                app:destination="@id/aboutSettingsFragment"-->
-    <!--                app:enterAnim="@anim/push_down_in"-->
-    <!--                app:exitAnim="@anim/push_down_out"-->
-    <!--                app:popEnterAnim="@anim/push_up_out"-->
-    <!--                app:popExitAnim="@anim/push_up_in" />-->
-    <!--    </fragment>-->
-
-    <!--Settings-->
-    <!--    <fragment-->
-    <!--            android:id="@+id/designSettingsFragment"-->
-    <!--            android:name="com.ak.settings.design.DesignSettingsFragment"-->
-    <!--            android:label="DesignSettingsFragment"-->
-    <!--            tools:layout="@layout/fragment_design_settings" />-->
-    <!--    <fragment-->
-    <!--            android:id="@+id/privacySettingsFragment"-->
-    <!--            android:name="com.ak.settings.privacy.PrivacySettingsFragment"-->
-    <!--            android:label="PrivacySettingsFragment"-->
-    <!--            tools:layout="@layout/fragment_privacy_settings" />-->
-    <!--    <fragment-->
-    <!--            android:id="@+id/aboutSettingsFragment"-->
-    <!--            android:name="com.ak.settings.about.AboutSettingsFragment"-->
-    <!--            android:label="AboutSettingsFragment"-->
-    <!--            tools:layout="@layout/fragment_about_settings" />-->
+    <include app:graph="@navigation/settings_nav_graph" />
 
 </navigation>

@@ -134,7 +134,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
                 setSupportActionBar(tbPasswordsListBar)
-                supportActionBar?.title = "Passwords list 1"
+                supportActionBar?.title = "Passwords list"
             }
         }
     }

@@ -4,11 +4,11 @@ import android.util.Log
 import com.ak.base.constants.AppConstants
 import com.ak.base.presenter.BasePSPresenter
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
-import com.ak.feature_security_api.interfaces.IPSAuthManager.RunActionType.ADD_PATTERN_SECURITY_ACTION_TYPE
-import com.ak.feature_security_api.interfaces.IPSAuthManager.RunActionType.ADD_PINCODE_SECURITY_ACTION_TYPE
-import com.ak.feature_security_api.interfaces.IPSAuthManager.RunActionType.AUTH_SECURITY_ACTION_TYPE
-import com.ak.feature_security_api.interfaces.IPSAuthManager.RunActionType.CHANGE_PATTERN_SECURITY_ACTION_TYPE
-import com.ak.feature_security_api.interfaces.IPSAuthManager.RunActionType.CHANGE_PINCODE_SECURITY_ACTION_TYPE
+import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.ADD_PATTERN_SECURITY_ACTION_TYPE
+import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.ADD_PINCODE_SECURITY_ACTION_TYPE
+import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.AUTH_SECURITY_ACTION_TYPE
+import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.CHANGE_PATTERN_SECURITY_ACTION_TYPE
+import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.CHANGE_PINCODE_SECURITY_ACTION_TYPE
 import com.ak.feature_security_impl.di.FeatureSecurityComponent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -34,9 +34,7 @@ class SecurityPresenter @Inject constructor(
     private var addSecurityConfirmCode = ""
 
     init {
-        FeatureSecurityComponent.get()
-            .provideSecurityScreenComponent()
-            .injectSecurityPresenter(this)
+        FeatureSecurityComponent.get().inject(this)
     }
 
     fun onSecurityInputTypeChangeClicked() {
