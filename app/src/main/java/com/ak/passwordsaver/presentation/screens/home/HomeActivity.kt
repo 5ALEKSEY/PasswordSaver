@@ -19,6 +19,10 @@ import moxy.presenter.ProvidePresenter
 
 class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
 
+    companion object {
+        private const val MENU_CHANGE_DELAY = 200L
+    }
+
     @InjectPresenter
     lateinit var homePresenter: HomePresenter
 
@@ -26,10 +30,11 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
     fun providePresenter(): HomePresenter = daggerPresenter
 
     private var currentMenuItemId = R.id.passwordsListFragment
+    private var lastMenuChangeTime = 0L
 
     private val visibleBottomBarDestinations = arrayOf(
-        R.id.settingsFragment,
-        R.id.passwordsListFragment
+            R.id.settingsFragment,
+            R.id.passwordsListFragment
     )
 
     private val homeNavController: NavController by lazy {
@@ -57,6 +62,7 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
         } else {
             null
         }
+
         if (currentFragment != null
             && currentFragment is BasePSFragment<*>
             && currentFragment.isBackPressEnabled()
@@ -95,7 +101,16 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
                 // skip already selected menu item
                 return@setOnNavigationItemSelectedListener false
             }
+
+            val currentTime = System.currentTimeMillis()
+            val lastMenuItemChangeDuration = currentTime - lastMenuChangeTime
+            if (lastMenuChangeTime != 0L && lastMenuItemChangeDuration < MENU_CHANGE_DELAY) {
+                // skip monkey fast menu tabs changes
+                return@setOnNavigationItemSelectedListener false
+            }
+
             currentMenuItemId = menuItem.itemId
+            lastMenuChangeTime = currentTime
             NavigationUI.onNavDestinationSelected(menuItem, navController)
         }
     }
