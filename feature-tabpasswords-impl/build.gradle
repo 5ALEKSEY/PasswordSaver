@@ -88,8 +88,7 @@ dependencies {
     implementation deps.cardView
 
     implementation deps.circleImageView
-
     implementation deps.navComponent
-
     implementation deps.easycrypt
+    implementation deps.lottieAnim
 }

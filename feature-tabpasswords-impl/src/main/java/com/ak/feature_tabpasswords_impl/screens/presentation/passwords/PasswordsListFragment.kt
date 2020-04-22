@@ -78,7 +78,12 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     }
 
     override fun setLoadingState(isLoading: Boolean) {
-        pbPasswordsLoading.setVisibility(isLoading)
+        passwordsLoadingContainer.setVisibility(isLoading)
+        if (isLoading) {
+            loadingAnimation.playAnimation()
+        } else {
+            loadingAnimation.pauseAnimation()
+        }
     }
 
     override fun setEmptyPasswordsState(isEmptyViewVisible: Boolean) {
