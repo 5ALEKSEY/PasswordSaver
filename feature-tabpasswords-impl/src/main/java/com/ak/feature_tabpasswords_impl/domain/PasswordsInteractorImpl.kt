@@ -55,26 +55,26 @@ class PasswordsInteractorImpl @Inject constructor(
 
     private fun getInvokedDecryptionUseCase(passwordRepoEntities: List<PasswordRepoEntity>) =
         Observable.fromIterable(passwordRepoEntities.mapRepoToDomainEntitiesList())
-            .flatMap(
-                    { entity -> decryptPasswordContent(entity.getPasswordContent()) },
-                    { oldEntity, decryptedPasswordContent ->
-                        oldEntity.passwordContentValue = decryptedPasswordContent
-                    return@flatMap oldEntity
-                })
+            .concatMap { entity ->
+                decryptPasswordContent(entity.getPasswordContent()).map { decryptedPasswordContent ->
+                    entity.passwordContentValue = decryptedPasswordContent
+                    return@map entity
+                }
+            }
             .toList()
 
     private fun decryptPasswordContent(encryptedPasswordContent: String) =
         Single.create<String> { emitter ->
             mEncryptionUseCase.decrypt(
-                encryptedPasswordContent,
-                { decryptedContent -> emitter.onSuccess(decryptedContent) },
-                { throwable -> emitter.onError(throwable) }
+                    encryptedPasswordContent,
+                    { decryptedContent -> emitter.onSuccess(decryptedContent) },
+                    { throwable -> emitter.onError(throwable) }
             )
         }.toObservable()
 
     private fun getInvokedPasswordsDataCheckUseCase(passwordDomainEntities: List<PasswordDomainEntity>) =
         Observable.fromIterable(passwordDomainEntities)
-            .flatMap { entity ->
+            .concatMap { entity ->
                 checkPasswordData(
                         entity.getPasswordName(),
                         entity.getPasswordContent()
@@ -92,26 +92,22 @@ class PasswordsInteractorImpl @Inject constructor(
             }
         }.toObservable()
 
-    private fun getInvokedEncryptionUseCase(passwordDBEntities: List<PasswordDomainEntity>) =
-        Observable.fromIterable(passwordDBEntities)
-            .flatMap(
-                    { entity -> encryptPasswordContent(entity.getPasswordContent()) },
-                    { oldEntity, encryptedPassword ->
-                        PasswordDomainEntity(
-                                oldEntity.getPasswordId(),
-                                oldEntity.getPasswordName(),
-                                oldEntity.getPasswordAvatarPath(),
-                        encryptedPassword
-                    )
-                })
+    private fun getInvokedEncryptionUseCase(passwordDomainEntities: List<PasswordDomainEntity>) =
+        Observable.fromIterable(passwordDomainEntities)
+            .concatMap { entity ->
+                encryptPasswordContent(entity.getPasswordContent()).map { encryptedPassword ->
+                    entity.passwordContentValue = encryptedPassword
+                    return@map entity
+                }
+            }
             .toList()
 
     private fun encryptPasswordContent(passwordContent: String) =
         Single.create<String> { emitter ->
             mEncryptionUseCase.encrypt(
-                passwordContent,
-                { encryptedContent -> emitter.onSuccess(encryptedContent) },
-                { throwable -> emitter.onError(throwable) }
+                    passwordContent,
+                    { encryptedContent -> emitter.onSuccess(encryptedContent) },
+                    { throwable -> emitter.onError(throwable) }
             )
         }.toObservable()
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import com.ak.core_repo_api.api.CoreRepositoryApi
 import com.ak.core_repo_impl.di.module.AppModule
 import com.ak.core_repo_impl.di.module.DatabaseModule
+import com.ak.core_repo_impl.di.module.DbMigrationsModule
 import com.ak.core_repo_impl.di.module.ManagersModule
 import com.ak.core_repo_impl.di.module.PreferencesModule
 import com.ak.core_repo_impl.di.module.RepositoriesModule
@@ -14,6 +15,7 @@ import javax.inject.Singleton
     modules = [
         AppModule::class,
         DatabaseModule::class,
+        DbMigrationsModule::class,
         ManagersModule::class,
         PreferencesModule::class,
         RepositoriesModule::class

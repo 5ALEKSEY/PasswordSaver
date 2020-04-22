@@ -13,13 +13,10 @@ import io.reactivex.Single
 @Dao
 interface PasswordsDAO {
 
-    @Query("SELECT * FROM " + PasswordDBEntity.PASSWORD_TABLE_NAME)
+    @Query("SELECT * FROM ${PasswordDBEntity.TABLE_NAME}")
     fun getAllPasswords(): Flowable<List<PasswordDBEntity>>
 
-    @Query(
-        "SELECT * FROM " + PasswordDBEntity.PASSWORD_TABLE_NAME + " WHERE "
-                + PasswordDBEntity.COLUMN_PASSWORD_ID + " = :passwordId LIMIT 1"
-    )
+    @Query("SELECT * FROM ${PasswordDBEntity.TABLE_NAME} WHERE ${PasswordDBEntity.COLUMN_PASSWORD_ID} = :passwordId LIMIT 1")
     fun getPasswordById(passwordId: Long): Single<PasswordDBEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
