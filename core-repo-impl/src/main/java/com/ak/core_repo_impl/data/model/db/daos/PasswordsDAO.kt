@@ -13,7 +13,7 @@ import io.reactivex.Single
 @Dao
 interface PasswordsDAO {
 
-    @Query("SELECT * FROM ${PasswordDBEntity.TABLE_NAME}")
+    @Query("SELECT * FROM ${PasswordDBEntity.TABLE_NAME} ORDER BY ${PasswordDBEntity.COLUMN_PASSWORD_ID} DESC")
     fun getAllPasswords(): Flowable<List<PasswordDBEntity>>
 
     @Query("SELECT * FROM ${PasswordDBEntity.TABLE_NAME} WHERE ${PasswordDBEntity.COLUMN_PASSWORD_ID} = :passwordId LIMIT 1")
