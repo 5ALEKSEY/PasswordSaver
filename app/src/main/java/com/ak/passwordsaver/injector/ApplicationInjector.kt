@@ -2,6 +2,8 @@ package com.ak.passwordsaver.injector
 
 import com.ak.core_repo_api.api.CoreRepositoryApi
 import com.ak.core_repo_impl.di.CoreRepositoryComponent
+import com.ak.feature_encryption_api.api.FeatureEncryptionApi
+import com.ak.feature_encryption_impl.di.FeatureEncryptionComponent
 import com.ak.feature_security_api.api.FeatureSecurityApi
 import com.ak.feature_security_impl.di.DaggerFeatureSecurityComponent_FeatureSecurityDependenciesComponent
 import com.ak.feature_security_impl.di.FeatureSecurityComponent
@@ -77,6 +79,7 @@ object ApplicationInjector {
     private fun initTabPasswordsDependencies(): FeatureTabPasswordsDependencies {
         return DaggerFeatureTabPasswordsComponent_FeatureTabPasswordsDependenciesComponent.builder()
             .coreRepositoryApi(initCoreRepo())
+            .featureEncryptionApi(initFeatureEncryption())
             .build()
     }
 
@@ -94,6 +97,10 @@ object ApplicationInjector {
                     .build(),
                 PSApplication.appContext
         )
+    }
+
+    private fun initFeatureEncryption(): FeatureEncryptionApi {
+        return FeatureEncryptionComponent.get()
     }
 
     private fun initCoreRepo(): CoreRepositoryApi {

@@ -57,39 +57,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(':feature-tabpasswords-api')
-
-    implementation project(':base')
-    implementation project(':core-repo-api')
-    implementation project(':feature-encryption-api')
 
     implementation deps.kotlin
-    implementation deps.appCompat
     implementation deps.androidX
-    implementation deps.androidMaterial
-    implementation deps.constraint
-
-    implementation deps.dagger
-    kapt deps.daggerKapt
-
-    implementation deps.moxy
-    kapt deps.moxyKapt
-
-    implementation deps.room
-    kapt deps.roomKapt
-
-    implementation deps.rx
-    implementation deps.rxAndroid
-
-    implementation deps.coroutinesPermission
-    implementation deps.kotlinCoroutines
-
-    implementation deps.recyclerView
-    implementation deps.cardView
-
-    implementation deps.circleImageView
-
-    implementation deps.navComponent
-
-    implementation deps.easycrypt
 }

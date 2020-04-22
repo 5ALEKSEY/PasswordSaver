@@ -2,12 +2,12 @@ package com.ak.feature_tabpasswords_impl.domain
 
 import com.ak.core_repo_api.intefaces.IPasswordsRepository
 import com.ak.core_repo_api.intefaces.PasswordRepoEntity
+import com.ak.feature_encryption_api.interfaces.IEncryptionManager
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity
 import com.ak.feature_tabpasswords_impl.domain.entity.PasswordDomainEntity
 import com.ak.feature_tabpasswords_impl.domain.entity.mapFeatureToDomainEntitiesList
 import com.ak.feature_tabpasswords_impl.domain.entity.mapRepoToDomainEntitiesList
-import com.ak.feature_tabpasswords_impl.domain.usecase.EncryptionUseCase
 import com.ak.feature_tabpasswords_impl.domain.usecase.PasswordDataCheckUseCase
 import io.reactivex.Flowable
 import io.reactivex.Observable
@@ -15,11 +15,11 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class PasswordsInteractorImpl @Inject constructor(
-    private val passwordsRepository: IPasswordsRepository
+    private val passwordsRepository: IPasswordsRepository,
+    private val encryptionManager: IEncryptionManager
 ) : IPasswordsInteractor {
 
-    private val mEncryptionUseCase: EncryptionUseCase = EncryptionUseCase()
-    private val mPasswordDataCheckUseCase: PasswordDataCheckUseCase = PasswordDataCheckUseCase()
+    private val passwordDataCheckUseCase: PasswordDataCheckUseCase = PasswordDataCheckUseCase()
 
     override fun getAllPasswords(): Flowable<List<PasswordFeatureEntity>> =
         passwordsRepository.getAllPasswords()
@@ -65,7 +65,7 @@ class PasswordsInteractorImpl @Inject constructor(
 
     private fun decryptPasswordContent(encryptedPasswordContent: String) =
         Single.create<String> { emitter ->
-            mEncryptionUseCase.decrypt(
+            encryptionManager.decrypt(
                     encryptedPasswordContent,
                     { decryptedContent -> emitter.onSuccess(decryptedContent) },
                     { throwable -> emitter.onError(throwable) }
@@ -85,7 +85,7 @@ class PasswordsInteractorImpl @Inject constructor(
     private fun checkPasswordData(passwordName: String, passwordContent: String) =
         Single.create<Boolean> { emitter ->
             try {
-                mPasswordDataCheckUseCase.verifyPasswordData(passwordName, passwordContent)
+                passwordDataCheckUseCase.verifyPasswordData(passwordName, passwordContent)
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
@@ -104,7 +104,7 @@ class PasswordsInteractorImpl @Inject constructor(
 
     private fun encryptPasswordContent(passwordContent: String) =
         Single.create<String> { emitter ->
-            mEncryptionUseCase.encrypt(
+            encryptionManager.encrypt(
                     passwordContent,
                     { encryptedContent -> emitter.onSuccess(encryptedContent) },
                     { throwable -> emitter.onError(throwable) }

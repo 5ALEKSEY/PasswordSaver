@@ -3,6 +3,7 @@ package com.ak.feature_tabpasswords_impl.di
 import android.content.Context
 import com.ak.base.scopes.FeatureScope
 import com.ak.core_repo_api.api.CoreRepositoryApi
+import com.ak.feature_encryption_api.api.FeatureEncryptionApi
 import com.ak.feature_tabpasswords_api.api.FeatureTabPasswordsApi
 import com.ak.feature_tabpasswords_impl.di.modules.AppModule
 import com.ak.feature_tabpasswords_impl.di.modules.DomainBusinessLogicModule
@@ -79,7 +80,7 @@ abstract class FeatureTabPasswordsComponent : FeatureTabPasswordsApi {
     abstract fun inject(fragment: EditPasswordFragment)
     abstract fun inject(fragment: AddNewPasswordFragment)
 
-    @Component(dependencies = [CoreRepositoryApi::class])
+    @Component(dependencies = [CoreRepositoryApi::class, FeatureEncryptionApi::class])
     @FeatureScope
     interface FeatureTabPasswordsDependenciesComponent : FeatureTabPasswordsDependencies
 }

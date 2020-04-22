@@ -87,6 +87,8 @@ dependencies {
     implementation project(':feature-tabpasswords-impl')
     implementation project(':feature-tabsettings-api')
     implementation project(':feature-tabsettings-impl')
+    implementation project(':feature-encryption-api')
+    implementation project(':feature-encryption-impl')
 
     implementation deps.kotlin
     implementation deps.appCompat
