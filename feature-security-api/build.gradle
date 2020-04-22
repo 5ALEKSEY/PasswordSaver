@@ -61,6 +61,4 @@ dependencies {
     implementation deps.kotlin
     implementation deps.androidX
     implementation deps.appCompat
-
-    implementation deps.rx
 }

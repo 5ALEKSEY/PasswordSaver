@@ -68,8 +68,6 @@ dependencies {
     implementation deps.kotlin
     implementation deps.androidX
 
-    implementation deps.rx
-
     implementation deps.easycrypt
 
     implementation deps.dagger

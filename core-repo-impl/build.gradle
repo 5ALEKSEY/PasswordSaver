@@ -73,9 +73,6 @@ dependencies {
     implementation deps.dagger
     kapt deps.daggerKapt
 
-    implementation deps.moxy
-    kapt deps.moxyKapt
-
     implementation deps.room
     kapt deps.roomKapt
 

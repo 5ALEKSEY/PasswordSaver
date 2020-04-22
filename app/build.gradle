@@ -102,26 +102,10 @@ dependencies {
     implementation deps.moxy
     kapt deps.moxyKapt
 
-    implementation deps.room
-    kapt deps.roomKapt
-
-    implementation deps.circleImageView
-
-    implementation deps.glide
-    kapt deps.glideKapt
-
-    implementation deps.recyclerView
-    implementation deps.cardView
-
     implementation deps.rx
     implementation deps.rxAndroid
 
     debugImplementation deps.stethoDebugImpl
-
-    implementation deps.easycrypt
-
-    implementation deps.coroutinesPermission
-    implementation deps.kotlinCoroutines
 
     implementation deps.lifecycle
     implementation deps.gson

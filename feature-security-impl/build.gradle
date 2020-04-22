@@ -74,21 +74,6 @@ dependencies {
     implementation deps.moxy
     kapt deps.moxyKapt
 
-    implementation deps.room
-    kapt deps.roomKapt
-
     implementation deps.rx
     implementation deps.rxAndroid
-
-    implementation deps.coroutinesPermission
-    implementation deps.kotlinCoroutines
-
-    implementation deps.recyclerView
-    implementation deps.cardView
-
-    implementation deps.circleImageView
-
-    implementation deps.navComponent
-
-    implementation deps.easycrypt
 }
