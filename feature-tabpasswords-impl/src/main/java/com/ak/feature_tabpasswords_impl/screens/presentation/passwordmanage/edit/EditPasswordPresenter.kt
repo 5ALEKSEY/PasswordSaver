@@ -28,6 +28,11 @@ class EditPasswordPresenter @Inject constructor(
             .subscribe(
                 { passwordEntity ->
                     passwordEntityForEdit = passwordEntity
+                    val avatarPath = passwordEntity.passwordAvatarPathValue
+                    if (avatarPath.isNotEmpty()) {
+                        selectedAvatarPath = avatarPath
+                        viewState.displayPasswordAvatarChooserImage(internalStorageManager.getBitmapImageFromPath(avatarPath))
+                    }
                     viewState.displayPasswordData(
                         passwordEntity.getPasswordName(),
                         passwordEntity.getPasswordContent()

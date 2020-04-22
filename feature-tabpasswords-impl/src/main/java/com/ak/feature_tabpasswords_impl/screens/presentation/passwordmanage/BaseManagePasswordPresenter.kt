@@ -17,9 +17,9 @@ import javax.inject.Inject
 abstract class BaseManagePasswordPresenter<MV : IBaseManagePasswordView> : BasePSPresenter<MV>() {
 
     @Inject
-    lateinit var bitmapDecoderManager: IBitmapDecoderManager
+    protected lateinit var bitmapDecoderManager: IBitmapDecoderManager
     @Inject
-    lateinit var internalStorageManager: IPSInternalStorageManager
+    protected lateinit var internalStorageManager: IPSInternalStorageManager
 
     private var nameChangeDis: Disposable? = null
     private var isAvatarDisplayed = false
