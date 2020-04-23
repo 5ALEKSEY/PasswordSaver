@@ -19,6 +19,8 @@
             <option value="$PROJECT_DIR$/feature-encryption-impl" />
             <option value="$PROJECT_DIR$/feature-security-api" />
             <option value="$PROJECT_DIR$/feature-security-impl" />
+            <option value="$PROJECT_DIR$/feature-tabaccounts-api" />
+            <option value="$PROJECT_DIR$/feature-tabaccounts-impl" />
             <option value="$PROJECT_DIR$/feature-tabpasswords-api" />
             <option value="$PROJECT_DIR$/feature-tabpasswords-impl" />
             <option value="$PROJECT_DIR$/feature-tabsettings-api" />
