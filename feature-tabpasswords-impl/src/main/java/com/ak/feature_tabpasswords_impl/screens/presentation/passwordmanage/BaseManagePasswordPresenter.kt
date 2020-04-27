@@ -76,7 +76,7 @@ abstract class BaseManagePasswordPresenter<MV : IBaseManagePasswordView> : BaseP
         nameChangeDis = passwordNameChangeSubject.toFlowable(BackpressureStrategy.LATEST)
             .subscribeOn(Schedulers.io())
             .debounce(AppConstants.TEXT_INPUT_DEBOUNCE, TimeUnit.MILLISECONDS)
-            .map(PSUtils::getAbbreviationFormPasswordName)
+            .map(PSUtils::getAbbreviationFormName)
             .distinctUntilChanged()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(viewState::drawTextForPasswordAvatar)

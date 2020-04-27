@@ -34,7 +34,8 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
 
     private val visibleBottomBarDestinations = arrayOf(
             R.id.settingsFragment,
-            R.id.passwordsListFragment
+            R.id.passwordsListFragment,
+            R.id.accountsListFragment
     )
 
     private val homeNavController: NavController by lazy {

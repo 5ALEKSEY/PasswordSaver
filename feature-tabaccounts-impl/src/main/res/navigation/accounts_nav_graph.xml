@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/accounts_nav_graph"
+        app:startDestination="@id/accountsListFragment"
+        tools:ignore="UnusedNavigation">
+
+    <fragment
+            android:id="@+id/accountsListFragment"
+            android:name="com.ak.feature_tabaccounts_impl.screens.presentation.accounts.AccountsListFragment"
+            android:label="PasswordsListFragment"
+            tools:layout="@layout/fragment_accounts_list">
+        <action
+                android:id="@+id/action_accountsListFragment_to_editAccountFragment"
+                app:destination="@id/editAccountFragment"
+                app:enterAnim="@anim/push_down_in"
+                app:exitAnim="@anim/push_down_out"
+                app:popEnterAnim="@anim/push_up_out"
+                app:popExitAnim="@anim/push_up_in" />
+        <action
+                android:id="@+id/action_accountsListFragment_to_addNewAccountFragment"
+                app:destination="@id/addNewAccountFragment"
+                app:enterAnim="@anim/push_down_in"
+                app:exitAnim="@anim/push_down_out"
+                app:popEnterAnim="@anim/push_up_out"
+                app:popExitAnim="@anim/push_up_in" />
+    </fragment>
+
+    <fragment
+            android:id="@+id/editAccountFragment"
+            android:name="com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.edit.EditAccountFragment"
+            android:label="EditPasswordFragment"
+            tools:layout="@layout/fragment_manage_account" />
+    <fragment
+            android:id="@+id/addNewAccountFragment"
+            android:name="com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.add.AddNewAccountFragment"
+            android:label="AddNewPasswordFragment"
+            tools:layout="@layout/fragment_manage_account" />
+
+</navigation>

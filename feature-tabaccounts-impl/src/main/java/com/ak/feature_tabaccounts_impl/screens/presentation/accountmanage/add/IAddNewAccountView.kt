@@ -1,0 +1,5 @@
+package com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.add
+
+import com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.IBaseManageAccountView
+
+interface IAddNewAccountView : IBaseManageAccountView

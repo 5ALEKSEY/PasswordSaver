@@ -6,6 +6,8 @@
 
     <include app:graph="@navigation/passwords_nav_graph" />
 
+    <include app:graph="@navigation/accounts_nav_graph" />
+
     <include app:graph="@navigation/settings_nav_graph" />
 
 </navigation>

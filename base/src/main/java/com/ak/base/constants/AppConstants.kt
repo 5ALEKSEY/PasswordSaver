@@ -8,7 +8,12 @@ object AppConstants {
 
     // create password
     const val PASSWORD_NAME_MAX_LENGTH = 20
-    const val PASSWORD_CONTENT_MAX_LENGTH = 25
+    const val PASSWORD_CONTENT_MAX_LENGTH = 30
+
+    // create account
+    const val ACCOUNT_NAME_MAX_LENGTH = 20
+    const val ACCOUNT_LOGIN_MAX_LENGTH = 30
+    const val ACCOUNT_PASSWORD_MAX_LENGTH = 30
 
     // Other constants
     const val IMAGE_MIME_TYPE = "image/*"

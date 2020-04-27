@@ -10,7 +10,6 @@ fun List<AccountRepoEntity>.mapRepoToDomainEntitiesList(): List<AccountDomainEnt
 fun AccountRepoEntity.mapToDomainEntity() = AccountDomainEntity(
         this.getAccountId(),
         this.getAccountName(),
-        this.getAccountAvatarPath(),
         this.getAccountLogin(),
         this.getAccountPassword()
 )
@@ -22,7 +21,6 @@ fun List<AccountFeatureEntity>.mapFeatureToDomainEntitiesList(): List<AccountDom
 fun AccountFeatureEntity.mapToDomainEntity() = AccountDomainEntity(
         this.getAccountId(),
         this.getAccountName(),
-        this.getAccountAvatarPath(),
         this.getAccountLogin(),
         this.getAccountPassword()
 )

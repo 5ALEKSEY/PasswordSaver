@@ -7,6 +7,9 @@ import com.ak.feature_encryption_impl.di.FeatureEncryptionComponent
 import com.ak.feature_security_api.api.FeatureSecurityApi
 import com.ak.feature_security_impl.di.DaggerFeatureSecurityComponent_FeatureSecurityDependenciesComponent
 import com.ak.feature_security_impl.di.FeatureSecurityComponent
+import com.ak.feature_tabaccounts_impl.di.DaggerFeatureTabAccountsComponent_FeatureTabAccountsDependenciesComponent
+import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
+import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsDependencies
 import com.ak.feature_tabpasswords_impl.di.DaggerFeatureTabPasswordsComponent_FeatureTabPasswordsDependenciesComponent
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsDependencies
@@ -27,12 +30,21 @@ object ApplicationInjector {
 
                 // clear another features
                 clearTabSettingsFeature()
+                clearTabAccountsFeature()
+            }
+            R.id.accountsListFragment -> {
+                initTabAccountsFeature()
+
+                // clear another features
+                clearTabSettingsFeature()
+                clearTabPasswordsFeature()
             }
             R.id.settingsFragment -> {
                 initTabSettingsFeature()
 
                 // clear another features
                 clearTabPasswordsFeature()
+                clearTabAccountsFeature()
             }
         }
     }
@@ -61,6 +73,21 @@ object ApplicationInjector {
         }
     }
 
+    private fun initTabAccountsFeature() {
+        if (!FeatureTabAccountsComponent.isInitialized()) {
+            FeatureTabAccountsComponent.initialize(
+                    initTabAccountsDependencies(),
+                    PSApplication.appContext
+            )
+        }
+    }
+
+    private fun clearTabAccountsFeature() {
+        if (FeatureTabAccountsComponent.isInitialized()) {
+            FeatureTabAccountsComponent.get().clearComponent()
+        }
+    }
+
     private fun initTabSettingsFeature() {
         if (!FeatureTabSettingsComponent.isInitialized()) {
             FeatureTabSettingsComponent.initialize(
@@ -78,6 +105,13 @@ object ApplicationInjector {
 
     private fun initTabPasswordsDependencies(): FeatureTabPasswordsDependencies {
         return DaggerFeatureTabPasswordsComponent_FeatureTabPasswordsDependenciesComponent.builder()
+            .coreRepositoryApi(initCoreRepo())
+            .featureEncryptionApi(initFeatureEncryption())
+            .build()
+    }
+
+    private fun initTabAccountsDependencies(): FeatureTabAccountsDependencies {
+        return DaggerFeatureTabAccountsComponent_FeatureTabAccountsDependenciesComponent.builder()
             .coreRepositoryApi(initCoreRepo())
             .featureEncryptionApi(initFeatureEncryption())
             .build()

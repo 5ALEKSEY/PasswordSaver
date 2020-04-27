@@ -6,16 +6,17 @@ import com.ak.feature_tabaccounts_api.interfaces.AccountFeatureEntity
 class AccountDomainEntity(
     var accountIdValue: Long?,
     var accountNameValue: String,
-    var accountAvatarPathValue: String,
     var accountLoginValue: String,
     var accountPasswordValue: String
 ) : AccountFeatureEntity, AccountRepoEntity {
 
+    constructor(accountName: String, accountLogin: String, accountPassword: String) : this(
+            null, accountName, accountLogin, accountPassword
+    )
+
     override fun getAccountId(): Long? = accountIdValue
 
     override fun getAccountName(): String = accountNameValue
-
-    override fun getAccountAvatarPath(): String = accountAvatarPathValue
 
     override fun getAccountLogin(): String = accountLoginValue
 

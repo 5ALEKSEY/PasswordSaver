@@ -69,7 +69,7 @@ class PasswordsListItemViewHolder(
                 fillColor,
                 textColor,
                 textSizeInPx,
-                PSUtils.getAbbreviationFormPasswordName(passwordItemModel.name)
+                PSUtils.getAbbreviationFormName(passwordItemModel.name)
             )
         }
     }

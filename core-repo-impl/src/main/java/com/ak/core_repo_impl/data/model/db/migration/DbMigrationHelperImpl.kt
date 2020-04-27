@@ -24,7 +24,6 @@ class DbMigrationHelperImpl @Inject constructor() : IDbMigrationHelper {
                                          "(" +
                                          "`${AccountDBEntity.COLUMN_ACCOUNT_ID}` INTEGER NOT NULL, " +
                                          "`${AccountDBEntity.COLUMN_ACCOUNT_NAME}` TEXT, " +
-                                         "`${AccountDBEntity.COLUMN_ACCOUNT_AVATAR_PATH}` TEXT, " +
                                          "`${AccountDBEntity.COLUMN_ACCOUNT_LOGIN}` TEXT, " +
                                          "`${AccountDBEntity.COLUMN_ACCOUNT_PASSWORD}` TEXT, " +
                                          "PRIMARY KEY(`${AccountDBEntity.COLUMN_ACCOUNT_ID}`)" +

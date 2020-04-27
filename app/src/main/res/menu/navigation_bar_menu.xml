@@ -5,6 +5,10 @@
             android:title="Passwords"
             android:icon="@drawable/ic_key_icon"/>
     <item
+            android:id="@+id/accounts_nav_graph"
+            android:title="Accounts"
+            android:icon="@drawable/ic_accounts"/>
+    <item
             android:id="@+id/settings_nav_graph"
             android:title="Settings"
             android:icon="@drawable/ic_settings"/>

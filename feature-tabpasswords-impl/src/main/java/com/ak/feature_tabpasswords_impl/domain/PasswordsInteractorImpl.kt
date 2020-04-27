@@ -31,7 +31,7 @@ class PasswordsInteractorImpl @Inject constructor(
             .map { it[0] }
 
     override fun deletePasswordById(passwordId: Long): Single<Boolean> =
-        passwordsRepository.deletePasswordsByIds(listOf(passwordId))
+        deletePasswordsByIds(listOf(passwordId))
 
     override fun deletePasswordsByIds(passwordIds: List<Long>): Single<Boolean> =
         passwordsRepository.deletePasswordsByIds(passwordIds)

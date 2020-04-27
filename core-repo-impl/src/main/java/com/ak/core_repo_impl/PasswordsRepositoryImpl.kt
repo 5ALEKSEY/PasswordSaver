@@ -4,7 +4,7 @@ import com.ak.core_repo_api.intefaces.IPasswordsRepository
 import com.ak.core_repo_api.intefaces.PasswordRepoEntity
 import com.ak.core_repo_impl.data.model.db.PSDatabase
 import com.ak.core_repo_impl.data.model.db.entities.PasswordDBEntity
-import com.ak.core_repo_impl.data.model.mapper.mapToDbEntitiesList
+import com.ak.core_repo_impl.data.model.mapper.mapToPasswordDbEntitiesList
 import io.reactivex.Flowable
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -40,14 +40,14 @@ class PasswordsRepositoryImpl @Inject constructor(
 
     override fun addNewPasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean> =
         Single.fromCallable {
-            passwordsLocalStore.getPasswordsDao().insertNewPassword(*passwordRepoEntities.mapToDbEntitiesList().toTypedArray())
+            passwordsLocalStore.getPasswordsDao().insertNewPassword(*passwordRepoEntities.mapToPasswordDbEntitiesList().toTypedArray())
         }
             .map { it.size >= 0 }
             .subscribeOn(Schedulers.io())
 
     override fun updatePasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean> =
         Single.fromCallable {
-            passwordsLocalStore.getPasswordsDao().updatePasswords(*passwordRepoEntities.mapToDbEntitiesList().toTypedArray())
+            passwordsLocalStore.getPasswordsDao().updatePasswords(*passwordRepoEntities.mapToPasswordDbEntitiesList().toTypedArray())
         }
             .map { updatedRows -> updatedRows >= 0 }
             .subscribeOn(Schedulers.io())

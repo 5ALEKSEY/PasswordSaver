@@ -3,7 +3,7 @@ package com.ak.feature_tabaccounts_impl.domain.usecase
 class AccountDataCheckUseCase {
 
     @Throws(AccountDataCheckException::class)
-    fun verifyPasswordData(accountName: String, accountLogin: String, accountPassword: String) {
+    fun verifyAccountData(accountName: String, accountLogin: String, accountPassword: String) {
         val emptyFields = arrayListOf<Int>()
         val incorrectFields = arrayListOf<Int>()
         var isVerifySuccess = true
