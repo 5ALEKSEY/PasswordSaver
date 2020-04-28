@@ -6,13 +6,13 @@ import com.ak.core_repo_api.api.CoreRepositoryApi
 import com.ak.feature_security_api.api.FeatureSecurityApi
 import com.ak.feature_security_impl.auth.SecurityActivity
 import com.ak.feature_security_impl.auth.SecurityPresenter
-import com.ak.feature_security_impl.di.modules.AppModule
 import com.ak.feature_security_impl.di.modules.SecurityManagerModule
+import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
 @Component(
-        modules = [AppModule::class, SecurityManagerModule::class],
+        modules = [SecurityManagerModule::class],
         dependencies = [FeatureSecurityDependencies::class]
 )
 @Singleton
@@ -21,14 +21,13 @@ abstract class FeatureSecurityComponent : FeatureSecurityApi {
     companion object {
         @Volatile
         private var featureSecurityComponent: FeatureSecurityComponent? = null
-        private lateinit var appContext: Context
 
         fun initAndGet(dependencies: FeatureSecurityDependencies, applicationContext: Context): FeatureSecurityComponent {
             if (featureSecurityComponent == null) {
                 featureSecurityComponent = DaggerFeatureSecurityComponent.builder()
-                    .featureSecurityDependencies(dependencies)
+                    .injectAppContext(applicationContext)
+                    .provideDependencies(dependencies)
                     .build()
-                appContext = applicationContext
             }
 
             return featureSecurityComponent!!
@@ -40,11 +39,14 @@ abstract class FeatureSecurityComponent : FeatureSecurityApi {
             throw IllegalStateException("FeatureSecurityComponent is null. initAndGet() should be called before")
         }
 
-        fun getAppContext(): Context = if (this::appContext.isInitialized) {
-            appContext
-        } else {
-            throw IllegalStateException("appContext is null. initAndGet() should be called before")
-        }
+    }
+
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun injectAppContext(context: Context): Builder
+        fun provideDependencies(dependencies: FeatureSecurityDependencies): Builder
+        fun build(): FeatureSecurityComponent
     }
 
     abstract fun inject(activity: SecurityActivity)

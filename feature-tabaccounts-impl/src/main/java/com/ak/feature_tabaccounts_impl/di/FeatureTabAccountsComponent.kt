@@ -7,7 +7,6 @@ import com.ak.feature_encryption_api.api.FeatureEncryptionApi
 import com.ak.feature_tabaccounts_api.api.FeatureTabAccountsApi
 import com.ak.feature_tabaccounts_impl.di.modules.AccountsTabManagersModule
 import com.ak.feature_tabaccounts_impl.di.modules.AccountsTabNavigationModule
-import com.ak.feature_tabaccounts_impl.di.modules.AppModule
 import com.ak.feature_tabaccounts_impl.di.modules.DomainBusinessLogicModule
 import com.ak.feature_tabaccounts_impl.screens.actionMode.AccountsActionModePresenter
 import com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.add.AddNewAccountFragment
@@ -16,11 +15,11 @@ import com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.edit.E
 import com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.edit.EditAccountPresenter
 import com.ak.feature_tabaccounts_impl.screens.presentation.accounts.AccountsListFragment
 import com.ak.feature_tabaccounts_impl.screens.presentation.accounts.AccountsListPresenter
+import dagger.BindsInstance
 import dagger.Component
 
 @Component(
         modules = [
-            AppModule::class,
             DomainBusinessLogicModule::class,
             AccountsTabManagersModule::class,
             AccountsTabNavigationModule::class
@@ -33,14 +32,13 @@ abstract class FeatureTabAccountsComponent : FeatureTabAccountsApi {
     companion object {
         @Volatile
         private var featureTabAccountsComponent: FeatureTabAccountsComponent? = null
-        private var appContext: Context? = null
 
         fun initialize(dependencies: FeatureTabAccountsDependencies, applicationContext: Context) {
             if (featureTabAccountsComponent == null) {
                 featureTabAccountsComponent = DaggerFeatureTabAccountsComponent.builder()
-                    .featureTabAccountsDependencies(dependencies)
+                    .injectAppContext(applicationContext)
+                    .provideDependencies(dependencies)
                     .build()
-                appContext = applicationContext
             }
         }
 
@@ -50,18 +48,19 @@ abstract class FeatureTabAccountsComponent : FeatureTabAccountsApi {
             throw IllegalStateException("FeatureTabAccountsComponent is null. initialize() should be called before")
         }
 
-        fun getAppContext(): Context = if (appContext != null) {
-            appContext!!
-        } else {
-            throw IllegalStateException("appContext is null. initialize() should be called before")
-        }
-
         fun isInitialized() = featureTabAccountsComponent != null
+    }
+
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun injectAppContext(context: Context): Builder
+        fun provideDependencies(dependencies: FeatureTabAccountsDependencies): Builder
+        fun build(): FeatureTabAccountsComponent
     }
 
     fun clearComponent() {
         featureTabAccountsComponent = null
-        appContext = null
     }
 
     abstract fun inject(presenter: AccountsListPresenter)

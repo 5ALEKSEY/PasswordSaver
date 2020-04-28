@@ -9,15 +9,15 @@ import com.ak.feature_tabsettings_impl.about.AboutSettingsFragment
 import com.ak.feature_tabsettings_impl.about.AboutSettingsPresenter
 import com.ak.feature_tabsettings_impl.design.DesignSettingsFragment
 import com.ak.feature_tabsettings_impl.design.DesignSettingsPresenter
-import com.ak.feature_tabsettings_impl.di.modules.AppModule
 import com.ak.feature_tabsettings_impl.main.SettingsFragment
 import com.ak.feature_tabsettings_impl.main.SettingsPresenter
 import com.ak.feature_tabsettings_impl.privacy.PrivacySettingsFragment
 import com.ak.feature_tabsettings_impl.privacy.PrivacySettingsPresenter
+import dagger.BindsInstance
 import dagger.Component
 
 @Component(
-        modules = [AppModule::class],
+        modules = [],
         dependencies = [FeatureTabSettingsDependencies::class]
 )
 @FeatureScope
@@ -26,14 +26,13 @@ abstract class FeatureTabSettingsComponent : FeatureTabSettingsApi {
     companion object {
         @Volatile
         private var featureTabSettingsComponent: FeatureTabSettingsComponent? = null
-        private var appContext: Context? = null
 
         fun initialize(dependencies: FeatureTabSettingsDependencies, applicationContext: Context) {
             if (featureTabSettingsComponent == null) {
                 featureTabSettingsComponent = DaggerFeatureTabSettingsComponent.builder()
-                    .featureTabSettingsDependencies(dependencies)
+                    .injectAppContext(applicationContext)
+                    .provideDependencies(dependencies)
                     .build()
-                appContext = applicationContext
             }
         }
 
@@ -43,18 +42,19 @@ abstract class FeatureTabSettingsComponent : FeatureTabSettingsApi {
             throw IllegalStateException("FeatureTabSettingsComponent is null. initialize() should be called before")
         }
 
-        fun getAppContext(): Context = if (appContext != null) {
-            appContext!!
-        } else {
-            throw IllegalStateException("appContext is null. initialize() should be called before")
-        }
-
         fun isInitialized() = featureTabSettingsComponent != null
+    }
+
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun injectAppContext(context: Context): Builder
+        fun provideDependencies(dependencies: FeatureTabSettingsDependencies): Builder
+        fun build(): FeatureTabSettingsComponent
     }
 
     fun clearComponent() {
         featureTabSettingsComponent = null
-        appContext = null
     }
 
     abstract fun inject(fragment: SettingsFragment)

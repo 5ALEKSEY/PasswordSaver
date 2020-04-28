@@ -19,6 +19,7 @@ import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.edit
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.ui.PhotoChooserBottomSheetDialog
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwords.PasswordsListFragment
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwords.PasswordsListPresenter
+import dagger.BindsInstance
 import dagger.Component
 
 @Component(
@@ -36,14 +37,13 @@ abstract class FeatureTabPasswordsComponent : FeatureTabPasswordsApi {
     companion object {
         @Volatile
         private var featureTabPasswordsComponent: FeatureTabPasswordsComponent? = null
-        private var appContext: Context? = null
 
         fun initialize(dependencies: FeatureTabPasswordsDependencies, applicationContext: Context) {
             if (featureTabPasswordsComponent == null) {
                 featureTabPasswordsComponent = DaggerFeatureTabPasswordsComponent.builder()
-                    .featureTabPasswordsDependencies(dependencies)
+                    .injectAppContext(applicationContext)
+                    .provideDependencies(dependencies)
                     .build()
-                appContext = applicationContext
             }
         }
 
@@ -53,18 +53,19 @@ abstract class FeatureTabPasswordsComponent : FeatureTabPasswordsApi {
             throw IllegalStateException("FeatureTabPasswordsComponent is null. initialize() should be called before")
         }
 
-        fun getAppContext(): Context = if (appContext != null) {
-            appContext!!
-        } else {
-            throw IllegalStateException("appContext is null. initialize() should be called before")
-        }
-
         fun isInitialized() = featureTabPasswordsComponent != null
+    }
+
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun injectAppContext(context: Context): Builder
+        fun provideDependencies(dependencies: FeatureTabPasswordsDependencies): Builder
+        fun build(): FeatureTabPasswordsComponent
     }
 
     fun clearComponent() {
         featureTabPasswordsComponent = null
-        appContext = null
     }
 
     abstract fun inject(activity: CameraPickImageActivity)
