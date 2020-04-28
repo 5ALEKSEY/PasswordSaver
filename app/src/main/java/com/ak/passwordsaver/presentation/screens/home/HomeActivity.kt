@@ -7,6 +7,8 @@ import androidx.navigation.NavGraph
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.ak.base.extensions.removeTextBadgeByMenuId
+import com.ak.base.extensions.setTextBadgeByMenuId
 import com.ak.base.extensions.setVisibility
 import com.ak.base.ui.BasePSFragment
 import com.ak.passwordsaver.R
@@ -96,6 +98,14 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
         finish()
     }
 
+    override fun setFeatureBadgeText(featureMenuId: Int, text: String) {
+        bnvBottomBar.setTextBadgeByMenuId(featureMenuId, text)
+    }
+
+    override fun removeFeatureBadgeText(featureMenuId: Int) {
+        bnvBottomBar.removeTextBadgeByMenuId(featureMenuId)
+    }
+
     private fun initBottomNavigationView(navController: NavController) {
         bnvBottomBar.setOnNavigationItemSelectedListener { menuItem ->
             if (currentMenuItemId == menuItem.itemId) {
@@ -112,8 +122,10 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
 
             currentMenuItemId = menuItem.itemId
             lastMenuChangeTime = currentTime
+            homePresenter.onNavMenuDestinationChanged(currentMenuItemId)
             NavigationUI.onNavDestinationSelected(menuItem, navController)
         }
+        homePresenter.checkFeaturesBadgeUpdate()
     }
 
     private fun setSecureRecentAppsScreenState(isSecure: Boolean) {

@@ -1,0 +1,17 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+            android:id="@+id/tvBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginTop="2dp"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/bg_badge_notification"
+            android:gravity="center"
+            android:padding="3dp"
+            android:textColor="@color/colorWhite"
+            android:textSize="10sp"
+            tools:text="Badge text" />
+</merge>

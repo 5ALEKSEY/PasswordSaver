@@ -2,6 +2,8 @@ package com.ak.passwordsaver.injector
 
 import com.ak.core_repo_api.api.CoreRepositoryApi
 import com.ak.core_repo_impl.di.CoreRepositoryComponent
+import com.ak.feature_appupdate_api.api.FeatureAppUpdateApi
+import com.ak.feature_appupdate_impl.di.FeatureAppUpdateComponent
 import com.ak.feature_encryption_api.api.FeatureEncryptionApi
 import com.ak.feature_encryption_impl.di.FeatureEncryptionComponent
 import com.ak.feature_security_api.api.FeatureSecurityApi
@@ -53,6 +55,7 @@ object ApplicationInjector {
         return AppComponent.initialize(
                 DaggerAppComponent_AppComponentDependenciesComponent.builder()
                     .featureSecurityApi(initSecurityFeature())
+                    .featureAppUpdateApi(initFeatureAppUpdate())
                     .coreRepositoryApi(initCoreRepo())
                     .build()
         )
@@ -135,6 +138,10 @@ object ApplicationInjector {
 
     private fun initFeatureEncryption(): FeatureEncryptionApi {
         return FeatureEncryptionComponent.get()
+    }
+
+    private fun initFeatureAppUpdate(): FeatureAppUpdateApi {
+        return FeatureAppUpdateComponent.get(PSApplication.appContext)
     }
 
     private fun initCoreRepo(): CoreRepositoryApi {

@@ -6,16 +6,19 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
-import android.graphics.Rect
-import android.graphics.RectF
 import android.util.Log
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.ak.base.R
 import com.ak.base.constants.AppConstants
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.android.synthetic.main.layout_notification_badge.view.*
 import java.util.*
 
 fun Float.dpToPx(context: Context?) =
@@ -97,24 +100,20 @@ fun View.setVisibilityInvisible(isVisible: Boolean) {
     }
 }
 
-fun Bitmap.roundBitmap(radiusValue: Int): Bitmap {
-    val dstBitmap = Bitmap.createBitmap(
-        width,
-        height,
-        Bitmap.Config.ARGB_8888
-    )
+fun BottomNavigationView.setTextBadgeByMenuId(menuId: Int, badgeContent: String) {
+    getBottomNavViewMenuItem(this, menuId)?.apply {
+        val badgeView = LayoutInflater.from(this.context).inflate(R.layout.layout_notification_badge, this, true)
+        badgeView.tvBadgeText.text = badgeContent
+        setTag(R.id.TAG_BADGE_VIEW, badgeView.tvBadgeText)
+    }
+}
 
-    val canvas = Canvas(dstBitmap)
-    val paint = Paint()
-    paint.isAntiAlias = true
-
-    val rect = Rect(0, 0, width, height)
-    val rectF = RectF(rect)
-    canvas.drawRoundRect(rectF, radiusValue.toFloat(), radiusValue.toFloat(), paint)
-    paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)
-    canvas.drawBitmap(this, 0F, 0F, paint)
-    recycle()
-    return dstBitmap
+fun BottomNavigationView.removeTextBadgeByMenuId(menuId: Int) {
+    getBottomNavViewMenuItem(this, menuId)?.apply {
+        val badgeView = getTag(R.id.TAG_BADGE_VIEW) as? View ?: return
+        removeView(badgeView)
+        setTag(R.id.TAG_BADGE_VIEW, null)
+    }
 }
 
 inline fun View.setSafeClickListener(
@@ -140,6 +139,15 @@ inline fun View.setSafeClickListener(
             listener(v)
         }
     })
+}
+
+private fun getBottomNavViewMenuItem(bottomNavigationView: BottomNavigationView, menuItemId: Int): BottomNavigationItemView? {
+    val menuItemView = bottomNavigationView.getChildAt(0)?.findViewById<View>(menuItemId)
+    return if (menuItemView !is BottomNavigationItemView) {
+        null
+    } else {
+        menuItemView
+    }
 }
 
 private fun changeAppBarLayoutScrollBehavior(appBarLayout: AppBarLayout, isScrollNeeds: Boolean) {

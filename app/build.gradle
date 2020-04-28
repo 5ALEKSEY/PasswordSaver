@@ -79,18 +79,27 @@ kapt {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(':base')
+
     implementation project(':core-repo-api')
     implementation project(':core-repo-impl')
+
     implementation project(':feature-security-api')
     implementation project(':feature-security-impl')
+
     implementation project(':feature-tabpasswords-api')
     implementation project(':feature-tabpasswords-impl')
+
     implementation project(':feature-tabaccounts-api')
     implementation project(':feature-tabaccounts-impl')
+
     implementation project(':feature-tabsettings-api')
     implementation project(':feature-tabsettings-impl')
+
     implementation project(':feature-encryption-api')
     implementation project(':feature-encryption-impl')
+
+    implementation project(':feature-appupdate-api')
+    implementation project(':feature-appupdate-impl')
 
     implementation deps.kotlin
     implementation deps.appCompat

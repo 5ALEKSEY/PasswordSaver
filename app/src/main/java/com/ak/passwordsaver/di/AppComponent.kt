@@ -1,6 +1,7 @@
 package com.ak.passwordsaver.di
 
 import com.ak.core_repo_api.api.CoreRepositoryApi
+import com.ak.feature_appupdate_api.api.FeatureAppUpdateApi
 import com.ak.feature_security_api.api.FeatureSecurityApi
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.di.modules.AppModule
@@ -46,7 +47,7 @@ abstract class AppComponent {
     abstract fun inject(presenter: HomePresenter)
     abstract fun inject(activity: HomeActivity)
 
-    @Component(dependencies = [FeatureSecurityApi::class, CoreRepositoryApi::class])
+    @Component(dependencies = [CoreRepositoryApi::class, FeatureAppUpdateApi::class, FeatureSecurityApi::class])
     @Singleton
     interface AppComponentDependenciesComponent : AppComponentDependencies
 }
