@@ -22,11 +22,10 @@ class DbMigrationHelperImpl @Inject constructor() : IDbMigrationHelper {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("CREATE TABLE IF NOT EXISTS `${AccountDBEntity.TABLE_NAME}` " +
                                          "(" +
-                                         "`${AccountDBEntity.COLUMN_ACCOUNT_ID}` INTEGER NOT NULL, " +
-                                         "`${AccountDBEntity.COLUMN_ACCOUNT_NAME}` TEXT, " +
-                                         "`${AccountDBEntity.COLUMN_ACCOUNT_LOGIN}` TEXT, " +
-                                         "`${AccountDBEntity.COLUMN_ACCOUNT_PASSWORD}` TEXT, " +
-                                         "PRIMARY KEY(`${AccountDBEntity.COLUMN_ACCOUNT_ID}`)" +
+                                         "`${AccountDBEntity.COLUMN_ACCOUNT_ID}` INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                                         "`${AccountDBEntity.COLUMN_ACCOUNT_NAME}` TEXT NOT NULL, " +
+                                         "`${AccountDBEntity.COLUMN_ACCOUNT_LOGIN}` TEXT NOT NULL, " +
+                                         "`${AccountDBEntity.COLUMN_ACCOUNT_PASSWORD}` TEXT NOT NULL" +
                                          ")"
                 )
             }
