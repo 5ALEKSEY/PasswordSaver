@@ -11,7 +11,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class SettingsPreferencesManagerImpl @Inject constructor(
-    @Named(PreferencesModule.SETTINGS_PREFERENCES) private val mSettingsPreferences: SharedPreferences,
+    @Named(PreferencesModule.SETTINGS_PREFERENCES) private val settingsPreferences: SharedPreferences,
     private val mContext: Context
 ) : ISettingsPreferencesManager {
 
@@ -19,6 +19,7 @@ class SettingsPreferencesManagerImpl @Inject constructor(
         const val PASSWORD_SHOWING_TYPE_SHARED_KEY = "password_showing_type"
         const val IS_PINCODE_ENABLED_SHARED_KEY = "is_pincode_enabled"
         const val IS_PATTERN_ENABLED_SHARED_KEY = "is_pattern_enabled"
+        const val IS_BIOMETRIC_ENABLED_SHARED_KEY = "is_biometric_enabled"
         const val APP_LOCK_STATE_ID_SHARED_KEY = "app_lock_state_id"
         const val PINCODE_VALUE_SHARED_KEY = "pincode_value"
         const val PATTERN_VALUE_SHARED_KEY = "pattern_value"
@@ -27,13 +28,13 @@ class SettingsPreferencesManagerImpl @Inject constructor(
 
     override fun getPasswordShowingType() =
         PasswordShowingType.getTypeByNumber(
-            mSettingsPreferences.getInt(
+                settingsPreferences.getInt(
                 PASSWORD_SHOWING_TYPE_SHARED_KEY, 0
             )
         )
 
     override fun setPasswordShowingType(passwordShowingType: PasswordShowingType) {
-        mSettingsPreferences.edit()
+        settingsPreferences.edit()
             .putInt(PASSWORD_SHOWING_TYPE_SHARED_KEY, passwordShowingType.number)
             .apply()
     }
@@ -45,50 +46,57 @@ class SettingsPreferencesManagerImpl @Inject constructor(
         AppLockStateHelper.getAppLockStateStringList(mContext)
 
     override fun isPincodeEnabled() =
-        mSettingsPreferences.getBoolean(IS_PINCODE_ENABLED_SHARED_KEY, false)
+        settingsPreferences.getBoolean(IS_PINCODE_ENABLED_SHARED_KEY, false)
 
     override fun setPincodeEnableState(isEnabled: Boolean) {
-        mSettingsPreferences.edit().putBoolean(IS_PINCODE_ENABLED_SHARED_KEY, isEnabled).apply()
+        settingsPreferences.edit().putBoolean(IS_PINCODE_ENABLED_SHARED_KEY, isEnabled).apply()
     }
 
     override fun isPatternEnabled() =
-        mSettingsPreferences.getBoolean(IS_PATTERN_ENABLED_SHARED_KEY, false)
+        settingsPreferences.getBoolean(IS_PATTERN_ENABLED_SHARED_KEY, false)
 
     override fun setPatternEnableState(isEnabled: Boolean) {
-        mSettingsPreferences.edit().putBoolean(IS_PATTERN_ENABLED_SHARED_KEY, isEnabled).apply()
+        settingsPreferences.edit().putBoolean(IS_PATTERN_ENABLED_SHARED_KEY, isEnabled).apply()
     }
 
     override fun getLockAppStateChoose(): AppLockState {
-        val lockStateId = mSettingsPreferences.getInt(APP_LOCK_STATE_ID_SHARED_KEY, 0)
+        val lockStateId = settingsPreferences.getInt(APP_LOCK_STATE_ID_SHARED_KEY, 0)
         return AppLockStateHelper.convertFromLockStateId(lockStateId)
     }
 
     override fun setLockAppStateChoose(appLockState: AppLockState) {
-        mSettingsPreferences.edit()
+        settingsPreferences.edit()
             .putInt(APP_LOCK_STATE_ID_SHARED_KEY, appLockState.lockStateId)
             .apply()
     }
 
     override fun getUserPincodeValue() =
-        mSettingsPreferences.getString(PINCODE_VALUE_SHARED_KEY, "")!!
+        settingsPreferences.getString(PINCODE_VALUE_SHARED_KEY, "")!!
 
     override fun setUserPincodeValue(newPincodeValue: String) {
-        mSettingsPreferences.edit().putString(PINCODE_VALUE_SHARED_KEY, newPincodeValue).apply()
+        settingsPreferences.edit().putString(PINCODE_VALUE_SHARED_KEY, newPincodeValue).apply()
     }
 
     override fun getUserPatternValue() =
-        mSettingsPreferences.getString(PATTERN_VALUE_SHARED_KEY, "")!!
+        settingsPreferences.getString(PATTERN_VALUE_SHARED_KEY, "")!!
 
     override fun setUserPatternValue(newPatternValue: String) {
-        mSettingsPreferences.edit().putString(PATTERN_VALUE_SHARED_KEY, newPatternValue).apply()
+        settingsPreferences.edit().putString(PATTERN_VALUE_SHARED_KEY, newPatternValue).apply()
+    }
+
+    override fun isBiometricEnabled() =
+        settingsPreferences.getBoolean(IS_BIOMETRIC_ENABLED_SHARED_KEY, false)
+
+    override fun setBiometricEnableState(isEnabled: Boolean) {
+        settingsPreferences.edit().putBoolean(IS_BIOMETRIC_ENABLED_SHARED_KEY, isEnabled).apply()
     }
 
     override fun setBlockSecurityInputTime(blockSecurityInputTime: Long) {
-        mSettingsPreferences.edit()
+        settingsPreferences.edit()
             .putLong(BLOCK_SECURITY_INPUT_TIME_SHARED_KEY, blockSecurityInputTime)
             .apply()
     }
 
     override fun getBlockSecurityInputTime() =
-        mSettingsPreferences.getLong(BLOCK_SECURITY_INPUT_TIME_SHARED_KEY, 0L)
+        settingsPreferences.getLong(BLOCK_SECURITY_INPUT_TIME_SHARED_KEY, 0L)
 }

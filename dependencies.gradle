@@ -18,6 +18,7 @@ def kotlinCoroutines_version = '1.3.0'
 def lifecycle_version = '2.2.0'
 def gson_version = '2.8.6'
 def lottie_version = '3.4.0'
+def biometric_version = '1.0.1'
 def nav_version = '2.3.0-alpha02'
 
 ext.deps = [
@@ -46,5 +47,6 @@ ext.deps = [
         lifecycle           : "androidx.lifecycle:lifecycle-extensions:$lifecycle_version",
         gson                : "com.google.code.gson:gson:$gson_version",
         lottieAnim          : "com.airbnb.android:lottie:$lottie_version",
+        biometric           : "androidx.biometric:biometric:$biometric_version",
         navComponent        : ["androidx.navigation:navigation-fragment-ktx:$nav_version", "androidx.navigation:navigation-ui-ktx:$nav_version"]
 ]

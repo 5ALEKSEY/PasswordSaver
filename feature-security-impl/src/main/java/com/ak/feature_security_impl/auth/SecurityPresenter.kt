@@ -9,6 +9,7 @@ import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.AUTH_SECURITY_ACTION_TYPE
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.CHANGE_PATTERN_SECURITY_ACTION_TYPE
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.CHANGE_PINCODE_SECURITY_ACTION_TYPE
+import com.ak.feature_security_api.interfaces.IPSBiometricManager
 import com.ak.feature_security_impl.di.FeatureSecurityComponent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -19,7 +20,8 @@ import javax.inject.Inject
 
 @InjectViewState
 class SecurityPresenter @Inject constructor(
-    private val settingsPreferencesManager: ISettingsPreferencesManager
+    private val settingsPreferencesManager: ISettingsPreferencesManager,
+    private val psBiometricManager: IPSBiometricManager
 ) : BasePSPresenter<ISecurityView>() {
 
     companion object {
@@ -33,6 +35,8 @@ class SecurityPresenter @Inject constructor(
     private var failedAttemptsCount = 0
     private var addSecurityConfirmCode = ""
 
+    private var isInputBlocked = false
+
     init {
         FeatureSecurityComponent.get().inject(this)
     }
@@ -40,6 +44,36 @@ class SecurityPresenter @Inject constructor(
     fun onSecurityInputTypeChangeClicked() {
         isPincodeAuthMethod = !isPincodeAuthMethod
         viewState.switchAuthMethod(isPincodeAuthMethod, true)
+    }
+
+    fun startBiometricAuth() {
+        val canUseBiometricAuth = canUseBiometricAuth()
+        viewState.setBiometricAuthVisibility(canUseBiometricAuth)
+        if (canUseBiometricAuth) {
+            psBiometricManager.startAuth(object : IPSBiometricManager.AuthCallback {
+                override fun onSucceeded() {
+                    sendSuccessfullyAuthResult()
+                }
+
+                override fun onFailedAttempt() {
+                    viewState.showBiometricFailedAttempt()
+                }
+
+                override fun onBiometricLocked() {
+                    viewState.setBiometricAuthLockState(true)
+                }
+
+                override fun onHelpForUser(helpMessage: String) {
+                    viewState.showSecurityMessage(helpMessage)
+                }
+            })
+        }
+    }
+
+    fun stopBiometricAuth() {
+        if (canUseBiometricAuth()) {
+            psBiometricManager.cancelAuth()
+        }
     }
 
     override fun onFirstViewAttach() {
@@ -131,7 +165,7 @@ class SecurityPresenter @Inject constructor(
                             settingsPreferencesManager.setUserPatternValue(addSecurityConfirmCode)
                         }
                     }
-                    viewState.sendAuthActionResult(true)
+                    sendSuccessfullyAuthResult()
                 } else {
                     viewState.showSecurityMessage(getMessageForConfirmCode(), true)
                     showFailedActionViewState()
@@ -161,8 +195,7 @@ class SecurityPresenter @Inject constructor(
     private fun handleAuthUserInput(inputCode: String) {
         when {
             isSuccessfulUserInputCode(inputCode) -> {
-                viewState.hideSecurityMessage()
-                viewState.sendAuthActionResult(true)
+                sendSuccessfullyAuthResult()
             }
             failedAttemptsCount != MAX_FAILED_ATTEMPTS_COUNT -> {
                 failedAttemptsCount++
@@ -178,6 +211,11 @@ class SecurityPresenter @Inject constructor(
                 viewState.lockSecurityInputViews()
             }
         }
+    }
+
+    private fun sendSuccessfullyAuthResult() {
+        viewState.hideSecurityMessage()
+        viewState.sendAuthActionResult(true)
     }
 
     private fun isSuccessfulUserInputCode(inputCode: String): Boolean {
@@ -214,20 +252,28 @@ class SecurityPresenter @Inject constructor(
             .map { leftValue -> startedStep - leftValue }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
-                { tickValue ->
+                    { tickValue ->
                     viewState.showSecurityMessage("Security input blocked. Try after after: $tickValue")
                 },
-                { throwable -> Log.d("ded", throwable.message) },
-                {
+                    { throwable -> Log.d("ded", throwable.message) },
+                    {
                     resetAttemptsAndUnlockSecurityInput()
-                }
+                    },
+                    {
+                        isInputBlocked = true
+                    }
             )
             .let(this::bindDisposable)
     }
 
     private fun resetAttemptsAndUnlockSecurityInput() {
         failedAttemptsCount = 0
+        isInputBlocked = false
         viewState.showSecurityMessage("Verify your identity")
         viewState.unlockSecurityInputViews()
     }
+
+    private fun canUseBiometricAuth() = authActionType == AUTH_SECURITY_ACTION_TYPE
+            && psBiometricManager.isBiometricAuthEnabled()
+            && !isInputBlocked
 }

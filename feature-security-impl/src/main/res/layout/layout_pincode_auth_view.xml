@@ -7,6 +7,7 @@
         tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clRootPincodeAuthView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:background="@color/colorPrimary">
@@ -146,6 +147,21 @@
                 app:pincodeValue="nine"
                 app:primaryText="9"
                 app:secondaryText="WXYZ" />
+
+        <ImageView
+                android:id="@+id/ivBiometricAuthMark"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:padding="10dp"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:visibility="invisible"
+                tools:visibility="visible"
+                android:src="@drawable/ic_fingerprint"
+                app:layout_constraintBottom_toBottomOf="@+id/cPincodeNumberView0"
+                app:layout_constraintEnd_toStartOf="@id/cPincodeNumberView0"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/cPincodeNumberView0" />
 
         <com.ak.feature_security_impl.auth.security.pincode.PincodeNumberView
                 android:id="@+id/cPincodeNumberView0"

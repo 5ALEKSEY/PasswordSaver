@@ -8,7 +8,7 @@ import com.ak.feature_security_api.interfaces.IPSAuthManager
 import com.ak.feature_security_impl.auth.SecurityActivity
 import javax.inject.Inject
 
-class IAuthCheckerStarterImpl @Inject constructor(
+class AuthCheckerStarterImpl @Inject constructor(
     private val authManager: IPSAuthManager
 ) : IAuthCheckerStarter {
 

@@ -31,10 +31,16 @@
 
     <TextView
             android:id="@+id/tvSecurityMessageText"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/iconsAndText"
             android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            tools:visibility="visible"
             android:visibility="invisible"
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +60,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvSecurityMessageText">
 
         <com.ak.feature_security_impl.auth.security.pincode.PincodeAuthView
-                android:id="@+id/cPincodeAuthView"
+                android:id="@+id/vPincodeAuthView"
                 android:layout_width="match_parent"
                 android:layout_centerInParent="true"
                 android:layout_height="wrap_content"

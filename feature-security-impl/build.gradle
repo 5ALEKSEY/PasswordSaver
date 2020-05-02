@@ -74,6 +74,8 @@ dependencies {
     implementation deps.moxy
     kapt deps.moxyKapt
 
+    implementation deps.biometric
+
     implementation deps.rx
     implementation deps.rxAndroid
 }

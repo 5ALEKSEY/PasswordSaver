@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentActivity
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.showToastMessage
 import com.ak.base.extensions.vibrate
+import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_security_impl.R
 import com.ak.feature_security_impl.di.FeatureSecurityComponent
 import kotlinx.android.synthetic.main.activity_security.*
@@ -84,6 +85,21 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
         mvpDelegate.onAttach()
     }
 
+    override fun onResume() {
+        super.onResume()
+        securityPresenter.startBiometricAuth()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        securityPresenter.stopBiometricAuth()
+    }
+
+    override fun finish() {
+        applyFinishSecurityAnim(this)
+        super.finish()
+    }
+
     override fun showSecurityMessage(message: String, withAnimation: Boolean) {
         tvSecurityMessageText.visibility = View.VISIBLE
         tvSecurityMessageText.text = message
@@ -98,7 +114,7 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
     }
 
     override fun showFailedPincodeAuthAction() {
-        cPincodeAuthView.setFailedAuthViewState()
+        vPincodeAuthView.setFailedAuthViewState()
     }
 
     override fun showFailedPatternAuthAction() {
@@ -107,27 +123,39 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
 
     override fun lockSecurityInputViews() {
         invokeVibration(LOCK_VIBRATION_DELAY)
-        cPincodeAuthView.setPincodeInputLockedState(true)
+        vPincodeAuthView.setPincodeInputLockedState(true)
         vPatternAuthView.setAuthViewInputLockState(true)
     }
 
     override fun unlockSecurityInputViews() {
-        cPincodeAuthView.setPincodeInputLockedState(false)
+        vPincodeAuthView.setPincodeInputLockedState(false)
         vPatternAuthView.setAuthViewInputLockState(false)
+        securityPresenter.startBiometricAuth()
+    }
+
+    override fun setBiometricAuthVisibility(isBiometricVisible: Boolean) {
+        vPincodeAuthView.setBiometricAuthMarkVisibility(isBiometricVisible)
+    }
+
+    override fun showBiometricFailedAttempt() {
+        vPincodeAuthView.showBiometricMarkFailedAttempt()
+    }
+
+    override fun setBiometricAuthLockState(isLocked: Boolean) {
+        
     }
 
     override fun sendAuthActionResult(isSuccessfully: Boolean) {
         val result = if (isSuccessfully) Activity.RESULT_OK else Activity.RESULT_CANCELED
         setResult(result)
         finish()
-        applyFinishSecurityAnim(this)
     }
 
     override fun switchAuthMethod(isPincode: Boolean, withAnimation: Boolean) {
         val switchDuration = if (withAnimation) SWITCH_AUTH_METHOD_DURATION else 0L
 
-        val appearView = if (isPincode) cPincodeAuthView else vPatternAuthView
-        val disappearView = if (!isPincode) cPincodeAuthView else vPatternAuthView
+        val appearView = if (isPincode) vPincodeAuthView else vPatternAuthView
+        val disappearView = if (!isPincode) vPincodeAuthView else vPatternAuthView
 
         val appearAnim = getAppearAnimationForView(appearView, switchDuration)
         val disappearAnim = getDisappearAnimationForView(disappearView, switchDuration)
@@ -160,8 +188,8 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
         intent?.let { initAuthState(it) }
 
         vPatternAuthView.mOnFinishedAction = securityPresenter::onUserAuthFinished
-        cPincodeAuthView.mOnFinishedAction = securityPresenter::onUserAuthFinished
-        cPincodeAuthView.setPincodeValuesCount(PINCODE_INPUT_VALUES_COUNT)
+        vPincodeAuthView.onFinishedAction = securityPresenter::onUserAuthFinished
+        vPincodeAuthView.setPincodeValuesCount(PINCODE_INPUT_VALUES_COUNT)
 
         ivSecurityInputTypeChangeAction.setSafeClickListener(CHANGE_AUTH_INPUT_METHOD_CLICK_DELAY) {
             securityPresenter.onSecurityInputTypeChangeClicked()
@@ -171,7 +199,7 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
     private fun initAuthState(intent: Intent) {
         securityPresenter.authActionType = intent.getIntExtra(
             IS_AUTH_ACTION_KEY_EXTRA,
-            -1
+            IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE
         )
     }
 

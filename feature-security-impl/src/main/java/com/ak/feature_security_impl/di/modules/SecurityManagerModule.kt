@@ -2,8 +2,10 @@ package com.ak.feature_security_impl.di.modules
 
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_security_api.interfaces.IPSAuthManager
+import com.ak.feature_security_api.interfaces.IPSBiometricManager
 import com.ak.feature_security_impl.auth.PSAuthManagerImpl
-import com.ak.feature_security_impl.starter.IAuthCheckerStarterImpl
+import com.ak.feature_security_impl.auth.security.biometric.PSBiometricManagerImpl
+import com.ak.feature_security_impl.starter.AuthCheckerStarterImpl
 import dagger.Binds
 import dagger.Module
 import javax.inject.Singleton
@@ -16,5 +18,9 @@ interface SecurityManagerModule {
 
     @Binds
     @Singleton
-    fun provideAuthCheckerStarter(authCheckerStarterImpl: IAuthCheckerStarterImpl): IAuthCheckerStarter
+    fun provideAuthCheckerStarter(authCheckerStarterImpl: AuthCheckerStarterImpl): IAuthCheckerStarter
+
+    @Binds
+    @Singleton
+    fun providePSBiometricManager(psBiometricManagerImpl: PSBiometricManagerImpl): IPSBiometricManager
 }
