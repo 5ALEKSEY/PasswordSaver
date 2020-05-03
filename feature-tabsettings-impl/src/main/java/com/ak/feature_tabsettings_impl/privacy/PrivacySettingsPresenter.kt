@@ -142,8 +142,10 @@ class PrivacySettingsPresenter @Inject constructor(
                 }
                 IPSBiometricManager.AvailableStatus.NO_SAVED_FINGERPRINTS -> {
                     // TODO: make message for user and open security settings in phone
+
+                    settingsPreferencesManager.setBiometricEnableState(false)
                 }
-                else -> biometricSwitchItemModel = null
+                else -> settingsPreferencesManager.setBiometricEnableState(false)
             }
             biometricSwitchItemModel?.let { settingsItems.add(it) }
 
@@ -155,6 +157,9 @@ class PrivacySettingsPresenter @Inject constructor(
     private fun deleteUserPincodeData() {
         settingsPreferencesManager.setPincodeEnableState(false)
         settingsPreferencesManager.setUserPincodeValue("")
+
+        // disable another privacy features
+        settingsPreferencesManager.setBiometricEnableState(false)
         deleteUserPatternCodeData()
     }
 
