@@ -12,6 +12,8 @@ import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibility
 import com.ak.base.extensions.turnOffToolbarScrolling
 import com.ak.base.extensions.turnOnToolbarScrolling
+import com.ak.base.ui.dialog.PSDialog
+import com.ak.base.ui.dialog.PSDialogBuilder
 import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import com.ak.feature_tabpasswords_impl.screens.actionMode.IPasswordsActionModeView
@@ -45,8 +47,10 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     fun provideActionModePresenter(): com.ak.feature_tabpasswords_impl.screens.actionMode.PasswordsActionModePresenter = daggerActionModePresenter.get()
 
     private var tbPasswordsListBarActionMode: ActionMode? = null
-    private var mPasswordActionsDialog: PasswordActionsBottomSheetDialog? = null
-    private lateinit var mPasswordsAdapter: PasswordsListRecyclerAdapter
+    private var passwordActionsDialog: PasswordActionsBottomSheetDialog? = null
+    private lateinit var passwordsAdapter: PasswordsListRecyclerAdapter
+
+    private var deletePasswordDialog: PSDialog? = null
 
     override fun getFragmentLayoutResId() = R.layout.fragment_passwords_list
 
@@ -65,6 +69,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
             navigator.navigateToAddNewPassword()
         }
 
+        deletePasswordDialog?.dismissAllowingStateLoss()
         passwordsListPresenter.loadPasswords()
     }
 
@@ -74,7 +79,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     }
 
     override fun displayPasswords(passwordModelsList: List<PasswordItemModel>) {
-        mPasswordsAdapter.insertData(passwordModelsList)
+        passwordsAdapter.insertData(passwordModelsList)
     }
 
     override fun setLoadingState(isLoading: Boolean) {
@@ -99,7 +104,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         passwordId: Long,
         contentVisibilityState: Boolean
     ) {
-        mPasswordsAdapter.setPasswordContentVisibility(passwordId, contentVisibilityState)
+        passwordsAdapter.setPasswordContentVisibility(passwordId, contentVisibilityState)
     }
 
     override fun enableToolbarScrolling() {
@@ -111,8 +116,8 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     }
 
     override fun showPasswordActionsDialog() {
-        mPasswordActionsDialog = PasswordActionsBottomSheetDialog.showDialog(childFragmentManager)
-        mPasswordActionsDialog?.onChoosePasswordActionListener = { actionId ->
+        passwordActionsDialog = PasswordActionsBottomSheetDialog.showDialog(childFragmentManager)
+        passwordActionsDialog?.onChoosePasswordActionListener = { actionId ->
             when (actionId) {
                 PasswordActionsBottomSheetDialog.COPY_PASSWORD_CONTENT_ACTION -> {
                     passwordsListPresenter.onCopyPasswordAction()
@@ -121,14 +126,14 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
                     passwordsListPresenter.onEditPasswordAction()
                 }
                 PasswordActionsBottomSheetDialog.DELETE_PASSWORD_ITEM_ACTION -> {
-                    passwordsListPresenter.onDeletePasswordAction()
+                    showDeletePasswordDialog { passwordsListPresenter.onDeletePasswordAction() }
                 }
             }
         }
     }
 
     override fun hidePasswordActionsDialog() {
-        mPasswordActionsDialog?.dismiss()
+        passwordActionsDialog?.dismiss()
     }
 
     override fun showEditPasswordScreen(passwordId: Long) {
@@ -145,14 +150,14 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     }
 
     private fun initRecyclerView() {
-        mPasswordsAdapter = PasswordsListRecyclerAdapter(
+        passwordsAdapter = PasswordsListRecyclerAdapter(
             passwordsListPresenter::passwordShowActionRequired,
             passwordsListPresenter::onShowPasswordActions,
             passwordsActionModePresenter::onPasswordItemSingleClick,
             passwordsActionModePresenter::onPasswordItemLongClick
         )
 
-        rvPasswordsList.adapter = mPasswordsAdapter
+        rvPasswordsList.adapter = passwordsAdapter
         rvPasswordsList.layoutManager = GridLayoutManager(
             context,
             AppConstants.PASSWORDS_LIST_COLUMN_COUNT,
@@ -181,14 +186,14 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
 
     override fun displaySelectedMode() {
         val activityOfFragment = activity
-        mPasswordsAdapter.setItemsActionModeState(true)
+        passwordsAdapter.setItemsActionModeState(true)
         if (tbPasswordsListBarActionMode == null && activityOfFragment != null && activityOfFragment is AppCompatActivity) {
             tbPasswordsListBarActionMode =
                 activityOfFragment.startSupportActionMode(object : ActionMode.Callback {
                     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                         return when (item?.itemId) {
                             R.id.action_delete_selected_passwords -> {
-                                passwordsActionModePresenter.onDeleteSelectedInActionMode()
+                                showDeletePasswordDialog { passwordsActionModePresenter.onDeleteSelectedInActionMode() }
                                 true
                             }
                             else -> false
@@ -212,13 +217,26 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     }
 
     override fun hideSelectedMode() {
-        mPasswordsAdapter.setItemsActionModeState(false)
+        passwordsAdapter.setItemsActionModeState(false)
         passwordsActionModePresenter.onSelectedModeFinished()
         tbPasswordsListBarActionMode?.finish()
         tbPasswordsListBarActionMode = null
     }
 
     override fun showSelectStateForItem(isSelected: Boolean, passwordId: Long) {
-        mPasswordsAdapter.setSelectedStateForPasswordItemId(isSelected, passwordId)
+        passwordsAdapter.setSelectedStateForPasswordItemId(isSelected, passwordId)
+    }
+
+    private inline fun showDeletePasswordDialog(crossinline deleteCallback: () -> Unit) {
+        deletePasswordDialog?.dismissAllowingStateLoss()
+        deletePasswordDialog = PSDialogBuilder(childFragmentManager)
+            .title("Attention")
+            .description("Are you sure that you want to delete this password data? You can't restore this data later.")
+            .positive("Delete") {
+                deletePasswordDialog?.dismissAllowingStateLoss()
+                deleteCallback()
+            }
+            .cancelable(false)
+            .buildAndShow()
     }
 }

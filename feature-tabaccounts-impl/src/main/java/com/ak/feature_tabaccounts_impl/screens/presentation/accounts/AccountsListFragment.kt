@@ -12,6 +12,8 @@ import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibility
 import com.ak.base.extensions.turnOffToolbarScrolling
 import com.ak.base.extensions.turnOnToolbarScrolling
+import com.ak.base.ui.dialog.PSDialog
+import com.ak.base.ui.dialog.PSDialogBuilder
 import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
 import com.ak.feature_tabaccounts_impl.screens.actionMode.AccountsActionModePresenter
@@ -49,6 +51,8 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
     private var accountActionsDialog: AccountActionsBottomSheetDialog? = null
     private lateinit var accountsAdapter: AccountsListRecyclerAdapter
 
+    private var deleteAccountDialog: PSDialog? = null
+
     override fun getFragmentLayoutResId() = R.layout.fragment_accounts_list
 
     override fun isBackPressEnabled() = false
@@ -66,6 +70,7 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
             navigator.navigateToAddNewAccount()
         }
 
+        deleteAccountDialog?.dismissAllowingStateLoss()
         accountsListPresenter.loadPasswords()
     }
 
@@ -113,7 +118,7 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
                     accountsListPresenter.onEditAccountAction()
                 }
                 AccountActionsBottomSheetDialog.DELETE_ACCOUNT_ITEM_ACTION -> {
-                    accountsListPresenter.onDeleteAccountAction()
+                    showDeleteAccountDialog { accountsListPresenter.onDeleteAccountAction() }
                 }
             }
         }
@@ -179,7 +184,7 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
                     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                         return when (item?.itemId) {
                             R.id.action_delete_selected_accounts -> {
-                                accountsActionModePresenter.onDeleteSelectedInActionMode()
+                                showDeleteAccountDialog { accountsActionModePresenter.onDeleteSelectedInActionMode() }
                                 true
                             }
                             else -> false
@@ -211,5 +216,18 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
 
     override fun showSelectStateForItem(isSelected: Boolean, accountId: Long) {
         accountsAdapter.setSelectedStateForAccountItemId(isSelected, accountId)
+    }
+
+    private inline fun showDeleteAccountDialog(crossinline deleteCallback: () -> Unit) {
+        deleteAccountDialog?.dismissAllowingStateLoss()
+        deleteAccountDialog = PSDialogBuilder(childFragmentManager)
+            .title("Attention")
+            .description("Are you sure that you want to delete this account data? You can't restore this data later.")
+            .positive("Delete") {
+                deleteAccountDialog?.dismissAllowingStateLoss()
+                deleteCallback()
+            }
+            .cancelable(false)
+            .buildAndShow()
     }
 }
