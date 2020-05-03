@@ -3,6 +3,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/bg_ps_dialog"
+        android:padding="12dp"
         android:orientation="vertical">
 
     <TextView
@@ -23,7 +25,7 @@
             android:id="@+id/tvDialogDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
+            android:padding="8dp"
             android:textColor="@color/primaryText"
             android:textSize="18sp"
             tools:text="Sample description for dialog"/>
@@ -37,7 +39,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textAllCaps="true"
                 android:textColor="@color/colorAccent"
                 android:paddingTop="8dp"
@@ -51,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/tvDialogPositiveButton"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textAllCaps="true"
                 android:textColor="@color/primaryText"
                 android:paddingTop="8dp"

@@ -38,7 +38,7 @@ class PSDialogBuilder constructor(private val fragmentManager: FragmentManager) 
     fun cancelable(isCancelable: Boolean) = this.apply { this.isCancelable = isCancelable }
     fun onlyOk(isOkOnly: Boolean) = this.apply { this.isOkOnly = isOkOnly }
 
-    fun build() = PSDialog.showDialog(
+    fun buildAndShow() = PSDialog.showDialog(
             fragmentManager,
             title,
             desc,

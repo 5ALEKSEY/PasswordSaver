@@ -1,5 +1,7 @@
 package com.ak.base.ui.dialog
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -74,6 +76,10 @@ class PSDialog private constructor() : DialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val dialogView = inflater.inflate(R.layout.layout_alert_dialog, container, false)
         isCancelable = arguments?.getBoolean(CANCELABLE_EXTRA, DEFAULT_CANCELABLE) ?: DEFAULT_CANCELABLE
+        dialog?.window?.apply {
+            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setWindowAnimations(R.style.ps_dialog_animation)
+        }
         return dialogView
     }
 
