@@ -95,11 +95,6 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
         securityPresenter.stopBiometricAuth()
     }
 
-    override fun finish() {
-        applyFinishSecurityAnim(this)
-        super.finish()
-    }
-
     override fun showSecurityMessage(message: String, withAnimation: Boolean) {
         tvSecurityMessageText.visibility = View.VISIBLE
         tvSecurityMessageText.text = message
@@ -149,6 +144,7 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
         val result = if (isSuccessfully) Activity.RESULT_OK else Activity.RESULT_CANCELED
         setResult(result)
         finish()
+        applyFinishSecurityAnim(this)
     }
 
     override fun switchAuthMethod(isPincode: Boolean, withAnimation: Boolean) {
