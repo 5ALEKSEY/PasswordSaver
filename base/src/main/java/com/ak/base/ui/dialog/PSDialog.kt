@@ -1,5 +1,6 @@
 package com.ak.base.ui.dialog
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -28,9 +29,10 @@ class PSDialog private constructor() : DialogFragment() {
             title: String?,
             description: String?,
             positiveButtonText: String?,
-            positiveButtonClickListener: View.OnClickListener?,
+            positiveButtonClickListener: (() -> Unit)?,
             negativeButtonText: String?,
-            negativeButtonClickListener: View.OnClickListener?,
+            negativeButtonClickListener: (() -> Unit)?,
+            dismissDialogListener: (() -> Unit)?,
             isCancelable: Boolean?,
             isOkOnly: Boolean?): PSDialog {
 
@@ -58,6 +60,7 @@ class PSDialog private constructor() : DialogFragment() {
 
             dialogInstance.positiveClickListener = positiveButtonClickListener
             dialogInstance.negativeClickListener = negativeButtonClickListener
+            dialogInstance.dismissDialogListener = dismissDialogListener
 
             return dialogInstance.also { it.show(fragmentManager, DIALOG_TAG) }
         }
@@ -70,8 +73,9 @@ class PSDialog private constructor() : DialogFragment() {
         private const val DEFAULT_IS_OK_ONLY = false
     }
 
-    var positiveClickListener: View.OnClickListener? = null
-    var negativeClickListener: View.OnClickListener? = null
+    var positiveClickListener: (() -> Unit)? = null
+    var negativeClickListener: (() -> Unit)? = null
+    var dismissDialogListener: (() -> Unit)? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val dialogView = inflater.inflate(R.layout.layout_alert_dialog, container, false)
@@ -107,13 +111,18 @@ class PSDialog private constructor() : DialogFragment() {
         }
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        dismissDialogListener?.invoke()
+        super.onDismiss(dialog)
+    }
+
     private inline fun setClickListenerWithDefault(
         view: View,
-        clickListener: View.OnClickListener?,
+        noinline clickListener: (() -> Unit)?,
         crossinline defaultClickListener: () -> Unit
     ) {
         if (clickListener != null) {
-            view.setOnClickListener(clickListener)
+            view.setOnClickListener { clickListener.invoke() }
         } else {
             view.setOnClickListener { defaultClickListener() }
         }

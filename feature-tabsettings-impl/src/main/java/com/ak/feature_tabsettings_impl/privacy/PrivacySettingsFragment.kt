@@ -1,9 +1,13 @@
 package com.ak.feature_tabsettings_impl.privacy
 
+import android.content.Intent
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.base.ui.BasePSFragment
+import com.ak.base.ui.dialog.PSDialog
+import com.ak.base.ui.dialog.PSDialogBuilder
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
@@ -27,6 +31,7 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(),
     fun providePresenter(): PrivacySettingsPresenter = daggerPresenter
 
     private lateinit var settingsRecyclerAdapter: SettingsRecyclerViewAdapter
+    private var routeToSecureSettingsDialog: PSDialog? = null
 
     override fun getFragmentLayoutResId() = R.layout.fragment_privacy_settings
 
@@ -42,6 +47,7 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(),
 
     override fun onResume() {
         super.onResume()
+        routeToSecureSettingsDialog?.dismissAllowingStateLoss()
         privacySettingsPresenter.loadSettingsData()
     }
 
@@ -59,6 +65,19 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(),
 
     override fun openChangePatternScreen() {
         openSecurityScreen(IAuthCheckerStarter.CHANGE_PATTERN_SECURITY_ACTION_TYPE)
+    }
+
+    override fun showAddNewFingerprintDialog() {
+        routeToSecureSettingsDialog?.dismissAllowingStateLoss()
+        routeToSecureSettingsDialog = PSDialogBuilder(childFragmentManager)
+            .title("No added fingerprints")
+            .description("Sorry, you didn't add any fingerprint on your device. You can go to security settings and add new one. After that you can come back and enable fingerprint fast unlock in PasswordSaver application.")
+            .positive("Settings") {
+                startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS).also { it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
+            }
+            .dismissDialogListener { privacySettingsPresenter.loadSettingsData() }
+            .cancelable(false)
+            .buildAndShow()
     }
 
     override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {

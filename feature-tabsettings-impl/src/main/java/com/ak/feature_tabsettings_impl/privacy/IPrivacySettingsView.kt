@@ -8,5 +8,6 @@ interface IPrivacySettingsView : IBaseAppView {
     fun openChangePincodeScreen()
     fun openAddPatternScreen()
     fun openChangePatternScreen()
+    fun showAddNewFingerprintDialog()
     fun displayAppSettings(settingsItems: List<SettingsListItemModel>)
 }

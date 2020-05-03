@@ -50,8 +50,17 @@ class PrivacySettingsPresenter @Inject constructor(
                 }
             }
             BIOMETRIC_ENABLE_SETTINGS_ID -> {
-                settingsPreferencesManager.setBiometricEnableState(isChecked)
-                loadSettingsData()
+                when(psBiometricManager.getBiometricFeatureAvailableStatus()) {
+                    IPSBiometricManager.AvailableStatus.AVAILABLE -> {
+                        settingsPreferencesManager.setBiometricEnableState(isChecked)
+                        loadSettingsData()
+                    }
+                    IPSBiometricManager.AvailableStatus.NO_SAVED_FINGERPRINTS -> {
+                        if (isChecked) {
+                            viewState.showAddNewFingerprintDialog()
+                        }
+                    }
+                }
             }
         }
     }
@@ -129,23 +138,24 @@ class PrivacySettingsPresenter @Inject constructor(
 
             // Fingerprint
             val isBiometricEnabled = settingsPreferencesManager.isBiometricEnabled()
-            val biometricState = psBiometricManager.getBiometricFeatureAvailableStatus()
-            var biometricSwitchItemModel: SwitchSettingsListItemModel? = null
-            when (biometricState) {
+            var biometricSwitchItemModel: SwitchSettingsListItemModel? = SwitchSettingsListItemModel(
+                    BIOMETRIC_ENABLE_SETTINGS_ID,
+                    "Fingerprint",
+                    "You can use fingerprint for fast unlock your app",
+                    false
+            )
+            when (psBiometricManager.getBiometricFeatureAvailableStatus()) {
                 IPSBiometricManager.AvailableStatus.AVAILABLE -> {
-                    biometricSwitchItemModel = SwitchSettingsListItemModel(
-                            BIOMETRIC_ENABLE_SETTINGS_ID,
-                            "Fingerprint",
-                            "You can use fingerprint for fast unlock your app",
-                            isBiometricEnabled
-                    )
+                    biometricSwitchItemModel?.isChecked = isBiometricEnabled
                 }
                 IPSBiometricManager.AvailableStatus.NO_SAVED_FINGERPRINTS -> {
-                    // TODO: make message for user and open security settings in phone
-
+                    // user will route to phone security settings to add new fingerprint
                     settingsPreferencesManager.setBiometricEnableState(false)
                 }
-                else -> settingsPreferencesManager.setBiometricEnableState(false)
+                else -> {
+                    biometricSwitchItemModel = null
+                    settingsPreferencesManager.setBiometricEnableState(false)
+                }
             }
             biometricSwitchItemModel?.let { settingsItems.add(it) }
 
