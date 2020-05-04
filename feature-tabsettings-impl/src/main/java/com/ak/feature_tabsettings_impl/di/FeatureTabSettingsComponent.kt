@@ -3,6 +3,7 @@ package com.ak.feature_tabsettings_impl.di
 import android.content.Context
 import com.ak.base.scopes.FeatureScope
 import com.ak.core_repo_api.api.CoreRepositoryApi
+import com.ak.feature_appupdate_api.api.FeatureAppUpdateApi
 import com.ak.feature_security_api.api.FeatureSecurityApi
 import com.ak.feature_tabsettings_api.FeatureTabSettingsApi
 import com.ak.feature_tabsettings_impl.about.AboutSettingsFragment
@@ -70,7 +71,7 @@ abstract class FeatureTabSettingsComponent : FeatureTabSettingsApi {
     abstract fun inject(presenter: AboutSettingsPresenter)
 
 
-    @Component(dependencies = [CoreRepositoryApi::class, FeatureSecurityApi::class])
+    @Component(dependencies = [CoreRepositoryApi::class, FeatureSecurityApi::class, FeatureAppUpdateApi::class])
     @FeatureScope
     interface FeatureTabSettingsDependenciesComponent : FeatureTabSettingsDependencies
 }

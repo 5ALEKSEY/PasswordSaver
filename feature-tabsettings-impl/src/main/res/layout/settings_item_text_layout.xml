@@ -23,4 +23,22 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Change pincode" />
 
+    <TextView
+            android:id="@+id/tvNewBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/bg_badge_notification"
+            android:gravity="center"
+            android:padding="3dp"
+            android:textColor="@color/colorWhite"
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:textSize="10sp"
+            app:layout_constraintTop_toTopOf="@id/tvSettingName"
+            app:layout_constraintBottom_toBottomOf="@id/tvSettingName"
+            app:layout_constraintStart_toEndOf="@id/tvSettingName"
+            android:text="New" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

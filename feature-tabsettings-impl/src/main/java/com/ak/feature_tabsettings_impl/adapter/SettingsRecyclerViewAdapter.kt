@@ -26,93 +26,83 @@ class SettingsRecyclerViewAdapter constructor(
         const val TEXT_SETTING_TYPE = 4
     }
 
-    private val mSettingsItemsList = arrayListOf<SettingsListItemModel>()
-    private val mAdapterDelegatesManager = AdapterDelegatesManager<SettingsListItemModel>()
+    private val settingsItemsList = arrayListOf<SettingsListItemModel>()
+    private val adapterDelegatesManager = AdapterDelegatesManager<SettingsListItemModel>()
 
     private val mAdapterSwitchSettingsChangedListener: (settingId: Int, isChecked: Boolean) -> Unit =
         { position, newState ->
-            val itemModel = mSettingsItemsList[position]
+            val itemModel = settingsItemsList[position]
             if (itemModel is SwitchSettingsListItemModel) {
                 itemModel.isChecked = newState
             }
-            mSettingsItemsList[position] = itemModel
+            settingsItemsList[position] = itemModel
             onSwitchSettingsChanged?.invoke(itemModel.settingId, newState)
         }
     private val mAdapterSpinnerSettingsChangedListener: (settingId: Int, newDataId: Int) -> Unit =
         { position, newSelectedPosition ->
-            val itemModel = mSettingsItemsList[position]
+            val itemModel = settingsItemsList[position]
             if (itemModel is SpinnerSettingsListItemModel) {
                 itemModel.selectedItemPosition = newSelectedPosition
             }
-            mSettingsItemsList[position] = itemModel
+            settingsItemsList[position] = itemModel
             onSpinnerSettingsChanged?.invoke(itemModel.settingId, newSelectedPosition)
         }
 
     init {
         if (onSwitchSettingsChanged != null) {
-            mAdapterDelegatesManager.addDelegate(
-                SwitchAdapterDelegate(
-                        SWITCH_SETTING_TYPE,
-                        mAdapterSwitchSettingsChangedListener
-                )
-            )
+            adapterDelegatesManager.addDelegate(SwitchAdapterDelegate(
+                    SWITCH_SETTING_TYPE,
+                    mAdapterSwitchSettingsChangedListener
+            ))
         }
         if (onSpinnerSettingsChanged != null) {
-            mAdapterDelegatesManager.addDelegate(
-                SpinnerAdapterDelegate(
-                        SPINNER_SETTING_TYPE,
-                        mAdapterSpinnerSettingsChangedListener
-                )
-            )
+            adapterDelegatesManager.addDelegate(SpinnerAdapterDelegate(
+                    SPINNER_SETTING_TYPE,
+                    mAdapterSpinnerSettingsChangedListener
+            ))
         }
         if (onSectionSettingsClicked != null) {
-            mAdapterDelegatesManager.addDelegate(
-                SectionAdapterDelegate(
-                        SECTION_SETTING_TYPE,
-                        onSectionSettingsClicked
-                )
-            )
+            adapterDelegatesManager.addDelegate(SectionAdapterDelegate(
+                    SECTION_SETTING_TYPE,
+                    onSectionSettingsClicked
+            ))
         }
         if (onTextSettingsClicked != null) {
-            mAdapterDelegatesManager.addDelegate(
-                TextAdapterDelegate(
-                        TEXT_SETTING_TYPE,
-                        onTextSettingsClicked
-                )
-            )
+            adapterDelegatesManager.addDelegate(TextAdapterDelegate(
+                    TEXT_SETTING_TYPE,
+                    onTextSettingsClicked
+            ))
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        mAdapterDelegatesManager.onCreateViewHolder(parent, viewType)
+        adapterDelegatesManager.onCreateViewHolder(parent, viewType)
 
 
     override fun getItemViewType(position: Int) =
-        mAdapterDelegatesManager.getItemViewType(mSettingsItemsList[position])
+        adapterDelegatesManager.getItemViewType(settingsItemsList[position])
 
-    override fun getItemCount() = mSettingsItemsList.size
+    override fun getItemCount() = settingsItemsList.size
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
-        mAdapterDelegatesManager.onBindViewHolder(mSettingsItemsList[position], viewHolder)
+        adapterDelegatesManager.onBindViewHolder(settingsItemsList[position], viewHolder)
     }
 
     fun addSettingsList(settingItems: List<SettingsListItemModel>) {
-        val diffCallback =
-            PrivacyDiffUtilCallback(
-                mSettingsItemsList,
+        val diffCallback = PrivacyDiffUtilCallback(
+                settingsItemsList,
                 settingItems
-            )
+        )
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
-        mSettingsItemsList.clear()
-        mSettingsItemsList.addAll(settingItems)
+        settingsItemsList.clear()
+        settingsItemsList.addAll(settingItems)
         diffResult.dispatchUpdatesTo(this)
     }
 
     class PrivacyDiffUtilCallback(
         private val oldList: List<SettingsListItemModel>,
-        private val newList: List<SettingsListItemModel>
-    ) : DiffUtil.Callback() {
+        private val newList: List<SettingsListItemModel>) : DiffUtil.Callback() {
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
             oldList[oldItemPosition].settingId == newList[newItemPosition].settingId

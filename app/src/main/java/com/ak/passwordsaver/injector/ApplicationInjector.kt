@@ -124,6 +124,7 @@ object ApplicationInjector {
         return DaggerFeatureTabSettingsComponent_FeatureTabSettingsDependenciesComponent.builder()
             .coreRepositoryApi(initCoreRepo())
             .featureSecurityApi(initSecurityFeature())
+            .featureAppUpdateApi(initFeatureAppUpdate())
             .build()
     }
 

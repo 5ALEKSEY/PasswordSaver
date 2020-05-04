@@ -70,6 +70,7 @@ dependencies {
     implementation project(':base')
     implementation project(':core-repo-api')
     implementation project(':feature-security-api')
+    implementation project(':feature-appupdate-api')
 
     implementation deps.kotlin
     implementation deps.appCompat

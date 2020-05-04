@@ -7,5 +7,6 @@ class SpinnerSettingsListItemModel(
     settingName: String,
     val settingDescription: String,
     var selectedItemPosition: Int,
-    val spinnerItems: List<String>
-) : SettingsListItemModel(settingId, settingName)
+    val spinnerItems: List<String>,
+    hasNewBadge: Boolean = false
+) : SettingsListItemModel(settingId, settingName, hasNewBadge)

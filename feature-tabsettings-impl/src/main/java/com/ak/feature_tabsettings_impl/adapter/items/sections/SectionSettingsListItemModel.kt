@@ -7,5 +7,6 @@ class SectionSettingsListItemModel(
     settingId: Int,
     settingName: String,
     @DrawableRes
-    val imageRes: Int
-) : SettingsListItemModel(settingId, settingName)
+    val imageRes: Int,
+    hasNewBadge: Boolean = false
+) : SettingsListItemModel(settingId, settingName, hasNewBadge)

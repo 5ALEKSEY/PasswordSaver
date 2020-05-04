@@ -3,6 +3,7 @@ package com.ak.feature_tabsettings_impl.privacy
 import com.ak.base.presenter.BasePSPresenter
 import com.ak.core_repo_api.intefaces.AppLockStateHelper
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.feature_security_api.interfaces.IPSBiometricManager
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.spinners.SpinnerSettingsListItemModel
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @InjectViewState
 class PrivacySettingsPresenter @Inject constructor(
     private val settingsPreferencesManager: ISettingsPreferencesManager,
-    private val psBiometricManager: IPSBiometricManager
+    private val psBiometricManager: IPSBiometricManager,
+    private val featuresUpdateManager: IFeaturesUpdateManager
 ) : BasePSPresenter<IPrivacySettingsView>() {
 
     companion object {
@@ -142,7 +144,8 @@ class PrivacySettingsPresenter @Inject constructor(
                     BIOMETRIC_ENABLE_SETTINGS_ID,
                     "Fingerprint",
                     "You can use fingerprint for fast unlock your app",
-                    false
+                    false,
+                    isBiometricSettingsModelHasNewBadge()
             )
             when (psBiometricManager.getBiometricFeatureAvailableStatus()) {
                 IPSBiometricManager.AvailableStatus.AVAILABLE -> {
@@ -157,12 +160,17 @@ class PrivacySettingsPresenter @Inject constructor(
                     settingsPreferencesManager.setBiometricEnableState(false)
                 }
             }
-            biometricSwitchItemModel?.let { settingsItems.add(it) }
+            biometricSwitchItemModel?.let {
+                featuresUpdateManager.markFingerprintFeatureAsViewed()
+                settingsItems.add(it)
+            }
 
         }
 
         viewState.displayAppSettings(settingsItems)
     }
+
+    private fun isBiometricSettingsModelHasNewBadge() = !featuresUpdateManager.isFingerprintFeatureViewed()
 
     private fun deleteUserPincodeData() {
         settingsPreferencesManager.setPincodeEnableState(false)

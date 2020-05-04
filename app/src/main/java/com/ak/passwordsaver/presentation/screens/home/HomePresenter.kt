@@ -29,17 +29,34 @@ class HomePresenter @Inject constructor(
     }
 
     fun checkFeaturesBadgeUpdate() {
-        if (!featuresUpdateManager.isTabAccountsFeatureViewed()) {
+        if (isAccountsTabWithNewBadge()) {
             viewState.setFeatureBadgeText(R.id.accounts_nav_graph, "New")
         }
+        featuresUpdateManager.subscribeToViewedFeatureState(IFeaturesUpdateManager.FeatureType.TAB_ACCOUNTS)
+            .subscribe {
+                viewState.removeFeatureBadgeText(R.id.accounts_nav_graph)
+            }
+            .let(this::bindDisposable)
+
+        if (isPasswordsTabWithNewBadge()) {
+            viewState.setFeatureBadgeText(R.id.passwords_nav_graph, "New")
+        }
+
+        if (isSettingsTabWithNewBadge()) {
+            viewState.setFeatureBadgeText(R.id.settings_nav_graph, "New")
+        }
+        featuresUpdateManager.subscribeToViewedFeatureState(IFeaturesUpdateManager.FeatureType.FINGERPRINT)
+            .subscribe {
+                viewState.removeFeatureBadgeText(R.id.settings_nav_graph)
+            }
+            .let(this::bindDisposable)
     }
 
     fun onNavMenuDestinationChanged(destMenuId: Int) {
         when (destMenuId) {
             R.id.accounts_nav_graph -> {
-                if (!featuresUpdateManager.isTabAccountsFeatureViewed()) {
+                if (isAccountsTabWithNewBadge()) {
                     featuresUpdateManager.markTabAccountsFeatureAsViewed()
-                    viewState.removeFeatureBadgeText(destMenuId)
                 }
             }
         }
@@ -66,4 +83,10 @@ class HomePresenter @Inject constructor(
     }
 
     fun getSecureApplicationState() = settingsPreferencesManager.isPincodeEnabled()
+
+    private fun isAccountsTabWithNewBadge() = !featuresUpdateManager.isTabAccountsFeatureViewed()
+
+    private fun isPasswordsTabWithNewBadge() = false
+
+    private fun isSettingsTabWithNewBadge() = !featuresUpdateManager.isFingerprintFeatureViewed()
 }

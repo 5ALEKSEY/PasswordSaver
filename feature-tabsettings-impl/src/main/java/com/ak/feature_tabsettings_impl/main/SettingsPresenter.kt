@@ -2,6 +2,7 @@ package com.ak.feature_tabsettings_impl.main
 
 import com.ak.base.presenter.BasePSPresenter
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.items.sections.SectionSettingsListItemModel
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
@@ -10,7 +11,8 @@ import javax.inject.Inject
 
 @InjectViewState
 class SettingsPresenter @Inject constructor(
-    private val settingsPreferencesManager: ISettingsPreferencesManager
+    private val settingsPreferencesManager: ISettingsPreferencesManager,
+    private val featuresUpdateManager: IFeaturesUpdateManager
 ) : BasePSPresenter<ISettingsView>() {
 
     companion object {
@@ -24,29 +26,27 @@ class SettingsPresenter @Inject constructor(
     }
 
     fun loadSettingsData() {
-        val designSectionItemModel =
-            SectionSettingsListItemModel(
-                    DESIGN_SECTION_SETTING_ID,
-                    "Design",
-                    R.drawable.ic_design_section_action
-            )
-        val privacySectionItemModel =
-            SectionSettingsListItemModel(
-                    PRIVACY_SECTION_SETTING_ID,
-                    "Privacy",
-                    R.drawable.ic_privacy_section_action
-            )
-        val aboutSectionItemModel =
-            SectionSettingsListItemModel(
-                    ABOUT_SECTION_SETTING_ID,
-                    "About",
-                    R.drawable.ic_about_section_action
-            )
+        val designSectionItemModel = SectionSettingsListItemModel(
+                DESIGN_SECTION_SETTING_ID,
+                "Design",
+                R.drawable.ic_design_section_action
+        )
+        val privacySectionItemModel = SectionSettingsListItemModel(
+                PRIVACY_SECTION_SETTING_ID,
+                "Privacy",
+                R.drawable.ic_privacy_section_action,
+                isPrivacySectionHasNewBadge()
+        )
+        val aboutSectionItemModel = SectionSettingsListItemModel(
+                ABOUT_SECTION_SETTING_ID,
+                "About",
+                R.drawable.ic_about_section_action
+        )
 
         val sections = listOf(
-            designSectionItemModel,
-            privacySectionItemModel,
-            aboutSectionItemModel
+                designSectionItemModel,
+                privacySectionItemModel,
+                aboutSectionItemModel
         )
         viewState.displayAppSettings(sections)
     }
@@ -69,4 +69,6 @@ class SettingsPresenter @Inject constructor(
             }
         }
     }
+
+    private fun isPrivacySectionHasNewBadge() = !featuresUpdateManager.isFingerprintFeatureViewed()
 }
