@@ -1,6 +1,7 @@
 package com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.edit
 
 import android.os.Bundle
+import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
 import com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.BaseManageAccountFragment
 import kotlinx.android.synthetic.main.fragment_manage_account.*
@@ -15,14 +16,14 @@ class EditAccountFragment : BaseManageAccountFragment<EditAccountPresenter>(),
     }
 
     @InjectPresenter
-    lateinit var editAcountPresenter: EditAccountPresenter
+    lateinit var editAccountPresenter: EditAccountPresenter
 
     @ProvidePresenter
     fun providePresenter(): EditAccountPresenter = daggerPresenter
 
-    override fun getPresenter() = editAcountPresenter
+    override fun getPresenter() = editAccountPresenter
 
-    override fun getToolbarTitleText() = "Edit account"
+    override fun getToolbarTitleText() = getString(R.string.add_edit_account_toolbar_title)
 
     override fun injectFragment() {
         FeatureTabAccountsComponent.get().inject(this)
@@ -32,7 +33,7 @@ class EditAccountFragment : BaseManageAccountFragment<EditAccountPresenter>(),
         super.onCreate(savedInstanceState)
 
         if (arguments?.containsKey(ACCOUNT_ID_FOR_EDIT_EXTRA_KEY) == true) {
-            editAcountPresenter.loadPasswordData(
+            editAccountPresenter.loadPasswordData(
                 arguments!!.getLong(ACCOUNT_ID_FOR_EDIT_EXTRA_KEY, 0L)
             )
         } else {

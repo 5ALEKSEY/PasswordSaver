@@ -2,9 +2,11 @@ package com.ak.feature_tabsettings_impl.privacy
 
 import com.ak.base.presenter.BasePSPresenter
 import com.ak.core_repo_api.intefaces.AppLockStateHelper
+import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.feature_security_api.interfaces.IPSBiometricManager
+import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.spinners.SpinnerSettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchSettingsListItemModel
@@ -17,7 +19,8 @@ import javax.inject.Inject
 class PrivacySettingsPresenter @Inject constructor(
     private val settingsPreferencesManager: ISettingsPreferencesManager,
     private val psBiometricManager: IPSBiometricManager,
-    private val featuresUpdateManager: IFeaturesUpdateManager
+    private val featuresUpdateManager: IFeaturesUpdateManager,
+    private val resourceManager: IResourceManager
 ) : BasePSPresenter<IPrivacySettingsView>() {
 
     companion object {
@@ -93,8 +96,8 @@ class PrivacySettingsPresenter @Inject constructor(
         val isPincodeEnabled = settingsPreferencesManager.isPincodeEnabled()
         val pincodeSwitchItemModel = SwitchSettingsListItemModel(
                 PINCODE_ENABLE_SETTINGS_ID,
-                "Pincode",
-                "If you turn on this option, you can use privacy check before open your application",
+                resourceManager.getString(R.string.pincode_settings_name),
+                resourceManager.getString(R.string.pincode_settings_desc),
                 isPincodeEnabled
         )
         val settingsItems = mutableListOf<SettingsListItemModel>(pincodeSwitchItemModel) // default list
@@ -103,7 +106,7 @@ class PrivacySettingsPresenter @Inject constructor(
             //Change pincode
             val pincodeChangeTextItemModel = TextSettingsListItemModel(
                     PINCODE_CHANGE_SETTINGS_ID,
-                    "Change pincode"
+                    resourceManager.getString(R.string.change_pincode_settings_name)
             )
             settingsItems.add(pincodeChangeTextItemModel)
 
@@ -112,8 +115,8 @@ class PrivacySettingsPresenter @Inject constructor(
             val lockDelaysList = settingsPreferencesManager.getLockAppStatesList()
             val lockDelayChangeSpinnerItemModel = SpinnerSettingsListItemModel(
                     LOCK_DELAY_CHANGE_SETTINGS_ID,
-                    "Lock delay",
-                    "Choose delay which you want to use for lock you application",
+                    resourceManager.getString(R.string.lock_delay_settings_name),
+                    resourceManager.getString(R.string.lock_delay_settings_desc),
                     selectedDelayId,
                     lockDelaysList
             )
@@ -123,8 +126,8 @@ class PrivacySettingsPresenter @Inject constructor(
             val isPatternEnabled = settingsPreferencesManager.isPatternEnabled()
             val patternSwitchItemModel = SwitchSettingsListItemModel(
                     PATTERN_ENABLE_SETTINGS_ID,
-                    "Pattern",
-                    "You can use graphic pattern code for unlock your app",
+                    resourceManager.getString(R.string.pattern_settings_name),
+                    resourceManager.getString(R.string.pattern_settings_desc),
                     isPatternEnabled
             )
             settingsItems.add(patternSwitchItemModel)
@@ -133,7 +136,7 @@ class PrivacySettingsPresenter @Inject constructor(
             if (isPatternEnabled) {
                 val patternChangeTextItemModel = TextSettingsListItemModel(
                         PATTERN_CHANGE_SETTINGS_ID,
-                        "Change your pattern"
+                        resourceManager.getString(R.string.change_pattern_settings_name)
                 )
                 settingsItems.add(patternChangeTextItemModel)
             }
@@ -142,8 +145,8 @@ class PrivacySettingsPresenter @Inject constructor(
             val isBiometricEnabled = settingsPreferencesManager.isBiometricEnabled()
             var biometricSwitchItemModel: SwitchSettingsListItemModel? = SwitchSettingsListItemModel(
                     BIOMETRIC_ENABLE_SETTINGS_ID,
-                    "Fingerprint",
-                    "You can use fingerprint for fast unlock your app",
+                    resourceManager.getString(R.string.fingerprint_settings_name),
+                    resourceManager.getString(R.string.fingerprint_settings_desc),
                     false,
                     isBiometricSettingsModelHasNewBadge()
             )

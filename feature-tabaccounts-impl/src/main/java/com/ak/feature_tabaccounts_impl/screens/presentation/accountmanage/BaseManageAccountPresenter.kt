@@ -1,9 +1,15 @@
 package com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage
 
 import com.ak.base.presenter.BasePSPresenter
+import com.ak.core_repo_api.intefaces.IResourceManager
+import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.domain.usecase.AccountDataCheckException
+import javax.inject.Inject
 
 abstract class BaseManageAccountPresenter<MV : IBaseManageAccountView> : BasePSPresenter<MV>() {
+
+    @Inject
+    protected lateinit var resourceManager: IResourceManager
 
     abstract fun onManageAccountAction(name: String, login: String, password: String)
 
@@ -22,13 +28,22 @@ abstract class BaseManageAccountPresenter<MV : IBaseManageAccountView> : BasePSP
         for (field in th.emptyFields) {
             when (field) {
                 AccountDataCheckException.ACCOUNT_NAME_FIELD -> viewState.displayAccountNameInputError(
-                        "Name can't be empty"
+                        resourceManager.getString(
+                                R.string.empty_error_message,
+                                resourceManager.getString(R.string.name_field_name)
+                        )
                 )
                 AccountDataCheckException.ACCOUNT_LOGIN_FIELD -> viewState.displayAccountLoginInputError(
-                        "Login can't be empty"
+                        resourceManager.getString(
+                                R.string.empty_error_message,
+                                resourceManager.getString(R.string.login_field_name)
+                        )
                 )
                 AccountDataCheckException.ACCOUNT_PASSWORD_FIELD -> viewState.displayAccountPasswordInputError(
-                        "Password can't be empty"
+                        resourceManager.getString(
+                                R.string.empty_error_message,
+                                resourceManager.getString(R.string.password_field_name)
+                        )
                 )
             }
         }

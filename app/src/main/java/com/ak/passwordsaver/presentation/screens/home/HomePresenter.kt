@@ -1,6 +1,7 @@
 package com.ak.passwordsaver.presentation.screens.home
 
 import com.ak.base.presenter.BasePSPresenter
+import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.passwordsaver.R
@@ -15,7 +16,8 @@ import javax.inject.Inject
 @InjectViewState
 class HomePresenter @Inject constructor(
     private val featuresUpdateManager: IFeaturesUpdateManager,
-    private val settingsPreferencesManager: ISettingsPreferencesManager
+    private val settingsPreferencesManager: ISettingsPreferencesManager,
+    private val resourceManager: IResourceManager
 ) : BasePSPresenter<IHomeView>() {
 
     companion object {
@@ -30,7 +32,7 @@ class HomePresenter @Inject constructor(
 
     fun checkFeaturesBadgeUpdate() {
         if (isAccountsTabWithNewBadge()) {
-            viewState.setFeatureBadgeText(R.id.accounts_nav_graph, "New")
+            viewState.setFeatureBadgeText(R.id.accounts_nav_graph, resourceManager.getString(R.string.new_feature_badge))
         }
         featuresUpdateManager.subscribeToViewedFeatureState(IFeaturesUpdateManager.FeatureType.TAB_ACCOUNTS)
             .subscribe {
@@ -39,11 +41,11 @@ class HomePresenter @Inject constructor(
             .let(this::bindDisposable)
 
         if (isPasswordsTabWithNewBadge()) {
-            viewState.setFeatureBadgeText(R.id.passwords_nav_graph, "New")
+            viewState.setFeatureBadgeText(R.id.passwords_nav_graph, resourceManager.getString(R.string.new_feature_badge))
         }
 
         if (isSettingsTabWithNewBadge()) {
-            viewState.setFeatureBadgeText(R.id.settings_nav_graph, "New")
+            viewState.setFeatureBadgeText(R.id.settings_nav_graph, resourceManager.getString(R.string.new_feature_badge))
         }
         featuresUpdateManager.subscribeToViewedFeatureState(IFeaturesUpdateManager.FeatureType.FINGERPRINT)
             .subscribe {
@@ -76,7 +78,7 @@ class HomePresenter @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .doOnSubscribe {
                 isFinishScreenAllow = true
-                viewState.showShortTimeMessage("Click again for exit app")
+                viewState.showShortTimeMessage(resourceManager.getString(R.string.exit_app_note_text))
             }
             .subscribe { isFinishScreenAllow = false }
             .let(this::bindDisposable)

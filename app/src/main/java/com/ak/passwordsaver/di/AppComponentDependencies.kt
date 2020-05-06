@@ -1,5 +1,6 @@
 package com.ak.passwordsaver.di
 
+import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
@@ -10,4 +11,5 @@ interface AppComponentDependencies {
     fun needsAuthCheckerStarter(): IAuthCheckerStarter
     fun needsSettingsPreferencesManager(): ISettingsPreferencesManager
     fun needsFeaturesUpdateManager(): IFeaturesUpdateManager
+    fun needsResourceManager(): IResourceManager
 }

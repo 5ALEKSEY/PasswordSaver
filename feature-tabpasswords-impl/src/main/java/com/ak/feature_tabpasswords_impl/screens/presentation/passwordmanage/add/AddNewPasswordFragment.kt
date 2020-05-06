@@ -1,5 +1,6 @@
 package com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.add
 
+import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.BaseManagePasswordFragment
 import moxy.presenter.InjectPresenter
@@ -16,7 +17,7 @@ class AddNewPasswordFragment : BaseManagePasswordFragment<AddNewPasswordPresente
 
     override fun getPresenter() = addNewPasswordPresenter
 
-    override fun getToolbarTitleText() = "Add new password"
+    override fun getToolbarTitleText() = getString(R.string.add_new_password_toolbar_title)
 
     override fun injectFragment() {
         FeatureTabPasswordsComponent.get().inject(this)

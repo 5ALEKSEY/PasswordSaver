@@ -1,5 +1,6 @@
 package com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.add
 
+import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
 import com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.BaseManageAccountFragment
 import moxy.presenter.InjectPresenter
@@ -16,7 +17,7 @@ class AddNewAccountFragment : BaseManageAccountFragment<AddNewAccountPresenter>(
 
     override fun getPresenter() = addNewPasswordPresenter
 
-    override fun getToolbarTitleText() = "Add new account"
+    override fun getToolbarTitleText() = getString(R.string.add_new_account_toolbar_title)
 
     override fun injectFragment() {
         FeatureTabAccountsComponent.get().inject(this)

@@ -28,7 +28,7 @@ abstract class AppComponent {
         fun get() = if (appComponent != null) {
             appComponent!!
         } else {
-            throw IllegalStateException("AppComponent is null. init() should be called before")
+            throw IllegalStateException("AppComponent is null. initialize() should be called before")
         }
 
         fun initialize(dependencies: AppComponentDependencies): AppComponent {

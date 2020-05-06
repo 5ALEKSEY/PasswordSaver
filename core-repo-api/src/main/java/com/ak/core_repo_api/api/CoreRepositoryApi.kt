@@ -4,6 +4,7 @@ import com.ak.core_repo_api.intefaces.IAccountsRepository
 import com.ak.core_repo_api.intefaces.IAuthPreferencesManager
 import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
 import com.ak.core_repo_api.intefaces.IPasswordsRepository
+import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 
 interface CoreRepositoryApi {
@@ -12,4 +13,5 @@ interface CoreRepositoryApi {
     fun provideSettingsPreferencesManager(): ISettingsPreferencesManager
     fun provideAuthPreferencesManager(): IAuthPreferencesManager
     fun provideInternalStorageManager(): IPSInternalStorageManager
+    fun provideResourceManager(): IResourceManager
 }

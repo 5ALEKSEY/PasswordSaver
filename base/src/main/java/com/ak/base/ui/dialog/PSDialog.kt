@@ -66,9 +66,9 @@ class PSDialog private constructor() : DialogFragment() {
         }
 
         // Default values
-        private const val DEFAULT_TITLE = "Password Saver"
-        private const val DEFAULT_POS_BTN_TEXT = "Ok"
-        private const val DEFAULT_NEG_BTN_TEXT = "Cancel"
+        private val DEFAULT_TITLE_STRING_ID = R.string.app_name
+        private val DEFAULT_POS_BTN_STRING_ID = R.string.ok_action_text
+        private val DEFAULT_NEG_BTN_STRING_ID = R.string.cancel_action_text
         private const val DEFAULT_CANCELABLE = true
         private const val DEFAULT_IS_OK_ONLY = false
     }
@@ -95,13 +95,13 @@ class PSDialog private constructor() : DialogFragment() {
             return
         }
 
-        view.tvDialogTitle.text = dialogExtras.getString(TITLE_EXTRA, DEFAULT_TITLE)
+        view.tvDialogTitle.text = dialogExtras.getString(TITLE_EXTRA, getString(DEFAULT_TITLE_STRING_ID))
         view.tvDialogDescription.text = dialogExtras.getString(DESC_EXTRA)
 
-        view.tvDialogPositiveButton.text = dialogExtras.getString(POSITIVE_BTN_EXTRA, DEFAULT_POS_BTN_TEXT)
+        view.tvDialogPositiveButton.text = dialogExtras.getString(POSITIVE_BTN_EXTRA, getString(DEFAULT_POS_BTN_STRING_ID))
         setClickListenerWithDefault(view.tvDialogPositiveButton, positiveClickListener) { dismissAllowingStateLoss() }
 
-        view.tvDialogNegativeButton.text = dialogExtras.getString(NEGATIVE_BTN_EXTRA, DEFAULT_NEG_BTN_TEXT)
+        view.tvDialogNegativeButton.text = dialogExtras.getString(NEGATIVE_BTN_EXTRA, getString(DEFAULT_NEG_BTN_STRING_ID))
         setClickListenerWithDefault(view.tvDialogNegativeButton, negativeClickListener) { dismissAllowingStateLoss() }
 
         view.tvDialogNegativeButton.visibility = if (dialogExtras.getBoolean(IS_OK_ONLY_EXTRA, DEFAULT_IS_OK_ONLY)) {

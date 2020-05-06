@@ -70,9 +70,9 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(),
     override fun showAddNewFingerprintDialog() {
         routeToSecureSettingsDialog?.dismissAllowingStateLoss()
         routeToSecureSettingsDialog = PSDialogBuilder(childFragmentManager)
-            .title("No added fingerprints")
-            .description("Sorry, you didn't add any fingerprint on your device. You can go to security settings and add new one. After that you can come back and enable fingerprint fast unlock in PasswordSaver application.")
-            .positive("Settings") {
+            .title(getString(R.string.no_added_fingerprints_dialog_title))
+            .description(getString(R.string.no_added_fingerprints_dialog_desc))
+            .positive(getString(R.string.no_added_fingerprints_dialog_pos_btn)) {
                 startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS).also { it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
             }
             .dismissDialogListener { privacySettingsPresenter.loadSettingsData() }
@@ -88,7 +88,7 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(),
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
                 setSupportActionBar(tbPrivacySettingsBar)
-                supportActionBar?.title = "Privacy"
+                supportActionBar?.title = getString(R.string.privacy_settings_toolbar_title)
                 tbPrivacySettingsBar.setNavigationOnClickListener {
                     navController.popBackStack()
                 }

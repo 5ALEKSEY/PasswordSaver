@@ -1,7 +1,9 @@
 package com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.edit
 
+import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity
+import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import com.ak.feature_tabpasswords_impl.domain.entity.PasswordDomainEntity
 import com.ak.feature_tabpasswords_impl.domain.entity.mapToDomainEntity
@@ -12,7 +14,8 @@ import javax.inject.Inject
 
 @InjectViewState
 class EditPasswordPresenter @Inject constructor(
-    private val passwordsInteractor: IPasswordsInteractor
+    private val passwordsInteractor: IPasswordsInteractor,
+    private val resourceManager: IResourceManager
 ) : BaseManagePasswordPresenter<IEditPasswordView>() {
 
     private var passwordEntityForEdit: PasswordDomainEntity? = null
@@ -39,7 +42,7 @@ class EditPasswordPresenter @Inject constructor(
                     )
                 },
                 { throwable ->
-                    viewState.showShortTimeMessage("aaaaaa, blyat")
+                    viewState.showShortTimeMessage(resourceManager.getString(R.string.unknown_error_message))
                 }
             )
             .let(this::bindDisposable)
@@ -47,7 +50,7 @@ class EditPasswordPresenter @Inject constructor(
 
     override fun onManagePasswordAction(name: String, content: String) {
         if (passwordEntityForEdit == null) {
-            viewState.showShortTimeMessage("chto-to poshlo ne tak")
+            viewState.showShortTimeMessage(resourceManager.getString(R.string.unknown_error_message))
             return
         }
 

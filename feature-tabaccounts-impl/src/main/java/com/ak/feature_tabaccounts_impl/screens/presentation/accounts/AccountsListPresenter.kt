@@ -3,8 +3,10 @@ package com.ak.feature_tabaccounts_impl.screens.presentation.accounts
 import android.util.Log
 import com.ak.base.constants.AppConstants
 import com.ak.base.presenter.BasePSPresenter
+import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.feature_tabaccounts_api.interfaces.AccountFeatureEntity
 import com.ak.feature_tabaccounts_api.interfaces.IAccountsInteractor
+import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
 import com.ak.feature_tabaccounts_impl.screens.adapter.AccountItemModel
 import com.ak.feature_tabaccounts_impl.screens.logic.IDataBufferManager
@@ -15,7 +17,8 @@ import javax.inject.Inject
 @InjectViewState
 class AccountsListPresenter @Inject constructor(
     private val accountsInteractor: IAccountsInteractor,
-    private val dataBufferManager: IDataBufferManager
+    private val dataBufferManager: IDataBufferManager,
+    private val resourceManager: IResourceManager
 ) : BasePSPresenter<IAccountsListView>() {
 
     private var currentAccountId = 0L
@@ -54,7 +57,7 @@ class AccountsListPresenter @Inject constructor(
     fun onCopyAccountLoginAction() {
         getAccountDataAndStartAction {
             dataBufferManager.copyStringData(it.getAccountLogin())
-            viewState.showShortTimeMessage("Copied to clipboard")
+            viewState.showShortTimeMessage(resourceManager.getString(R.string.copied_to_clipboard_message))
             currentAccountId = 0L
         }
     }
@@ -62,7 +65,7 @@ class AccountsListPresenter @Inject constructor(
     fun onCopyAccountPasswordAction() {
         getAccountDataAndStartAction {
             dataBufferManager.copyStringData(it.getAccountPassword())
-            viewState.showShortTimeMessage("Copied to clipboard")
+            viewState.showShortTimeMessage(resourceManager.getString(R.string.copied_to_clipboard_message))
             currentAccountId = 0L
         }
     }
@@ -78,7 +81,6 @@ class AccountsListPresenter @Inject constructor(
             .doFinally { currentAccountId = 0L }
             .subscribe(
                 {
-                    viewState.showShortTimeMessage("deleted")
                 },
                 { throwable ->
                     viewState.showShortTimeMessage(throwable.message ?: "unknown")

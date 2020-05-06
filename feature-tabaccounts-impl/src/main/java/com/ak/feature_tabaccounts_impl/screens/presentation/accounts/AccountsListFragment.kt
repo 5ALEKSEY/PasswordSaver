@@ -136,7 +136,7 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
                 setSupportActionBar(tbAccountsListBar)
-                supportActionBar?.title = "Accounts list"
+                supportActionBar?.title = getString(R.string.accounts_list_toolbar_title)
             }
         }
     }
@@ -220,10 +220,11 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
 
     private inline fun showDeleteAccountDialog(crossinline deleteCallback: () -> Unit) {
         deleteAccountDialog?.dismissAllowingStateLoss()
+        val deleteItem = getString(R.string.delete_dialog_account_item)
         deleteAccountDialog = PSDialogBuilder(childFragmentManager)
-            .title("Attention")
-            .description("Are you sure that you want to delete this account data? You can't restore this data later.")
-            .positive("Delete") {
+            .title(getString(R.string.delete_data_dialog_title))
+            .description(getString(R.string.delete_data_dialog_desc, deleteItem))
+            .positive(getString(R.string.delete_dialog_pst_text)) {
                 deleteAccountDialog?.dismissAllowingStateLoss()
                 deleteCallback()
             }

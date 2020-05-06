@@ -3,6 +3,7 @@ package com.ak.feature_security_impl.auth
 import android.util.Log
 import com.ak.base.constants.AppConstants
 import com.ak.base.presenter.BasePSPresenter
+import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.ADD_PATTERN_SECURITY_ACTION_TYPE
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.ADD_PINCODE_SECURITY_ACTION_TYPE
@@ -10,6 +11,7 @@ import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.CHANGE_PATTERN_SECURITY_ACTION_TYPE
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter.RunActionType.CHANGE_PINCODE_SECURITY_ACTION_TYPE
 import com.ak.feature_security_api.interfaces.IPSBiometricManager
+import com.ak.feature_security_impl.R
 import com.ak.feature_security_impl.di.FeatureSecurityComponent
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -21,7 +23,8 @@ import javax.inject.Inject
 @InjectViewState
 class SecurityPresenter @Inject constructor(
     private val settingsPreferencesManager: ISettingsPreferencesManager,
-    private val psBiometricManager: IPSBiometricManager
+    private val psBiometricManager: IPSBiometricManager,
+    private val resourceManager: IResourceManager
 ) : BasePSPresenter<ISecurityView>() {
 
     companion object {
@@ -100,20 +103,26 @@ class SecurityPresenter @Inject constructor(
                 }
             }
             ADD_PINCODE_SECURITY_ACTION_TYPE -> {
-                viewState.showSecurityMessage("Enter your personal pincode")
+                viewState.showSecurityMessage(resourceManager.getString(R.string.add_new_pincode_message))
                 viewState.switchAuthMethod(true)
             }
             ADD_PATTERN_SECURITY_ACTION_TYPE -> {
-                viewState.showSecurityMessage("Create your personal graph pattern")
+                viewState.showSecurityMessage(resourceManager.getString(R.string.add_new_pattern_message))
                 isPincodeAuthMethod = false
                 viewState.switchAuthMethod(false)
             }
             CHANGE_PINCODE_SECURITY_ACTION_TYPE -> {
-                viewState.showSecurityMessage("Enter your previous pincode")
+                viewState.showSecurityMessage(resourceManager.getString(
+                        R.string.change_old_security_input_message,
+                        resourceManager.getString(R.string.security_input_pincode)
+                ))
                 viewState.switchAuthMethod(true)
             }
             CHANGE_PATTERN_SECURITY_ACTION_TYPE -> {
-                viewState.showSecurityMessage("Enter your previous graph pattern")
+                viewState.showSecurityMessage(resourceManager.getString(
+                        R.string.change_old_security_input_message,
+                        resourceManager.getString(R.string.security_input_pattern)
+                ))
                 isPincodeAuthMethod = false
                 viewState.switchAuthMethod(false)
             }
@@ -145,7 +154,7 @@ class SecurityPresenter @Inject constructor(
             }
             initSecurityAuthState()
         } else {
-            viewState.showSecurityMessage("Nope, not that :)", true)
+            viewState.showSecurityMessage(resourceManager.getString(R.string.change_security_input_error), true)
             showFailedActionViewState()
         }
     }
@@ -173,8 +182,8 @@ class SecurityPresenter @Inject constructor(
             }
             inputCode.length < MIN_CODE_LENGTH && authActionType == ADD_PATTERN_SECURITY_ACTION_TYPE -> {
                 viewState.showSecurityMessage(
-                    "Why is it so simple? Please, add more lines :)",
-                    true
+                        resourceManager.getString(R.string.pattern_incorrect_lines_count),
+                        true
                 )
                 showFailedActionViewState()
             }
@@ -185,12 +194,15 @@ class SecurityPresenter @Inject constructor(
         }
     }
 
-    private fun getMessageForConfirmCode() =
-        if (isPincodeAuthMethod) {
-            "Enter the pincode again to confirm"
+    private fun getMessageForConfirmCode(): String {
+        val securityInputName = if (isPincodeAuthMethod) {
+            resourceManager.getString(R.string.security_input_pincode)
         } else {
-            "Enter the graph pattern again to confirm"
+            resourceManager.getString(R.string.security_input_pattern)
         }
+
+        return resourceManager.getString(R.string.confirm_security_input_message, securityInputName)
+    }
 
     private fun handleAuthUserInput(inputCode: String) {
         when {
@@ -225,12 +237,15 @@ class SecurityPresenter @Inject constructor(
         return inputCode == codeForCheck
     }
 
-    private fun getIncorrectAuthMessage() =
-        if (isPincodeAuthMethod) {
-            "Incorrect pincode. Please, try again"
+    private fun getIncorrectAuthMessage(): String {
+        val securityInputName = if (isPincodeAuthMethod) {
+            resourceManager.getString(R.string.security_input_pincode)
         } else {
-            "Incorrect graph pattern. Please, try again"
+            resourceManager.getString(R.string.security_input_pattern)
         }
+
+        return resourceManager.getString(R.string.incorrect_security_input_message, securityInputName)
+    }
 
     private fun showFailedActionViewState() {
         if (isPincodeAuthMethod) {
@@ -241,23 +256,23 @@ class SecurityPresenter @Inject constructor(
     }
 
     private fun startBlockSecurityInputTimer(timeForBlock: Long) {
-        viewState.showSecurityMessage("Security input blocked. Try after after: $timeForBlock")
+        viewState.showSecurityMessage(resourceManager.getString(R.string.security_input_blocked_message, timeForBlock.toInt()))
         val startedStep = timeForBlock - 1
         Observable.interval(
-            AppConstants.BLOCK_SECURITY_INTERVAL,
-            TimeUnit.SECONDS,
-            Schedulers.computation()
+                AppConstants.BLOCK_SECURITY_INTERVAL,
+                TimeUnit.SECONDS,
+                Schedulers.computation()
         )
             .take(timeForBlock, TimeUnit.SECONDS)
             .map { leftValue -> startedStep - leftValue }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                     { tickValue ->
-                    viewState.showSecurityMessage("Security input blocked. Try after after: $tickValue")
-                },
+                        viewState.showSecurityMessage(resourceManager.getString(R.string.security_input_blocked_message, tickValue.toInt()))
+                    },
                     { throwable -> Log.d("ded", throwable.message) },
                     {
-                    resetAttemptsAndUnlockSecurityInput()
+                        resetAttemptsAndUnlockSecurityInput()
                     },
                     {
                         isInputBlocked = true
@@ -269,7 +284,7 @@ class SecurityPresenter @Inject constructor(
     private fun resetAttemptsAndUnlockSecurityInput() {
         failedAttemptsCount = 0
         isInputBlocked = false
-        viewState.showSecurityMessage("Verify your identity")
+        viewState.showSecurityMessage(resourceManager.getString(R.string.security_input_start_message))
         viewState.unlockSecurityInputViews()
     }
 

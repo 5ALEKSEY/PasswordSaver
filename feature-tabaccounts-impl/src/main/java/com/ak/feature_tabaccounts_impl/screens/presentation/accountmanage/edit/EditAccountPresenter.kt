@@ -2,6 +2,7 @@ package com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.edit
 
 import com.ak.feature_tabaccounts_api.interfaces.AccountFeatureEntity
 import com.ak.feature_tabaccounts_api.interfaces.IAccountsInteractor
+import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
 import com.ak.feature_tabaccounts_impl.domain.entity.AccountDomainEntity
 import com.ak.feature_tabaccounts_impl.domain.entity.mapToDomainEntity
@@ -35,7 +36,7 @@ class EditAccountPresenter @Inject constructor(
                         )
                     },
                     { throwable ->
-                        viewState.showShortTimeMessage("aaaaaa, blyat")
+                        viewState.showShortTimeMessage(resourceManager.getString(R.string.unknown_error_message))
                     }
             )
             .let(this::bindDisposable)
@@ -43,7 +44,7 @@ class EditAccountPresenter @Inject constructor(
 
     override fun onManageAccountAction(name: String, login: String, password: String) {
         if (accountEntityForEdit == null) {
-            viewState.showShortTimeMessage("chto-to poshlo ne tak")
+            viewState.showShortTimeMessage(resourceManager.getString(R.string.unknown_error_message))
             return
         }
 
