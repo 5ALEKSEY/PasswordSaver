@@ -64,7 +64,6 @@ class PasswordsActionModePresenter @Inject constructor(
                 .subscribe(
                     {
                         viewState.hideSelectedMode()
-                        viewState.showShortTimeMessage("deleted")
                     },
                     { throwable ->
                         viewState.showShortTimeMessage(throwable.message ?: "unknown")

@@ -74,7 +74,7 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(),
                         }
 
                         override fun onAuthFailed() {
-                            showShortTimeMessage("Is it honestly you??? :)")
+                            showShortTimeMessage(getString(R.string.auth_failed_funny_text))
                         }
                     }
             )
@@ -89,7 +89,7 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(),
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
                 setSupportActionBar(tbSettingsBar)
-                supportActionBar?.title = "Settings"
+                supportActionBar?.title = getString(R.string.settings_toolbar_title)
             }
         }
     }

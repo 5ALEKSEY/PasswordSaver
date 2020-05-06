@@ -4,6 +4,8 @@ import com.ak.base.constants.AppConstants
 import com.ak.base.presenter.BasePSPresenter
 import com.ak.base.utils.PSUtils
 import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
+import com.ak.core_repo_api.intefaces.IResourceManager
+import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.domain.usecase.PasswordDataCheckException
 import com.ak.feature_tabpasswords_impl.screens.logic.IBitmapDecoderManager
 import io.reactivex.BackpressureStrategy
@@ -20,6 +22,8 @@ abstract class BaseManagePasswordPresenter<MV : IBaseManagePasswordView> : BaseP
     protected lateinit var bitmapDecoderManager: IBitmapDecoderManager
     @Inject
     protected lateinit var internalStorageManager: IPSInternalStorageManager
+    @Inject
+    protected lateinit var resourceManager: IResourceManager
 
     private var nameChangeDis: Disposable? = null
     private var isAvatarDisplayed = false
@@ -54,7 +58,7 @@ abstract class BaseManagePasswordPresenter<MV : IBaseManagePasswordView> : BaseP
                 selectedAvatarPath = fileImagePath
                 viewState.displayPasswordAvatarChooserImage(it)
             } else {
-                viewState.showShortTimeMessage("aaaaa, blyat'")
+                viewState.showShortTimeMessage(resourceManager.getString(R.string.unknown_error_message))
             }
         }
     }
@@ -98,10 +102,16 @@ abstract class BaseManagePasswordPresenter<MV : IBaseManagePasswordView> : BaseP
         for (field in th.emptyFields) {
             when (field) {
                 PasswordDataCheckException.PASSWORD_NAME_FIELD -> viewState.displayPasswordNameInputError(
-                    "Name can't be empty"
+                        resourceManager.getString(
+                                R.string.empty_error_message,
+                                resourceManager.getString(R.string.name_field_name)
+                        )
                 )
                 PasswordDataCheckException.PASSWORD_CONTENT_FIELD -> viewState.displayPasswordContentInputError(
-                    "Content can't be empty"
+                        resourceManager.getString(
+                                R.string.empty_error_message,
+                                resourceManager.getString(R.string.content_field_name)
+                        )
                 )
             }
         }

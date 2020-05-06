@@ -1,6 +1,7 @@
 package com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.edit
 
 import android.os.Bundle
+import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.BaseManagePasswordFragment
 import kotlinx.android.synthetic.main.fragment_manage_password.*
@@ -22,7 +23,7 @@ class EditPasswordFragment : BaseManagePasswordFragment<EditPasswordPresenter>()
 
     override fun getPresenter() = editPasswordPresenter
 
-    override fun getToolbarTitleText() = "Edit password"
+    override fun getToolbarTitleText() = getString(R.string.add_edit_password_toolbar_title)
 
     override fun injectFragment() {
         FeatureTabPasswordsComponent.get().inject(this)

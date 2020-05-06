@@ -35,7 +35,7 @@ class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
         super.initViewBeforePresenterAttach()
         initToolbar()
         initRecyclerView()
-        displayLauncherImageText("Passwords")
+        displayLauncherImageText(getString(R.string.about_launch_image_text))
     }
 
     override fun setVersionInfo(versionInfo: String) {
@@ -47,7 +47,7 @@ class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
     }
 
     override fun startReportAction() {
-        showShortTimeMessage("report. aga. shhha")
+//        showShortTimeMessage("report. aga. shhha")
     }
 
     private fun initToolbar() {

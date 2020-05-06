@@ -18,6 +18,8 @@
     <string name="pincode_settings_desc">If you turn on this option, you can use privacy check before open your application</string>
     <string name="change_pincode_settings_name">Change pincode</string>
     <string name="lock_delay_settings_name">Lock delay</string>
+    <string name="showing_type_settings_name">Showing type</string>
+    <string name="showing_type_settings_decs">Type of password showing for user</string>
     <string name="lock_delay_settings_desc">Choose delay which you want to use for lock you application</string>
     <string name="pattern_settings_name">Pattern</string>
     <string name="pattern_settings_desc">You can use graphic pattern code for unlock your app</string>
@@ -46,14 +48,24 @@
     <string name="name_field_name">Name</string>
     <string name="login_field_name">Login</string>
     <string name="password_field_name">Password</string>
+    <string name="content_field_name">Content</string>
     <string name="add_new_account_toolbar_title">Add new account</string>
     <string name="add_edit_account_toolbar_title">Edit account</string>
+    <string name="add_edit_password_toolbar_title">Edit password</string>
     <string name="copied_to_clipboard_message">Copied to clipboard</string>
     <string name="accounts_list_toolbar_title">Accounts list</string>
+    <string name="passwords_list_toolbar_title">Passwords list</string>
+    <string name="settings_toolbar_title">Settings</string>
+    <string name="design_settings_toolbar_title">Design</string>
     <string name="delete_data_dialog_title">Attention</string>
     <string name="delete_data_dialog_desc">Are you sure that you want to delete this %s data? You can\'t restore this data later.</string>
     <string name="delete_dialog_password_item">password</string>
     <string name="delete_dialog_account_item">account</string>
     <string name="delete_dialog_pst_text">Delete</string>
+    <string name="about_launch_image_text">Passwords</string>
+    <string name="design_setting_name">Design</string>
+    <string name="privacy_setting_name">Privacy</string>
+    <string name="about_setting_name">About</string>
+    <string name="auth_failed_funny_text">Is it honestly you??? :)</string>
 
 </resources>

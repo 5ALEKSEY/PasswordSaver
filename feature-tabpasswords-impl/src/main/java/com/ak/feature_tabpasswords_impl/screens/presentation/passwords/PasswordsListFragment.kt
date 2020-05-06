@@ -144,7 +144,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
                 setSupportActionBar(tbPasswordsListBar)
-                supportActionBar?.title = "Passwords list"
+                supportActionBar?.title = getString(R.string.passwords_list_toolbar_title)
             }
         }
     }
@@ -229,10 +229,11 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
 
     private inline fun showDeletePasswordDialog(crossinline deleteCallback: () -> Unit) {
         deletePasswordDialog?.dismissAllowingStateLoss()
+        val deleteItemString = getString(R.string.delete_dialog_password_item)
         deletePasswordDialog = PSDialogBuilder(childFragmentManager)
-            .title("Attention")
-            .description("Are you sure that you want to delete this password data? You can't restore this data later.")
-            .positive("Delete") {
+            .title(getString(R.string.delete_data_dialog_title))
+            .description(getString(R.string.delete_data_dialog_desc, deleteItemString))
+            .positive(getString(R.string.delete_dialog_pst_text)) {
                 deletePasswordDialog?.dismissAllowingStateLoss()
                 deleteCallback()
             }

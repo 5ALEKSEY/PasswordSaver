@@ -4,10 +4,12 @@ import android.util.Log
 import com.ak.base.constants.AppConstants
 import com.ak.base.presenter.BasePSPresenter
 import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
+import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 import com.ak.core_repo_api.intefaces.PasswordShowingType
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity
+import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordItemModel
 import com.ak.feature_tabpasswords_impl.screens.logic.IDataBufferManager
@@ -20,7 +22,8 @@ class PasswordsListPresenter @Inject constructor(
     private val passwordsInteractor: IPasswordsInteractor,
     private val settingsPreferencesManager: ISettingsPreferencesManager,
     private val internalStorageManager: IPSInternalStorageManager,
-    private val dataBufferManager: IDataBufferManager
+    private val dataBufferManager: IDataBufferManager,
+    private val resourceManager: IResourceManager
 ) : BasePSPresenter<IPasswordsListView>() {
 
     private var mCurrentPasswordId = 0L
@@ -64,7 +67,7 @@ class PasswordsListPresenter @Inject constructor(
     fun onCopyPasswordAction() {
         getPasswordDataAndStartAction {
             dataBufferManager.copyStringData(it.getPasswordContent())
-            viewState.showShortTimeMessage("Copied to clipboard")
+            viewState.showShortTimeMessage(resourceManager.getString(R.string.copied_to_clipboard_message))
             mCurrentPasswordId = 0L
         }
     }
@@ -80,7 +83,6 @@ class PasswordsListPresenter @Inject constructor(
             .doFinally { mCurrentPasswordId = 0L }
             .subscribe(
                 {
-                    viewState.showShortTimeMessage("deleted")
                 },
                 { throwable ->
                     viewState.showShortTimeMessage(throwable.message ?: "unknown")

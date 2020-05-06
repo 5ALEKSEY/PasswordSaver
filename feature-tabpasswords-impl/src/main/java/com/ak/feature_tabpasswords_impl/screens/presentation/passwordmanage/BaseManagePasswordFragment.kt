@@ -14,7 +14,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.drawTextInner
@@ -152,7 +151,6 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
         }
 
     override fun displaySuccessPasswordManageAction() {
-        Toast.makeText(context, "Successful", Toast.LENGTH_SHORT).show()
         navController.popBackStack()
     }
 

@@ -1,6 +1,5 @@
 package com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.edit
 
-import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity
 import com.ak.feature_tabpasswords_impl.R
@@ -14,8 +13,7 @@ import javax.inject.Inject
 
 @InjectViewState
 class EditPasswordPresenter @Inject constructor(
-    private val passwordsInteractor: IPasswordsInteractor,
-    private val resourceManager: IResourceManager
+    private val passwordsInteractor: IPasswordsInteractor
 ) : BaseManagePasswordPresenter<IEditPasswordView>() {
 
     private var passwordEntityForEdit: PasswordDomainEntity? = null

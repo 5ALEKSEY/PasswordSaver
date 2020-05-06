@@ -43,7 +43,7 @@ class DesignSettingsFragment : BasePSFragment<DesignSettingsPresenter>(),
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
                 setSupportActionBar(tbDesignSettingsBar)
-                supportActionBar?.title = "Design"
+                supportActionBar?.title = getString(R.string.design_settings_toolbar_title)
                 tbDesignSettingsBar.setNavigationOnClickListener {
                     navController.popBackStack()
                 }
