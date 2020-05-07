@@ -60,15 +60,18 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         FeatureTabPasswordsComponent.get().inject(this)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun initViewBeforePresenterAttach() {
+        super.initViewBeforePresenterAttach()
         initToolbar()
         initRecyclerView()
 
         fabAddNewPasswordAction.setSafeClickListener {
             navigator.navigateToAddNewPassword()
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
         deletePasswordDialog?.dismissAllowingStateLoss()
         passwordsListPresenter.loadPasswords()
     }

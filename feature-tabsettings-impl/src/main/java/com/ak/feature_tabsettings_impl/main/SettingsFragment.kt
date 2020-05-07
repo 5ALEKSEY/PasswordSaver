@@ -37,10 +37,14 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(),
         FeatureTabSettingsComponent.get().inject(this)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun initViewBeforePresenterAttach() {
+        super.initViewBeforePresenterAttach()
         initToolbar()
         initRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
         settingsPresenter.loadSettingsData()
     }
 

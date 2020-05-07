@@ -1,5 +1,6 @@
 package com.ak.feature_tabaccounts_impl.screens.presentation.accounts
 
+import android.annotation.SuppressLint
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -61,15 +62,18 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
         FeatureTabAccountsComponent.get().inject(this)
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun initViewBeforePresenterAttach() {
+        super.initViewBeforePresenterAttach()
         initToolbar()
         initRecyclerView()
 
         fabAddNewAccountAction.setSafeClickListener {
             navigator.navigateToAddNewAccount()
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
         deleteAccountDialog?.dismissAllowingStateLoss()
         accountsListPresenter.loadPasswords()
     }
@@ -218,12 +222,13 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
         accountsAdapter.setSelectedStateForAccountItemId(isSelected, accountId)
     }
 
+    @SuppressLint("StringFormatInvalid")
     private inline fun showDeleteAccountDialog(crossinline deleteCallback: () -> Unit) {
         deleteAccountDialog?.dismissAllowingStateLoss()
-        val deleteItem = getString(R.string.delete_dialog_account_item)
+        val deleteItemString = getString(R.string.delete_dialog_account_item)
         deleteAccountDialog = PSDialogBuilder(childFragmentManager)
             .title(getString(R.string.delete_data_dialog_title))
-            .description(getString(R.string.delete_data_dialog_desc, deleteItem))
+            .description(getString(R.string.delete_data_dialog_desc, deleteItemString))
             .positive(getString(R.string.delete_dialog_pst_text)) {
                 deleteAccountDialog?.dismissAllowingStateLoss()
                 deleteCallback()
