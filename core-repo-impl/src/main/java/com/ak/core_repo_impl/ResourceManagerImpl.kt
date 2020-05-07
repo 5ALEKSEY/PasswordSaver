@@ -13,6 +13,6 @@ class ResourceManagerImpl @Inject constructor(
     }
 
     override fun getString(stringResId: Int, vararg formatArgs: Any): String {
-        return appContext.getString(stringResId, formatArgs)
+        return appContext.getString(stringResId, *formatArgs)
     }
 }
