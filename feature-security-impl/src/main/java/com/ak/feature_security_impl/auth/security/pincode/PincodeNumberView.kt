@@ -49,6 +49,7 @@ class PincodeNumberView(context: Context?, attrs: AttributeSet?) :
         )
 
         try {
+            // todo: fetch primary text and secondary from pincode value enum
             mPincodeValue = typedArray.getInt(R.styleable.PincodeNumberView_pincodeValue, 0)
             mPrimaryText = typedArray.getString(R.styleable.PincodeNumberView_primaryText) ?: ""
             mSecondaryText = typedArray.getString(R.styleable.PincodeNumberView_secondaryText) ?: ""

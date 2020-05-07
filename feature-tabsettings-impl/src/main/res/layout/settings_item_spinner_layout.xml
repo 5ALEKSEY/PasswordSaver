@@ -37,7 +37,7 @@
             app:layout_constraintTop_toTopOf="@id/tvSettingName"
             app:layout_constraintBottom_toBottomOf="@id/tvSettingName"
             app:layout_constraintStart_toEndOf="@id/tvSettingName"
-            android:text="New" />
+            android:text="@string/new_feature_badge" />
 
     <TextView
             android:id="@+id/tvSettingDescription"

@@ -1,5 +1,6 @@
 package com.ak.feature_tabpasswords_impl.screens.adapter
 
+import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.base.extensions.drawTextInner
@@ -30,7 +31,8 @@ class PasswordsListItemViewHolder(
         itemView.tvPasswordContent.setVisibility(passwordItemModel.isPasswordContentNeeds)
 
         itemView.btnPasswordVisibilityAction.text = getVisibilityPasswordButtonText(
-            passwordItemModel.isPasswordContentVisible
+            passwordItemModel.isPasswordContentVisible,
+            itemView.context
         )
 
         itemView.setOnClickListener {
@@ -100,8 +102,12 @@ class PasswordsListItemViewHolder(
         }
     }
 
-    private fun getVisibilityPasswordButtonText(isPasswordContentVisible: Boolean) =
-        if (isPasswordContentVisible) "Hide" else "Show"
+    private fun getVisibilityPasswordButtonText(isPasswordContentVisible: Boolean, context: Context) =
+        if (isPasswordContentVisible) {
+            context.getString(R.string.show_password_button_text)
+        } else {
+            context.getString(R.string.hide_password_button_text)
+        }
 
     private fun getRootItemBackground(isItemSelected: Boolean) =
         if (isItemSelected) {

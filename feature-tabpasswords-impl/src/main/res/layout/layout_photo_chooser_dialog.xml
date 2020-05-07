@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:maxLines="1"
-                android:text="Camera"
+                android:text="@string/image_chooser_camera"
                 android:textColor="@color/avatar_chooser_dialog_text_color"
                 android:textSize="20sp" />
 
@@ -128,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:maxLines="1"
-                android:text="Gallery"
+                android:text="@string/image_chooser_gallery"
                 android:textColor="@color/avatar_chooser_dialog_text_color"
                 android:textSize="20sp" />
 

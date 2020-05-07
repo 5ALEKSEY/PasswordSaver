@@ -67,5 +67,23 @@
     <string name="privacy_setting_name">Privacy</string>
     <string name="about_setting_name">About</string>
     <string name="auth_failed_funny_text">Is it honestly you??? :)</string>
+    <string name="show_password_button_text">Show</string>
+    <string name="hide_password_button_text">Hide</string>
+    <string name="image_chooser_camera">Camera</string>
+    <string name="image_chooser_gallery">Gallery</string>
+    <string name="chooser_copy_password_content">Copy password content</string>
+    <string name="chooser_edit_password_content">Edit password item</string>
+    <string name="chooser_delete_password_content">Delete password</string>
+    <string name="chooser_copy_account_login_content">Copy account login</string>
+    <string name="chooser_copy_account_password">Copy account password</string>
+    <string name="chooser_edit_account">Edit account item</string>
+    <string name="chooser_delete_account">Delete account</string>
+    <string name="decrypting_data_message">Wait for decrypt your data …</string>
+    <string name="no_saved_password_data_message">Sorry, you do not have any saved password, please click on + button.</string>
+    <string name="no_saved_account_data_message">Sorry, you do not have any saved account, please click on + button.</string>
+    <string name="save_password_button_text">Save password</string>
+    <string name="save_account_button_text">Save account</string>
+    <string name="click_to_change_image">Click to change</string>
+    <string name="oops_message">Oops!</string>
 
 </resources>

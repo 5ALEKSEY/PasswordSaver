@@ -46,7 +46,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSecurityScreenLogo"
-            android:text="Incorrect password. Please, try again" />
+            tools:text="@string/incorrect_security_input_message" />
 
     <RelativeLayout
             android:id="@+id/vAuthContainer"

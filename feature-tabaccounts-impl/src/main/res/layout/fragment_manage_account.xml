@@ -41,7 +41,7 @@
                         android:id="@+id/tietAccountNameField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Account name"
+                        android:hint="@string/name_field_name"
                         android:imeOptions="actionNext"
                         android:inputType="text"
                         android:nextFocusDown="@id/tietAccountLoginField" />
@@ -58,7 +58,7 @@
                         android:id="@+id/tietAccountLoginField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Login"
+                        android:hint="@string/login_field_name"
                         android:imeOptions="actionNext"
                         android:inputType="text"
                         android:nextFocusDown="@id/tietAccountPasswordField"/>
@@ -75,7 +75,7 @@
                         android:id="@+id/tietAccountPasswordField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Password"
+                        android:hint="@string/password_field_name"
                         android:imeOptions="actionDone"
                         android:inputType="text" />
 
@@ -87,7 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="32dp"
-                    android:text="Save account"/>
+                    android:text="@string/save_account_button_text"/>
 
         </LinearLayout>
 
