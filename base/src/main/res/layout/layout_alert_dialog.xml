@@ -13,13 +13,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:ellipsize="end"
             android:gravity="center"
-            android:singleLine="true"
             android:textColor="@color/primaryText"
             android:textSize="20sp"
             android:textStyle="bold"
-            tools:text="Sample dialog title" />
+            tools:text="Sample dialog title e3e3e3e 3e3 e3 e3 e3 e3 d3" />
 
     <TextView
             android:id="@+id/tvDialogDescription"
@@ -27,8 +25,8 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:textColor="@color/primaryText"
-            android:textSize="18sp"
-            tools:text="Sample description for dialog"/>
+            android:textSize="17sp"
+            tools:text="@string/no_added_fingerprints_dialog_desc"/>
 
     <RelativeLayout
             android:layout_width="wrap_content"
@@ -39,13 +37,14 @@
                 android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textAllCaps="true"
                 android:textColor="@color/colorAccent"
                 android:paddingTop="8dp"
+                android:textStyle="bold"
                 android:paddingBottom="8dp"
-                android:paddingStart="22dp"
-                android:paddingEnd="22dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
                 tools:text="OK"/>
 
         <TextView
@@ -53,13 +52,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/tvDialogPositiveButton"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textAllCaps="true"
                 android:textColor="@color/primaryText"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:paddingStart="22dp"
-                android:paddingEnd="22dp"
+                android:paddingStart="18dp"
+                android:paddingEnd="18dp"
                 tools:text="CANCEL"/>
 
     </RelativeLayout>

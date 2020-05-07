@@ -104,9 +104,9 @@ class PasswordsListItemViewHolder(
 
     private fun getVisibilityPasswordButtonText(isPasswordContentVisible: Boolean, context: Context) =
         if (isPasswordContentVisible) {
-            context.getString(R.string.show_password_button_text)
-        } else {
             context.getString(R.string.hide_password_button_text)
+        } else {
+            context.getString(R.string.show_password_button_text)
         }
 
     private fun getRootItemBackground(isItemSelected: Boolean) =

@@ -2,10 +2,6 @@ apply plugin: 'com.android.library'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
-apply plugin: 'kotlin-kapt'
-
 def rootExtConfiguration = rootProject.extensions.getByName("ext")
 
 String VERSION_NAME = rootExtConfiguration["appVersionName"]
@@ -25,25 +21,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [
-                        disableEmptyStrategyCheck: 'true',
-                        defaultMoxyStrategy: 'moxy.viewstate.strategy.OneExecutionStateStrategy',
-                        enableEmptyStrategyHelper: 'false',
-                ]
-            }
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
     buildTypes {
