@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">PasswordSaver</string>
     <string name="password_showing_dialog_type">"Диалог"</string>
     <string name="password_showing_toast_type">"Тост"</string>
     <string name="immediately_lock_state">"Моментально"</string>
