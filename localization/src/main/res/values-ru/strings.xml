@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PasswordSaver</string>
+    <string name="app_name">"PasswordSaver"</string>
     <string name="password_showing_dialog_type">"Диалог"</string>
     <string name="password_showing_toast_type">"Тост"</string>
     <string name="immediately_lock_state">"Моментально"</string>
@@ -78,9 +78,9 @@
     <string name="chooser_edit_account">"Редактировать аккаунт"</string>
     <string name="chooser_delete_account">"Удалить аккаунт"</string>
     <string name="decrypting_data_message">"Подождите. Идет расшифровка данных …"</string>
-    <string name="no_saved_password_data_message">"Извините, у вас нет сохраненных паролей. Пожалуйста нажмите на + "</string>
-    <string name="no_saved_account_data_message">"Извините, у вас нет сохраненных аккаунтов. Пожалуйста нажмите на + "</string>
-    <string name="save_password_button_text">"Сохранить паролль"</string>
+    <string name="no_saved_password_data_message">"Извините, у вас нет сохраненных паролей. Пожалуйста, нажмите на + "</string>
+    <string name="no_saved_account_data_message">"Извините, у вас нет сохраненных аккаунтов. Пожалуйста, нажмите на + "</string>
+    <string name="save_password_button_text">"Сохранить пароль"</string>
     <string name="save_account_button_text">"Сохранить аккаунт"</string>
     <string name="click_to_change_image">"Изменить"</string>
     <string name="oops_message">"Уупс!"</string>
