@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">PS_Debug</string>
+    <string name="application_name">PS_Debug</string>
 </resources>

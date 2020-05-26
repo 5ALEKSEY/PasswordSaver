@@ -78,9 +78,6 @@ dependencies {
     implementation deps.rx
     implementation deps.rxAndroid
 
-    implementation deps.coroutinesPermission
-    implementation deps.kotlinCoroutines
-
     implementation deps.recyclerView
     implementation deps.cardView
 
