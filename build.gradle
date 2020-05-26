@@ -29,8 +29,8 @@ task clean(type: Delete) {
 
 ext {
     // VERSION config
-    appVersionName = "2.4.2"
-    appVersionCode = 38
+    appVersionName = "2.4.3"
+    appVersionCode = 39
 
     // SDK config
     compileSdkVersion = 28
