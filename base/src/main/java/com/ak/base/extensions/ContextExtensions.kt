@@ -37,6 +37,7 @@ fun Context.vibrate(vibrateDuration: Long = 200L) {
                 )
             )
         } else {
+            @Suppress("DEPRECATION")
             it.vibrate(vibrateDuration)
         }
     }
