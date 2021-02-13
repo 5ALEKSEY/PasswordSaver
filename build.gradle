@@ -29,13 +29,13 @@ task clean(type: Delete) {
 
 ext {
     // VERSION config
-    appVersionName = "2.4.3"
-    appVersionCode = 39
+    appVersionName = "2.4.4"
+    appVersionCode = 40
 
     // SDK config
-    compileSdkVersion = 28
+    compileSdkVersion = 30
     minSdkVersion = 23
-    targetSdkVersion = 28
+    targetSdkVersion = 30
 }
 
 apply from: 'dependencies.gradle'
