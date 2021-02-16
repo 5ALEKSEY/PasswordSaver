@@ -250,8 +250,9 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
             && data != null
             && data.hasExtra(CameraPickImageActivity.PICKED_IMAGE_PATH_KEY_EXTRA)
         ) {
-            val filePath = data.getStringExtra(CameraPickImageActivity.PICKED_IMAGE_PATH_KEY_EXTRA)
-            getPresenter().onCameraImageSelected(filePath)
+            data.getStringExtra(CameraPickImageActivity.PICKED_IMAGE_PATH_KEY_EXTRA)?.let {
+                getPresenter().onCameraImageSelected(it)
+            }
         }
     }
 }

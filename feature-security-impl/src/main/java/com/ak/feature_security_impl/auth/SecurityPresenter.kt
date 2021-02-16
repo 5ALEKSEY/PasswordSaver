@@ -270,7 +270,7 @@ class SecurityPresenter @Inject constructor(
                     { tickValue ->
                         viewState.showSecurityMessage(resourceManager.getString(R.string.security_input_blocked_message, tickValue.toInt()))
                     },
-                    { throwable -> Log.d("ded", throwable.message) },
+                    { throwable -> Log.d("ded", throwable.message ?: "") },
                     {
                         resetAttemptsAndUnlockSecurityInput()
                     },
