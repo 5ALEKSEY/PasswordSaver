@@ -27,6 +27,7 @@ abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFrag
     abstract fun injectFragment()
 
     protected lateinit var navController: NavController
+    protected lateinit var fragmentView: View
 
     open fun isBackPressEnabled() = true
 
@@ -48,13 +49,18 @@ abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFrag
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(getFragmentLayoutResId(), container, false)
+        fragmentView = inflater.inflate(
+                getFragmentLayoutResId(),
+                container,
+                false
+        )
+        initViewBeforePresenterAttach(fragmentView)
+        return fragmentView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
-        initViewBeforePresenterAttach()
         mvpDelegate.onAttach()
     }
 
@@ -66,7 +72,7 @@ abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFrag
         vibrate(vibrateDuration)
     }
 
-    protected open fun initViewBeforePresenterAttach() {
+    protected open fun initViewBeforePresenterAttach(fragmentView: View) {
 
     }
 

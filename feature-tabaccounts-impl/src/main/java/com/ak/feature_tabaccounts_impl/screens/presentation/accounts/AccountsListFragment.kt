@@ -1,8 +1,10 @@
 package com.ak.feature_tabaccounts_impl.screens.presentation.accounts
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.GridLayoutManager
@@ -25,6 +27,7 @@ import com.ak.feature_tabaccounts_impl.screens.presentation.base.BaseAccountsMod
 import com.ak.feature_tabaccounts_impl.screens.presentation.ui.AccountActionsBottomSheetDialog
 import dagger.Lazy
 import kotlinx.android.synthetic.main.fragment_accounts_list.*
+import kotlinx.android.synthetic.main.fragment_accounts_list.view.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
@@ -62,12 +65,17 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
         FeatureTabAccountsComponent.get().inject(this)
     }
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        accountsListPresenter.loadPasswords()
+    }
+
+    override fun initViewBeforePresenterAttach(fragmentView: View) {
+        super.initViewBeforePresenterAttach(fragmentView)
         initToolbar()
         initRecyclerView()
 
-        fabAddNewAccountAction.setSafeClickListener {
+        fragmentView.fabAddNewAccountAction.setSafeClickListener {
             navigator.navigateToAddNewAccount()
         }
     }
@@ -75,7 +83,6 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
     override fun onResume() {
         super.onResume()
         deleteAccountDialog?.dismissAllowingStateLoss()
-        accountsListPresenter.loadPasswords()
     }
 
     override fun onPause() {
@@ -88,24 +95,24 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
     }
 
     override fun setLoadingState(isLoading: Boolean) {
-        accountLoadingContainer.setVisibility(isLoading)
+        fragmentView.accountLoadingContainer.setVisibility(isLoading)
         if (isLoading) {
-            loadingAnimation.playAnimation()
+            fragmentView.loadingAnimation.playAnimation()
         } else {
-            loadingAnimation.pauseAnimation()
+            fragmentView.loadingAnimation.pauseAnimation()
         }
     }
 
     override fun setEmptyAccountsState(isEmptyViewVisible: Boolean) {
-        incEmptyView.setVisibility(isEmptyViewVisible)
+        fragmentView.incEmptyView.setVisibility(isEmptyViewVisible)
     }
 
     override fun enableToolbarScrolling() {
-        tbAccountsListBar.turnOnToolbarScrolling(ablAccountsListBarLayout)
+        fragmentView.tbAccountsListBar.turnOnToolbarScrolling(ablAccountsListBarLayout)
     }
 
     override fun disableToolbarScrolling() {
-        tbAccountsListBar.turnOffToolbarScrolling(ablAccountsListBarLayout)
+        fragmentView.tbAccountsListBar.turnOffToolbarScrolling(ablAccountsListBarLayout)
     }
 
     override fun showAccountActionsDialog() {
@@ -139,7 +146,7 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
     private fun initToolbar() {
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
-                setSupportActionBar(tbAccountsListBar)
+                setSupportActionBar(fragmentView.tbAccountsListBar)
                 supportActionBar?.title = getString(R.string.accounts_list_toolbar_title)
             }
         }
@@ -152,25 +159,28 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
                 accountsActionModePresenter::onPasswordItemLongClick
         )
 
-        rvAccountsList.adapter = accountsAdapter
-        rvAccountsList.layoutManager = GridLayoutManager(
-                context,
-                AppConstants.PASSWORDS_LIST_COLUMN_COUNT,
-                GridLayoutManager.VERTICAL,
-                false
-        )
-        rvAccountsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) {
-                    fabAddNewAccountAction.hide()
-                } else {
-                    fabAddNewAccountAction.show()
-                }
+        with(fragmentView.rvAccountsList) {
+            adapter = accountsAdapter
+            layoutManager = GridLayoutManager(
+                    context,
+                    AppConstants.PASSWORDS_LIST_COLUMN_COUNT,
+                    GridLayoutManager.VERTICAL,
+                    false
+            )
 
-                super.onScrolled(recyclerView, dx, dy)
-            }
-        })
-        (rvAccountsList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (dy > 0) {
+                        fragmentView.fabAddNewAccountAction.hide()
+                    } else {
+                        fragmentView.fabAddNewAccountAction.show()
+                    }
+
+                    super.onScrolled(recyclerView, dx, dy)
+                }
+            })
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        }
     }
 
     //------------------------------------- Action mode --------------------------------------------
@@ -180,9 +190,9 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
     }
 
     override fun displaySelectedMode() {
-        val activityOfFragment = activity
+        val activityOfFragment = requireActivity()
         accountsAdapter.setItemsActionModeState(true)
-        if (tbAccountsListBarActionMode == null && activityOfFragment != null && activityOfFragment is AppCompatActivity) {
+        if (tbAccountsListBarActionMode == null && activityOfFragment is AppCompatActivity) {
             tbAccountsListBarActionMode =
                 activityOfFragment.startSupportActionMode(object : ActionMode.Callback {
                     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {

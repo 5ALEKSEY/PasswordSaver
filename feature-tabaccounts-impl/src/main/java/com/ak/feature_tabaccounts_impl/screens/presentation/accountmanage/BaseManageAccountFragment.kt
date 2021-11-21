@@ -5,6 +5,7 @@ import android.text.InputFilter
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import com.ak.base.constants.AppConstants
@@ -13,6 +14,7 @@ import com.ak.base.extensions.setSafeClickListener
 import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.screens.presentation.base.BaseAccountsModuleFragment
 import kotlinx.android.synthetic.main.fragment_manage_account.*
+import kotlinx.android.synthetic.main.fragment_manage_account.view.*
 
 abstract class BaseManageAccountFragment<ManagePresenter : BaseManageAccountPresenter<*>>
     : BaseAccountsModuleFragment<ManagePresenter>(), IBaseManageAccountView {
@@ -26,11 +28,11 @@ abstract class BaseManageAccountFragment<ManagePresenter : BaseManageAccountPres
         setHasOptionsMenu(true)
     }
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun initViewBeforePresenterAttach(fragmentView: View) {
+        super.initViewBeforePresenterAttach(fragmentView)
         initToolbar()
 
-        tietAccountPasswordField.setOnEditorActionListener { _, actionId, _ ->
+        fragmentView.tietAccountPasswordField.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_DONE) {
                 manageAccountAction()
                 true
@@ -40,17 +42,17 @@ abstract class BaseManageAccountFragment<ManagePresenter : BaseManageAccountPres
         }
 
 
-        tietAccountNameField.filters = arrayOf(
+        fragmentView.tietAccountNameField.filters = arrayOf(
                 InputFilter.LengthFilter(AppConstants.ACCOUNT_NAME_MAX_LENGTH)
         )
-        tietAccountLoginField.filters = arrayOf(
+        fragmentView.tietAccountLoginField.filters = arrayOf(
                 InputFilter.LengthFilter(AppConstants.ACCOUNT_LOGIN_MAX_LENGTH)
         )
-        tietAccountPasswordField.filters = arrayOf(
+        fragmentView.tietAccountPasswordField.filters = arrayOf(
                 InputFilter.LengthFilter(AppConstants.ACCOUNT_PASSWORD_MAX_LENGTH)
         )
 
-        btnManageAccountAction.setSafeClickListener {
+        fragmentView.btnManageAccountAction.setSafeClickListener {
             manageAccountAction()
         }
     }
@@ -73,35 +75,36 @@ abstract class BaseManageAccountFragment<ManagePresenter : BaseManageAccountPres
     }
 
     override fun displayAccountNameInputError(errorMessage: String) {
-        tilAccountNameLayout.error = errorMessage
+        fragmentView.tilAccountNameLayout.error = errorMessage
     }
 
     override fun hideAccountNameInputError() {
-        tilAccountNameLayout.error = null
+        fragmentView.tilAccountNameLayout.error = null
     }
 
     override fun displayAccountLoginInputError(errorMessage: String) {
-        tilAccountLoginLayout.error = errorMessage
+        fragmentView.tilAccountLoginLayout.error = errorMessage
     }
 
     override fun hideAccountLoginInputError() {
-        tilAccountLoginLayout.error = null
+        fragmentView.tilAccountLoginLayout.error = null
     }
 
     override fun displayAccountPasswordInputError(errorMessage: String) {
-        tilAccountPasswordLayout.error = errorMessage
+        fragmentView.tilAccountPasswordLayout.error = errorMessage
     }
 
     override fun hideAccountPasswordInputError() {
-        tilAccountPasswordLayout.error = null
+        fragmentView.tilAccountPasswordLayout.error = null
     }
 
     private fun initToolbar() {
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
-                setSupportActionBar(tbManageAccountBar)
+                val actionBarView = fragmentView.tbManageAccountBar
+                setSupportActionBar(actionBarView)
                 supportActionBar?.title = getToolbarTitleText()
-                tbManageAccountBar.setNavigationOnClickListener {
+                actionBarView.setNavigationOnClickListener {
                     hideKeyboard()
                     navController.popBackStack()
                 }
@@ -117,9 +120,9 @@ abstract class BaseManageAccountFragment<ManagePresenter : BaseManageAccountPres
         hideAccountLoginInputError()
         hideAccountPasswordInputError()
         getPresenter().onManageAccountAction(
-                tietAccountNameField.text.toString(),
-                tietAccountLoginField.text.toString(),
-                tietAccountPasswordField.text.toString()
+                fragmentView.tietAccountNameField.text.toString(),
+                fragmentView.tietAccountLoginField.text.toString(),
+                fragmentView.tietAccountPasswordField.text.toString()
         )
     }
 }

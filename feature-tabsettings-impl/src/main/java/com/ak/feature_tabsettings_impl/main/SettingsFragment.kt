@@ -1,6 +1,7 @@
 package com.ak.feature_tabsettings_impl.main
 
 import android.content.Intent
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,7 +11,7 @@ import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.android.synthetic.main.fragment_settings.view.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
@@ -37,8 +38,8 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(),
         FeatureTabSettingsComponent.get().inject(this)
     }
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun initViewBeforePresenterAttach(fragmentView: View) {
+        super.initViewBeforePresenterAttach(fragmentView)
         initToolbar()
         initRecyclerView()
     }
@@ -92,7 +93,7 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(),
     private fun initToolbar() {
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
-                setSupportActionBar(tbSettingsBar)
+                setSupportActionBar(fragmentView.tbSettingsBar)
                 supportActionBar?.title = getString(R.string.settings_toolbar_title)
             }
         }
@@ -105,15 +106,18 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(),
             settingsPresenter::onSectionClicked,
             null
         )
-        rvSettingsItemsList.adapter = settingsRecyclerAdapter
-        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        rvSettingsItemsList.layoutManager = linearLayoutManager
-        rvSettingsItemsList.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                linearLayoutManager.orientation
+
+        with(fragmentView.rvSettingsItemsList) {
+            adapter = settingsRecyclerAdapter
+            val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(
+                    DividerItemDecoration(
+                            context,
+                            linearLayoutManager.orientation
+                    )
             )
-        )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

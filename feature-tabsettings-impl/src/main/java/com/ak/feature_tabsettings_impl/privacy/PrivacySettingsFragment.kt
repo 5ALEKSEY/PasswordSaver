@@ -2,6 +2,7 @@ package com.ak.feature_tabsettings_impl.privacy
 
 import android.content.Intent
 import android.provider.Settings
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +14,7 @@ import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_privacy_settings.*
+import kotlinx.android.synthetic.main.fragment_privacy_settings.view.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
@@ -39,8 +40,8 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(),
         FeatureTabSettingsComponent.get().inject(this)
     }
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun initViewBeforePresenterAttach(fragmentView: View) {
+        super.initViewBeforePresenterAttach(fragmentView)
         initToolbar()
         initRecyclerView()
     }
@@ -87,9 +88,10 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(),
     private fun initToolbar() {
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
-                setSupportActionBar(tbPrivacySettingsBar)
+                val actionBarView = fragmentView.tbPrivacySettingsBar
+                setSupportActionBar(actionBarView)
                 supportActionBar?.title = getString(R.string.privacy_settings_toolbar_title)
-                tbPrivacySettingsBar.setNavigationOnClickListener {
+                actionBarView.setNavigationOnClickListener {
                     navController.popBackStack()
                 }
             }
@@ -103,7 +105,7 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(),
             null,
             privacySettingsPresenter::onTextSettingsItemClicked
         )
-        rvPrivacySettingsItemsList.apply {
+        fragmentView.rvPrivacySettingsItemsList.apply {
             adapter = settingsRecyclerAdapter
             val linLayoutManager = LinearLayoutManager(
                 context,

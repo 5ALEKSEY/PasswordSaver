@@ -1,5 +1,6 @@
 package com.ak.feature_tabsettings_impl.design
 
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -8,7 +9,7 @@ import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_design_settings.*
+import kotlinx.android.synthetic.main.fragment_design_settings.view.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
@@ -29,8 +30,8 @@ class DesignSettingsFragment : BasePSFragment<DesignSettingsPresenter>(),
         FeatureTabSettingsComponent.get().inject(this)
     }
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun initViewBeforePresenterAttach(fragmentView: View) {
+        super.initViewBeforePresenterAttach(fragmentView)
         initToolbar()
         initRecyclerView()
     }
@@ -42,9 +43,10 @@ class DesignSettingsFragment : BasePSFragment<DesignSettingsPresenter>(),
     private fun initToolbar() {
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
-                setSupportActionBar(tbDesignSettingsBar)
+                val actionBarView = fragmentView.tbDesignSettingsBar
+                setSupportActionBar(actionBarView)
                 supportActionBar?.title = getString(R.string.design_settings_toolbar_title)
-                tbDesignSettingsBar.setNavigationOnClickListener {
+                actionBarView.setNavigationOnClickListener {
                     navController.popBackStack()
                 }
             }
@@ -58,7 +60,8 @@ class DesignSettingsFragment : BasePSFragment<DesignSettingsPresenter>(),
             null,
             null
         )
-        rvDesignSettingsItemsList.apply {
+
+        fragmentView.rvDesignSettingsItemsList.apply {
             adapter = settingsRecyclerAdapter
             val linLayoutManager = LinearLayoutManager(
                 context,

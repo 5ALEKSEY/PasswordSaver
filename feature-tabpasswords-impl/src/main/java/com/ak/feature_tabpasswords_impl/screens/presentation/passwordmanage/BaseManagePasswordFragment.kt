@@ -29,6 +29,7 @@ import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.ui.P
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
 import kotlinx.android.synthetic.main.fragment_manage_password.*
+import kotlinx.android.synthetic.main.fragment_manage_password.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,12 +51,12 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
         setHasOptionsMenu(true)
     }
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun initViewBeforePresenterAttach(fragmentView: View) {
+        super.initViewBeforePresenterAttach(fragmentView)
         initGalleryManager()
         initToolbar()
 
-        tietPasswordContentField.setOnEditorActionListener { _, actionId, _ ->
+        fragmentView.tietPasswordContentField.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_DONE) {
                 managePasswordAction()
                 true
@@ -63,11 +64,11 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
                 false
             }
         }
-        tietPasswordContentField.filters = arrayOf(
+        fragmentView.tietPasswordContentField.filters = arrayOf(
             InputFilter.LengthFilter(AppConstants.PASSWORD_CONTENT_MAX_LENGTH)
         )
 
-        ivPasswordAvatarChooser.setSafeClickListener {
+        fragmentView.ivPasswordAvatarChooser.setSafeClickListener {
             GlobalScope.launch {
 
                 val permissionResult = PermissionManager.requestPermissions(
@@ -110,7 +111,7 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
             }
         }
 
-        tietPasswordNameField.addTextChangedListener(object : TextWatcher {
+        fragmentView.tietPasswordNameField.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
             }
@@ -123,11 +124,11 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
                 getPresenter().onPasswordNameTextChanged(s.toString())
             }
         })
-        tietPasswordNameField.filters = arrayOf(
+        fragmentView.tietPasswordNameField.filters = arrayOf(
             InputFilter.LengthFilter(AppConstants.PASSWORD_NAME_MAX_LENGTH)
         )
 
-        btnManagePasswordAction.setSafeClickListener {
+        fragmentView.btnManagePasswordAction.setSafeClickListener {
             managePasswordAction()
         }
     }
@@ -155,19 +156,19 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
     }
 
     override fun displayPasswordNameInputError(errorMessage: String) {
-        tilPasswordNameLayout.error = errorMessage
+        fragmentView.tilPasswordNameLayout.error = errorMessage
     }
 
     override fun hidePasswordNameInputError() {
-        tilPasswordNameLayout.error = null
+        fragmentView.tilPasswordNameLayout.error = null
     }
 
     override fun displayPasswordContentInputError(errorMessage: String) {
-        tilPasswordContentLayout.error = errorMessage
+        fragmentView.tilPasswordContentLayout.error = errorMessage
     }
 
     override fun hidePasswordContentInputError() {
-        tilPasswordContentLayout.error = null
+        fragmentView.tilPasswordContentLayout.error = null
     }
 
     override fun drawTextForPasswordAvatar(text: String) {
@@ -176,14 +177,14 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
         val textColor = getColorCompat(R.color.colorWhite)
         val textSizeInPx = resources.getDimensionPixelSize(R.dimen.add_avatar_inner_text_size)
 
-        ivPasswordAvatarChooser.drawTextInner(fillColor, textColor, textSizeInPx, text)
-        lvAvatarChooserImageDesc.setVisibility(!isTextDrawNeeds)
+        fragmentView.ivPasswordAvatarChooser.drawTextInner(fillColor, textColor, textSizeInPx, text)
+        fragmentView.lvAvatarChooserImageDesc.setVisibility(!isTextDrawNeeds)
     }
 
     override fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap?) {
         getPresenter().onAvatarDisplayStateChanged(true)
-        ivPasswordAvatarChooser.setImageBitmap(bitmapImage)
-        lvAvatarChooserImageDesc.visibility = View.GONE
+        fragmentView.ivPasswordAvatarChooser.setImageBitmap(bitmapImage)
+        fragmentView.lvAvatarChooserImageDesc.visibility = View.GONE
     }
 
     override fun deletePasswordAvatarChooserImage() {
@@ -218,9 +219,10 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
     private fun initToolbar() {
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
-                setSupportActionBar(tbManagePasswordBar)
+                val actionBarView = fragmentView.tbManagePasswordBar
+                setSupportActionBar(actionBarView)
                 supportActionBar?.title = getToolbarTitleText()
-                tbManagePasswordBar.setNavigationOnClickListener {
+                actionBarView.setNavigationOnClickListener {
                     hideKeyboard()
                     navController.popBackStack()
                 }
@@ -235,8 +237,8 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
         hidePasswordNameInputError()
         hidePasswordContentInputError()
         getPresenter().onManagePasswordAction(
-            tietPasswordNameField.text.toString(),
-            tietPasswordContentField.text.toString()
+            fragmentView.tietPasswordNameField.text.toString(),
+            fragmentView.tietPasswordContentField.text.toString()
         )
     }
 

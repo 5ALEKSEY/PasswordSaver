@@ -1,5 +1,6 @@
 package com.ak.feature_tabsettings_impl.about
 
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,7 +11,7 @@ import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_about_settings.*
+import kotlinx.android.synthetic.main.fragment_about_settings.view.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
@@ -31,15 +32,15 @@ class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
         FeatureTabSettingsComponent.get().inject(this)
     }
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun initViewBeforePresenterAttach(fragmentView: View) {
+        super.initViewBeforePresenterAttach(fragmentView)
         initToolbar()
         initRecyclerView()
         displayLauncherImageText(getString(R.string.about_launch_image_text))
     }
 
     override fun setVersionInfo(versionInfo: String) {
-        tvApplicationVersionInfo.text = versionInfo
+        fragmentView.tvApplicationVersionInfo.text = versionInfo
     }
 
     override fun displayAboutActions(settingsItems: List<SettingsListItemModel>) {
@@ -53,8 +54,9 @@ class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
     private fun initToolbar() {
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
-                setSupportActionBar(tbAboutSettingsBar)
-                tbAboutSettingsBar.setNavigationOnClickListener {
+                val actionBaeView = fragmentView.tbAboutSettingsBar
+                setSupportActionBar(actionBaeView)
+                actionBaeView.setNavigationOnClickListener {
                     navController.popBackStack()
                 }
             }
@@ -68,7 +70,7 @@ class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
             aboutSettingsPresenter::onAboutActionClicked,
             null
         )
-        rvAboutActionsList.apply {
+        fragmentView.rvAboutActionsList.apply {
             adapter = aboutRecyclerAdapter
             val linearLayoutManager = LinearLayoutManager(
                 context,
@@ -87,7 +89,7 @@ class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
             resources.getDimensionPixelSize(R.dimen.about_image_launcher_text_size)
         val aboutLauncherImageSizeInPx =
             resources.getDimensionPixelSize(R.dimen.about_image_launcher_size)
-        ivAboutLauncherImage.drawTextInner(
+        fragmentView.ivAboutLauncherImage.drawTextInner(
             aboutLauncherImageSizeInPx,
             fillColor,
             textColor,

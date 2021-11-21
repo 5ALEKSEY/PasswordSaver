@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.BaseManagePasswordFragment
-import kotlinx.android.synthetic.main.fragment_manage_password.*
+import kotlinx.android.synthetic.main.fragment_manage_password.view.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
@@ -42,7 +42,7 @@ class EditPasswordFragment : BaseManagePasswordFragment<EditPasswordPresenter>()
     }
 
     override fun displayPasswordData(passwordName: String, passwordContent: String) {
-        tietPasswordNameField.setText(passwordName)
-        tietPasswordContentField.setText(passwordContent)
+        fragmentView.tietPasswordNameField.setText(passwordName)
+        fragmentView.tietPasswordContentField.setText(passwordContent)
     }
 }

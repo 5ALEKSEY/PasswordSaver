@@ -4,7 +4,7 @@ import android.os.Bundle
 import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
 import com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.BaseManageAccountFragment
-import kotlinx.android.synthetic.main.fragment_manage_account.*
+import kotlinx.android.synthetic.main.fragment_manage_account.view.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
@@ -42,8 +42,8 @@ class EditAccountFragment : BaseManageAccountFragment<EditAccountPresenter>(),
     }
 
     override fun displayAccountData(accountName: String, accountLogin: String, accountPassword: String) {
-        tietAccountNameField.setText(accountName)
-        tietAccountLoginField.setText(accountLogin)
-        tietAccountPasswordField.setText(accountPassword)
+        fragmentView.tietAccountNameField.setText(accountName)
+        fragmentView.tietAccountLoginField.setText(accountLogin)
+        fragmentView.tietAccountPasswordField.setText(accountPassword)
     }
 }

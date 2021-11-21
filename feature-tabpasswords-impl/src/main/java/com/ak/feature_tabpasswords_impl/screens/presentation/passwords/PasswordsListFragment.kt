@@ -1,7 +1,9 @@
 package com.ak.feature_tabpasswords_impl.screens.presentation.passwords
 
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,12 +19,14 @@ import com.ak.base.ui.dialog.PSDialogBuilder
 import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import com.ak.feature_tabpasswords_impl.screens.actionMode.IPasswordsActionModeView
+import com.ak.feature_tabpasswords_impl.screens.actionMode.PasswordsActionModePresenter
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordItemModel
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordsListRecyclerAdapter
 import com.ak.feature_tabpasswords_impl.screens.presentation.base.BasePasswordsModuleFragment
 import com.ak.feature_tabpasswords_impl.screens.ui.PasswordActionsBottomSheetDialog
 import dagger.Lazy
 import kotlinx.android.synthetic.main.fragment_passwords_list.*
+import kotlinx.android.synthetic.main.fragment_passwords_list.view.*
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
@@ -38,13 +42,13 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     fun providePresenter(): PasswordsListPresenter = daggerPresenter
 
     @InjectPresenter
-    lateinit var passwordsActionModePresenter: com.ak.feature_tabpasswords_impl.screens.actionMode.PasswordsActionModePresenter
+    lateinit var passwordsActionModePresenter: PasswordsActionModePresenter
 
     @Inject
-    lateinit var daggerActionModePresenter: Lazy<com.ak.feature_tabpasswords_impl.screens.actionMode.PasswordsActionModePresenter>
+    lateinit var daggerActionModePresenter: Lazy<PasswordsActionModePresenter>
 
     @ProvidePresenter
-    fun provideActionModePresenter(): com.ak.feature_tabpasswords_impl.screens.actionMode.PasswordsActionModePresenter = daggerActionModePresenter.get()
+    fun provideActionModePresenter(): PasswordsActionModePresenter = daggerActionModePresenter.get()
 
     private var tbPasswordsListBarActionMode: ActionMode? = null
     private var passwordActionsDialog: PasswordActionsBottomSheetDialog? = null
@@ -60,12 +64,17 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         FeatureTabPasswordsComponent.get().inject(this)
     }
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        passwordsListPresenter.loadPasswords()
+    }
+
+    override fun initViewBeforePresenterAttach(fragmentView: View) {
+        super.initViewBeforePresenterAttach(fragmentView)
         initToolbar()
         initRecyclerView()
 
-        fabAddNewPasswordAction.setSafeClickListener {
+        fragmentView.fabAddNewPasswordAction.setSafeClickListener {
             navigator.navigateToAddNewPassword()
         }
     }
@@ -73,7 +82,6 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     override fun onResume() {
         super.onResume()
         deletePasswordDialog?.dismissAllowingStateLoss()
-        passwordsListPresenter.loadPasswords()
     }
 
     override fun onPause() {
@@ -86,16 +94,16 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     }
 
     override fun setLoadingState(isLoading: Boolean) {
-        passwordsLoadingContainer.setVisibility(isLoading)
+        fragmentView.passwordsLoadingContainer.setVisibility(isLoading)
         if (isLoading) {
-            loadingAnimation.playAnimation()
+            fragmentView.loadingAnimation.playAnimation()
         } else {
-            loadingAnimation.pauseAnimation()
+            fragmentView.loadingAnimation.pauseAnimation()
         }
     }
 
     override fun setEmptyPasswordsState(isEmptyViewVisible: Boolean) {
-        incEmptyView.setVisibility(isEmptyViewVisible)
+        fragmentView.incEmptyView.setVisibility(isEmptyViewVisible)
     }
 
     override fun openPasswordToastMode(passwordName: String, passwordContent: String) {
@@ -111,11 +119,11 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     }
 
     override fun enableToolbarScrolling() {
-        tbPasswordsListBar.turnOnToolbarScrolling(ablPasswordsListBarLayout)
+        fragmentView.tbPasswordsListBar.turnOnToolbarScrolling(ablPasswordsListBarLayout)
     }
 
     override fun disableToolbarScrolling() {
-        tbPasswordsListBar.turnOffToolbarScrolling(ablPasswordsListBarLayout)
+        fragmentView.tbPasswordsListBar.turnOffToolbarScrolling(ablPasswordsListBarLayout)
     }
 
     override fun showPasswordActionsDialog() {
@@ -146,7 +154,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     private fun initToolbar() {
         if (activity != null && activity is AppCompatActivity) {
             (activity as AppCompatActivity).apply {
-                setSupportActionBar(tbPasswordsListBar)
+                setSupportActionBar(fragmentView.tbPasswordsListBar)
                 supportActionBar?.title = getString(R.string.passwords_list_toolbar_title)
             }
         }
@@ -160,25 +168,29 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
             passwordsActionModePresenter::onPasswordItemLongClick
         )
 
-        rvPasswordsList.adapter = passwordsAdapter
-        rvPasswordsList.layoutManager = GridLayoutManager(
-            context,
-            AppConstants.PASSWORDS_LIST_COLUMN_COUNT,
-            GridLayoutManager.VERTICAL,
-            false
-        )
-        rvPasswordsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) {
-                    fabAddNewPasswordAction.hide()
-                } else {
-                    fabAddNewPasswordAction.show()
-                }
+        with(fragmentView.rvPasswordsList) {
+            adapter = passwordsAdapter
+            layoutManager = GridLayoutManager(
+                    context,
+                    AppConstants.PASSWORDS_LIST_COLUMN_COUNT,
+                    GridLayoutManager.VERTICAL,
+                    false
+            )
 
-                super.onScrolled(recyclerView, dx, dy)
-            }
-        })
-        (rvPasswordsList.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (dy > 0) {
+                        fragmentView.fabAddNewPasswordAction.hide()
+                    } else {
+                        fragmentView.fabAddNewPasswordAction.show()
+                    }
+
+                    super.onScrolled(recyclerView, dx, dy)
+                }
+            })
+
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        }
     }
 
     //------------------------------------- Action mode --------------------------------------------
@@ -188,9 +200,9 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     }
 
     override fun displaySelectedMode() {
-        val activityOfFragment = activity
+        val activityOfFragment = requireActivity()
         passwordsAdapter.setItemsActionModeState(true)
-        if (tbPasswordsListBarActionMode == null && activityOfFragment != null && activityOfFragment is AppCompatActivity) {
+        if (tbPasswordsListBarActionMode == null && activityOfFragment is AppCompatActivity) {
             tbPasswordsListBarActionMode =
                 activityOfFragment.startSupportActionMode(object : ActionMode.Callback {
                     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
