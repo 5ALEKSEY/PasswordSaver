@@ -27,7 +27,7 @@
         <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="@color/colorWhite"
+                android:background="@color/staticColorWhite"
                 app:layout_constraintBottom_toBottomOf="@+id/cPincodeInputView"
                 app:layout_constraintEnd_toEndOf="@+id/cPincodeNumberView3"
                 app:layout_constraintStart_toStartOf="@+id/cPincodeNumberView1" />

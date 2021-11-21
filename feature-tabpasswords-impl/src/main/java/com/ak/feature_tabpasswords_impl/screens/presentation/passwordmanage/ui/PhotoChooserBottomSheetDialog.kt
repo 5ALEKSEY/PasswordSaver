@@ -72,7 +72,7 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
                 setImageBitmap(lastGalleryImage)
             } else {
                 @ColorInt
-                val noLastImageColor = context.getColorCompat(R.color.colorBlack)
+                val noLastImageColor = context.getColorCompat(R.color.staticColorBlack)
                 setImageDrawable(ColorDrawable(noLastImageColor))
             }
         }

@@ -15,7 +15,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back_action"
             app:title="About"
-            app:titleTextColor="@color/iconsAndText" />
+            app:titleTextColor="@color/colorToolbarIconsAndText" />
 
     <RelativeLayout
             android:id="@+id/ivAboutImageContainer"
@@ -43,7 +43,7 @@
                 android:layout_below="@id/ivAboutLauncherImage"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/colorWhite"
+                android:textColor="@color/staticColorWhite"
                 tools:text="v. 1.0.0-debug" />
 
     </RelativeLayout>

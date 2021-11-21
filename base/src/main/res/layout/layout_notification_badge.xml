@@ -11,7 +11,7 @@
             android:background="@drawable/bg_badge_notification"
             android:gravity="center"
             android:padding="3dp"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/staticColorWhite"
             android:textSize="10sp"
             tools:text="Badge text" />
 </merge>

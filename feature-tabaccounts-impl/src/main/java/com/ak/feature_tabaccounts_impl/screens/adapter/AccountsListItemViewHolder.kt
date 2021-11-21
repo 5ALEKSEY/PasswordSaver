@@ -45,7 +45,7 @@ class AccountsListItemViewHolder(
         itemView.ivAccountItemAction.setVisibilityInvisible(!accountItemModel.isInActionModeState)
 
         val fillColor = itemView.context.getColorCompat(R.color.colorPrimary)
-        val textColor = itemView.context.getColorCompat(R.color.colorWhite)
+        val textColor = itemView.context.getColorCompat(R.color.staticColorWhite)
         val textSizeInPx = itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_inner_text_size)
         val avatarSizeInPx = itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_avatar_size)
         itemView.ivAccountAvatar.drawTextInner(

@@ -14,4 +14,4 @@
         android:paddingTop="10dp"
         android:textAlignment="inherit"
         style="?android:attr/spinnerItemStyle"
-        android:textColor="@color/primaryText"/>
+        android:textColor="@color/colorPrimaryText"/>

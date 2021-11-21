@@ -13,7 +13,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back_action"
-            app:titleTextColor="@color/iconsAndText" />
+            app:titleTextColor="@color/colorToolbarIconsAndText" />
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPrivacySettingsItemsList"

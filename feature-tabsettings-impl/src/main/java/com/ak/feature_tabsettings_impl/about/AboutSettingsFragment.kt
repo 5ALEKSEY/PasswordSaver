@@ -84,7 +84,7 @@ class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
 
     private fun displayLauncherImageText(text: String) {
         val fillColor = getColorCompat(R.color.colorPrimary)
-        val textColor = getColorCompat(R.color.colorWhite)
+        val textColor = getColorCompat(R.color.staticColorWhite)
         val aboutLauncherImageTextSizeInPx =
             resources.getDimensionPixelSize(R.dimen.about_image_launcher_text_size)
         val aboutLauncherImageSizeInPx =

@@ -102,7 +102,7 @@ class CameraPickImageActivity : MvpAppCompatActivity(), ICameraPickImageView {
     private fun initWindow() {
         window?.apply {
             addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)  // hide status bar
-            navigationBarColor = getColorCompat(R.color.colorBlack)
+            navigationBarColor = getColorCompat(R.color.staticColorBlack)
         }
     }
 

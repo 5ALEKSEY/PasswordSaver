@@ -14,7 +14,7 @@
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:layout_margin="8dp"
             android:padding="8dp"
-            android:tint="@color/iconsAndText"
+            android:tint="@color/colorToolbarIconsAndText"
             android:src="@drawable/ic_pattern_input_type"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +33,7 @@
             android:id="@+id/tvSecurityMessageText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/iconsAndText"
+            android:textColor="@color/colorToolbarIconsAndText"
             android:textSize="16sp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"

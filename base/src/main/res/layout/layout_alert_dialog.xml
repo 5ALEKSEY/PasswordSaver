@@ -14,7 +14,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:gravity="center"
-            android:textColor="@color/primaryText"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:text="Sample dialog title e3e3e3e 3e3 e3 e3 e3 e3 d3" />
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:textColor="@color/primaryText"
+            android:textColor="@color/colorPrimaryText"
             android:textSize="17sp"
             tools:text="@string/no_added_fingerprints_dialog_desc"/>
 
@@ -54,7 +54,7 @@
                 android:layout_toStartOf="@id/tvDialogPositiveButton"
                 android:textSize="14sp"
                 android:textAllCaps="true"
-                android:textColor="@color/primaryText"
+                android:textColor="@color/colorPrimaryText"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:paddingStart="18dp"
