@@ -82,7 +82,7 @@
     <string name="decrypting_data_message">Wait for decrypt your data …</string>
     <string name="no_saved_password_data_message">Sorry, you do not have any saved password, please click on + button.</string>
     <string name="no_saved_account_data_message">Sorry, you do not have any saved account, please click on + button.</string>
-    <string name="save_password_button_text">Save password</string>
+    <string name="save_password_button_text">Save</string>
     <string name="save_account_button_text">Save account</string>
     <string name="click_to_change_image">Click to change</string>
     <string name="oops_message">Oops!</string>

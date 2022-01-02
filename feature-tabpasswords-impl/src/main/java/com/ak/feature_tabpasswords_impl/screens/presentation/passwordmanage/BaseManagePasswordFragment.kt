@@ -173,7 +173,7 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
 
     override fun drawTextForPasswordAvatar(text: String) {
         val isTextDrawNeeds = text.isNotEmpty()
-        val fillColor = getColorCompat(R.color.colorPrimary)
+        val fillColor = getColorCompat(R.color.colorPrimaryLight)
         val textColor = getColorCompat(R.color.staticColorWhite)
         val textSizeInPx = resources.getDimensionPixelSize(R.dimen.add_avatar_inner_text_size)
 

@@ -82,7 +82,7 @@
     <string name="decrypting_data_message">"Подождите. Идет расшифровка данных …"</string>
     <string name="no_saved_password_data_message">"Извините, у вас нет сохраненных паролей. Пожалуйста нажмите на + "</string>
     <string name="no_saved_account_data_message">"Извините, у вас нет сохраненных аккаунтов. Пожалуйста нажмите на + "</string>
-    <string name="save_password_button_text">"Сохранить паролль"</string>
+    <string name="save_password_button_text">"Сохранить"</string>
     <string name="save_account_button_text">"Сохранить аккаунт"</string>
     <string name="click_to_change_image">"Изменить"</string>
     <string name="oops_message">"Уупс!"</string>
