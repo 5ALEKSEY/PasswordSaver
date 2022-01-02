@@ -1,10 +1,6 @@
 package com.ak.feature_tabpasswords_impl.screens.adapter
 
-import android.content.Context
 import android.graphics.drawable.AnimationDrawable
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.ImageSpan
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.base.constants.AppConstants
@@ -32,11 +28,15 @@ class PasswordsListItemViewHolder(
         itemView.tvPasswordName.text = passwordItemModel.name
 
         itemView.tvPasswordContent.apply {
-            text = getPasswordContentText(passwordItemModel, itemView.context)
+            text = PSUtils.getHidedContentText(
+                itemView.context,
+                passwordItemModel.isPasswordContentVisible,
+                passwordItemModel.password
+            )
             maxLines = if (passwordItemModel.isPasswordContentVisible) {
-                AppConstants.PASSWORD_MAX_LINES_VISIBLE_CONTENT
+                AppConstants.MAX_LINES_VISIBLE_CONTENT
             } else {
-                AppConstants.PASSWORD_MAX_LINES_INVISIBLE_CONTENT
+                AppConstants.MAX_LINES_INVISIBLE_CONTENT
             }
         }
 
@@ -93,18 +93,17 @@ class PasswordsListItemViewHolder(
             }
         } else {
             // init additional listeners
-            val passwordId = passwordItemModel.passwordId
             itemView.setSafeClickListener(
                 PASSWORD_SHOW_ACTION_CLICK_DELAY_IN_MILLIS
             ) {
                 onVisibilityPasswordAction(
-                    passwordId,
+                    passwordItemModel.passwordId,
                     !passwordItemModel.isPasswordContentVisible
                 )
             }
 
             itemView.ivPasswordItemAction.setSafeClickListener {
-                onShowPasswordItemActions(passwordId, passwordItemModel.isPasswordContentVisible)
+                onShowPasswordItemActions(passwordItemModel.passwordId, passwordItemModel.isPasswordContentVisible)
             }
         }
     }
@@ -121,24 +120,6 @@ class PasswordsListItemViewHolder(
             setEnterFadeDuration(0)
             setExitFadeDuration(400)
             start()
-        }
-    }
-
-    private fun getPasswordContentText(
-        passwordItemModel: PasswordItemModel,
-        context: Context
-    ) = if (passwordItemModel.isPasswordContentVisible) {
-        passwordItemModel.password
-    } else {
-        SpannableString(passwordItemModel.password).apply {
-            passwordItemModel.password.forEachIndexed { index, _ ->
-                val imageSpan = ImageSpan(
-                    context,
-                    R.drawable.password_secret_element,
-                    ImageSpan.ALIGN_BOTTOM
-                )
-                setSpan(imageSpan, index, index + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
-            }
         }
     }
 }

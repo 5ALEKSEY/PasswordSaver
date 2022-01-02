@@ -52,8 +52,7 @@ class PasswordsListRecyclerAdapter(
     fun setItemsActionModeState(isInActionMode: Boolean) {
         for (i in 0 until itemsList.size) {
             val itemModel = itemsList[i]
-            itemModel.isInActionModeState = isInActionMode
-            changePasswordItem(itemModel, i)
+            changePasswordItem(itemModel.copy(isInActionModeState = isInActionMode), i)
         }
     }
 
@@ -61,8 +60,7 @@ class PasswordsListRecyclerAdapter(
         val position = itemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
         itemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }
             ?.let {
-                it.isItemSelected = isSelected
-                changePasswordItem(it, position)
+                changePasswordItem(it.copy(isItemSelected = isSelected), position)
             }
     }
 
@@ -70,8 +68,7 @@ class PasswordsListRecyclerAdapter(
         val index = itemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
         itemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }
             ?.let {
-                it.isPasswordContentVisible = isContentVisible
-                changePasswordItem(it, index)
+                changePasswordItem(it.copy(isPasswordContentVisible = isContentVisible), index)
             }
     }
 

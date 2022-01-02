@@ -8,10 +8,10 @@ data class PasswordItemModel constructor(
     val name: String,
     val passwordAvatarBitmap: Bitmap?,
     val password: String,
-    var isLoadingModel: Boolean = false,
-    var isItemSelected: Boolean = false,
-    var isPasswordContentVisible: Boolean = false,
-    var isInActionModeState: Boolean = false
+    val isLoadingModel: Boolean = false,
+    val isItemSelected: Boolean = false,
+    val isPasswordContentVisible: Boolean = false,
+    val isInActionModeState: Boolean = false
 ) {
     companion object {
         fun getSearchingTempModel(passwordId: Long) = getModelForId(passwordId)

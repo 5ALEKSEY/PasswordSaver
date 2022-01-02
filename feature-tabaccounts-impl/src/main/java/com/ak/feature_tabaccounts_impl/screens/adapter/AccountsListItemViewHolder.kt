@@ -2,6 +2,7 @@ package com.ak.feature_tabaccounts_impl.screens.adapter
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.drawTextInner
 import com.ak.base.extensions.getColorCompat
 import com.ak.base.extensions.setSafeClickListener
@@ -12,15 +13,44 @@ import kotlinx.android.synthetic.main.accounts_item_layout.view.*
 
 class AccountsListItemViewHolder(
     itemView: View,
+    private val onVisibilityAccountAction: (accountId: Long, newVisibilityState: Boolean) -> Unit,
     private val onShowAccountItemActions: (accountId: Long) -> Unit,
     private val onAccountItemSingleClick: (accountId: Long) -> Unit,
     private val onAccountItemLongClick: (accountId: Long) -> Unit
 ) : RecyclerView.ViewHolder(itemView) {
 
+    companion object {
+        const val ACCOUNT_SHOW_ACTION_CLICK_DELAY_IN_MILLIS = 700L
+    }
+
     fun bindAccountListItemView(accountItemModel: AccountItemModel) {
         itemView.tvAccountName.text = accountItemModel.name
-        itemView.tvAccountLogin.text = accountItemModel.login
-        itemView.tvAccountPassword.text = accountItemModel.password
+
+        itemView.tvAccountLogin.apply {
+            text = PSUtils.getHidedContentText(
+                itemView.context,
+                accountItemModel.isAccountContentVisible,
+                accountItemModel.login
+            )
+            maxLines = if (accountItemModel.isAccountContentVisible) {
+                AppConstants.MAX_LINES_VISIBLE_CONTENT
+            } else {
+                AppConstants.MAX_LINES_INVISIBLE_CONTENT
+            }
+        }
+
+        itemView.tvAccountPassword.apply {
+            text = PSUtils.getHidedContentText(
+                itemView.context,
+                accountItemModel.isAccountContentVisible,
+                accountItemModel.password
+            )
+            maxLines = if (accountItemModel.isAccountContentVisible) {
+                AppConstants.MAX_LINES_VISIBLE_CONTENT
+            } else {
+                AppConstants.MAX_LINES_INVISIBLE_CONTENT
+            }
+        }
 
         itemView.setOnClickListener {
             onAccountItemSingleClick(accountItemModel.accountId)
@@ -68,6 +98,15 @@ class AccountsListItemViewHolder(
             }
         } else {
             // init additional listeners
+            itemView.setSafeClickListener(
+                ACCOUNT_SHOW_ACTION_CLICK_DELAY_IN_MILLIS
+            ) {
+                onVisibilityAccountAction(
+                    accountItemModel.accountId,
+                    !accountItemModel.isAccountContentVisible
+                )
+            }
+
             itemView.ivAccountItemAction.setSafeClickListener {
                 onShowAccountItemActions(accountItemModel.accountId)
             }

@@ -26,11 +26,16 @@ import com.ak.feature_tabaccounts_impl.screens.adapter.AccountsListRecyclerAdapt
 import com.ak.feature_tabaccounts_impl.screens.presentation.base.BaseAccountsModuleFragment
 import com.ak.feature_tabaccounts_impl.screens.presentation.ui.AccountActionsBottomSheetDialog
 import dagger.Lazy
-import kotlinx.android.synthetic.main.fragment_accounts_list.*
-import kotlinx.android.synthetic.main.fragment_accounts_list.view.*
+import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_accounts_list.ablAccountsListBarLayout
+import kotlinx.android.synthetic.main.fragment_accounts_list.view.accountLoadingContainer
+import kotlinx.android.synthetic.main.fragment_accounts_list.view.fabAddNewAccountAction
+import kotlinx.android.synthetic.main.fragment_accounts_list.view.incEmptyView
+import kotlinx.android.synthetic.main.fragment_accounts_list.view.loadingAnimation
+import kotlinx.android.synthetic.main.fragment_accounts_list.view.rvAccountsList
+import kotlinx.android.synthetic.main.fragment_accounts_list.view.tbAccountsListBar
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import javax.inject.Inject
 
 class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>(),
     IAccountsListView,
@@ -105,6 +110,10 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
 
     override fun setEmptyAccountsState(isEmptyViewVisible: Boolean) {
         fragmentView.incEmptyView.setVisibility(isEmptyViewVisible)
+    }
+
+    override fun setAccountContentVisibility(accountId: Long, contentVisibilityState: Boolean) {
+        accountsAdapter.setAccountContentVisibility(accountId, contentVisibilityState)
     }
 
     override fun enableToolbarScrolling() {

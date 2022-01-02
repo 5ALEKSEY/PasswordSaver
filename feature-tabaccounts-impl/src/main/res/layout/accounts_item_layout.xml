@@ -5,8 +5,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:elevation="6dp"
-        app:cardCornerRadius="10dp">
+        android:elevation="8dp"
+        app:cardCornerRadius="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/vAccountItemRoot"
@@ -14,94 +14,98 @@
             android:layout_height="wrap_content"
             android:padding="6dp">
 
+        <TextView
+                android:id="@+id/tvAccountName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_marginStart="6dp"
+                android:minLines="1"
+                android:textColor="@color/colorPrimaryText"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Name of account" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivAccountAvatar"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="6dp"
+                android:src="@color/staticColorWhite"
+                app:civ_border_color="@color/colorPrimaryDark"
+                app:civ_border_width="1dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAccountName" />
+
         <ImageView
                 android:id="@+id/ivItemSelected"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
+                android:tint="@color/colorAccent"
                 android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_password_item_selected"
-                tools:visibility="visible" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAccountName"
+                app:srcCompat="@drawable/ic_password_item_selected" />
 
         <ImageView
                 android:id="@+id/ivAccountItemAction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
+                android:tint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvAccountName"
                 app:srcCompat="@drawable/ic_password_item_action" />
 
-        <TextView
-                android:id="@+id/tvAccountName"
+        <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="1"
-                android:minLines="1"
-                android:padding="10dp"
-                tools:text="Name of account"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/ivAccountAvatar"
-                app:layout_constraintEnd_toStartOf="@+id/ivAccountItemAction"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/ivItemSelected"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/ivAccountAvatar"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:src="@color/colorPrimary"
-                app:civ_border_color="@color/colorPrimaryDark"
-                app:civ_border_width="3dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvAccountName" />
-
-        <TextView
-                android:id="@+id/tvAccountLogin"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="8dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:singleLine="true"
-                tools:text="375297300260"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/tvAccountPassword"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
+                android:layout_marginHorizontal="6dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="@+id/ivAccountAvatar"
+                app:layout_constraintEnd_toStartOf="@+id/ivItemSelected"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/ivAccountAvatar"
-                app:layout_constraintTop_toBottomOf="@+id/ivAccountItemAction" />
+                app:layout_constraintTop_toTopOf="@+id/ivAccountAvatar">
 
-        <TextView
-                android:id="@+id/tvAccountPassword"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="8dp"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:singleLine="true"
-                tools:text="7890098aabc321 eewe weewew ewew wewe"
-                android:textColor="@color/colorPrimaryText"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/ivAccountAvatar"
-                app:layout_constraintTop_toBottomOf="@+id/tvAccountLogin" />
+            <TextView
+                    android:id="@+id/tvAccountLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
+                    android:drawableStart="@drawable/ic_account_login"
+                    android:drawablePadding="6dp"
+                    android:gravity="start|center_vertical"
+                    android:maxLines="1"
+                    android:minHeight="24dp"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    tools:text="Figma Account Key" />
+
+            <TextView
+                    android:id="@+id/tvAccountPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:drawableStart="@drawable/ic_account_password"
+                    android:drawablePadding="6dp"
+                    android:gravity="start|center_vertical"
+                    android:maxLines="1"
+                    android:minHeight="24dp"
+                    android:textColor="@color/colorPrimaryText"
+                    android:textSize="16sp"
+                    tools:text="*************************************" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

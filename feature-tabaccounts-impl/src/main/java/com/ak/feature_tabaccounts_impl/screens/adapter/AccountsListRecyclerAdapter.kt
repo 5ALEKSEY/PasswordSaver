@@ -22,6 +22,7 @@ class AccountsListRecyclerAdapter(
             .inflate(R.layout.accounts_item_layout, parent, false)
         return AccountsListItemViewHolder(
                 view,
+                this::setAccountContentVisibility,
                 onShowAccountItemActions,
                 onAccountItemSingleClick,
                 onAccountItemLongClick
@@ -47,8 +48,7 @@ class AccountsListRecyclerAdapter(
     fun setItemsActionModeState(isInActionMode: Boolean) {
         for (i in 0 until itemsList.size) {
             val itemModel = itemsList[i]
-            itemModel.isInActionModeState = isInActionMode
-            changeAccountItem(itemModel, i)
+            changeAccountItem(itemModel.copy(isInActionModeState = isInActionMode), i)
         }
     }
 
@@ -56,8 +56,15 @@ class AccountsListRecyclerAdapter(
         val position = itemsList.indexOf(AccountItemModel.getSearchingTempModel(accountId))
         itemsList.find { it.accountId == accountId }
             ?.let {
-                it.isItemSelected = isSelected
-                changeAccountItem(it, position)
+                changeAccountItem(it.copy(isItemSelected = isSelected), position)
+            }
+    }
+
+    fun setAccountContentVisibility(accountId: Long, isContentVisible: Boolean) {
+        val index = itemsList.indexOf(AccountItemModel.getSearchingTempModel(accountId))
+        itemsList.find { accountItemModel -> accountItemModel.accountId == accountId }
+            ?.let {
+                changeAccountItem(it.copy(isAccountContentVisible = isContentVisible), index)
             }
     }
 

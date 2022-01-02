@@ -9,17 +9,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            app:titleTextColor="@color/colorToolbarIconsAndText"
-            app:navigationIcon="@drawable/ic_back_action"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back_action"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
+            app:titleTextColor="@color/colorToolbarIconsAndText" />
 
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:overScrollMode="never"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,6 +28,7 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
@@ -41,6 +41,9 @@
                         android:id="@+id/tietAccountNameField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableTint="@color/colorPrimary"
+                        android:drawableStart="@drawable/ic_password_name_input_field"
+                        android:drawablePadding="8dp"
                         android:hint="@string/name_field_name"
                         android:imeOptions="actionNext"
                         android:inputType="text"
@@ -58,10 +61,13 @@
                         android:id="@+id/tietAccountLoginField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableTint="@color/colorPrimary"
+                        android:drawableStart="@drawable/ic_account_login"
+                        android:drawablePadding="8dp"
                         android:hint="@string/login_field_name"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        android:nextFocusDown="@id/tietAccountPasswordField"/>
+                        android:nextFocusDown="@id/tietAccountPasswordField" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,6 +81,9 @@
                         android:id="@+id/tietAccountPasswordField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableTint="@color/colorPrimary"
+                        android:drawableStart="@drawable/ic_account_password"
+                        android:drawablePadding="8dp"
                         android:hint="@string/password_field_name"
                         android:imeOptions="actionDone"
                         android:inputType="text" />
@@ -84,10 +93,12 @@
             <Button
                     android:id="@+id/btnManageAccountAction"
                     style="@style/PSButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:layout_marginTop="32dp"
-                    android:text="@string/save_account_button_text"/>
+                    android:minWidth="160dp"
+                    android:text="@string/save_account_button_text" />
 
         </LinearLayout>
 
