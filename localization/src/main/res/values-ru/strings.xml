@@ -70,6 +70,8 @@
     <string name="hide_password_button_text">"Спрятать"</string>
     <string name="image_chooser_camera">"Камера"</string>
     <string name="image_chooser_gallery">"Галерея"</string>
+    <string name="chooser_show_password_content">"Показать пароль"</string>
+    <string name="chooser_hide_password_content">"Спрятать пароль"</string>
     <string name="chooser_copy_password_content">"Скопировать пароль"</string>
     <string name="chooser_edit_password_content">"Редактировать пароль"</string>
     <string name="chooser_delete_password_content">"Удалить пароль"</string>

@@ -6,7 +6,6 @@ import com.ak.base.presenter.BasePSPresenter
 import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
-import com.ak.core_repo_api.intefaces.PasswordShowingType
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity
 import com.ak.feature_tabpasswords_impl.R
@@ -14,8 +13,8 @@ import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordItemModel
 import com.ak.feature_tabpasswords_impl.screens.logic.IDataBufferManager
 import io.reactivex.android.schedulers.AndroidSchedulers
-import moxy.InjectViewState
 import javax.inject.Inject
+import moxy.InjectViewState
 
 @InjectViewState
 class PasswordsListPresenter @Inject constructor(
@@ -53,17 +52,22 @@ class PasswordsListPresenter @Inject constructor(
             .let(this::bindDisposable)
     }
 
-    fun passwordShowActionRequired(passwordId: Long, isVisiblePasswordContent: Boolean) {
+    fun onShowPasswordActions(passwordId: Long, isContentVisible: Boolean) {
         mCurrentPasswordId = passwordId
-        startShowingPassword(isVisiblePasswordContent, passwordId)
-    }
-
-    fun onShowPasswordActions(passwordId: Long) {
-        mCurrentPasswordId = passwordId
-        viewState.showPasswordActionsDialog()
+        viewState.showPasswordActionsDialog(isContentVisible)
     }
 
     // from actions bottom sheet dialog
+    fun onShowPasswordAction() {
+        viewState.setPasswordContentVisibility(mCurrentPasswordId, true)
+        mCurrentPasswordId = 0L
+    }
+
+    fun onHidePasswordAction() {
+        viewState.setPasswordContentVisibility(mCurrentPasswordId, false)
+        mCurrentPasswordId = 0L
+    }
+
     fun onCopyPasswordAction() {
         getPasswordDataAndStartAction {
             dataBufferManager.copyStringData(it.getPasswordContent())
@@ -90,27 +94,6 @@ class PasswordsListPresenter @Inject constructor(
             .let(this::bindDisposable)
     }
 
-    private fun startShowingPassword(newVisibilityState: Boolean, passwordId: Long) {
-        val showingType = settingsPreferencesManager.getPasswordShowingType()
-
-        if (showingType == PasswordShowingType.IN_CARD && !newVisibilityState) {
-            // hide password content for 'in card' mode
-            viewState.setPasswordVisibilityInCardMode(passwordId, false)
-        } else {
-            // open state
-            when (showingType) {
-                PasswordShowingType.TOAST -> getPasswordDataAndStartAction {
-                    viewState.openPasswordToastMode(it.getPasswordName(), it.getPasswordContent())
-                    mCurrentPasswordId = 0L
-                }
-                PasswordShowingType.IN_CARD -> viewState.setPasswordVisibilityInCardMode(
-                    passwordId,
-                    true
-                )
-            }
-        }
-    }
-
     private inline fun getPasswordDataAndStartAction(crossinline action: (entity: PasswordFeatureEntity) -> Unit) {
         passwordsInteractor.getPasswordById(mCurrentPasswordId)
             .observeOn(AndroidSchedulers.mainThread())
@@ -133,7 +116,6 @@ class PasswordsListPresenter @Inject constructor(
     }
 
     private fun convertFeatureEntitiesList(entitiesList: List<PasswordFeatureEntity>): List<PasswordItemModel> {
-        val showingType = settingsPreferencesManager.getPasswordShowingType()
         val resultList = arrayListOf<PasswordItemModel>()
         entitiesList.forEach {
             val avatarBitmap =
@@ -143,8 +125,7 @@ class PasswordsListPresenter @Inject constructor(
                     it.getPasswordId()!!,
                     it.getPasswordName(),
                     avatarBitmap,
-                    it.getPasswordContent(),
-                    showingType == PasswordShowingType.IN_CARD
+                    it.getPasswordContent()
                 )
             )
         }

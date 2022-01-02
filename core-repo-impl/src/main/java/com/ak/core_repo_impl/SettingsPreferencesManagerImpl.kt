@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import com.ak.core_repo_api.intefaces.AppLockState
 import com.ak.core_repo_api.intefaces.AppLockStateHelper
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
-import com.ak.core_repo_api.intefaces.PasswordShowingType
 import com.ak.core_repo_impl.di.module.PreferencesModule
 import javax.inject.Inject
 import javax.inject.Named
@@ -16,6 +15,7 @@ class SettingsPreferencesManagerImpl @Inject constructor(
 ) : ISettingsPreferencesManager {
 
     companion object {
+        @Deprecated("This one should be deleted")
         const val PASSWORD_SHOWING_TYPE_SHARED_KEY = "password_showing_type"
         const val IS_PINCODE_ENABLED_SHARED_KEY = "is_pincode_enabled"
         const val IS_PATTERN_ENABLED_SHARED_KEY = "is_pattern_enabled"
@@ -25,22 +25,6 @@ class SettingsPreferencesManagerImpl @Inject constructor(
         const val PATTERN_VALUE_SHARED_KEY = "pattern_value"
         const val BLOCK_SECURITY_INPUT_TIME_SHARED_KEY = "block_security_input_time"
     }
-
-    override fun getPasswordShowingType() =
-        PasswordShowingType.getTypeByNumber(
-                settingsPreferences.getInt(
-                PASSWORD_SHOWING_TYPE_SHARED_KEY, 0
-            )
-        )
-
-    override fun setPasswordShowingType(passwordShowingType: PasswordShowingType) {
-        settingsPreferences.edit()
-            .putInt(PASSWORD_SHOWING_TYPE_SHARED_KEY, passwordShowingType.number)
-            .apply()
-    }
-
-    override fun getStringListOfPasswordShowingTypes() =
-        PasswordShowingType.getListOfTypesMessages(mContext)
 
     override fun getLockAppStatesList() =
         AppLockStateHelper.getAppLockStateStringList(mContext)

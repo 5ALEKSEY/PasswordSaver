@@ -25,11 +25,16 @@ import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordsListRecyclerAda
 import com.ak.feature_tabpasswords_impl.screens.presentation.base.BasePasswordsModuleFragment
 import com.ak.feature_tabpasswords_impl.screens.ui.PasswordActionsBottomSheetDialog
 import dagger.Lazy
-import kotlinx.android.synthetic.main.fragment_passwords_list.*
-import kotlinx.android.synthetic.main.fragment_passwords_list.view.*
+import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_passwords_list.ablPasswordsListBarLayout
+import kotlinx.android.synthetic.main.fragment_passwords_list.view.fabAddNewPasswordAction
+import kotlinx.android.synthetic.main.fragment_passwords_list.view.incEmptyView
+import kotlinx.android.synthetic.main.fragment_passwords_list.view.loadingAnimation
+import kotlinx.android.synthetic.main.fragment_passwords_list.view.passwordsLoadingContainer
+import kotlinx.android.synthetic.main.fragment_passwords_list.view.rvPasswordsList
+import kotlinx.android.synthetic.main.fragment_passwords_list.view.tbPasswordsListBar
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import javax.inject.Inject
 
 class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter>(),
     IPasswordsListView,
@@ -106,12 +111,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         fragmentView.incEmptyView.setVisibility(isEmptyViewVisible)
     }
 
-    override fun openPasswordToastMode(passwordName: String, passwordContent: String) {
-        val message = "$passwordName: $passwordContent"
-        showShortTimeMessage(message)
-    }
-
-    override fun setPasswordVisibilityInCardMode(
+    override fun setPasswordContentVisibility(
         passwordId: Long,
         contentVisibilityState: Boolean
     ) {
@@ -126,10 +126,19 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         fragmentView.tbPasswordsListBar.turnOffToolbarScrolling(ablPasswordsListBarLayout)
     }
 
-    override fun showPasswordActionsDialog() {
-        passwordActionsDialog = PasswordActionsBottomSheetDialog.showDialog(childFragmentManager)
+    override fun showPasswordActionsDialog(isContentVisible: Boolean) {
+        passwordActionsDialog = PasswordActionsBottomSheetDialog.showDialog(
+            childFragmentManager,
+            isContentVisible
+        )
         passwordActionsDialog?.onChoosePasswordActionListener = { actionId ->
             when (actionId) {
+                PasswordActionsBottomSheetDialog.SHOW_PASSWORD_CONTENT_ACTION -> {
+                    passwordsListPresenter.onShowPasswordAction()
+                }
+                PasswordActionsBottomSheetDialog.HIDE_PASSWORD_CONTENT_ACTION -> {
+                    passwordsListPresenter.onHidePasswordAction()
+                }
                 PasswordActionsBottomSheetDialog.COPY_PASSWORD_CONTENT_ACTION -> {
                     passwordsListPresenter.onCopyPasswordAction()
                 }
@@ -162,7 +171,6 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
 
     private fun initRecyclerView() {
         passwordsAdapter = PasswordsListRecyclerAdapter(
-            passwordsListPresenter::passwordShowActionRequired,
             passwordsListPresenter::onShowPasswordActions,
             passwordsActionModePresenter::onPasswordItemSingleClick,
             passwordsActionModePresenter::onPasswordItemLongClick

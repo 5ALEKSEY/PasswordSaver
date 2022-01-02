@@ -28,11 +28,11 @@ import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.gall
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.ui.PhotoChooserBottomSheetDialog
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_manage_password.*
 import kotlinx.android.synthetic.main.fragment_manage_password.view.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPresenter<*>>
     : BasePasswordsModuleFragment<ManagePresenter>(), IBaseManagePasswordView {
@@ -177,7 +177,13 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
         val textColor = getColorCompat(R.color.staticColorWhite)
         val textSizeInPx = resources.getDimensionPixelSize(R.dimen.add_avatar_inner_text_size)
 
-        fragmentView.ivPasswordAvatarChooser.drawTextInner(fillColor, textColor, textSizeInPx, text)
+        fragmentView.ivPasswordAvatarChooser.drawTextInner(
+            requireContext(),
+            fillColor,
+            textColor,
+            textSizeInPx,
+            text
+        )
         fragmentView.lvAvatarChooserImageDesc.setVisibility(!isTextDrawNeeds)
     }
 

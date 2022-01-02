@@ -9,7 +9,8 @@ import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_design_settings.view.*
+import kotlinx.android.synthetic.main.fragment_design_settings.view.rvDesignSettingsItemsList
+import kotlinx.android.synthetic.main.fragment_design_settings.view.tbDesignSettingsBar
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
@@ -56,7 +57,7 @@ class DesignSettingsFragment : BasePSFragment<DesignSettingsPresenter>(),
     private fun initRecyclerView() {
         settingsRecyclerAdapter = SettingsRecyclerViewAdapter(
             null,
-            designSettingsPresenter::settingSpinnerItemChanged,
+            null,
             null,
             null
         )

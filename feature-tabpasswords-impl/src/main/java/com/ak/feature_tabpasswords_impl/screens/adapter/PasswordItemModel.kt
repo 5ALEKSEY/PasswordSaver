@@ -1,20 +1,37 @@
 package com.ak.feature_tabpasswords_impl.screens.adapter
 
 import android.graphics.Bitmap
+import androidx.annotation.IntRange
 
 data class PasswordItemModel constructor(
     val passwordId: Long,
     val name: String,
     val passwordAvatarBitmap: Bitmap?,
     val password: String,
-    val isPasswordContentNeeds: Boolean,
+    var isLoadingModel: Boolean = false,
     var isItemSelected: Boolean = false,
     var isPasswordContentVisible: Boolean = false,
     var isInActionModeState: Boolean = false
 ) {
     companion object {
-        fun getSearchingTempModel(passwordId: Long) =
-            PasswordItemModel(passwordId, "", null, "", false)
+        fun getSearchingTempModel(passwordId: Long) = getModelForId(passwordId)
+
+        fun getLoadingModels(@IntRange(from = 1) size: Int): List<PasswordItemModel> {
+            val resultList = ArrayList<PasswordItemModel>(size)
+            repeat(size) {
+                resultList.add(
+                    getModelForId(it.toLong()).copy(isLoadingModel = true)
+                )
+            }
+            return resultList
+        }
+
+        private fun getModelForId(passwordId: Long) = PasswordItemModel(
+            passwordId,
+            "",
+            null,
+            ""
+        )
     }
 
     fun isTheSameContent(passwordItemModel: PasswordItemModel) =
@@ -22,7 +39,6 @@ data class PasswordItemModel constructor(
                 || this.name != passwordItemModel.name
                 || this.passwordAvatarBitmap != passwordItemModel.passwordAvatarBitmap
                 || this.password != passwordItemModel.password
-                || this.isPasswordContentNeeds != passwordItemModel.isPasswordContentNeeds
                 || this.isItemSelected != passwordItemModel.isItemSelected
                 || this.isPasswordContentVisible != passwordItemModel.isPasswordContentVisible
                 || this.isInActionModeState != passwordItemModel.isInActionModeState)

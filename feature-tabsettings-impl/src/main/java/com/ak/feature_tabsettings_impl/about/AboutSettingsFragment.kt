@@ -11,7 +11,10 @@ import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_about_settings.view.*
+import kotlinx.android.synthetic.main.fragment_about_settings.view.ivAboutLauncherImage
+import kotlinx.android.synthetic.main.fragment_about_settings.view.rvAboutActionsList
+import kotlinx.android.synthetic.main.fragment_about_settings.view.tbAboutSettingsBar
+import kotlinx.android.synthetic.main.fragment_about_settings.view.tvApplicationVersionInfo
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 
@@ -90,6 +93,7 @@ class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
         val aboutLauncherImageSizeInPx =
             resources.getDimensionPixelSize(R.dimen.about_image_launcher_size)
         fragmentView.ivAboutLauncherImage.drawTextInner(
+            requireContext(),
             aboutLauncherImageSizeInPx,
             fillColor,
             textColor,

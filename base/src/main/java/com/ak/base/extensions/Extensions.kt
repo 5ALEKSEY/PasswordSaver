@@ -18,8 +18,8 @@ import com.ak.base.constants.AppConstants
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.layout_notification_badge.view.*
-import java.util.*
+import java.util.Calendar
+import kotlinx.android.synthetic.main.layout_notification_badge.view.tvBadgeText
 
 fun Float.dpToPx(context: Context?) =
     if (context != null) {
@@ -33,6 +33,7 @@ fun Float.dpToPx(context: Context?) =
     }
 
 fun ImageView.drawTextInner(
+    context: Context,
     imageSizeInPx: Int,
     fillColor: Int,
     textColor: Int,
@@ -46,6 +47,7 @@ fun ImageView.drawTextInner(
         color = textColor
         textAlign = Paint.Align.CENTER
         textSize = textSizeInPx.toFloat()
+        typeface = context.getFontCompat(R.font.app_font_family)
         xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER)
     }
     canvas.drawBitmap(bitmap, 0F, 0F, paint)
@@ -57,12 +59,13 @@ fun ImageView.drawTextInner(
 }
 
 fun ImageView.drawTextInner(
+    context: Context,
     fillColor: Int,
     textColor: Int,
     textSizeInPx: Int,
     textToDraw: String
 ) {
-    drawTextInner(width, fillColor, textColor, textSizeInPx, textToDraw)
+    drawTextInner(context, width, fillColor, textColor, textSizeInPx, textToDraw)
 }
 
 fun Toolbar.turnOffToolbarScrolling(appBarLayout: AppBarLayout) {

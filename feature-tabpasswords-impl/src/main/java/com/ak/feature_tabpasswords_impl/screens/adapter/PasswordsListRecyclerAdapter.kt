@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ak.feature_tabpasswords_impl.R
 
 class PasswordsListRecyclerAdapter(
-    private val onShowPasswordAction: (passwordId: Long, newVisibilityState: Boolean) -> Unit,
-    private val onShowPasswordItemActions: (passwordId: Long) -> Unit,
+    private val onShowPasswordItemActions: (passwordId: Long, isContentVisible: Boolean) -> Unit,
     private val onPasswordItemSingleClick: (passwordId: Long) -> Unit,
     private val onPasswordItemLongClick: (passwordId: Long) -> Unit
 ) : RecyclerView.Adapter<PasswordsListItemViewHolder>() {
@@ -23,7 +22,7 @@ class PasswordsListRecyclerAdapter(
             .inflate(R.layout.passwords_item_layout, parent, false)
         return PasswordsListItemViewHolder(
             view,
-            onShowPasswordAction,
+            this::setPasswordContentVisibility,
             onShowPasswordItemActions,
             onPasswordItemSingleClick,
             onPasswordItemLongClick
@@ -58,21 +57,21 @@ class PasswordsListRecyclerAdapter(
         }
     }
 
-    fun setPasswordContentVisibility(passwordId: Long, isContentVisible: Boolean) {
-        val index = itemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
-        itemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }
-            ?.let {
-                it.isPasswordContentVisible = isContentVisible
-                changePasswordItem(it, index)
-            }
-    }
-
     fun setSelectedStateForPasswordItemId(isSelected: Boolean, passwordId: Long) {
         val position = itemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
         itemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }
             ?.let {
                 it.isItemSelected = isSelected
                 changePasswordItem(it, position)
+            }
+    }
+
+    fun setPasswordContentVisibility(passwordId: Long, isContentVisible: Boolean) {
+        val index = itemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
+        itemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }
+            ?.let {
+                it.isPasswordContentVisible = isContentVisible
+                changePasswordItem(it, index)
             }
     }
 

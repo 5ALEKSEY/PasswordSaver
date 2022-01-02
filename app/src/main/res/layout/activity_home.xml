@@ -32,6 +32,8 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:background="@color/colorToolbarIconsAndText"
+            app:itemIconTint="@color/nav_bar_tabs_color"
+            app:itemTextColor="@color/nav_bar_tabs_color"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -70,6 +70,8 @@
     <string name="hide_password_button_text">Hide</string>
     <string name="image_chooser_camera">Camera</string>
     <string name="image_chooser_gallery">Gallery</string>
+    <string name="chooser_show_password_content">Show password content</string>
+    <string name="chooser_hide_password_content">Hide password content</string>
     <string name="chooser_copy_password_content">Copy password content</string>
     <string name="chooser_edit_password_content">Edit password item</string>
     <string name="chooser_delete_password_content">Delete password</string>
