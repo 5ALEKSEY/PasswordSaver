@@ -1,6 +1,9 @@
 package com.ak.feature_tabpasswords_impl.screens.adapter
 
 import android.graphics.drawable.AnimationDrawable
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.base.constants.AppConstants
@@ -14,17 +17,70 @@ import kotlinx.android.synthetic.main.passwords_item_layout.view.*
 
 class PasswordsListItemViewHolder(
     itemView: View,
-    private val onVisibilityPasswordAction: (passwordId: Long, newVisibilityState: Boolean) -> Unit,
-    private val onShowPasswordItemActions: (passwordId: Long, isContentVisible: Boolean) -> Unit,
-    private val onPasswordItemSingleClick: (passwordId: Long) -> Unit,
-    private val onPasswordItemLongClick: (passwordId: Long) -> Unit
-) : RecyclerView.ViewHolder(itemView) {
+    private val listener: PasswordsListClickListener
+) : RecyclerView.ViewHolder(itemView), View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
 
-    companion object {
+    private var passwordItemModel: PasswordItemModel? = null
+
+    private companion object {
         const val PASSWORD_SHOW_ACTION_CLICK_DELAY_IN_MILLIS = 700L
+
+        const val CONTEXT_MENU_SELECT_ID = 1
+        const val CONTEXT_MENU_COPY_ID = 2
+        const val CONTEXT_MENU_EDIT_ID = 3
+        const val CONTEXT_MENU_DELETE_ID = 4
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            CONTEXT_MENU_SELECT_ID -> {
+                passwordItemModel?.let {
+                    listener.selectPasswordItem(it)
+                    true
+                } ?: false
+            }
+            CONTEXT_MENU_COPY_ID -> {
+                passwordItemModel?.let {
+                    listener.copyPasswordItemContent(it)
+                    true
+                } ?: false
+            }
+            CONTEXT_MENU_EDIT_ID -> {
+                passwordItemModel?.let {
+                    listener.editPasswordItem(it)
+                    true
+                } ?: false
+            }
+            CONTEXT_MENU_DELETE_ID -> {
+                passwordItemModel?.let {
+                    listener.deletePasswordItem(it)
+                    true
+                } ?: false
+            }
+            else -> false
+        }
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
+        passwordItemModel?.let { listener.onCreateContextMenuForPasswordItem(it) }
+        menu?.apply {
+            addContextMenuItem(this, CONTEXT_MENU_SELECT_ID, "Select")
+            addContextMenuItem(this, CONTEXT_MENU_COPY_ID, "Copy password")
+            addContextMenuItem(this, CONTEXT_MENU_EDIT_ID, "Edit")
+            addContextMenuItem(this, CONTEXT_MENU_DELETE_ID, "Delete")
+        }
+    }
+
+    private fun addContextMenuItem(menu: ContextMenu, itemId: Int, itemTitle: String) {
+        menu.add(Menu.NONE, itemId, Menu.NONE, itemTitle).setOnMenuItemClickListener(this)
+    }
+
+    fun onClear() {
+        itemView.setOnCreateContextMenuListener(null)
     }
 
     fun bindPasswordListItemView(passwordItemModel: PasswordItemModel) {
+        this.passwordItemModel = passwordItemModel
         itemView.tvPasswordName.text = passwordItemModel.name
 
         itemView.tvPasswordContent.apply {
@@ -40,13 +96,23 @@ class PasswordsListItemViewHolder(
             }
         }
 
-        itemView.setOnClickListener {
-            onPasswordItemSingleClick(passwordItemModel.passwordId)
+        if (passwordItemModel.isInActionModeState) {
+            itemView.setOnClickListener {
+                listener.selectPasswordItem(passwordItemModel)
+            }
+        } else {
+            itemView.setOnClickListener(null)
         }
 
-        itemView.setOnLongClickListener {
-            onPasswordItemLongClick(passwordItemModel.passwordId)
-            return@setOnLongClickListener true
+        itemView.setOnCreateContextMenuListener(this)
+
+        if (passwordItemModel.isInActionModeState) {
+            itemView.setOnLongClickListener {
+                listener.selectPasswordItem(passwordItemModel)
+                return@setOnLongClickListener true
+            }
+        } else {
+            itemView.setOnLongClickListener(null)
         }
 
         initAdditionalItemClickListeners(passwordItemModel)
@@ -58,8 +124,6 @@ class PasswordsListItemViewHolder(
         } else {
             itemView.ivItemSelected.setVisibilityInvisible(passwordItemModel.isItemSelected)
         }
-
-        itemView.ivPasswordItemAction.setVisibilityInvisible(!passwordItemModel.isInActionModeState)
 
         if (passwordItemModel.passwordAvatarBitmap != null) {
             itemView.ivPasswordAvatar.setImageBitmap(passwordItemModel.passwordAvatarBitmap)
@@ -96,21 +160,13 @@ class PasswordsListItemViewHolder(
             itemView.setSafeClickListener(
                 PASSWORD_SHOW_ACTION_CLICK_DELAY_IN_MILLIS
             ) {
-                onVisibilityPasswordAction(
-                    passwordItemModel.passwordId,
-                    !passwordItemModel.isPasswordContentVisible
-                )
-            }
-
-            itemView.ivPasswordItemAction.setSafeClickListener {
-                onShowPasswordItemActions(passwordItemModel.passwordId, passwordItemModel.isPasswordContentVisible)
+                listener.showPasswordItemContent(passwordItemModel)
             }
         }
     }
 
     private fun setRootItemBackground(passwordItemModel: PasswordItemModel, rootView: View) {
         val bgResId = when {
-            passwordItemModel.isItemSelected -> R.drawable.bg_selected_password_item
             passwordItemModel.isLoadingModel -> R.drawable.loading_animation
             else -> 0
         }
@@ -118,7 +174,7 @@ class PasswordsListItemViewHolder(
 
         (rootView.background as? AnimationDrawable)?.apply {
             setEnterFadeDuration(0)
-            setExitFadeDuration(400)
+            setExitFadeDuration(500)
             start()
         }
     }

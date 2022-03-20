@@ -9,24 +9,21 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ak.feature_tabpasswords_impl.R
 
 class PasswordsListRecyclerAdapter(
-    private val onShowPasswordItemActions: (passwordId: Long, isContentVisible: Boolean) -> Unit,
-    private val onPasswordItemSingleClick: (passwordId: Long) -> Unit,
-    private val onPasswordItemLongClick: (passwordId: Long) -> Unit
+    private val listener: PasswordsListClickListener
 ) : RecyclerView.Adapter<PasswordsListItemViewHolder>() {
 
     private var itemsList = arrayListOf<PasswordItemModel>()
+
+    override fun onViewRecycled(holder: PasswordsListItemViewHolder) {
+        super.onViewRecycled(holder)
+        holder.onClear()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PasswordsListItemViewHolder {
         val view = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.passwords_item_layout, parent, false)
-        return PasswordsListItemViewHolder(
-            view,
-            this::setPasswordContentVisibility,
-            onShowPasswordItemActions,
-            onPasswordItemSingleClick,
-            onPasswordItemLongClick
-        )
+        return PasswordsListItemViewHolder(view, listener)
     }
 
     override fun getItemCount() = itemsList.size
@@ -54,6 +51,21 @@ class PasswordsListRecyclerAdapter(
             val itemModel = itemsList[i]
             changePasswordItem(itemModel.copy(isInActionModeState = isInActionMode), i)
         }
+    }
+
+    fun clearContextMenuOpenedForPasswordItems() {
+        for (i in 0 until itemsList.size) {
+            val itemModel = itemsList[i]
+            changePasswordItem(itemModel.copy(isLoadingModel = false), i)
+        }
+    }
+
+    fun setContextMenuOpenedForPasswordItem(passwordId: Long) {
+        val position = itemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
+        itemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }
+            ?.let {
+                changePasswordItem(it.copy(isLoadingModel = true), position)
+            }
     }
 
     fun setSelectedStateForPasswordItemId(isSelected: Boolean, passwordId: Long) {

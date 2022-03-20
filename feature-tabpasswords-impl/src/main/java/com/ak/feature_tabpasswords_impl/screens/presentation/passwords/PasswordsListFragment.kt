@@ -21,9 +21,9 @@ import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import com.ak.feature_tabpasswords_impl.screens.actionMode.IPasswordsActionModeView
 import com.ak.feature_tabpasswords_impl.screens.actionMode.PasswordsActionModePresenter
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordItemModel
+import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordsListClickListener
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordsListRecyclerAdapter
 import com.ak.feature_tabpasswords_impl.screens.presentation.base.BasePasswordsModuleFragment
-import com.ak.feature_tabpasswords_impl.screens.ui.PasswordActionsBottomSheetDialog
 import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_passwords_list.ablPasswordsListBarLayout
@@ -55,8 +55,35 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     @ProvidePresenter
     fun provideActionModePresenter(): PasswordsActionModePresenter = daggerActionModePresenter.get()
 
+    private val passwordsListClickListener = object : PasswordsListClickListener {
+        override fun selectPasswordItem(item: PasswordItemModel) {
+            passwordsActionModePresenter.onPasswordItemSelect(item.passwordId)
+        }
+
+        override fun showPasswordItemContent(item: PasswordItemModel) {
+            passwordsAdapter.setPasswordContentVisibility(item.passwordId, !item.isPasswordContentVisible)
+        }
+
+        override fun copyPasswordItemContent(item: PasswordItemModel) {
+            passwordsListPresenter.onCopyPasswordAction(item.passwordId)
+        }
+
+        override fun editPasswordItem(item: PasswordItemModel) {
+            passwordsListPresenter.onEditPasswordAction(item.passwordId)
+        }
+
+        override fun deletePasswordItem(item: PasswordItemModel) {
+            showDeletePasswordDialog {
+                passwordsListPresenter.onDeletePasswordAction(item.passwordId)
+            }
+        }
+
+        override fun onCreateContextMenuForPasswordItem(item: PasswordItemModel) {
+            passwordsAdapter.setContextMenuOpenedForPasswordItem(item.passwordId)
+        }
+    }
+
     private var tbPasswordsListBarActionMode: ActionMode? = null
-    private var passwordActionsDialog: PasswordActionsBottomSheetDialog? = null
     private lateinit var passwordsAdapter: PasswordsListRecyclerAdapter
 
     private var deletePasswordDialog: PSDialog? = null
@@ -111,13 +138,6 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         fragmentView.incEmptyView.setVisibility(isEmptyViewVisible)
     }
 
-    override fun setPasswordContentVisibility(
-        passwordId: Long,
-        contentVisibilityState: Boolean
-    ) {
-        passwordsAdapter.setPasswordContentVisibility(passwordId, contentVisibilityState)
-    }
-
     override fun enableToolbarScrolling() {
         fragmentView.tbPasswordsListBar.turnOnToolbarScrolling(ablPasswordsListBarLayout)
     }
@@ -126,38 +146,13 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         fragmentView.tbPasswordsListBar.turnOffToolbarScrolling(ablPasswordsListBarLayout)
     }
 
-    override fun showPasswordActionsDialog(isContentVisible: Boolean) {
-        passwordActionsDialog = PasswordActionsBottomSheetDialog.showDialog(
-            childFragmentManager,
-            isContentVisible
-        )
-        passwordActionsDialog?.onChoosePasswordActionListener = { actionId ->
-            when (actionId) {
-                PasswordActionsBottomSheetDialog.SHOW_PASSWORD_CONTENT_ACTION -> {
-                    passwordsListPresenter.onShowPasswordAction()
-                }
-                PasswordActionsBottomSheetDialog.HIDE_PASSWORD_CONTENT_ACTION -> {
-                    passwordsListPresenter.onHidePasswordAction()
-                }
-                PasswordActionsBottomSheetDialog.COPY_PASSWORD_CONTENT_ACTION -> {
-                    passwordsListPresenter.onCopyPasswordAction()
-                }
-                PasswordActionsBottomSheetDialog.EDIT_PASSWORD_ITEM_ACTION -> {
-                    passwordsListPresenter.onEditPasswordAction()
-                }
-                PasswordActionsBottomSheetDialog.DELETE_PASSWORD_ITEM_ACTION -> {
-                    showDeletePasswordDialog { passwordsListPresenter.onDeletePasswordAction() }
-                }
-            }
-        }
-    }
-
-    override fun hidePasswordActionsDialog() {
-        passwordActionsDialog?.dismiss()
-    }
-
     override fun showEditPasswordScreen(passwordId: Long) {
         navigator.navigateToEditPassword(passwordId)
+    }
+
+    override fun onContextMenuClosed(menu: Menu?) {
+        super.onContextMenuClosed(menu)
+        passwordsAdapter.clearContextMenuOpenedForPasswordItems()
     }
 
     private fun initToolbar() {
@@ -170,11 +165,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
     }
 
     private fun initRecyclerView() {
-        passwordsAdapter = PasswordsListRecyclerAdapter(
-            passwordsListPresenter::onShowPasswordActions,
-            passwordsActionModePresenter::onPasswordItemSingleClick,
-            passwordsActionModePresenter::onPasswordItemLongClick
-        )
+        passwordsAdapter = PasswordsListRecyclerAdapter(passwordsListClickListener)
 
         with(fragmentView.rvPasswordsList) {
             adapter = passwordsAdapter

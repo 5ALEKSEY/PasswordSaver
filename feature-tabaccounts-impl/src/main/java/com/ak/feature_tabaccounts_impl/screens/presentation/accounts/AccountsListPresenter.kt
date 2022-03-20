@@ -11,8 +11,8 @@ import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
 import com.ak.feature_tabaccounts_impl.screens.adapter.AccountItemModel
 import com.ak.feature_tabaccounts_impl.screens.logic.IDataBufferManager
 import io.reactivex.android.schedulers.AndroidSchedulers
-import moxy.InjectViewState
 import javax.inject.Inject
+import moxy.InjectViewState
 
 @InjectViewState
 class AccountsListPresenter @Inject constructor(
@@ -20,8 +20,6 @@ class AccountsListPresenter @Inject constructor(
     private val dataBufferManager: IDataBufferManager,
     private val resourceManager: IResourceManager
 ) : BasePSPresenter<IAccountsListView>() {
-
-    private var currentAccountId = 0L
 
     init {
         FeatureTabAccountsComponent.get().inject(this)
@@ -48,37 +46,28 @@ class AccountsListPresenter @Inject constructor(
             .let(this::bindDisposable)
     }
 
-    fun onShowAccountActions(accountId: Long) {
-        currentAccountId = accountId
-        viewState.showAccountActionsDialog()
-    }
-
     // from actions bottom sheet dialog
-    fun onCopyAccountLoginAction() {
-        getAccountDataAndStartAction {
+    fun onCopyAccountLoginAction(accountId: Long) {
+        getAccountDataAndStartAction(accountId) {
             dataBufferManager.copyStringData(it.getAccountLogin())
             viewState.showShortTimeMessage(resourceManager.getString(R.string.copied_to_clipboard_message))
-            currentAccountId = 0L
         }
     }
 
-    fun onCopyAccountPasswordAction() {
-        getAccountDataAndStartAction {
+    fun onCopyAccountPasswordAction(accountId: Long) {
+        getAccountDataAndStartAction(accountId) {
             dataBufferManager.copyStringData(it.getAccountPassword())
             viewState.showShortTimeMessage(resourceManager.getString(R.string.copied_to_clipboard_message))
-            currentAccountId = 0L
         }
     }
 
-    fun onEditAccountAction() {
-        viewState.showEditAccountScreen(currentAccountId)
-        currentAccountId = 0L
+    fun onEditAccountAction(accountId: Long) {
+        viewState.showEditAccountScreen(accountId)
     }
 
-    fun onDeleteAccountAction() {
-        accountsInteractor.deleteAccountById(currentAccountId)
+    fun onDeleteAccountAction(accountId: Long) {
+        accountsInteractor.deleteAccountById(accountId)
             .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { currentAccountId = 0L }
             .subscribe(
                 {
                 },
@@ -88,8 +77,8 @@ class AccountsListPresenter @Inject constructor(
             .let(this::bindDisposable)
     }
 
-    private inline fun getAccountDataAndStartAction(crossinline action: (entity: AccountFeatureEntity) -> Unit) {
-        accountsInteractor.getAccountById(currentAccountId)
+    private inline fun getAccountDataAndStartAction(accountId: Long, crossinline action: (entity: AccountFeatureEntity) -> Unit) {
+        accountsInteractor.getAccountById(accountId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { entity ->

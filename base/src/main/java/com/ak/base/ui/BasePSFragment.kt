@@ -3,6 +3,7 @@ package com.ak.base.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
@@ -12,8 +13,8 @@ import androidx.navigation.Navigation
 import com.ak.base.extensions.showToastMessage
 import com.ak.base.extensions.vibrate
 import com.ak.base.presenter.BasePSPresenter
-import moxy.MvpAppCompatFragment
 import javax.inject.Inject
+import moxy.MvpAppCompatFragment
 
 abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFragment(),
     IBaseAppView {
@@ -30,6 +31,10 @@ abstract class BasePSFragment<Presenter : BasePSPresenter<*>> : MvpAppCompatFrag
     protected lateinit var fragmentView: View
 
     open fun isBackPressEnabled() = true
+
+    open fun onContextMenuClosed(menu: Menu?) {
+
+    }
 
     override fun onAttach(context: Context) {
         injectFragment()

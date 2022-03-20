@@ -25,8 +25,6 @@ class PasswordsListPresenter @Inject constructor(
     private val resourceManager: IResourceManager
 ) : BasePSPresenter<IPasswordsListView>() {
 
-    private var mCurrentPasswordId = 0L
-
     init {
         FeatureTabPasswordsComponent.get().inject(this)
     }
@@ -52,39 +50,20 @@ class PasswordsListPresenter @Inject constructor(
             .let(this::bindDisposable)
     }
 
-    fun onShowPasswordActions(passwordId: Long, isContentVisible: Boolean) {
-        mCurrentPasswordId = passwordId
-        viewState.showPasswordActionsDialog(isContentVisible)
-    }
-
-    // from actions bottom sheet dialog
-    fun onShowPasswordAction() {
-        viewState.setPasswordContentVisibility(mCurrentPasswordId, true)
-        mCurrentPasswordId = 0L
-    }
-
-    fun onHidePasswordAction() {
-        viewState.setPasswordContentVisibility(mCurrentPasswordId, false)
-        mCurrentPasswordId = 0L
-    }
-
-    fun onCopyPasswordAction() {
-        getPasswordDataAndStartAction {
+    fun onCopyPasswordAction(passwordId: Long) {
+        getPasswordDataAndStartAction(passwordId) {
             dataBufferManager.copyStringData(it.getPasswordContent())
             viewState.showShortTimeMessage(resourceManager.getString(R.string.copied_to_clipboard_message))
-            mCurrentPasswordId = 0L
         }
     }
 
-    fun onEditPasswordAction() {
-        viewState.showEditPasswordScreen(mCurrentPasswordId)
-        mCurrentPasswordId = 0L
+    fun onEditPasswordAction(passwordId: Long) {
+        viewState.showEditPasswordScreen(passwordId)
     }
 
-    fun onDeletePasswordAction() {
-        passwordsInteractor.deletePasswordById(mCurrentPasswordId)
+    fun onDeletePasswordAction(passwordId: Long) {
+        passwordsInteractor.deletePasswordById(passwordId)
             .observeOn(AndroidSchedulers.mainThread())
-            .doFinally { mCurrentPasswordId = 0L }
             .subscribe(
                 {
                 },
@@ -94,8 +73,8 @@ class PasswordsListPresenter @Inject constructor(
             .let(this::bindDisposable)
     }
 
-    private inline fun getPasswordDataAndStartAction(crossinline action: (entity: PasswordFeatureEntity) -> Unit) {
-        passwordsInteractor.getPasswordById(mCurrentPasswordId)
+    private inline fun getPasswordDataAndStartAction(passwordsId: Long, crossinline action: (entity: PasswordFeatureEntity) -> Unit) {
+        passwordsInteractor.getPasswordById(passwordsId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(
                 { entity ->

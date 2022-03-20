@@ -22,9 +22,9 @@ import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
 import com.ak.feature_tabaccounts_impl.screens.actionMode.AccountsActionModePresenter
 import com.ak.feature_tabaccounts_impl.screens.actionMode.IAccountsActionModeView
 import com.ak.feature_tabaccounts_impl.screens.adapter.AccountItemModel
+import com.ak.feature_tabaccounts_impl.screens.adapter.AccountListClickListener
 import com.ak.feature_tabaccounts_impl.screens.adapter.AccountsListRecyclerAdapter
 import com.ak.feature_tabaccounts_impl.screens.presentation.base.BaseAccountsModuleFragment
-import com.ak.feature_tabaccounts_impl.screens.presentation.ui.AccountActionsBottomSheetDialog
 import dagger.Lazy
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_accounts_list.ablAccountsListBarLayout
@@ -56,8 +56,37 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
     @ProvidePresenter
     fun provideActionModePresenter(): AccountsActionModePresenter = daggerActionModePresenter.get()
 
+    private val accountsListClickListener = object : AccountListClickListener {
+        override fun selectAccountItem(item: AccountItemModel) {
+            accountsActionModePresenter.onAccountItemSelect(item.accountId)
+        }
+
+        override fun showAccountItemContent(item: AccountItemModel) {
+            accountsAdapter.setAccountContentVisibility(item.accountId, !item.isAccountContentVisible)
+        }
+
+        override fun copyAccountItemLogin(item: AccountItemModel) {
+            accountsListPresenter.onCopyAccountLoginAction(item.accountId)
+        }
+
+        override fun copyAccountItemPassword(item: AccountItemModel) {
+            accountsListPresenter.onCopyAccountPasswordAction(item.accountId)
+        }
+
+        override fun editAccountItem(item: AccountItemModel) {
+            accountsListPresenter.onEditAccountAction(item.accountId)
+        }
+
+        override fun deleteAccountItem(item: AccountItemModel) {
+            accountsListPresenter.onDeleteAccountAction(item.accountId)
+        }
+
+        override fun onCreateContextMenuForAccountItem(item: AccountItemModel) {
+            accountsAdapter.setContextMenuOpenedForAccountItem(item.accountId)
+        }
+    }
+
     private var tbAccountsListBarActionMode: ActionMode? = null
-    private var accountActionsDialog: AccountActionsBottomSheetDialog? = null
     private lateinit var accountsAdapter: AccountsListRecyclerAdapter
 
     private var deleteAccountDialog: PSDialog? = null
@@ -124,32 +153,13 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
         fragmentView.tbAccountsListBar.turnOffToolbarScrolling(ablAccountsListBarLayout)
     }
 
-    override fun showAccountActionsDialog() {
-        accountActionsDialog = AccountActionsBottomSheetDialog.showDialog(childFragmentManager)
-        accountActionsDialog?.onChooseAccountActionListener = { actionId ->
-            when (actionId) {
-                AccountActionsBottomSheetDialog.COPY_ACCOUNT_LOGIN_ACTION -> {
-                    accountsListPresenter.onCopyAccountLoginAction()
-                }
-                AccountActionsBottomSheetDialog.COPY_ACCOUNT_PASSWORD_ACTION -> {
-                    accountsListPresenter.onCopyAccountPasswordAction()
-                }
-                AccountActionsBottomSheetDialog.EDIT_ACCOUNT_ITEM_ACTION -> {
-                    accountsListPresenter.onEditAccountAction()
-                }
-                AccountActionsBottomSheetDialog.DELETE_ACCOUNT_ITEM_ACTION -> {
-                    showDeleteAccountDialog { accountsListPresenter.onDeleteAccountAction() }
-                }
-            }
-        }
-    }
-
-    override fun hideAccountActionsDialog() {
-        accountActionsDialog?.dismiss()
-    }
-
     override fun showEditAccountScreen(accountId: Long) {
         navigator.navigateToEditAccount(accountId)
+    }
+
+    override fun onContextMenuClosed(menu: Menu?) {
+        super.onContextMenuClosed(menu)
+        accountsAdapter.clearContextMenuOpenedForAccountItems()
     }
 
     private fun initToolbar() {
@@ -162,11 +172,7 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
     }
 
     private fun initRecyclerView() {
-        accountsAdapter = AccountsListRecyclerAdapter(
-                accountsListPresenter::onShowAccountActions,
-                accountsActionModePresenter::onPasswordItemSingleClick,
-                accountsActionModePresenter::onPasswordItemLongClick
-        )
+        accountsAdapter = AccountsListRecyclerAdapter(accountsListClickListener)
 
         with(fragmentView.rvAccountsList) {
             adapter = accountsAdapter

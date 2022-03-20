@@ -2,15 +2,18 @@ package com.ak.passwordsaver.presentation.base
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import androidx.annotation.LayoutRes
+import androidx.fragment.app.Fragment
 import com.ak.base.extensions.showToastMessage
 import com.ak.base.extensions.vibrate
 import com.ak.base.presenter.BasePSPresenter
+import com.ak.base.ui.BasePSFragment
 import com.ak.base.ui.IBaseAppView
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_security_api.interfaces.IPSAuthManager
-import moxy.MvpAppCompatActivity
 import javax.inject.Inject
+import moxy.MvpAppCompatActivity
 
 abstract class BasePSFragmentActivity<Presenter : BasePSPresenter<*>> : MvpAppCompatActivity(),
     IBaseAppView {
@@ -66,9 +69,23 @@ abstract class BasePSFragmentActivity<Presenter : BasePSPresenter<*>> : MvpAppCo
         vibrate(vibrateDuration)
     }
 
+    override fun onContextMenuClosed(menu: Menu?) {
+        super.onContextMenuClosed(menu)
+        supportFragmentManager.fragments.forEach {
+            notifyFragmentAboutContextMenuClosed(it, menu)
+        }
+    }
+
     protected open fun initViewBeforePresenterAttach() {
 
     }
 
     protected open fun isAuthCheckNeedsForScreen() = true
+
+    private fun notifyFragmentAboutContextMenuClosed(fragment: Fragment, menu: Menu?) {
+        if (fragment is BasePSFragment<*> && fragment.isVisible) {
+            fragment.onContextMenuClosed(menu)
+        }
+        fragment.childFragmentManager.fragments.forEach { notifyFragmentAboutContextMenuClosed(it, menu) }
+    }
 }

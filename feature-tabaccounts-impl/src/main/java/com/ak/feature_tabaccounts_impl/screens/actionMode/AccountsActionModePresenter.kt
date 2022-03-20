@@ -4,62 +4,59 @@ import com.ak.base.presenter.BasePSPresenter
 import com.ak.feature_tabaccounts_api.interfaces.IAccountsInteractor
 import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
-import moxy.InjectViewState
 import javax.inject.Inject
+import moxy.InjectViewState
 
 @InjectViewState
 class AccountsActionModePresenter @Inject constructor(
     private val passwordsInteractor: IAccountsInteractor
 ) : BasePSPresenter<IAccountsActionModeView>() {
 
-    private var selectedPasswordsIdsList = arrayListOf<Long>()
+    private var selectedAccountsIdsList = arrayListOf<Long>()
     private var isSelectedModeActive = false
 
     init {
         FeatureTabAccountsComponent.get().inject(this)
     }
 
-    fun onPasswordItemLongClick(passwordId: Long) {
-        viewState.displaySelectedMode()
-        isSelectedModeActive = true
-        handleNewItemSelection(passwordId)
-    }
-
-    fun onPasswordItemSingleClick(passwordId: Long) {
-        if (isSelectedModeActive) {
-            handleNewItemSelection(passwordId)
+    fun onAccountItemSelect(accountId: Long) {
+        if (!isSelectedModeActive) {
+            viewState.displaySelectedMode()
+            isSelectedModeActive = true
         }
+
+        handleNewItemSelection(accountId)
     }
 
-    private fun handleNewItemSelection(passwordId: Long) {
-        val isWasSelected = selectedPasswordsIdsList.contains(passwordId)
+    private fun handleNewItemSelection(accountId: Long) {
+        val isWasSelected = selectedAccountsIdsList.contains(accountId)
 
         if (isWasSelected) {
-            selectedPasswordsIdsList.remove(passwordId)
-            if (selectedPasswordsIdsList.isEmpty()) {
-                viewState.showSelectStateForItem(!isWasSelected, passwordId)
+            selectedAccountsIdsList.remove(accountId)
+            if (selectedAccountsIdsList.isEmpty()) {
+                viewState.showSelectStateForItem(!isWasSelected, accountId)
                 viewState.hideSelectedMode()
                 return
             }
         } else {
-            selectedPasswordsIdsList.add(passwordId)
+            selectedAccountsIdsList.add(accountId)
         }
 
-        viewState.showSelectStateForItem(!isWasSelected, passwordId)
+        viewState.showSelectStateForItem(!isWasSelected, accountId)
         viewState.showSelectedItemsQuantityText(getActionModeTitleText())
     }
 
     fun onSelectedModeFinished() {
-        for (passwordId in selectedPasswordsIdsList) {
+        for (passwordId in selectedAccountsIdsList) {
             viewState.showSelectStateForItem(false, passwordId)
         }
         isSelectedModeActive = false
-        selectedPasswordsIdsList.clear()
+        selectedAccountsIdsList.clear()
     }
 
     fun onDeleteSelectedInActionMode() {
-        if (selectedPasswordsIdsList.isNotEmpty()) {
-            passwordsInteractor.deleteAccountsByIds(selectedPasswordsIdsList)
+        if (selectedAccountsIdsList.isNotEmpty()) {
+            passwordsInteractor.deleteAccountsByIds(selectedAccountsIdsList)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     {
@@ -72,5 +69,5 @@ class AccountsActionModePresenter @Inject constructor(
         }
     }
 
-    private fun getActionModeTitleText() = selectedPasswordsIdsList.size.toString()
+    private fun getActionModeTitleText() = selectedAccountsIdsList.size.toString()
 }

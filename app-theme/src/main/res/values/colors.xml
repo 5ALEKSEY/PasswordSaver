@@ -36,8 +36,8 @@
 
     <color name="camera_pick_image_panel_background">#66181818</color>
 
-    <color name="loading_gradient_start">#ECF9FF</color>
-    <color name="loading_gradient_center">#D1E7FF</color>
-    <color name="loading_gradient_end">#AEDEFF</color>
+    <color name="loading_gradient_start">#FFFFFF</color>
+    <color name="loading_gradient_center">#F6FAFF</color>
+    <color name="loading_gradient_end">#E6F5FF</color>
 
 </resources>

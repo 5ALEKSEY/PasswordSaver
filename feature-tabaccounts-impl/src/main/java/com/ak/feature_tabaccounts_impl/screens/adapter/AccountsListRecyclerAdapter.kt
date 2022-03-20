@@ -9,9 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ak.feature_tabaccounts_impl.R
 
 class AccountsListRecyclerAdapter(
-    private val onShowAccountItemActions: (passwordId: Long) -> Unit,
-    private val onAccountItemSingleClick: (passwordId: Long) -> Unit,
-    private val onAccountItemLongClick: (passwordId: Long) -> Unit
+    private val listener: AccountListClickListener
 ) : RecyclerView.Adapter<AccountsListItemViewHolder>() {
 
     private var itemsList = arrayListOf<AccountItemModel>()
@@ -20,13 +18,7 @@ class AccountsListRecyclerAdapter(
         val view = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.accounts_item_layout, parent, false)
-        return AccountsListItemViewHolder(
-                view,
-                this::setAccountContentVisibility,
-                onShowAccountItemActions,
-                onAccountItemSingleClick,
-                onAccountItemLongClick
-        )
+        return AccountsListItemViewHolder(view, listener)
     }
 
     override fun getItemCount() = itemsList.size
@@ -65,6 +57,21 @@ class AccountsListRecyclerAdapter(
         itemsList.find { accountItemModel -> accountItemModel.accountId == accountId }
             ?.let {
                 changeAccountItem(it.copy(isAccountContentVisible = isContentVisible), index)
+            }
+    }
+
+    fun clearContextMenuOpenedForAccountItems() {
+        for (i in 0 until itemsList.size) {
+            val itemModel = itemsList[i]
+            changeAccountItem(itemModel.copy(isLoadingModel = false), i)
+        }
+    }
+
+    fun setContextMenuOpenedForAccountItem(accountId: Long) {
+        val position = itemsList.indexOf(AccountItemModel.getSearchingTempModel(accountId))
+        itemsList.find { accountItemModel -> accountItemModel.accountId == accountId }
+            ?.let {
+                changeAccountItem(it.copy(isLoadingModel = true), position)
             }
     }
 

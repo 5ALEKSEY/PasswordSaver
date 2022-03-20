@@ -1,7 +1,7 @@
 package com.ak.feature_tabpasswords_impl.screens.adapter
 
 import android.graphics.Bitmap
-import androidx.annotation.IntRange
+import android.view.ContextMenu
 
 data class PasswordItemModel constructor(
     val passwordId: Long,
@@ -12,19 +12,9 @@ data class PasswordItemModel constructor(
     val isItemSelected: Boolean = false,
     val isPasswordContentVisible: Boolean = false,
     val isInActionModeState: Boolean = false
-) {
+): ContextMenu.ContextMenuInfo {
     companion object {
         fun getSearchingTempModel(passwordId: Long) = getModelForId(passwordId)
-
-        fun getLoadingModels(@IntRange(from = 1) size: Int): List<PasswordItemModel> {
-            val resultList = ArrayList<PasswordItemModel>(size)
-            repeat(size) {
-                resultList.add(
-                    getModelForId(it.toLong()).copy(isLoadingModel = true)
-                )
-            }
-            return resultList
-        }
 
         private fun getModelForId(passwordId: Long) = PasswordItemModel(
             passwordId,
@@ -39,6 +29,7 @@ data class PasswordItemModel constructor(
                 || this.name != passwordItemModel.name
                 || this.passwordAvatarBitmap != passwordItemModel.passwordAvatarBitmap
                 || this.password != passwordItemModel.password
+                || this.isLoadingModel != passwordItemModel.isLoadingModel
                 || this.isItemSelected != passwordItemModel.isItemSelected
                 || this.isPasswordContentVisible != passwordItemModel.isPasswordContentVisible
                 || this.isInActionModeState != passwordItemModel.isInActionModeState)

@@ -4,8 +4,8 @@ import com.ak.base.presenter.BasePSPresenter
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import io.reactivex.android.schedulers.AndroidSchedulers
-import moxy.InjectViewState
 import javax.inject.Inject
+import moxy.InjectViewState
 
 @InjectViewState
 class PasswordsActionModePresenter @Inject constructor(
@@ -19,16 +19,13 @@ class PasswordsActionModePresenter @Inject constructor(
         FeatureTabPasswordsComponent.get().inject(this)
     }
 
-    fun onPasswordItemLongClick(passwordId: Long) {
-        viewState.displaySelectedMode()
-        isSelectedModeActive = true
-        handleNewItemSelection(passwordId)
-    }
-
-    fun onPasswordItemSingleClick(passwordId: Long) {
-        if (isSelectedModeActive) {
-            handleNewItemSelection(passwordId)
+    fun onPasswordItemSelect(passwordId: Long) {
+        if (!isSelectedModeActive) {
+            viewState.displaySelectedMode()
+            isSelectedModeActive = true
         }
+
+        handleNewItemSelection(passwordId)
     }
 
     private fun handleNewItemSelection(passwordId: Long) {

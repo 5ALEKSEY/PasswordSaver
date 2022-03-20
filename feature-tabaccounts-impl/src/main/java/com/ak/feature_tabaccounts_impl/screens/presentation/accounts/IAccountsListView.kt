@@ -10,7 +10,5 @@ interface IAccountsListView : IBaseAppView {
     fun displayAccounts(accountModelsList: List<AccountItemModel>)
     fun enableToolbarScrolling()
     fun disableToolbarScrolling()
-    fun showAccountActionsDialog()
-    fun hideAccountActionsDialog()
     fun showEditAccountScreen(accountId: Long)
 }
