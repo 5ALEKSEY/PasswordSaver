@@ -11,10 +11,11 @@ import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_settings.view.*
+import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_settings.view.rvSettingsItemsList
+import kotlinx.android.synthetic.main.fragment_settings.view.tbSettingsBar
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import javax.inject.Inject
 
 class SettingsFragment : BasePSFragment<SettingsPresenter>(),
     ISettingsView {
@@ -70,18 +71,18 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(),
     override fun startAuthAndOpenPrivacySettings() {
         activity?.let {
             authChecker.startAuthCheck(
-                    it,
-                    this,
-                    IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE,
-                    object : IAuthCheckerStarter.CheckAuthCallback {
-                        override fun onAuthSuccessfully() {
-                            showPrivacySettings()
-                        }
-
-                        override fun onAuthFailed() {
-                            showShortTimeMessage(getString(R.string.auth_failed_funny_text))
-                        }
+                it,
+                this,
+                IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE,
+                object : IAuthCheckerStarter.CheckAuthCallback {
+                    override fun onAuthSuccessfully() {
+                        showPrivacySettings()
                     }
+
+                    override fun onAuthFailed() {
+                        showShortTimeMessage(getString(R.string.auth_failed_funny_text))
+                    }
+                }
             )
         }
     }
@@ -112,10 +113,7 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(),
             val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(
-                    DividerItemDecoration(
-                            context,
-                            linearLayoutManager.orientation
-                    )
+                DividerItemDecoration(context, linearLayoutManager.orientation)
             )
         }
     }

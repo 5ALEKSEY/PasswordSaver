@@ -13,6 +13,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/ic_back_action"
+            app:titleTextAppearance="@style/Toolbar.TitleText"
             app:titleTextColor="@color/colorToolbarIconsAndText" />
 
     <androidx.recyclerview.widget.RecyclerView
