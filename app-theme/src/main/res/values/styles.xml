@@ -25,4 +25,71 @@
         <item name="android:textSize">17sp</item>
     </style>
 
+    <style name="CustomTheme" parent="@style/AppTheme">
+        <!-- STATIC COLORS -->
+        <item name="staticColorTransparent">#00FFFFFF</item>
+        <item name="staticColorBlack">#000000</item>
+        <item name="staticColorWhite">#FFFFFF</item>
+    </style>
+
+    <!--THEMES -->
+
+    <style name="CustomTheme.Blue" parent="CustomTheme">
+        <item name="themedStatusBarColor">#3651FB</item>
+        <item name="themedBackgroundColor">#FFFFFF</item>
+
+        <item name="themedPrimaryColor">#3F51B5</item>
+        <item name="themedPrimaryDarkColor">#303F9F</item>
+        <item name="themedPrimaryLightColor">#5C6ED2</item>
+        <item name="themedAccentColor">#3DA2FF</item>
+
+        <item name="themedToolbarIconsAndTextColor">#FFFFFF</item>
+        <item name="themedPrimaryTextColor">#212121</item>
+        <item name="themedSecondaryTextColor">#757575</item>
+
+        <item name="themedDividerColor">#BDBDBD</item>
+        <item name="themedErrorColor">#FC4F4F</item>
+        <item name="themedSuccessColor">#2FD236</item>
+
+        <item name="themedBadgeNotificationColor">#FF5050</item>
+
+        <item name="themedPatternLineColor">#F8F8F8</item>
+        <item name="themedSecurityBackgroundColor">#3F51B5</item>
+        <item name="themedSecurityTextColor">#FFFFFF</item>
+        <item name="themedSecurityPincodeUnderTextColor">#E0DBDB</item>
+
+        <item name="themedCameraPickImagePanelBackgroundColor">#66181818</item>
+
+<!--        <item name="themedSelectedItemGradient">#FFFFFF</item>-->
+    </style>
+
+    <style name="CustomTheme.Orange" parent="CustomTheme.Blue">
+        <item name="themedStatusBarColor">#FB6B1C</item>
+        <item name="themedBackgroundColor">#FFCFB5</item>
+
+        <item name="themedPrimaryColor">#FF7B33</item>
+        <item name="themedPrimaryDarkColor">#A84A17</item>
+        <item name="themedPrimaryLightColor">#FFB891</item>
+        <item name="themedAccentColor">#FFAE81</item>
+
+        <item name="themedToolbarIconsAndTextColor">#FFFFFF</item>
+        <item name="themedPrimaryTextColor">#FFF2ED</item>
+        <item name="themedSecondaryTextColor">#FFC8AF</item>
+
+        <item name="themedDividerColor">#BDBDBD</item>
+        <item name="themedErrorColor">#FC4F4F</item>
+        <item name="themedSuccessColor">#2FD236</item>
+
+        <item name="themedBadgeNotificationColor">#FF5050</item>
+
+        <item name="themedPatternLineColor">#F8F8F8</item>
+        <item name="themedSecurityBackgroundColor">#FF7B33</item>
+        <item name="themedSecurityTextColor">#FFFFFF</item>
+        <item name="themedSecurityPincodeUnderTextColor">#E0DBDB</item>
+
+        <item name="themedCameraPickImagePanelBackgroundColor">#66493424</item>
+
+<!--        <item name="themedSelectedItemGradient">#FFFFFF</item>-->
+    </style>
+
 </resources>
