@@ -11,13 +11,15 @@ import androidx.fragment.app.FragmentManager
 import com.ak.base.extensions.getColorCompat
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.feature_tabpasswords_impl.R
-import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
+import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponentInitializer
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.camera.manager.IPSCameraManager
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.gallery.manager.IPSGalleryManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.layout_photo_chooser_dialog.view.*
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.layout_photo_chooser_dialog.view.ivPhotoChooserGalleryPreview
+import kotlinx.android.synthetic.main.layout_photo_chooser_dialog.view.vChooseCameraAction
+import kotlinx.android.synthetic.main.layout_photo_chooser_dialog.view.vChooseGalleryAction
 
 class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
 
@@ -47,7 +49,7 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FeatureTabPasswordsComponent.get().inject(this)
+        (context?.applicationContext as? FeatureTabPasswordsComponentInitializer)?.initializeTabPasswordsComponent()?.inject(this)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?) =

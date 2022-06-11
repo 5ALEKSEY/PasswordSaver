@@ -29,20 +29,25 @@ import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.ui.P
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.fragment_manage_password.*
-import kotlinx.android.synthetic.main.fragment_manage_password.view.*
+import kotlinx.android.synthetic.main.fragment_manage_password.tietPasswordNameField
+import kotlinx.android.synthetic.main.fragment_manage_password.view.btnManagePasswordAction
+import kotlinx.android.synthetic.main.fragment_manage_password.view.ivPasswordAvatarChooser
+import kotlinx.android.synthetic.main.fragment_manage_password.view.lvAvatarChooserImageDesc
+import kotlinx.android.synthetic.main.fragment_manage_password.view.tbManagePasswordBar
+import kotlinx.android.synthetic.main.fragment_manage_password.view.tietPasswordContentField
+import kotlinx.android.synthetic.main.fragment_manage_password.view.tietPasswordNameField
+import kotlinx.android.synthetic.main.fragment_manage_password.view.tilPasswordContentLayout
+import kotlinx.android.synthetic.main.fragment_manage_password.view.tilPasswordNameLayout
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPresenter<*>>
-    : BasePasswordsModuleFragment<ManagePresenter>(), IBaseManagePasswordView {
+abstract class BaseManagePasswordFragment<ManageVM : BaseManagePasswordViewModel>
+    : BasePasswordsModuleFragment<ManageVM>() {
 
     @Inject
     lateinit var mGalleryManager: IPSGalleryManager
 
     private lateinit var mAvatarChooserDialog: PhotoChooserBottomSheetDialog
-
-    protected abstract fun getPresenter(): ManagePresenter
 
     override fun getFragmentLayoutResId() = R.layout.fragment_manage_password
 
@@ -51,8 +56,8 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
         setHasOptionsMenu(true)
     }
 
-    override fun initViewBeforePresenterAttach(fragmentView: View) {
-        super.initViewBeforePresenterAttach(fragmentView)
+    override fun initView(fragmentView: View) {
+        super.initView(fragmentView)
         initGalleryManager()
         initToolbar()
 
@@ -121,7 +126,7 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                getPresenter().onPasswordNameTextChanged(s.toString())
+                viewModel.onPasswordNameTextChanged(s.toString())
             }
         })
         fragmentView.tietPasswordNameField.filters = arrayOf(
@@ -131,6 +136,28 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
         fragmentView.btnManagePasswordAction.setSafeClickListener {
             managePasswordAction()
         }
+    }
+
+    override fun subscriberToViewModel(viewModel: ManageVM) {
+        super.subscriberToViewModel(viewModel)
+        viewModel.subscribeToSuccessPasswordManage().observe(viewLifecycleOwner) {
+            navController.popBackStack()
+        }
+        viewModel.subscribeToNameInputError().observe(viewLifecycleOwner) { errorMessage ->
+            fragmentView.tilPasswordNameLayout.error = errorMessage
+        }
+        viewModel.subscribeToContentInputError().observe(viewLifecycleOwner) { errorMessage ->
+            fragmentView.tilPasswordContentLayout.error = errorMessage
+        }
+        viewModel.subscribeToAvatarText().observe(viewLifecycleOwner, this::drawTextForPasswordAvatar)
+        viewModel.subscribeToAvatarChooserImage().observe(viewLifecycleOwner) { image ->
+            if (image != null) {
+                displayPasswordAvatarChooserImage(image)
+            } else {
+                deletePasswordAvatarChooserImage()
+            }
+        }
+
     }
 
     override fun onPause() {
@@ -151,27 +178,7 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
             super.onOptionsItemSelected(item)
         }
 
-    override fun displaySuccessPasswordManageAction() {
-        navController.popBackStack()
-    }
-
-    override fun displayPasswordNameInputError(errorMessage: String) {
-        fragmentView.tilPasswordNameLayout.error = errorMessage
-    }
-
-    override fun hidePasswordNameInputError() {
-        fragmentView.tilPasswordNameLayout.error = null
-    }
-
-    override fun displayPasswordContentInputError(errorMessage: String) {
-        fragmentView.tilPasswordContentLayout.error = errorMessage
-    }
-
-    override fun hidePasswordContentInputError() {
-        fragmentView.tilPasswordContentLayout.error = null
-    }
-
-    override fun drawTextForPasswordAvatar(text: String) {
+    private fun drawTextForPasswordAvatar(text: String) {
         val isTextDrawNeeds = text.isNotEmpty()
         val fillColor = getColorCompat(R.color.colorPrimaryLight)
         val textColor = getColorCompat(R.color.staticColorWhite)
@@ -187,24 +194,24 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
         fragmentView.lvAvatarChooserImageDesc.setVisibility(!isTextDrawNeeds)
     }
 
-    override fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap?) {
-        getPresenter().onAvatarDisplayStateChanged(true)
+    private fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap?) {
+        viewModel.onAvatarDisplayStateChanged(true)
         fragmentView.ivPasswordAvatarChooser.setImageBitmap(bitmapImage)
         fragmentView.lvAvatarChooserImageDesc.visibility = View.GONE
     }
 
-    override fun deletePasswordAvatarChooserImage() {
-        getPresenter().onAvatarDisplayStateChanged(false)
-        getPresenter().onPasswordNameTextChanged(tietPasswordNameField.text.toString())
+    private fun deletePasswordAvatarChooserImage() {
+        viewModel.onAvatarDisplayStateChanged(false)
+        viewModel.onPasswordNameTextChanged(tietPasswordNameField.text.toString())
     }
 
-    override fun dismissPasswordAvatarChooserDialog() {
+    private fun dismissPasswordAvatarChooserDialog() {
         if (this::mAvatarChooserDialog.isInitialized) {
             mAvatarChooserDialog.dismiss()
         }
     }
 
-    override fun openGalleryForImagePick() {
+    private fun openGalleryForImagePick() {
         if (this::mGalleryManager.isInitialized) {
             activity?.let {
                 mGalleryManager.openGalleryForImagePick(it, this)
@@ -212,14 +219,14 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
         }
     }
 
-    override fun openCameraForImagePick() {
+    private fun openCameraForImagePick() {
         activity?.let {
             CameraPickImageActivity.startCameraPickActivityForResult(it, this)
         }
     }
 
     private fun initGalleryManager() {
-        mGalleryManager.setOnImagePickedListener(getPresenter()::onGalleryAvatarSelected)
+        mGalleryManager.setOnImagePickedListener(viewModel::onGalleryAvatarSelected)
     }
 
     private fun initToolbar() {
@@ -240,9 +247,7 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
 
     private fun managePasswordAction() {
         hideKeyboard()
-        hidePasswordNameInputError()
-        hidePasswordContentInputError()
-        getPresenter().onManagePasswordAction(
+        viewModel.onManagePasswordAction(
             fragmentView.tietPasswordNameField.text.toString(),
             fragmentView.tietPasswordContentField.text.toString()
         )
@@ -258,8 +263,9 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
             && data != null
             && data.hasExtra(CameraPickImageActivity.PICKED_IMAGE_PATH_KEY_EXTRA)
         ) {
-            val filePath = data.getStringExtra(CameraPickImageActivity.PICKED_IMAGE_PATH_KEY_EXTRA)
-            getPresenter().onCameraImageSelected(filePath)
+            data.getStringExtra(CameraPickImageActivity.PICKED_IMAGE_PATH_KEY_EXTRA)?.let {
+                viewModel.onCameraImageSelected(it)
+            }
         }
     }
 }

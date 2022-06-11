@@ -20,8 +20,6 @@ android {
     defaultConfig {
         minSdkVersion MIN_SDK_VERSION
         targetSdkVersion TARGET_SDK_VERSION
-        versionCode VERSION_CODE
-        versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -71,9 +69,6 @@ dependencies {
 
     implementation deps.dagger
     kapt deps.daggerKapt
-
-    implementation deps.moxy
-    kapt deps.moxyKapt
 
     implementation deps.rx
     implementation deps.rxAndroid

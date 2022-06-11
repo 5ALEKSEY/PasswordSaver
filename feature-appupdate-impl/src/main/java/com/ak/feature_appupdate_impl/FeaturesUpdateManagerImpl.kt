@@ -3,8 +3,8 @@ package com.ak.feature_appupdate_impl
 import android.content.SharedPreferences
 import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.feature_appupdate_impl.di.modules.PreferencesModule
-import io.reactivex.Observable
-import io.reactivex.subjects.BehaviorSubject
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -18,8 +18,8 @@ class FeaturesUpdateManagerImpl @Inject constructor(
     }
 
     private val featuresUpdateSubjectsMap = mapOf(
-            IFeaturesUpdateManager.FeatureType.TAB_ACCOUNTS to BehaviorSubject.create<Boolean>(),
-            IFeaturesUpdateManager.FeatureType.FINGERPRINT to BehaviorSubject.create<Boolean>()
+        IFeaturesUpdateManager.FeatureType.TAB_ACCOUNTS to BehaviorSubject.create<Boolean>(),
+        IFeaturesUpdateManager.FeatureType.FINGERPRINT to BehaviorSubject.create<Boolean>()
     )
 
     override fun isTabAccountsFeatureViewed() =

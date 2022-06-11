@@ -5,16 +5,17 @@ import com.ak.feature_appupdate_api.api.FeatureAppUpdateApi
 import com.ak.feature_security_api.api.FeatureSecurityApi
 import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.di.modules.AppModule
+import com.ak.passwordsaver.di.modules.MainViewModelsModule
 import com.ak.passwordsaver.di.modules.NavigationModule
 import com.ak.passwordsaver.presentation.screens.home.HomeActivity
-import com.ak.passwordsaver.presentation.screens.home.HomePresenter
 import dagger.Component
 import javax.inject.Singleton
 
 @Component(
     modules = [
         AppModule::class,
-        NavigationModule::class
+        NavigationModule::class,
+        MainViewModelsModule::class,
     ],
     dependencies = [AppComponentDependencies::class]
 )
@@ -44,7 +45,6 @@ abstract class AppComponent {
     }
 
     abstract fun inject(app: PSApplication)
-    abstract fun inject(presenter: HomePresenter)
     abstract fun inject(activity: HomeActivity)
 
     @Component(dependencies = [CoreRepositoryApi::class, FeatureAppUpdateApi::class, FeatureSecurityApi::class])

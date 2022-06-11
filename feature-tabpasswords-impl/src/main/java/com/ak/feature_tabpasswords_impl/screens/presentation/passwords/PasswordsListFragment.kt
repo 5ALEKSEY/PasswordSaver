@@ -12,52 +12,32 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibility
-import com.ak.base.extensions.turnOffToolbarScrolling
-import com.ak.base.extensions.turnOnToolbarScrolling
 import com.ak.base.ui.dialog.PSDialog
 import com.ak.base.ui.dialog.PSDialogBuilder
+import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
-import com.ak.feature_tabpasswords_impl.screens.actionMode.IPasswordsActionModeView
-import com.ak.feature_tabpasswords_impl.screens.actionMode.PasswordsActionModePresenter
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordItemModel
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordsListClickListener
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordsListRecyclerAdapter
 import com.ak.feature_tabpasswords_impl.screens.presentation.base.BasePasswordsModuleFragment
-import dagger.Lazy
-import javax.inject.Inject
-import kotlinx.android.synthetic.main.fragment_passwords_list.ablPasswordsListBarLayout
 import kotlinx.android.synthetic.main.fragment_passwords_list.view.fabAddNewPasswordAction
 import kotlinx.android.synthetic.main.fragment_passwords_list.view.incEmptyView
 import kotlinx.android.synthetic.main.fragment_passwords_list.view.loadingAnimation
 import kotlinx.android.synthetic.main.fragment_passwords_list.view.passwordsLoadingContainer
 import kotlinx.android.synthetic.main.fragment_passwords_list.view.rvPasswordsList
-import kotlinx.android.synthetic.main.fragment_passwords_list.view.tbPasswordsListBar
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 
-class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter>(),
-    IPasswordsListView,
-    IPasswordsActionModeView {
+class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel>() {
 
-    @InjectPresenter
-    lateinit var passwordsListPresenter: PasswordsListPresenter
+    private lateinit var passwordsActionModeViewModel: PasswordsActionModeViewModel
 
-    @ProvidePresenter
-    fun providePresenter(): PasswordsListPresenter = daggerPresenter
-
-    @InjectPresenter
-    lateinit var passwordsActionModePresenter: PasswordsActionModePresenter
-
-    @Inject
-    lateinit var daggerActionModePresenter: Lazy<PasswordsActionModePresenter>
-
-    @ProvidePresenter
-    fun provideActionModePresenter(): PasswordsActionModePresenter = daggerActionModePresenter.get()
+    override fun createViewModel(): PasswordsListViewModel {
+        return injectViewModel(viewModelsFactory)
+    }
 
     private val passwordsListClickListener = object : PasswordsListClickListener {
         override fun selectPasswordItem(item: PasswordItemModel) {
-            passwordsActionModePresenter.onPasswordItemSelect(item.passwordId)
+            passwordsActionModeViewModel.onPasswordItemSelect(item.passwordId)
         }
 
         override fun showPasswordItemContent(item: PasswordItemModel) {
@@ -65,16 +45,16 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         }
 
         override fun copyPasswordItemContent(item: PasswordItemModel) {
-            passwordsListPresenter.onCopyPasswordAction(item.passwordId)
+            viewModel.onCopyPasswordAction(item.passwordId)
         }
 
         override fun editPasswordItem(item: PasswordItemModel) {
-            passwordsListPresenter.onEditPasswordAction(item.passwordId)
+            viewModel.onEditPasswordAction(item.passwordId)
         }
 
         override fun deletePasswordItem(item: PasswordItemModel) {
             showDeletePasswordDialog {
-                passwordsListPresenter.onDeletePasswordAction(item.passwordId)
+                viewModel.onDeletePasswordAction(item.passwordId)
             }
         }
 
@@ -92,22 +72,63 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
 
     override fun isBackPressEnabled() = false
 
-    override fun injectFragment() {
-        FeatureTabPasswordsComponent.get().inject(this)
+    override fun injectFragment(component: FeatureTabPasswordsComponent) {
+        component.inject(this)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        passwordsActionModeViewModel = injectViewModel(viewModelsFactory)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        passwordsListPresenter.loadPasswords()
+        viewModel.loadPasswords()
     }
 
-    override fun initViewBeforePresenterAttach(fragmentView: View) {
-        super.initViewBeforePresenterAttach(fragmentView)
+    override fun initView(fragmentView: View) {
+        super.initView(fragmentView)
         initToolbar()
         initRecyclerView()
 
         fragmentView.fabAddNewPasswordAction.setSafeClickListener {
             navigator.navigateToAddNewPassword()
+        }
+    }
+
+    override fun subscriberToViewModel(viewModel: PasswordsListViewModel) {
+        super.subscriberToViewModel(viewModel)
+        viewModel.subscribeEmptyPasswordState().observe(viewLifecycleOwner) {
+            fragmentView.incEmptyView.setVisibility(it)
+        }
+        viewModel.subscribeToLoadingState().observe(viewLifecycleOwner) { isLoading ->
+            fragmentView.passwordsLoadingContainer.setVisibility(isLoading)
+            if (isLoading) {
+                fragmentView.loadingAnimation.playAnimation()
+            } else {
+                fragmentView.loadingAnimation.pauseAnimation()
+            }
+        }
+        viewModel.subscribeToShowEditPasswordScreen().observe(viewLifecycleOwner) { passwordId ->
+            navigator.navigateToEditPassword(passwordId)
+        }
+        viewModel.subscribeToToolbarScrollingState().observe(viewLifecycleOwner) { canScrollToolbar ->
+            applyForToolbarController {
+                switchToolbarScrollingState(canScrollToolbar)
+            }
+        }
+        viewModel.subscribeToPasswordsList().observe(viewLifecycleOwner) {
+            passwordsAdapter.insertData(it)
+        }
+
+        passwordsActionModeViewModel.subscribeToSelectedModeState().observe(viewLifecycleOwner) { hasSelectedMode ->
+            if (hasSelectedMode) displaySelectedMode() else hideSelectedMode()
+        }
+        passwordsActionModeViewModel.subscribeToSelectedStateForItem().observe(viewLifecycleOwner) { (isSelected, passwordId) ->
+            showSelectStateForItem(isSelected, passwordId)
+        }
+        passwordsActionModeViewModel.subscribeToSelectedItemsQuantityText().observe(viewLifecycleOwner) { text ->
+            showSelectedItemsQuantityText(text)
         }
     }
 
@@ -121,46 +142,14 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         hideSelectedMode()
     }
 
-    override fun displayPasswords(passwordModelsList: List<PasswordItemModel>) {
-        passwordsAdapter.insertData(passwordModelsList)
-    }
-
-    override fun setLoadingState(isLoading: Boolean) {
-        fragmentView.passwordsLoadingContainer.setVisibility(isLoading)
-        if (isLoading) {
-            fragmentView.loadingAnimation.playAnimation()
-        } else {
-            fragmentView.loadingAnimation.pauseAnimation()
-        }
-    }
-
-    override fun setEmptyPasswordsState(isEmptyViewVisible: Boolean) {
-        fragmentView.incEmptyView.setVisibility(isEmptyViewVisible)
-    }
-
-    override fun enableToolbarScrolling() {
-        fragmentView.tbPasswordsListBar.turnOnToolbarScrolling(ablPasswordsListBarLayout)
-    }
-
-    override fun disableToolbarScrolling() {
-        fragmentView.tbPasswordsListBar.turnOffToolbarScrolling(ablPasswordsListBarLayout)
-    }
-
-    override fun showEditPasswordScreen(passwordId: Long) {
-        navigator.navigateToEditPassword(passwordId)
-    }
-
     override fun onContextMenuClosed(menu: Menu?) {
         super.onContextMenuClosed(menu)
         passwordsAdapter.clearContextMenuOpenedForPasswordItems()
     }
 
     private fun initToolbar() {
-        if (activity != null && activity is AppCompatActivity) {
-            (activity as AppCompatActivity).apply {
-                setSupportActionBar(fragmentView.tbPasswordsListBar)
-                supportActionBar?.title = getString(R.string.passwords_list_toolbar_title)
-            }
+        applyForToolbarController {
+            setToolbarTitle(R.string.passwords_list_toolbar_title)
         }
     }
 
@@ -170,10 +159,10 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         with(fragmentView.rvPasswordsList) {
             adapter = passwordsAdapter
             layoutManager = GridLayoutManager(
-                    context,
-                    AppConstants.PASSWORDS_LIST_COLUMN_COUNT,
-                    GridLayoutManager.VERTICAL,
-                    false
+                context,
+                AppConstants.PASSWORDS_LIST_COLUMN_COUNT,
+                GridLayoutManager.VERTICAL,
+                false
             )
 
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -194,11 +183,11 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
 
     //------------------------------------- Action mode --------------------------------------------
 
-    override fun showSelectedItemsQuantityText(text: String) {
+    private fun showSelectedItemsQuantityText(text: String) {
         tbPasswordsListBarActionMode?.title = text
     }
 
-    override fun displaySelectedMode() {
+    private fun displaySelectedMode() {
         val activityOfFragment = requireActivity()
         passwordsAdapter.setItemsActionModeState(true)
         if (tbPasswordsListBarActionMode == null && activityOfFragment is AppCompatActivity) {
@@ -207,7 +196,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
                     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                         return when (item?.itemId) {
                             R.id.action_delete_selected_passwords -> {
-                                showDeletePasswordDialog { passwordsActionModePresenter.onDeleteSelectedInActionMode() }
+                                showDeletePasswordDialog { passwordsActionModeViewModel.onDeleteSelectedInActionMode() }
                                 true
                             }
                             else -> false
@@ -230,14 +219,14 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListPresenter
         }
     }
 
-    override fun hideSelectedMode() {
+    private fun hideSelectedMode() {
         passwordsAdapter.setItemsActionModeState(false)
-        passwordsActionModePresenter.onSelectedModeFinished()
+        passwordsActionModeViewModel.onSelectedModeFinished()
         tbPasswordsListBarActionMode?.finish()
         tbPasswordsListBarActionMode = null
     }
 
-    override fun showSelectStateForItem(isSelected: Boolean, passwordId: Long) {
+    private fun showSelectStateForItem(isSelected: Boolean, passwordId: Long) {
         passwordsAdapter.setSelectedStateForPasswordItemId(isSelected, passwordId)
     }
 

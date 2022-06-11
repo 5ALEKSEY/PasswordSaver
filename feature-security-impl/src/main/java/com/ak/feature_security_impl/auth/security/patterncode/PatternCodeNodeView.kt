@@ -9,12 +9,11 @@ import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ak.base.extensions.getColorCompat
 import com.ak.feature_security_impl.R
-import kotlinx.android.synthetic.main.layout_pattern_code_node_view.view.*
+import kotlinx.android.synthetic.main.layout_pattern_code_node_view.view.ivNodePatternView
 
-class PatternCodeNodeView(context: Context?, attrs: AttributeSet?) :
-    ConstraintLayout(context, attrs) {
+class PatternCodeNodeView(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
 
-    private val mFailedColor by lazy { context!!.getColorCompat(R.color.failed_action_color) }
+    private val mFailedColor by lazy { context.getColorCompat(R.color.failed_action_color) }
 
     private val mInitPatterNodeEnableState = false
     private var mIsPatternNodeEnabled = mInitPatterNodeEnableState

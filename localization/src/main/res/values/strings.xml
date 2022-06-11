@@ -86,4 +86,6 @@
     <string name="save_account_button_text">Save</string>
     <string name="click_to_change_image">Click to change</string>
     <string name="oops_message">Oops!</string>
+    <string name="blue_theme_name">Blue</string>
+    <string name="orange_theme_name">Orange</string>
 </resources>

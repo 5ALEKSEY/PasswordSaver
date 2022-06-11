@@ -19,7 +19,7 @@ import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
+class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
 
     companion object DefaultValues {
         private const val LINE_WIDTH = 12F
@@ -44,9 +44,9 @@ class PatternAuthView(context: Context?, attrs: AttributeSet?) : RelativeLayout(
     //----------------------------------------------------------------------------------------------
 
 
-    private val mDefaultLineColor by lazy { context!!.getColorCompat(R.color.default_pattern_line_color) }
-    private val mFailedLineColor by lazy { context!!.getColorCompat(R.color.failed_pattern_line_color) }
-    private val mBackgroundColor by lazy { context!!.getColorCompat(R.color.security_background_color) }
+    private val mDefaultLineColor by lazy { context.getColorCompat(R.color.default_pattern_line_color) }
+    private val mFailedLineColor by lazy { context.getColorCompat(R.color.failed_pattern_line_color) }
+    private val mBackgroundColor by lazy { context.getColorCompat(R.color.security_background_color) }
 
     lateinit var mOnFinishedAction: (patternResultCode: String) -> Unit
 

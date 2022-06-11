@@ -6,51 +6,57 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.base.extensions.drawTextInner
 import com.ak.base.extensions.getColorCompat
-import com.ak.base.ui.BasePSFragment
+import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
+import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
 import kotlinx.android.synthetic.main.fragment_about_settings.view.ivAboutLauncherImage
 import kotlinx.android.synthetic.main.fragment_about_settings.view.rvAboutActionsList
 import kotlinx.android.synthetic.main.fragment_about_settings.view.tbAboutSettingsBar
 import kotlinx.android.synthetic.main.fragment_about_settings.view.tvApplicationVersionInfo
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 
-class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
-    IAboutSettingsView {
-
-    @InjectPresenter
-    lateinit var aboutSettingsPresenter: AboutSettingsPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): AboutSettingsPresenter = daggerPresenter
+class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>() {
 
     private lateinit var aboutRecyclerAdapter: SettingsRecyclerViewAdapter
 
     override fun getFragmentLayoutResId() = R.layout.fragment_about_settings
 
-    override fun injectFragment() {
-        FeatureTabSettingsComponent.get().inject(this)
+    override fun injectFragment(component: FeatureTabSettingsComponent) {
+        component.inject(this)
     }
 
-    override fun initViewBeforePresenterAttach(fragmentView: View) {
-        super.initViewBeforePresenterAttach(fragmentView)
+    override fun createViewModel(): AboutSettingsViewModel {
+        return injectViewModel(viewModelsFactory)
+    }
+
+    override fun initView(fragmentView: View) {
+        super.initView(fragmentView)
         initToolbar()
         initRecyclerView()
         displayLauncherImageText(getString(R.string.about_launch_image_text))
+        viewModel.onInitSettings()
     }
 
-    override fun setVersionInfo(versionInfo: String) {
+    override fun subscriberToViewModel(viewModel: AboutSettingsViewModel) {
+        super.subscriberToViewModel(viewModel)
+        viewModel.subscribeToStartReportLiveData().observe(viewLifecycleOwner) {
+            startReportAction()
+        }
+        viewModel.subscribeToVersionInfoLiveData().observe(viewLifecycleOwner, this::setVersionInfo)
+        viewModel.subscribeToAboutActionsLiveData().observe(viewLifecycleOwner, this::displayAboutActions)
+    }
+
+    private fun setVersionInfo(versionInfo: String) {
         fragmentView.tvApplicationVersionInfo.text = versionInfo
     }
 
-    override fun displayAboutActions(settingsItems: List<SettingsListItemModel>) {
+    private fun displayAboutActions(settingsItems: List<SettingsListItemModel>) {
         aboutRecyclerAdapter.addSettingsList(settingsItems)
     }
 
-    override fun startReportAction() {
+    private fun startReportAction() {
 //        showShortTimeMessage("report. aga. shhha")
     }
 
@@ -70,7 +76,7 @@ class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
         aboutRecyclerAdapter = SettingsRecyclerViewAdapter(
             null,
             null,
-            aboutSettingsPresenter::onAboutActionClicked,
+            viewModel::onAboutActionClicked,
             null
         )
         fragmentView.rvAboutActionsList.apply {

@@ -7,9 +7,10 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ak.base.extensions.vibrate
 import com.ak.feature_security_impl.R
-import kotlinx.android.synthetic.main.layout_pincode_number_view.view.*
+import kotlinx.android.synthetic.main.layout_pincode_number_view.view.tvPrimaryNumberText
+import kotlinx.android.synthetic.main.layout_pincode_number_view.view.tvSecondaryNumberText
 
-class PincodeNumberView(context: Context?, attrs: AttributeSet?) :
+class PincodeNumberView(context: Context, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs), View.OnClickListener {
 
     companion object {

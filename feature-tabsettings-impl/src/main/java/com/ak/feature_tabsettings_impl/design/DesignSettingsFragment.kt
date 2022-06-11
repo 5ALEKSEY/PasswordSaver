@@ -4,40 +4,36 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ak.base.ui.BasePSFragment
+import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
+import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
 import kotlinx.android.synthetic.main.fragment_design_settings.view.rvDesignSettingsItemsList
 import kotlinx.android.synthetic.main.fragment_design_settings.view.tbDesignSettingsBar
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 
-class DesignSettingsFragment : BasePSFragment<DesignSettingsPresenter>(),
-    IDesignSettingsView {
-
-    @InjectPresenter
-    lateinit var designSettingsPresenter: DesignSettingsPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): DesignSettingsPresenter = daggerPresenter
+class DesignSettingsFragment : BaseSettingsModuleFragment<DesignSettingsViewModel>() {
 
     private lateinit var settingsRecyclerAdapter: SettingsRecyclerViewAdapter
 
     override fun getFragmentLayoutResId() = R.layout.fragment_design_settings
 
-    override fun injectFragment() {
-        FeatureTabSettingsComponent.get().inject(this)
+    override fun injectFragment(component: FeatureTabSettingsComponent) {
+        component.inject(this)
     }
 
-    override fun initViewBeforePresenterAttach(fragmentView: View) {
-        super.initViewBeforePresenterAttach(fragmentView)
+    override fun createViewModel(): DesignSettingsViewModel {
+        return injectViewModel(viewModelsFactory)
+    }
+
+    override fun initView(fragmentView: View) {
+        super.initView(fragmentView)
         initToolbar()
         initRecyclerView()
     }
 
-    override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
+    private fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
         settingsRecyclerAdapter.addSettingsList(settingsItems)
     }
 

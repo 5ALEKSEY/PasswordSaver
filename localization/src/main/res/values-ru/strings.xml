@@ -86,4 +86,6 @@
     <string name="save_account_button_text">"Сохранить"</string>
     <string name="click_to_change_image">"Изменить"</string>
     <string name="oops_message">"Уупс!"</string>
+    <string name="blue_theme_name">"Синяя"</string>
+    <string name="orange_theme_name">"Оранжевая"</string>
 </resources>

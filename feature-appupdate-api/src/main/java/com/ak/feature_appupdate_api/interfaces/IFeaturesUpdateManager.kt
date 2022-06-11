@@ -1,6 +1,6 @@
 package com.ak.feature_appupdate_api.interfaces
 
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 interface IFeaturesUpdateManager {
     // tab account feature

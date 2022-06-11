@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import javax.inject.Inject
 
+// TODO: move to common module
 class DataBufferManagerImpl @Inject constructor(
     private val context: Context
 ) : IDataBufferManager {
@@ -18,7 +19,7 @@ class DataBufferManagerImpl @Inject constructor(
     }
 
     override fun copyStringData(label: String, data: String) {
-        mClipboardManager.primaryClip = ClipData.newPlainText(label, data)
+        mClipboardManager.setPrimaryClip(ClipData.newPlainText(label, data))
     }
 
     override fun copyStringData(data: String) {

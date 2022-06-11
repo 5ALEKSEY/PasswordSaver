@@ -20,8 +20,6 @@ android {
     defaultConfig {
         minSdkVersion MIN_SDK_VERSION
         targetSdkVersion TARGET_SDK_VERSION
-        versionCode VERSION_CODE
-        versionName VERSION_NAME
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -49,8 +47,15 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     api project(':localization')
 
+    implementation deps.constraint
     implementation deps.kotlin
     implementation deps.appCompat
     implementation deps.androidX
     implementation deps.androidMaterial
+    implementation deps.viewPump
+
+    implementation deps.rx
+    implementation deps.rxAndroid
+
+    implementation deps.gson
 }

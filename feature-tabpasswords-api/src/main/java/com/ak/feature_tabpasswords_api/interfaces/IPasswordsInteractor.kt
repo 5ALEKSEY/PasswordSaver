@@ -1,7 +1,8 @@
 package com.ak.feature_tabpasswords_api.interfaces
 
-import io.reactivex.Flowable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
+
 
 interface IPasswordsInteractor {
     fun getAllPasswords(): Flowable<List<PasswordFeatureEntity>>

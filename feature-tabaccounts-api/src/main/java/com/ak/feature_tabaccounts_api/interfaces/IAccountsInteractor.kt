@@ -1,7 +1,7 @@
 package com.ak.feature_tabaccounts_api.interfaces
 
-import io.reactivex.Flowable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
 
 interface IAccountsInteractor {
     fun getAllAccounts(): Flowable<List<AccountFeatureEntity>>

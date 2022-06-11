@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     // static colors
+    <color name="staticColorTransparent">#00FFFFFF</color>
     <color name="staticColorBlack">#000000</color>
     <color name="staticColorWhite">#FFFFFF</color>
-    <color name="staticColorTransparent">#00FFFFFF</color>
 
     // app theme colors
     <color name="colorPrimary">#3F51B5</color>

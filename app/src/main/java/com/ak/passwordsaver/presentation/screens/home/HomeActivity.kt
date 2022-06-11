@@ -2,6 +2,8 @@ package com.ak.passwordsaver.presentation.screens.home
 
 import android.os.Bundle
 import android.view.WindowManager
+import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.Navigation
@@ -10,26 +12,30 @@ import androidx.navigation.ui.NavigationUI
 import com.ak.base.extensions.removeTextBadgeByMenuId
 import com.ak.base.extensions.setTextBadgeByMenuId
 import com.ak.base.extensions.setVisibility
+import com.ak.base.extensions.turnOffToolbarScrolling
+import com.ak.base.extensions.turnOnToolbarScrolling
 import com.ak.base.ui.BasePSFragment
+import com.ak.base.ui.toolbar.IToolbarController
+import com.ak.base.viewmodel.injectViewModel
 import com.ak.passwordsaver.R
 import com.ak.passwordsaver.di.AppComponent
-import com.ak.passwordsaver.injector.ApplicationInjector
+import com.ak.passwordsaver.di.modules.MainViewModelsModule
+import com.ak.passwordsaver.injector.ClearComponentsByDestinationChangeManager
 import com.ak.passwordsaver.presentation.base.BasePSFragmentActivity
-import kotlinx.android.synthetic.main.activity_home.*
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import javax.inject.Inject
+import javax.inject.Named
 
-class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
+class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController {
 
     companion object {
         private const val MENU_CHANGE_DELAY = 200L
     }
 
-    @InjectPresenter
-    lateinit var homePresenter: HomePresenter
-
-    @ProvidePresenter
-    fun providePresenter(): HomePresenter = daggerPresenter
+    @Inject
+    @field:Named(MainViewModelsModule.MAIN_VIEW_MODELS_FACTORY_KEY)
+    protected lateinit var viewModelsFactory: ViewModelProvider.Factory
 
     private var currentMenuItemId = R.id.passwordsListFragment
     private var lastMenuChangeTime = 0L
@@ -43,16 +49,31 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
     private val homeNavController: NavController by lazy {
         Navigation.findNavController(this, R.id.bottomNavHostFragment)
     }
+    private val bottomNavigationView by lazy {
+        findViewById<BottomNavigationView>(R.id.bnvBottomBar)
+    }
+    private val toolbarAppBarLayout by lazy {
+        findViewById<AppBarLayout>(R.id.ablHomeBarLayout)
+    }
+    private val toolbarView by lazy {
+        findViewById<Toolbar>(R.id.tbHomeToolbar)
+    }
 
-    private val destChangeListener =
-        NavController.OnDestinationChangedListener { _, destAction, _ ->
-            if (destAction !is NavGraph) {
-                ApplicationInjector.onDestinationIdChanged(destAction.id)
-                bnvBottomBar.setVisibility(destAction.id in visibleBottomBarDestinations)
+    private val destChangeListener = NavController.OnDestinationChangedListener { _, destAction, _ ->
+        if (destAction !is NavGraph) {
+            val appContext = applicationContext
+            if (appContext is ClearComponentsByDestinationChangeManager) {
+                appContext.onDestinationIdChanged(destAction.id)
             }
+            bottomNavigationView.setVisibility(destAction.id in visibleBottomBarDestinations)
         }
+    }
 
     override fun getScreenLayoutResId() = R.layout.activity_home
+
+    override fun createViewModel(): HomeViewModel {
+        return injectViewModel(viewModelsFactory)
+    }
 
     override fun onBackPressed() {
         val hostFragment = supportFragmentManager.findFragmentById(R.id.bottomNavHostFragment)
@@ -74,14 +95,14 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
             return
         }
 
-        homePresenter.finishScreenAction()
+        viewModel.finishScreenAction()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AppComponent.get().inject(this)
         super.onCreate(savedInstanceState)
-        setSecureRecentAppsScreenState(homePresenter.getSecureApplicationState())
-        initBottomNavigationView(homeNavController)
+        initToolbar()
+        setSecureRecentAppsScreenState(viewModel.getSecureApplicationState())
     }
 
     override fun onStart() {
@@ -94,38 +115,62 @@ class HomeActivity : BasePSFragmentActivity<HomePresenter>(), IHomeView {
         super.onStop()
     }
 
-    override fun finishScreen() {
-        finish()
-    }
-
-    override fun setFeatureBadgeText(featureMenuId: Int, text: String) {
-        bnvBottomBar.setTextBadgeByMenuId(featureMenuId, text)
-    }
-
-    override fun removeFeatureBadgeText(featureMenuId: Int) {
-        bnvBottomBar.removeTextBadgeByMenuId(featureMenuId)
-    }
-
-    private fun initBottomNavigationView(navController: NavController) {
-        bnvBottomBar.setOnNavigationItemSelectedListener { menuItem ->
+    override fun initView() {
+        super.initView()
+        bottomNavigationView.setOnItemSelectedListener { menuItem ->
             if (currentMenuItemId == menuItem.itemId) {
                 // skip already selected menu item
-                return@setOnNavigationItemSelectedListener false
+                return@setOnItemSelectedListener false
             }
 
             val currentTime = System.currentTimeMillis()
             val lastMenuItemChangeDuration = currentTime - lastMenuChangeTime
             if (lastMenuChangeTime != 0L && lastMenuItemChangeDuration < MENU_CHANGE_DELAY) {
                 // skip monkey fast menu tabs changes
-                return@setOnNavigationItemSelectedListener false
+                return@setOnItemSelectedListener false
             }
 
             currentMenuItemId = menuItem.itemId
             lastMenuChangeTime = currentTime
-            homePresenter.onNavMenuDestinationChanged(currentMenuItemId)
-            NavigationUI.onNavDestinationSelected(menuItem, navController)
+            viewModel.onNavMenuDestinationChanged(currentMenuItemId)
+            NavigationUI.onNavDestinationSelected(menuItem, homeNavController)
         }
-        homePresenter.checkFeaturesBadgeUpdate()
+        viewModel.checkFeaturesBadgeUpdate()
+    }
+
+    override fun subscriberToViewModel(viewModel: HomeViewModel) {
+        super.subscriberToViewModel(viewModel)
+        viewModel.subscribeToFinishScreenLiveData().observe(this) {
+            finish()
+        }
+        viewModel.subscribeToFeatureBadgeTextLiveData().observe(this) { badgeData ->
+            val (badgeId, badgeTextResId) = badgeData
+            if (badgeTextResId == null || badgeTextResId == -1) {
+                bottomNavigationView.removeTextBadgeByMenuId(badgeId)
+            } else {
+                bottomNavigationView.setTextBadgeByMenuId(badgeId, getString(badgeTextResId))
+            }
+        }
+    }
+
+    override fun setToolbarTitle(title: String) {
+        supportActionBar?.title = title
+    }
+
+    override fun setToolbarTitle(titleResIs: Int) {
+        setToolbarTitle(getString(titleResIs))
+    }
+
+    override fun switchToolbarScrollingState(isScrollingEnabled: Boolean) {
+        if (isScrollingEnabled) {
+            toolbarView.turnOnToolbarScrolling(toolbarAppBarLayout)
+        } else {
+            toolbarView.turnOffToolbarScrolling(toolbarAppBarLayout)
+        }
+    }
+
+    private fun initToolbar() {
+        setSupportActionBar(toolbarView)
     }
 
     private fun setSecureRecentAppsScreenState(isSecure: Boolean) {

@@ -6,6 +6,25 @@
         android:layout_height="match_parent"
         tools:context=".presentation.screens.home.HomeActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/ablHomeBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/tbHomeToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                app:titleTextAppearance="@style/Toolbar.TitleText"
+                app:titleTextColor="@color/colorToolbarIconsAndText" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <fragment
             android:id="@+id/bottomNavHostFragment"
             android:name="androidx.navigation.fragment.NavHostFragment"
@@ -15,7 +34,7 @@
             app:layout_constraintBottom_toTopOf="@+id/vBottomBarDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ablHomeBarLayout"
             app:navGraph="@navigation/nav_graph" />
 
     <View

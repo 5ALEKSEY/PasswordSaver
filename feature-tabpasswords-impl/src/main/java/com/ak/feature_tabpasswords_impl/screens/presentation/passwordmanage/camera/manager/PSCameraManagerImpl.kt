@@ -261,7 +261,7 @@ class PSCameraManagerImpl @Inject constructor(
                     mPreviewImageView!!.width, mPreviewImageView!!.height
                 )
             createCameraPreviewSession(
-                surfaceTexture,
+                surfaceTexture!!,
                 optimalPreviewSize.width,
                 optimalPreviewSize.height
             )
@@ -269,29 +269,27 @@ class PSCameraManagerImpl @Inject constructor(
             mPreviewImageView!!.surfaceTextureListener =
                 object : TextureView.SurfaceTextureListener {
                     override fun onSurfaceTextureSizeChanged(
-                        surface: SurfaceTexture?,
+                        surface: SurfaceTexture,
                         w: Int,
                         h: Int
                     ) {
                         Log.d("d", "d")
                     }
 
-                    override fun onSurfaceTextureUpdated(surface: SurfaceTexture?) {
+                    override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {
                         Log.d("d", "ss")
                     }
 
-                    override fun onSurfaceTextureDestroyed(surface: SurfaceTexture?): Boolean {
+                    override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
                         Log.d("d", "ss")
                         return true
                     }
 
                     override fun onSurfaceTextureAvailable(
-                        surface: SurfaceTexture?,
+                        surface: SurfaceTexture,
                         width: Int,
                         height: Int
                     ) {
-                        if (surface == null) return
-
                         val optimalPreviewSize =
                             CameraHelper.getBestCameraPhotoPreviewSize(
                                 context,

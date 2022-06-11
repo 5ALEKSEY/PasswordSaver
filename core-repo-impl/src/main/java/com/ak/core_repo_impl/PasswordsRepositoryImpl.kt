@@ -5,10 +5,10 @@ import com.ak.core_repo_api.intefaces.PasswordRepoEntity
 import com.ak.core_repo_impl.data.model.db.PSDatabase
 import com.ak.core_repo_impl.data.model.db.entities.PasswordDBEntity
 import com.ak.core_repo_impl.data.model.mapper.mapToPasswordDbEntitiesList
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class PasswordsRepositoryImpl @Inject constructor(

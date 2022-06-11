@@ -13,52 +13,28 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibility
-import com.ak.base.extensions.turnOffToolbarScrolling
-import com.ak.base.extensions.turnOnToolbarScrolling
 import com.ak.base.ui.dialog.PSDialog
 import com.ak.base.ui.dialog.PSDialogBuilder
+import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
-import com.ak.feature_tabaccounts_impl.screens.actionMode.AccountsActionModePresenter
-import com.ak.feature_tabaccounts_impl.screens.actionMode.IAccountsActionModeView
 import com.ak.feature_tabaccounts_impl.screens.adapter.AccountItemModel
 import com.ak.feature_tabaccounts_impl.screens.adapter.AccountListClickListener
 import com.ak.feature_tabaccounts_impl.screens.adapter.AccountsListRecyclerAdapter
 import com.ak.feature_tabaccounts_impl.screens.presentation.base.BaseAccountsModuleFragment
-import dagger.Lazy
-import javax.inject.Inject
-import kotlinx.android.synthetic.main.fragment_accounts_list.ablAccountsListBarLayout
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.accountLoadingContainer
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.fabAddNewAccountAction
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.incEmptyView
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.loadingAnimation
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.rvAccountsList
-import kotlinx.android.synthetic.main.fragment_accounts_list.view.tbAccountsListBar
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 
-class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>(),
-    IAccountsListView,
-    IAccountsActionModeView {
+class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>() {
 
-    @InjectPresenter
-    lateinit var accountsListPresenter: AccountsListPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): AccountsListPresenter = daggerPresenter
-
-    @InjectPresenter
-    lateinit var accountsActionModePresenter: AccountsActionModePresenter
-
-    @Inject
-    lateinit var daggerActionModePresenter: Lazy<AccountsActionModePresenter>
-
-    @ProvidePresenter
-    fun provideActionModePresenter(): AccountsActionModePresenter = daggerActionModePresenter.get()
+    private lateinit var accountsActionModeViewModel: AccountsActionModeViewModel
 
     private val accountsListClickListener = object : AccountListClickListener {
         override fun selectAccountItem(item: AccountItemModel) {
-            accountsActionModePresenter.onAccountItemSelect(item.accountId)
+            accountsActionModeViewModel.onAccountItemSelect(item.accountId)
         }
 
         override fun showAccountItemContent(item: AccountItemModel) {
@@ -66,19 +42,19 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
         }
 
         override fun copyAccountItemLogin(item: AccountItemModel) {
-            accountsListPresenter.onCopyAccountLoginAction(item.accountId)
+            viewModel.onCopyAccountLoginAction(item.accountId)
         }
 
         override fun copyAccountItemPassword(item: AccountItemModel) {
-            accountsListPresenter.onCopyAccountPasswordAction(item.accountId)
+            viewModel.onCopyAccountPasswordAction(item.accountId)
         }
 
         override fun editAccountItem(item: AccountItemModel) {
-            accountsListPresenter.onEditAccountAction(item.accountId)
+            viewModel.onEditAccountAction(item.accountId)
         }
 
         override fun deleteAccountItem(item: AccountItemModel) {
-            accountsListPresenter.onDeleteAccountAction(item.accountId)
+            viewModel.onDeleteAccountAction(item.accountId)
         }
 
         override fun onCreateContextMenuForAccountItem(item: AccountItemModel) {
@@ -95,23 +71,47 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
 
     override fun isBackPressEnabled() = false
 
-    override fun injectFragment() {
-        FeatureTabAccountsComponent.get().inject(this)
+    override fun injectFragment(component: FeatureTabAccountsComponent) {
+        component.inject(this)
+    }
+
+    override fun createViewModel(): AccountsListViewModel {
+        return injectViewModel(viewModelsFactory)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        accountsActionModeViewModel = injectViewModel(viewModelsFactory)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        accountsListPresenter.loadPasswords()
+        viewModel.loadPasswords()
     }
 
-    override fun initViewBeforePresenterAttach(fragmentView: View) {
-        super.initViewBeforePresenterAttach(fragmentView)
+    override fun initView(fragmentView: View) {
+        super.initView(fragmentView)
         initToolbar()
         initRecyclerView()
 
         fragmentView.fabAddNewAccountAction.setSafeClickListener {
             navigator.navigateToAddNewAccount()
         }
+    }
+
+    override fun subscriberToViewModel(viewModel: AccountsListViewModel) {
+        super.subscriberToViewModel(viewModel)
+        viewModel.subscribeToLoadingState().observe(viewLifecycleOwner, this::setLoadingState)
+        viewModel.subscribeEmptyAccountsState().observe(viewLifecycleOwner, this::setEmptyAccountsState)
+        viewModel.subscribeToAccountsList().observe(viewLifecycleOwner, this::displayAccounts)
+        viewModel.subscribeToToolbarScrollingState().observe(viewLifecycleOwner) { isEnabled ->
+            applyForToolbarController {
+                switchToolbarScrollingState(isEnabled)
+            }
+        }
+        viewModel.subscribeToShowEditPasswordScreen().observe(viewLifecycleOwner, this::showEditAccountScreen)
+
+        subscribeToActionModeViewModel(accountsActionModeViewModel)
     }
 
     override fun onResume() {
@@ -124,11 +124,11 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
         hideSelectedMode()
     }
 
-    override fun displayAccounts(accountModelsList: List<AccountItemModel>) {
+    private fun displayAccounts(accountModelsList: List<AccountItemModel>) {
         accountsAdapter.insertData(accountModelsList)
     }
 
-    override fun setLoadingState(isLoading: Boolean) {
+    private fun setLoadingState(isLoading: Boolean) {
         fragmentView.accountLoadingContainer.setVisibility(isLoading)
         if (isLoading) {
             fragmentView.loadingAnimation.playAnimation()
@@ -137,23 +137,11 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
         }
     }
 
-    override fun setEmptyAccountsState(isEmptyViewVisible: Boolean) {
+    private fun setEmptyAccountsState(isEmptyViewVisible: Boolean) {
         fragmentView.incEmptyView.setVisibility(isEmptyViewVisible)
     }
 
-    override fun setAccountContentVisibility(accountId: Long, contentVisibilityState: Boolean) {
-        accountsAdapter.setAccountContentVisibility(accountId, contentVisibilityState)
-    }
-
-    override fun enableToolbarScrolling() {
-        fragmentView.tbAccountsListBar.turnOnToolbarScrolling(ablAccountsListBarLayout)
-    }
-
-    override fun disableToolbarScrolling() {
-        fragmentView.tbAccountsListBar.turnOffToolbarScrolling(ablAccountsListBarLayout)
-    }
-
-    override fun showEditAccountScreen(accountId: Long) {
+    private fun showEditAccountScreen(accountId: Long) {
         navigator.navigateToEditAccount(accountId)
     }
 
@@ -163,11 +151,8 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
     }
 
     private fun initToolbar() {
-        if (activity != null && activity is AppCompatActivity) {
-            (activity as AppCompatActivity).apply {
-                setSupportActionBar(fragmentView.tbAccountsListBar)
-                supportActionBar?.title = getString(R.string.accounts_list_toolbar_title)
-            }
+        applyForToolbarController {
+            setToolbarTitle(R.string.accounts_list_toolbar_title)
         }
     }
 
@@ -177,10 +162,10 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
         with(fragmentView.rvAccountsList) {
             adapter = accountsAdapter
             layoutManager = GridLayoutManager(
-                    context,
-                    AppConstants.PASSWORDS_LIST_COLUMN_COUNT,
-                    GridLayoutManager.VERTICAL,
-                    false
+                context,
+                AppConstants.PASSWORDS_LIST_COLUMN_COUNT,
+                GridLayoutManager.VERTICAL,
+                false
             )
 
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -200,11 +185,21 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
 
     //------------------------------------- Action mode --------------------------------------------
 
-    override fun showSelectedItemsQuantityText(text: String) {
+    private fun subscribeToActionModeViewModel(viewModel: AccountsActionModeViewModel) {
+        viewModel.subscribeToSelectedModeState().observe(viewLifecycleOwner) { hasSelectedMode ->
+            if (hasSelectedMode) displaySelectedMode() else hideSelectedMode()
+        }
+        viewModel.subscribeToSelectedStateForItem().observe(viewLifecycleOwner) {
+            showSelectStateForItem(it.first, it.second)
+        }
+        viewModel.subscribeToSelectedItemsQuantityText().observe(viewLifecycleOwner, this::showSelectedItemsQuantityText)
+    }
+
+    private fun showSelectedItemsQuantityText(text: String) {
         tbAccountsListBarActionMode?.title = text
     }
 
-    override fun displaySelectedMode() {
+    private fun displaySelectedMode() {
         val activityOfFragment = requireActivity()
         accountsAdapter.setItemsActionModeState(true)
         if (tbAccountsListBarActionMode == null && activityOfFragment is AppCompatActivity) {
@@ -213,7 +208,7 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
                     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                         return when (item?.itemId) {
                             R.id.action_delete_selected_accounts -> {
-                                showDeleteAccountDialog { accountsActionModePresenter.onDeleteSelectedInActionMode() }
+                                showDeleteAccountDialog { accountsActionModeViewModel.onDeleteSelectedInActionMode() }
                                 true
                             }
                             else -> false
@@ -236,14 +231,14 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListPresenter>()
         }
     }
 
-    override fun hideSelectedMode() {
+    private fun hideSelectedMode() {
         accountsAdapter.setItemsActionModeState(false)
-        accountsActionModePresenter.onSelectedModeFinished()
+        accountsActionModeViewModel.onSelectedModeFinished()
         tbAccountsListBarActionMode?.finish()
         tbAccountsListBarActionMode = null
     }
 
-    override fun showSelectStateForItem(isSelected: Boolean, accountId: Long) {
+    private fun showSelectStateForItem(isSelected: Boolean, accountId: Long) {
         accountsAdapter.setSelectedStateForAccountItemId(isSelected, accountId)
     }
 

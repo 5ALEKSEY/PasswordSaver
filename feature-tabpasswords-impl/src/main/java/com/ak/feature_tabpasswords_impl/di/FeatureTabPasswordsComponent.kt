@@ -9,16 +9,12 @@ import com.ak.feature_tabpasswords_impl.di.modules.AppModule
 import com.ak.feature_tabpasswords_impl.di.modules.DomainBusinessLogicModule
 import com.ak.feature_tabpasswords_impl.di.modules.PasswordsTabManagersModule
 import com.ak.feature_tabpasswords_impl.di.modules.PasswordsTabNavigationModule
-import com.ak.feature_tabpasswords_impl.screens.actionMode.PasswordsActionModePresenter
+import com.ak.feature_tabpasswords_impl.di.modules.TabPasswordsViewModelsModule
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.add.AddNewPasswordFragment
-import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.add.AddNewPasswordPresenter
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.camera.CameraPickImageActivity
-import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.camera.CameraPickImagePresenter
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.edit.EditPasswordFragment
-import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.edit.EditPasswordPresenter
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.ui.PhotoChooserBottomSheetDialog
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwords.PasswordsListFragment
-import com.ak.feature_tabpasswords_impl.screens.presentation.passwords.PasswordsListPresenter
 import dagger.BindsInstance
 import dagger.Component
 
@@ -27,7 +23,8 @@ import dagger.Component
             AppModule::class,
             DomainBusinessLogicModule::class,
             PasswordsTabManagersModule::class,
-            PasswordsTabNavigationModule::class
+            PasswordsTabNavigationModule::class,
+            TabPasswordsViewModelsModule::class
         ],
         dependencies = [FeatureTabPasswordsDependencies::class]
 )
@@ -38,22 +35,22 @@ abstract class FeatureTabPasswordsComponent : FeatureTabPasswordsApi {
         @Volatile
         private var featureTabPasswordsComponent: FeatureTabPasswordsComponent? = null
 
-        fun initialize(dependencies: FeatureTabPasswordsDependencies, applicationContext: Context) {
+        fun initializeAndGet(dependencies: FeatureTabPasswordsDependencies, applicationContext: Context): FeatureTabPasswordsComponent {
             if (featureTabPasswordsComponent == null) {
                 featureTabPasswordsComponent = DaggerFeatureTabPasswordsComponent.builder()
                     .injectAppContext(applicationContext)
                     .provideDependencies(dependencies)
                     .build()
             }
+
+            return requireNotNull(featureTabPasswordsComponent) {
+                "FeatureTabPasswordsComponent is null. initializeAndGet() didn't initialize it"
+            }
         }
 
-        fun get(): FeatureTabPasswordsComponent = if (featureTabPasswordsComponent != null) {
-            featureTabPasswordsComponent!!
-        } else {
-            throw IllegalStateException("FeatureTabPasswordsComponent is null. initialize() should be called before")
+        fun clear() {
+            featureTabPasswordsComponent = null
         }
-
-        fun isInitialized() = featureTabPasswordsComponent != null
     }
 
     @Component.Builder
@@ -64,18 +61,7 @@ abstract class FeatureTabPasswordsComponent : FeatureTabPasswordsApi {
         fun build(): FeatureTabPasswordsComponent
     }
 
-    fun clearComponent() {
-        featureTabPasswordsComponent = null
-    }
-
     abstract fun inject(activity: CameraPickImageActivity)
-
-    abstract fun inject(presenter: CameraPickImagePresenter)
-    abstract fun inject(presenter: PasswordsListPresenter)
-    abstract fun inject(presenter: PasswordsActionModePresenter)
-    abstract fun inject(presenter: AddNewPasswordPresenter)
-    abstract fun inject(presenter: EditPasswordPresenter)
-
     abstract fun inject(dialog: PhotoChooserBottomSheetDialog)
     abstract fun inject(fragment: PasswordsListFragment)
     abstract fun inject(fragment: EditPasswordFragment)

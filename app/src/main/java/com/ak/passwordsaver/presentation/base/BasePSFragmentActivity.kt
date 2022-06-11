@@ -3,42 +3,39 @@ package com.ak.passwordsaver.presentation.base
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import com.ak.app_theme.theme.uicomponents.BaseThemeActivity
 import com.ak.base.extensions.showToastMessage
 import com.ak.base.extensions.vibrate
-import com.ak.base.presenter.BasePSPresenter
 import com.ak.base.ui.BasePSFragment
-import com.ak.base.ui.IBaseAppView
+import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_security_api.interfaces.IPSAuthManager
 import javax.inject.Inject
-import moxy.MvpAppCompatActivity
 
-abstract class BasePSFragmentActivity<Presenter : BasePSPresenter<*>> : MvpAppCompatActivity(),
-    IBaseAppView {
+// TODO: must be in base module (but auth manager dependency should be solved before)
+abstract class BasePSFragmentActivity<VM : BasePSViewModel> : BaseThemeActivity() {
 
     @Inject
     protected lateinit var authManager: IPSAuthManager
     @Inject
     protected lateinit var authChecker: IAuthCheckerStarter
 
-    @Inject
-    protected lateinit var daggerPresenter: Presenter
+    protected lateinit var viewModel: VM
 
     @LayoutRes
     abstract fun getScreenLayoutResId(): Int
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        mvpDelegate.onAttach()
-    }
+    abstract fun createViewModel(): VM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(getScreenLayoutResId())
-        initViewBeforePresenterAttach()
-        mvpDelegate.onAttach()
+        viewModel = createViewModel()
+        initView()
+        subscriberToViewModel(viewModel)
     }
 
     override fun onResume() {
@@ -61,23 +58,26 @@ abstract class BasePSFragmentActivity<Presenter : BasePSPresenter<*>> : MvpAppCo
         authChecker.handleActivityResult(requestCode, resultCode)
     }
 
-    override fun showShortTimeMessage(message: String) {
-        showToastMessage(message)
-    }
-
-    override fun invokeVibration(vibrateDuration: Long) {
-        vibrate(vibrateDuration)
-    }
-
-    override fun onContextMenuClosed(menu: Menu?) {
+    override fun onContextMenuClosed(menu: Menu) {
         super.onContextMenuClosed(menu)
         supportFragmentManager.fragments.forEach {
             notifyFragmentAboutContextMenuClosed(it, menu)
         }
     }
 
-    protected open fun initViewBeforePresenterAttach() {
+    @CallSuper
+    protected open fun initView() {
 
+    }
+
+    @CallSuper
+    protected open fun subscriberToViewModel(viewModel: VM) {
+        viewModel.subscribeToShortTimeMessageLiveData().observe(this) {
+            showToastMessage(it)
+        }
+        viewModel.subscribeToVibrateLiveData().observe(this) {
+            vibrate(it)
+        }
     }
 
     protected open fun isAuthCheckNeedsForScreen() = true

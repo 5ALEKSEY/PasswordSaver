@@ -6,69 +6,70 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ak.base.ui.BasePSFragment
 import com.ak.base.ui.dialog.PSDialog
 import com.ak.base.ui.dialog.PSDialogBuilder
+import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
+import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_privacy_settings.view.*
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_privacy_settings.view.rvPrivacySettingsItemsList
+import kotlinx.android.synthetic.main.fragment_privacy_settings.view.tbPrivacySettingsBar
 
-class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(),
-    IPrivacySettingsView {
+class PrivacySettingsFragment : BaseSettingsModuleFragment<PrivacySettingsViewModel>() {
 
     @Inject
-    lateinit var authChecker: IAuthCheckerStarter
-
-    @InjectPresenter
-    lateinit var privacySettingsPresenter: PrivacySettingsPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): PrivacySettingsPresenter = daggerPresenter
+    protected lateinit var authChecker: IAuthCheckerStarter
 
     private lateinit var settingsRecyclerAdapter: SettingsRecyclerViewAdapter
     private var routeToSecureSettingsDialog: PSDialog? = null
 
     override fun getFragmentLayoutResId() = R.layout.fragment_privacy_settings
 
-    override fun injectFragment() {
-        FeatureTabSettingsComponent.get().inject(this)
+    override fun injectFragment(component: FeatureTabSettingsComponent) {
+        component.inject(this)
     }
 
-    override fun initViewBeforePresenterAttach(fragmentView: View) {
-        super.initViewBeforePresenterAttach(fragmentView)
+    override fun createViewModel(): PrivacySettingsViewModel {
+        return injectViewModel(viewModelsFactory)
+    }
+
+    override fun initView(fragmentView: View) {
+        super.initView(fragmentView)
         initToolbar()
         initRecyclerView()
+    }
+
+    override fun subscriberToViewModel(viewModel: PrivacySettingsViewModel) {
+        super.subscriberToViewModel(viewModel)
+        viewModel.subscribeToPrivacySettingsListLiveData().observe(viewLifecycleOwner, this::displayPrivacySettings)
+        viewModel.subscribeToShowAddPincodeLiveData().observe(viewLifecycleOwner) {
+            openSecurityScreen(IAuthCheckerStarter.ADD_PINCODE_SECURITY_ACTION_TYPE)
+        }
+        viewModel.subscribeToShowEditPincodeLiveData().observe(viewLifecycleOwner) {
+            openSecurityScreen(IAuthCheckerStarter.CHANGE_PINCODE_SECURITY_ACTION_TYPE)
+        }
+        viewModel.subscribeToShowAddPatternLiveData().observe(viewLifecycleOwner) {
+            openSecurityScreen(IAuthCheckerStarter.ADD_PATTERN_SECURITY_ACTION_TYPE)
+        }
+        viewModel.subscribeToShowEditPatternLiveData().observe(viewLifecycleOwner) {
+            openSecurityScreen(IAuthCheckerStarter.CHANGE_PATTERN_SECURITY_ACTION_TYPE)
+        }
+        viewModel.subscribeToShowAddNewFingerprintLiveData().observe(viewLifecycleOwner) {
+            showAddNewFingerprintDialog()
+        }
     }
 
     override fun onResume() {
         super.onResume()
         routeToSecureSettingsDialog?.dismissAllowingStateLoss()
-        privacySettingsPresenter.loadSettingsData()
+        viewModel.loadSettingsData()
     }
 
-    override fun openAddPincodeScreen() {
-        openSecurityScreen(IAuthCheckerStarter.ADD_PINCODE_SECURITY_ACTION_TYPE)
-    }
-
-    override fun openChangePincodeScreen() {
-        openSecurityScreen(IAuthCheckerStarter.CHANGE_PINCODE_SECURITY_ACTION_TYPE)
-    }
-
-    override fun openAddPatternScreen() {
-        openSecurityScreen(IAuthCheckerStarter.ADD_PATTERN_SECURITY_ACTION_TYPE)
-    }
-
-    override fun openChangePatternScreen() {
-        openSecurityScreen(IAuthCheckerStarter.CHANGE_PATTERN_SECURITY_ACTION_TYPE)
-    }
-
-    override fun showAddNewFingerprintDialog() {
+    private fun showAddNewFingerprintDialog() {
         routeToSecureSettingsDialog?.dismissAllowingStateLoss()
         routeToSecureSettingsDialog = PSDialogBuilder(childFragmentManager)
             .title(getString(R.string.no_added_fingerprints_dialog_title))
@@ -76,12 +77,12 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(),
             .positive(getString(R.string.no_added_fingerprints_dialog_pos_btn)) {
                 startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS).also { it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
             }
-            .dismissDialogListener { privacySettingsPresenter.loadSettingsData() }
+            .dismissDialogListener { viewModel.loadSettingsData() }
             .cancelable(false)
             .buildAndShow()
     }
 
-    override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
+    private fun displayPrivacySettings(settingsItems: List<SettingsListItemModel>) {
         settingsRecyclerAdapter.addSettingsList(settingsItems)
     }
 
@@ -100,10 +101,10 @@ class PrivacySettingsFragment : BasePSFragment<PrivacySettingsPresenter>(),
 
     private fun initRecyclerView() {
         settingsRecyclerAdapter = SettingsRecyclerViewAdapter(
-            privacySettingsPresenter::onSwitchSettingsItemChanged,
-            privacySettingsPresenter::onSpinnerItemChanged,
+            viewModel::onSwitchSettingsItemChanged,
+            viewModel::onSpinnerItemChanged,
             null,
-            privacySettingsPresenter::onTextSettingsItemClicked
+            viewModel::onTextSettingsItemClicked
         )
         fragmentView.rvPrivacySettingsItemsList.apply {
             adapter = settingsRecyclerAdapter

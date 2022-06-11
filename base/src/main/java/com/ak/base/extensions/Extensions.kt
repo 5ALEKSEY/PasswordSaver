@@ -18,6 +18,7 @@ import com.ak.base.constants.AppConstants
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import io.reactivex.rxjava3.core.SingleEmitter
 import java.util.Calendar
 import kotlinx.android.synthetic.main.layout_notification_badge.view.tvBadgeText
 
@@ -142,6 +143,18 @@ inline fun View.setSafeClickListener(
             listener(v)
         }
     })
+}
+
+fun <T> SingleEmitter<T>.onSuccessSafe(value: T) {
+    if (!isDisposed) {
+        onSuccess(value)
+    }
+}
+
+fun <T> SingleEmitter<T>.onErrorSafe(error: Throwable) {
+    if (!isDisposed) {
+        onError(error)
+    }
 }
 
 private fun getBottomNavViewMenuItem(bottomNavigationView: BottomNavigationView, menuItemId: Int): BottomNavigationItemView? {

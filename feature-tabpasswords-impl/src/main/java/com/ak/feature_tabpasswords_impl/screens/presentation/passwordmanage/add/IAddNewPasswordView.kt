@@ -1,5 +1,0 @@
-package com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.add
-
-import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.IBaseManagePasswordView
-
-interface IAddNewPasswordView : IBaseManagePasswordView

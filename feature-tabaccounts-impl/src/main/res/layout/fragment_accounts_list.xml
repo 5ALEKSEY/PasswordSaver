@@ -6,22 +6,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/ablAccountsListBarLayout"
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.Toolbar
-                android:id="@+id/tbAccountsListBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorPrimary"
-                app:titleTextAppearance="@style/Toolbar.TitleText"
-                app:titleTextColor="@color/colorToolbarIconsAndText"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <LinearLayout
             android:id="@+id/accountLoadingContainer"
             android:layout_width="wrap_content"
