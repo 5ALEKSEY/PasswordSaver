@@ -3,7 +3,6 @@ package com.ak.feature_tabsettings_impl.privacy
 import android.content.Intent
 import android.provider.Settings
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.base.ui.dialog.PSDialog
@@ -17,7 +16,6 @@ import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
 import javax.inject.Inject
 import kotlinx.android.synthetic.main.fragment_privacy_settings.view.rvPrivacySettingsItemsList
-import kotlinx.android.synthetic.main.fragment_privacy_settings.view.tbPrivacySettingsBar
 
 class PrivacySettingsFragment : BaseSettingsModuleFragment<PrivacySettingsViewModel>() {
 
@@ -87,14 +85,10 @@ class PrivacySettingsFragment : BaseSettingsModuleFragment<PrivacySettingsViewMo
     }
 
     private fun initToolbar() {
-        if (activity != null && activity is AppCompatActivity) {
-            (activity as AppCompatActivity).apply {
-                val actionBarView = fragmentView.tbPrivacySettingsBar
-                setSupportActionBar(actionBarView)
-                supportActionBar?.title = getString(R.string.privacy_settings_toolbar_title)
-                actionBarView.setNavigationOnClickListener {
-                    navController.popBackStack()
-                }
+        applyForToolbarController {
+            setToolbarTitle(R.string.privacy_settings_toolbar_title)
+            setupBackAction(R.drawable.ic_back_action) {
+                navController.popBackStack()
             }
         }
     }

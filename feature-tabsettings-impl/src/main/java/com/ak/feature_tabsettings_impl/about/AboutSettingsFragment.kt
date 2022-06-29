@@ -1,7 +1,6 @@
 package com.ak.feature_tabsettings_impl.about
 
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.base.extensions.drawTextInner
@@ -14,7 +13,6 @@ import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
 import kotlinx.android.synthetic.main.fragment_about_settings.view.ivAboutLauncherImage
 import kotlinx.android.synthetic.main.fragment_about_settings.view.rvAboutActionsList
-import kotlinx.android.synthetic.main.fragment_about_settings.view.tbAboutSettingsBar
 import kotlinx.android.synthetic.main.fragment_about_settings.view.tvApplicationVersionInfo
 
 class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>() {
@@ -61,13 +59,10 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
     }
 
     private fun initToolbar() {
-        if (activity != null && activity is AppCompatActivity) {
-            (activity as AppCompatActivity).apply {
-                val actionBaeView = fragmentView.tbAboutSettingsBar
-                setSupportActionBar(actionBaeView)
-                actionBaeView.setNavigationOnClickListener {
-                    navController.popBackStack()
-                }
+        applyForToolbarController {
+            setToolbarTitle(R.string.privacy_settings_toolbar_title)
+            setupBackAction(R.drawable.ic_back_action) {
+                navController.popBackStack()
             }
         }
     }

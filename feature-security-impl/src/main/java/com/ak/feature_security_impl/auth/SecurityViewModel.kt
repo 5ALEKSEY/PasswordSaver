@@ -27,6 +27,10 @@ class SecurityViewModel @Inject constructor(
         private const val MIN_CODE_LENGTH = 5
     }
 
+    init {
+        Log.d("d", "de")
+    }
+
     var authActionType = IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE
     private var isPincodeAuthMethod = true
 

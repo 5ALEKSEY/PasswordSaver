@@ -7,14 +7,12 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AppCompatActivity
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.hideKeyboard
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.screens.presentation.base.BaseAccountsModuleFragment
 import kotlinx.android.synthetic.main.fragment_manage_account.view.btnManageAccountAction
-import kotlinx.android.synthetic.main.fragment_manage_account.view.tbManageAccountBar
 import kotlinx.android.synthetic.main.fragment_manage_account.view.tietAccountLoginField
 import kotlinx.android.synthetic.main.fragment_manage_account.view.tietAccountNameField
 import kotlinx.android.synthetic.main.fragment_manage_account.view.tietAccountPasswordField
@@ -96,15 +94,11 @@ abstract class BaseManageAccountFragment<ManagerVM : BaseManageAccountViewModel>
     }
 
     private fun initToolbar() {
-        if (activity != null && activity is AppCompatActivity) {
-            (activity as AppCompatActivity).apply {
-                val actionBarView = fragmentView.tbManageAccountBar
-                setSupportActionBar(actionBarView)
-                supportActionBar?.title = getToolbarTitleText()
-                actionBarView.setNavigationOnClickListener {
-                    hideKeyboard()
-                    navController.popBackStack()
-                }
+        applyForToolbarController {
+            setToolbarTitle(getToolbarTitleText())
+            setupBackAction(R.drawable.ic_back_action) {
+                hideKeyboard()
+                navController.popBackStack()
             }
         }
     }

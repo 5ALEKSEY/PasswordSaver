@@ -90,7 +90,13 @@ abstract class BasePSFragment<VM : BasePSViewModel> : Fragment() {
         navController.popBackStack()
     }
 
-    protected fun applyForToolbarController(block: IToolbarController.() -> Unit) {
-        (activity as? IToolbarController)?.apply(block)
+    protected fun applyForToolbarController(fromZero: Boolean = true, block: IToolbarController.() -> Unit) {
+        (activity as? IToolbarController)?.apply {
+            if (fromZero) {
+                clearBackAction()
+            }
+
+            block(this)
+        }
     }
 }

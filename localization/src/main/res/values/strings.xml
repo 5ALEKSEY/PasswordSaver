@@ -29,6 +29,7 @@
     <string name="no_added_fingerprints_dialog_desc">Sorry, you didn\'t add any fingerprint on your device. You can go to security settings and add new one. After that you can come back and enable fingerprint fast unlock in PasswordSaver application.</string>
     <string name="no_added_fingerprints_dialog_pos_btn">Settings</string>
     <string name="privacy_settings_toolbar_title">Privacy</string>
+    <string name="about_settings_toolbar_title">About</string>
     <string name="nav_tab_passwords_name">Passwords</string>
     <string name="nav_tab_accounts_name">Accounts</string>
     <string name="nav_tab_settings_name">Settings</string>

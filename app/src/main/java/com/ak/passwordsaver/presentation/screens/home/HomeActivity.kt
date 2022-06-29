@@ -1,7 +1,9 @@
 package com.ak.passwordsaver.presentation.screens.home
 
 import android.os.Bundle
+import android.view.View
 import android.view.WindowManager
+import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -27,7 +29,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import javax.inject.Inject
 import javax.inject.Named
 
-typealias ToolbarAction = () -> Unit
+typealias ToolbarAction = Toolbar.() -> Unit
 
 class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController {
 
@@ -56,6 +58,9 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
     private val bottomNavigationView by lazy {
         findViewById<BottomNavigationView>(R.id.bnvBottomBar)
     }
+    private val bottomNavigationViewDivider by lazy {
+        findViewById<View>(R.id.vBottomBarDivider)
+    }
     private val toolbarAppBarLayout by lazy {
         findViewById<AppBarLayout>(R.id.ablHomeBarLayout)
     }
@@ -69,7 +74,10 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
             if (appContext is ClearComponentsByDestinationChangeManager) {
                 appContext.onDestinationIdChanged(destAction.id)
             }
-            bottomNavigationView.setVisibility(destAction.id in visibleBottomBarDestinations)
+
+            val isBottomNavVisible = destAction.id in visibleBottomBarDestinations
+            bottomNavigationView.setVisibility(isBottomNavVisible)
+            bottomNavigationViewDivider.setVisibility(isBottomNavVisible)
         }
     }
 
@@ -170,12 +178,26 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
         forToolbarOrPostpone { supportActionBar?.title = title }
     }
 
+    override fun setupBackAction(@DrawableRes backIconResId: Int, action: () -> Unit) {
+        forToolbarOrPostpone {
+            setNavigationIcon(backIconResId)
+            setNavigationOnClickListener { action() }
+        }
+    }
+
+    override fun clearBackAction() {
+        forToolbarOrPostpone {
+            navigationIcon = null
+            setNavigationOnClickListener(null)
+        }
+    }
+
     override fun switchToolbarScrollingState(isScrollingEnabled: Boolean) {
         forToolbarOrPostpone {
             if (isScrollingEnabled) {
-                toolbarView.turnOnToolbarScrolling(toolbarAppBarLayout)
+                turnOnToolbarScrolling(toolbarAppBarLayout)
             } else {
-                toolbarView.turnOffToolbarScrolling(toolbarAppBarLayout)
+                turnOffToolbarScrolling(toolbarAppBarLayout)
             }
         }
     }
@@ -183,13 +205,13 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
     private fun initToolbar() {
         setSupportActionBar(toolbarView)
 
-        toolbarPostponedActions.forEach { it.invoke() }
+        toolbarPostponedActions.forEach { it.invoke(toolbarView) }
         toolbarPostponedActions.clear()
     }
 
     private fun forToolbarOrPostpone(block: ToolbarAction) {
         if (supportActionBar != null) {
-            block()
+            block(toolbarView)
         } else {
             toolbarPostponedActions.add(block)
         }

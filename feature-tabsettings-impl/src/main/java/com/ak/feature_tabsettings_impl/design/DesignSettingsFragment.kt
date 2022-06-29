@@ -1,7 +1,6 @@
 package com.ak.feature_tabsettings_impl.design
 
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.base.viewmodel.injectViewModel
@@ -11,7 +10,6 @@ import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
 import kotlinx.android.synthetic.main.fragment_design_settings.view.rvDesignSettingsItemsList
-import kotlinx.android.synthetic.main.fragment_design_settings.view.tbDesignSettingsBar
 
 class DesignSettingsFragment : BaseSettingsModuleFragment<DesignSettingsViewModel>() {
 
@@ -38,14 +36,10 @@ class DesignSettingsFragment : BaseSettingsModuleFragment<DesignSettingsViewMode
     }
 
     private fun initToolbar() {
-        if (activity != null && activity is AppCompatActivity) {
-            (activity as AppCompatActivity).apply {
-                val actionBarView = fragmentView.tbDesignSettingsBar
-                setSupportActionBar(actionBarView)
-                supportActionBar?.title = getString(R.string.design_settings_toolbar_title)
-                actionBarView.setNavigationOnClickListener {
-                    navController.popBackStack()
-                }
+        applyForToolbarController {
+            setToolbarTitle(R.string.design_settings_toolbar_title)
+            setupBackAction(R.drawable.ic_back_action) {
+                navController.popBackStack()
             }
         }
     }

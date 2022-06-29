@@ -29,6 +29,7 @@
     <string name="no_added_fingerprints_dialog_desc">"Извините, вы не добавили ни одного отпечатка пальца в своем устройстве. Вы можете перейти в настройки безопасности и добавить новый. После этого вы можете вернуться и включить эту опцию в приложении."</string>
     <string name="no_added_fingerprints_dialog_pos_btn">"Настройки"</string>
     <string name="privacy_settings_toolbar_title">"Приватность"</string>
+    <string name="about_settings_toolbar_title">"О приложении"</string>
     <string name="nav_tab_passwords_name">"Пароли"</string>
     <string name="nav_tab_accounts_name">"Аккаунты"</string>
     <string name="nav_tab_settings_name">"Настройки"</string>

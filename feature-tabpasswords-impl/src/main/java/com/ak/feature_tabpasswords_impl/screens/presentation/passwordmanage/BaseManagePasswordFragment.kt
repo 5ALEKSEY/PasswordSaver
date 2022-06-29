@@ -14,7 +14,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AppCompatActivity
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.drawTextInner
 import com.ak.base.extensions.getColorCompat
@@ -33,7 +32,6 @@ import kotlinx.android.synthetic.main.fragment_manage_password.tietPasswordNameF
 import kotlinx.android.synthetic.main.fragment_manage_password.view.btnManagePasswordAction
 import kotlinx.android.synthetic.main.fragment_manage_password.view.ivPasswordAvatarChooser
 import kotlinx.android.synthetic.main.fragment_manage_password.view.lvAvatarChooserImageDesc
-import kotlinx.android.synthetic.main.fragment_manage_password.view.tbManagePasswordBar
 import kotlinx.android.synthetic.main.fragment_manage_password.view.tietPasswordContentField
 import kotlinx.android.synthetic.main.fragment_manage_password.view.tietPasswordNameField
 import kotlinx.android.synthetic.main.fragment_manage_password.view.tilPasswordContentLayout
@@ -230,15 +228,11 @@ abstract class BaseManagePasswordFragment<ManageVM : BaseManagePasswordViewModel
     }
 
     private fun initToolbar() {
-        if (activity != null && activity is AppCompatActivity) {
-            (activity as AppCompatActivity).apply {
-                val actionBarView = fragmentView.tbManagePasswordBar
-                setSupportActionBar(actionBarView)
-                supportActionBar?.title = getToolbarTitleText()
-                actionBarView.setNavigationOnClickListener {
-                    hideKeyboard()
-                    navController.popBackStack()
-                }
+        applyForToolbarController {
+            setToolbarTitle(getToolbarTitleText())
+            setupBackAction(R.drawable.ic_back_action) {
+                hideKeyboard()
+                navController.popBackStack()
             }
         }
     }

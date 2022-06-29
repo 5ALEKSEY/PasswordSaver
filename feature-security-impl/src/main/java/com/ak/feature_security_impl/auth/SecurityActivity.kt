@@ -77,10 +77,20 @@ class SecurityActivity : BaseThemeActivity() {
         FeatureSecurityComponent.get().inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_security)
+        initViewModel()
         initView()
-        viewModel = injectViewModel(viewModelsFactory)
-        viewModel.initSecurityAuthState()
         subscribeToViewModel(viewModel)
+    }
+
+    private fun initViewModel() {
+        viewModel = injectViewModel(viewModelsFactory)
+        intent?.let {
+            viewModel.authActionType = it.getIntExtra(
+                IS_AUTH_ACTION_KEY_EXTRA,
+                IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE
+            )
+        }
+        viewModel.initSecurityAuthState()
     }
 
     private fun subscribeToViewModel(viewModel: SecurityViewModel) {
@@ -201,8 +211,6 @@ class SecurityActivity : BaseThemeActivity() {
     }
 
     private fun initView() {
-        intent?.let { initAuthState(it) }
-
         vPatternAuthView.mOnFinishedAction = viewModel::onUserAuthFinished
         vPincodeAuthView.onFinishedAction = viewModel::onUserAuthFinished
         vPincodeAuthView.setPincodeValuesCount(PINCODE_INPUT_VALUES_COUNT)
@@ -210,13 +218,6 @@ class SecurityActivity : BaseThemeActivity() {
         ivSecurityInputTypeChangeAction.setSafeClickListener(CHANGE_AUTH_INPUT_METHOD_CLICK_DELAY) {
             viewModel.onSecurityInputTypeChangeClicked()
         }
-    }
-
-    private fun initAuthState(intent: Intent) {
-        viewModel.authActionType = intent.getIntExtra(
-            IS_AUTH_ACTION_KEY_EXTRA,
-            IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE
-        )
     }
 
     private fun setSecurityInputTypeIcon(isPincode: Boolean) {
