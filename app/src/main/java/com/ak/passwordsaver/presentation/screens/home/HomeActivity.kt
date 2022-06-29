@@ -27,6 +27,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import javax.inject.Inject
 import javax.inject.Named
 
+typealias ToolbarAction = () -> Unit
+
 class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController {
 
     companion object {
@@ -40,10 +42,12 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
     private var currentMenuItemId = R.id.passwordsListFragment
     private var lastMenuChangeTime = 0L
 
+    private val toolbarPostponedActions = mutableListOf<ToolbarAction>()
+
     private val visibleBottomBarDestinations = arrayOf(
-            R.id.settingsFragment,
-            R.id.passwordsListFragment,
-            R.id.accountsListFragment
+        R.id.settingsFragment,
+        R.id.passwordsListFragment,
+        R.id.accountsListFragment
     )
 
     private val homeNavController: NavController by lazy {
@@ -77,7 +81,7 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
 
     override fun onBackPressed() {
         val hostFragment = supportFragmentManager.findFragmentById(R.id.bottomNavHostFragment)
-                as NavHostFragment
+            as NavHostFragment
 
         // get current visible fragment in bav host container
         val inflatedFragments = hostFragment.childFragmentManager.fragments
@@ -113,6 +117,11 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
     override fun onStop() {
         homeNavController.removeOnDestinationChangedListener(destChangeListener)
         super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        toolbarPostponedActions.clear()
     }
 
     override fun initView() {
@@ -153,24 +162,37 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
         }
     }
 
-    override fun setToolbarTitle(title: String) {
-        supportActionBar?.title = title
-    }
-
     override fun setToolbarTitle(titleResIs: Int) {
         setToolbarTitle(getString(titleResIs))
     }
 
+    override fun setToolbarTitle(title: String) {
+        forToolbarOrPostpone { supportActionBar?.title = title }
+    }
+
     override fun switchToolbarScrollingState(isScrollingEnabled: Boolean) {
-        if (isScrollingEnabled) {
-            toolbarView.turnOnToolbarScrolling(toolbarAppBarLayout)
-        } else {
-            toolbarView.turnOffToolbarScrolling(toolbarAppBarLayout)
+        forToolbarOrPostpone {
+            if (isScrollingEnabled) {
+                toolbarView.turnOnToolbarScrolling(toolbarAppBarLayout)
+            } else {
+                toolbarView.turnOffToolbarScrolling(toolbarAppBarLayout)
+            }
         }
     }
 
     private fun initToolbar() {
         setSupportActionBar(toolbarView)
+
+        toolbarPostponedActions.forEach { it.invoke() }
+        toolbarPostponedActions.clear()
+    }
+
+    private fun forToolbarOrPostpone(block: ToolbarAction) {
+        if (supportActionBar != null) {
+            block()
+        } else {
+            toolbarPostponedActions.add(block)
+        }
     }
 
     private fun setSecureRecentAppsScreenState(isSecure: Boolean) {
