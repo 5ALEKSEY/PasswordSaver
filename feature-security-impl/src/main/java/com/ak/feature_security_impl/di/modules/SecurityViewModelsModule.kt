@@ -2,15 +2,13 @@ package com.ak.feature_security_impl.di.modules
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ak.base.viewmodel.BaseViewModelFactory
+import com.ak.base.viewmodel.IViewModelAssistedFactory
 import com.ak.base.viewmodel.annotation.ViewModelInjectKey
 import com.ak.feature_security_impl.auth.SecurityViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import javax.inject.Inject
 import javax.inject.Named
-import javax.inject.Provider
 import javax.inject.Singleton
 
 @Module
@@ -23,15 +21,13 @@ abstract class SecurityViewModelsModule {
     @Binds
     @Singleton
     @Named(SECURITY_VIEW_MODELS_FACTORY_KEY)
-    abstract fun bindViewModelFactory(factory: SecurityViewModelsFactory): ViewModelProvider.Factory
+    abstract fun bindViewModelFactory(factory: SecurityViewModelsFactoryComposite): ViewModelProvider.Factory
 
     @Binds
     @IntoMap
     @Singleton
     @ViewModelInjectKey(SecurityViewModel::class)
-    abstract fun injectSecurityViewModel(viewModel: SecurityViewModel): ViewModel
+    abstract fun bindSecurityViewModelAssistedFactory(
+        factory: SecurityViewModelAssistedFactory
+    ): IViewModelAssistedFactory<out ViewModel>
 }
-
-class SecurityViewModelsFactory @Inject constructor(
-    viewModels: MutableMap<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
-) : BaseViewModelFactory(viewModels)

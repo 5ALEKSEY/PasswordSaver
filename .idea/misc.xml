@@ -3,6 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Dev/Projects/PasswordSaver/app/src/main/res/layout/activity_home.xml" value="0.16" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabaccounts-impl/src/main/res/layout/fragment_manage_account.xml" value="0.23324275362318841" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/fragment_manage_password.xml" value="0.22871376811594202" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_about_settings.xml" value="0.23324275362318841" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_design_settings.xml" value="0.23324275362318841" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_privacy_settings.xml" value="0.23324275362318841" />
         <entry key="..\:/Users/kuzme/StudioProjects/PasswordSaver/app/src/main/res/layout/activity_home.xml" value="0.30954587581093607" />
         <entry key="..\:/Users/kuzme/StudioProjects/PasswordSaver/feature-tabaccounts-impl/src/main/res/layout/fragment_accounts_list.xml" value="0.151268115942029" />
         <entry key="..\:/Users/kuzme/StudioProjects/PasswordSaver/feature-tabaccounts-impl/src/main/res/layout/fragment_manage_account.xml" value="0.151268115942029" />

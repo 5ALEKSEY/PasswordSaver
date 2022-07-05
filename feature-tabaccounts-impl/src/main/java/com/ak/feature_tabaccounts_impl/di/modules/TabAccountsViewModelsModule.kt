@@ -3,7 +3,7 @@ package com.ak.feature_tabaccounts_impl.di.modules
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ak.base.scopes.FeatureScope
-import com.ak.base.viewmodel.BaseViewModelFactory
+import com.ak.base.viewmodel.IViewModelAssistedFactory
 import com.ak.base.viewmodel.annotation.ViewModelInjectKey
 import com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.add.AddNewAccountViewModel
 import com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.edit.EditAccountViewModel
@@ -12,9 +12,7 @@ import com.ak.feature_tabaccounts_impl.screens.presentation.accounts.AccountsLis
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import javax.inject.Inject
 import javax.inject.Named
-import javax.inject.Provider
 
 @Module
 abstract class TabAccountsViewModelsModule {
@@ -26,33 +24,37 @@ abstract class TabAccountsViewModelsModule {
     @Binds
     @FeatureScope
     @Named(ACCOUNTS_VIEW_MODELS_FACTORY_KEY)
-    abstract fun bindViewModelFactory(factory: AccountsViewModelsFactory): ViewModelProvider.Factory
+    abstract fun bindViewModelFactory(factory: AccountsViewModelsFactoryComposite): ViewModelProvider.Factory
 
     @Binds
     @IntoMap
     @FeatureScope
     @ViewModelInjectKey(AccountsListViewModel::class)
-    abstract fun injectAccountsListViewModel(viewModel: AccountsListViewModel): ViewModel
+    abstract fun bindAccountsListViewModelAssistedFactory(
+        factory: AccountsListViewModelAssistedFactory
+    ): IViewModelAssistedFactory<out ViewModel>
 
     @Binds
     @IntoMap
     @FeatureScope
     @ViewModelInjectKey(AccountsActionModeViewModel::class)
-    abstract fun injectAccountsActionModeViewModel(viewModel: AccountsActionModeViewModel): ViewModel
+    abstract fun bindAccountsActionModeViewModelAssistedFactory(
+        factory: AccountsActionModeViewModelAssistedFactory
+    ): IViewModelAssistedFactory<out ViewModel>
 
     @Binds
     @IntoMap
     @FeatureScope
     @ViewModelInjectKey(EditAccountViewModel::class)
-    abstract fun injectEditAccountViewModel(viewModel: EditAccountViewModel): ViewModel
+    abstract fun bindEditAccountViewModelAssistedFactory(
+        factory: EditAccountViewModelAssistedFactory
+    ): IViewModelAssistedFactory<out ViewModel>
 
     @Binds
     @IntoMap
     @FeatureScope
     @ViewModelInjectKey(AddNewAccountViewModel::class)
-    abstract fun injectAddNewAccountViewModel(viewModel: AddNewAccountViewModel): ViewModel
+    abstract fun bindAddNewAccountViewModelAssistedFactory(
+        factory: AddNewAccountViewModelAssistedFactory
+    ): IViewModelAssistedFactory<out ViewModel>
 }
-
-class AccountsViewModelsFactory @Inject constructor(
-    viewModels: MutableMap<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
-) : BaseViewModelFactory(viewModels)

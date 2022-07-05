@@ -16,7 +16,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-class SecurityViewModel @Inject constructor(
+class SecurityViewModel constructor(
     private val settingsPreferencesManager: ISettingsPreferencesManager,
     private val psBiometricManager: IPSBiometricManager,
     private val resourceManager: IResourceManager
@@ -25,10 +25,6 @@ class SecurityViewModel @Inject constructor(
     companion object {
         private const val MAX_FAILED_ATTEMPTS_COUNT = 5
         private const val MIN_CODE_LENGTH = 5
-    }
-
-    init {
-        Log.d("d", "de")
     }
 
     var authActionType = IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE

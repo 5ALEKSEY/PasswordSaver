@@ -82,6 +82,10 @@ class SecurityActivity : BaseThemeActivity() {
         subscribeToViewModel(viewModel)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
     private fun initViewModel() {
         viewModel = injectViewModel(viewModelsFactory)
         intent?.let {

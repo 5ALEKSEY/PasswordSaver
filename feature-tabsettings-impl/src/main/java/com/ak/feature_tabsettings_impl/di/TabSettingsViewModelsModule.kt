@@ -3,7 +3,7 @@ package com.ak.feature_tabsettings_impl.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ak.base.scopes.FeatureScope
-import com.ak.base.viewmodel.BaseViewModelFactory
+import com.ak.base.viewmodel.IViewModelAssistedFactory
 import com.ak.base.viewmodel.annotation.ViewModelInjectKey
 import com.ak.feature_tabsettings_impl.about.AboutSettingsViewModel
 import com.ak.feature_tabsettings_impl.design.DesignSettingsViewModel
@@ -12,9 +12,7 @@ import com.ak.feature_tabsettings_impl.privacy.PrivacySettingsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import javax.inject.Inject
 import javax.inject.Named
-import javax.inject.Provider
 
 @Module
 abstract class TabSettingsViewModelsModule {
@@ -26,33 +24,37 @@ abstract class TabSettingsViewModelsModule {
     @Binds
     @FeatureScope
     @Named(SETTINGS_VIEW_MODELS_FACTORY_KEY)
-    abstract fun bindViewModelFactory(factory: SettingsViewModelsFactory): ViewModelProvider.Factory
+    abstract fun bindViewModelFactory(factory: SettingsViewModelsFactoryComposite): ViewModelProvider.Factory
 
     @Binds
     @IntoMap
     @FeatureScope
     @ViewModelInjectKey(SettingsViewModel::class)
-    abstract fun injectSettingsViewModel(viewModel: SettingsViewModel): ViewModel
+    abstract fun bindSettingsViewModelAssistedFactory(
+        factory: SettingsViewModelAssistedFactory
+    ): IViewModelAssistedFactory<out ViewModel>
 
     @Binds
     @IntoMap
     @FeatureScope
     @ViewModelInjectKey(AboutSettingsViewModel::class)
-    abstract fun injectAboutSettingsViewModel(viewModel: AboutSettingsViewModel): ViewModel
+    abstract fun bindAboutSettingsViewModelAssistedFactory(
+        factory: AboutSettingsViewModelAssistedFactory
+    ): IViewModelAssistedFactory<out ViewModel>
 
     @Binds
     @IntoMap
     @FeatureScope
     @ViewModelInjectKey(DesignSettingsViewModel::class)
-    abstract fun injectDesignSettingsViewModel(viewModel: DesignSettingsViewModel): ViewModel
+    abstract fun bindDesignSettingsViewModelAssistedFactory(
+        factory: DesignSettingsViewModelAssistedFactory
+    ): IViewModelAssistedFactory<out ViewModel>
 
     @Binds
     @IntoMap
     @FeatureScope
     @ViewModelInjectKey(PrivacySettingsViewModel::class)
-    abstract fun injectPrivacySettingsViewModel(viewModel: PrivacySettingsViewModel): ViewModel
+    abstract fun bindPrivacySettingsViewModelAssistedFactory(
+        factory: PrivacySettingsViewModelAssistedFactory
+    ): IViewModelAssistedFactory<out ViewModel>
 }
-
-class SettingsViewModelsFactory @Inject constructor(
-    viewModels: MutableMap<Class<out ViewModel>, @JvmSuppressWildcards Provider<ViewModel>>
-) : BaseViewModelFactory(viewModels)
