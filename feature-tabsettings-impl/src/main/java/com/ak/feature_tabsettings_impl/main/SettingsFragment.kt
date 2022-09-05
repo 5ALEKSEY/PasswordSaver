@@ -2,6 +2,7 @@ package com.ak.feature_tabsettings_impl.main
 
 import android.content.Intent
 import android.view.View
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.base.extensions.showToastMessage
@@ -80,7 +81,9 @@ class SettingsFragment : BaseSettingsModuleFragment<SettingsViewModel>() {
                 IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE,
                 object : IAuthCheckerStarter.CheckAuthCallback {
                     override fun onAuthSuccessfully() {
-                        showPrivacySettings()
+                        postponedEventManager.postponeOrInvokeFor(Lifecycle.Event.ON_RESUME) {
+                            showPrivacySettings()
+                        }
                     }
 
                     override fun onAuthFailed() {

@@ -23,7 +23,7 @@ class CustomThemedView private constructor(
             "src",
             "textColorHint",
             "thumbTint",
-            "buttonTint"
+            "buttonTint",
         )
 
         val appAttributes = arrayOf(
@@ -33,13 +33,13 @@ class CustomThemedView private constructor(
             "divider",
             "widgetPopupBackground",
             "cardBackgroundColor",
-            "buttonTint"
+            "buttonTint",
         )
 
         val alphaAttributes = arrayOf(
             "srcAlpha",
             "backgroundAlpha",
-            "textAlpha"
+            "textAlpha",
         )
 
         private val BACKGROUND_ATTR = androidAttributes[0]
@@ -59,7 +59,7 @@ class CustomThemedView private constructor(
         private val DIVIDER_ATTR = appAttributes[3]
         private val POPUP_BACKGROUND_ATTR = appAttributes[4]
         private val CARD_BACKGROUND_ATTR = appAttributes[5]
-        private val BUTTON_TINT_COMPAT_ATTR = androidAttributes[6]
+        private val BUTTON_TINT_COMPAT_ATTR = appAttributes[6]
 
         private val SRC_ALPHA_ATTR = alphaAttributes[0]
         private val BACKGROUND_ALPHA_ATTR = alphaAttributes[1]
@@ -86,9 +86,7 @@ class CustomThemedView private constructor(
     }
 
     fun getBackgroundResource() = getIntValue(BACKGROUND_ATTR)
-    fun getBackgroundTintResource() =
-        getIntValueFrom(BACKGROUND_TINT_ATTR, BACKGROUND_TINT_COMPAT_ATTR)
-
+    fun getBackgroundTintResource() = getIntValueFrom(BACKGROUND_TINT_ATTR, BACKGROUND_TINT_COMPAT_ATTR)
     fun getForegroundResource() = getIntValue(FOREGROUND_ATTR)
     fun getForegroundTintResource() = getIntValue(FOREGROUND_TINT_ATTR)
     fun getTextColor() = getIntValue(TEXT_COLOR_ATTR)

@@ -14,9 +14,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.base.constants.AppConstants
+import com.ak.base.extensions.applyForLaidOut
 import com.ak.base.extensions.drawTextInner
-import com.ak.base.extensions.getColorCompat
 import com.ak.base.extensions.hideKeyboard
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibility
@@ -176,20 +178,29 @@ abstract class BaseManagePasswordFragment<ManageVM : BaseManagePasswordViewModel
             super.onOptionsItemSelected(item)
         }
 
-    private fun drawTextForPasswordAvatar(text: String) {
+    override fun applyTheme(theme: CustomTheme) {
+        super.applyTheme(theme)
+        drawTextForPasswordAvatar(viewModel.subscribeToAvatarText().value ?: "", theme)
+    }
+
+    private fun drawTextForPasswordAvatar(text: String, theme: CustomTheme = CustomThemeManager.getInstance().getTheme()) {
         val isTextDrawNeeds = text.isNotEmpty()
-        val fillColor = getColorCompat(R.color.colorPrimaryLight)
-        val textColor = getColorCompat(R.color.staticColorWhite)
+        val fillColor = theme.getColor(R.attr.themedPrimaryLightColor)
+        val textColor = theme.getColor(R.attr.staticColorWhite)
         val textSizeInPx = resources.getDimensionPixelSize(R.dimen.add_avatar_inner_text_size)
 
-        fragmentView.ivPasswordAvatarChooser.drawTextInner(
-            requireContext(),
-            fillColor,
-            textColor,
-            textSizeInPx,
-            text
-        )
-        fragmentView.lvAvatarChooserImageDesc.setVisibility(!isTextDrawNeeds)
+        fragmentView.ivPasswordAvatarChooser.applyForLaidOut {
+            drawTextInner(
+                requireContext(),
+                fillColor,
+                textColor,
+                textSizeInPx,
+                text
+            )
+            borderColor = theme.getColor(R.attr.themedPrimaryColor)
+        }
+
+        fragmentView.lvAvatarChooserImageDesc.applyForLaidOut { setVisibility(!isTextDrawNeeds) }
     }
 
     private fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap?) {

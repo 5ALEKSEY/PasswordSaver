@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
-        android:singleLine="true"
+        style="?android:attr/spinnerItemStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ellipsize="marquee"
-        tools:text="BlaBlaBla"
-        android:textSize="18sp"
-        android:paddingBottom="10dp"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp"
         android:paddingTop="10dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="10dp"
+        android:singleLine="true"
         android:textAlignment="inherit"
-        style="?android:attr/spinnerItemStyle"
-        android:textColor="@color/colorPrimaryText"/>
+        android:background="?themedPrimaryBackgroundColor"
+        android:textColor="?themedPrimaryTextColor"
+        android:textSize="18sp"
+        tools:background="?themedPrimaryBackgroundColor"
+        tools:text="BlaBlaBla" />

@@ -58,8 +58,12 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
             }
         }
 
-        override fun onCreateContextMenuForPasswordItem(item: PasswordItemModel) {
+        override fun onShowPopupMenu(item: PasswordItemModel) {
             passwordsAdapter.setContextMenuOpenedForPasswordItem(item.passwordId)
+        }
+
+        override fun onDismissPopupmenu(item: PasswordItemModel) {
+            passwordsAdapter.clearContextMenuOpenedForPasswordItems()
         }
     }
 
@@ -113,9 +117,6 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
             navigator.navigateToEditPassword(passwordId)
         }
         viewModel.subscribeToToolbarScrollingState().observe(viewLifecycleOwner) { canScrollToolbar ->
-            applyForToolbarController {
-                switchToolbarScrollingState(canScrollToolbar)
-            }
         }
         viewModel.subscribeToPasswordsList().observe(viewLifecycleOwner) {
             passwordsAdapter.insertData(it)
@@ -140,11 +141,6 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
     override fun onPause() {
         super.onPause()
         hideSelectedMode()
-    }
-
-    override fun onContextMenuClosed(menu: Menu?) {
-        super.onContextMenuClosed(menu)
-        passwordsAdapter.clearContextMenuOpenedForPasswordItems()
     }
 
     private fun initToolbar() {

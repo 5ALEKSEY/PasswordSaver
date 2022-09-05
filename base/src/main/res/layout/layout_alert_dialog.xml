@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/llAlertDialogContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_ps_dialog"
-        android:padding="12dp"
-        android:orientation="vertical">
+        android:background="@drawable/bg_rounded"
+        android:backgroundTint="?themedPopupBackgroundColor"
+        android:orientation="vertical"
+        android:padding="12dp">
 
     <TextView
             android:id="@+id/tvDialogTitle"
@@ -14,7 +16,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:gravity="center"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="?themedPrimaryTextColor"
             android:textSize="20sp"
             android:textStyle="bold"
             tools:text="Sample dialog title e3e3e3e 3e3 e3 e3 e3 e3 d3" />
@@ -24,9 +26,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:textColor="@color/colorPrimaryText"
+            android:textColor="?themedPrimaryTextColor"
             android:textSize="17sp"
-            tools:text="@string/no_added_fingerprints_dialog_desc"/>
+            tools:text="@string/no_added_fingerprints_dialog_desc" />
 
     <RelativeLayout
             android:layout_width="wrap_content"
@@ -34,32 +36,32 @@
 
         <TextView
                 android:id="@+id/tvDialogPositiveButton"
-                android:layout_alignParentEnd="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textAllCaps="true"
-                android:textColor="@color/colorAccent"
-                android:paddingTop="8dp"
-                android:textStyle="bold"
-                android:paddingBottom="8dp"
+                android:layout_alignParentEnd="true"
                 android:paddingStart="18dp"
+                android:paddingTop="8dp"
                 android:paddingEnd="18dp"
-                tools:text="OK"/>
+                android:paddingBottom="8dp"
+                android:textAllCaps="true"
+                android:textColor="?themedAccentColor"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text="OK" />
 
         <TextView
                 android:id="@+id/tvDialogNegativeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/tvDialogPositiveButton"
-                android:textSize="14sp"
-                android:textAllCaps="true"
-                android:textColor="@color/colorPrimaryText"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
                 android:paddingStart="18dp"
+                android:paddingTop="8dp"
                 android:paddingEnd="18dp"
-                tools:text="CANCEL"/>
+                android:paddingBottom="8dp"
+                android:textAllCaps="true"
+                android:textColor="?themedPrimaryTextColor"
+                android:textSize="14sp"
+                tools:text="CANCEL" />
 
     </RelativeLayout>
 

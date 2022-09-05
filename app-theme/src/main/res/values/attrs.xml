@@ -174,7 +174,11 @@
 
         <!-- ATTRS HERE !!!!!!!!  -->
         <attr name="themedStatusBarColor" format="color" />
-        <attr name="themedBackgroundColor" format="color" />
+        <attr name="themedNavigationBarColor" format="color" />
+        <attr name="themedPrimaryBackgroundColor" format="color" />
+        <attr name="themedSecondaryBackgroundColor" format="color" />
+
+        <attr name="themedPopupBackgroundColor" format="color" />
 
         <attr name="themedPrimaryColor" format="color" />
         <attr name="themedPrimaryDarkColor" format="color" />
@@ -183,11 +187,17 @@
 
         <attr name="themedToolbarIconsAndTextColor" format="color" />
         <attr name="themedPrimaryTextColor" format="color" />
+        <attr name="themedPrimaryTextHintColor" format="color" />
         <attr name="themedSecondaryTextColor" format="color" />
 
         <attr name="themedDividerColor" format="color" />
         <attr name="themedErrorColor" format="color" />
         <attr name="themedSuccessColor" format="color" />
+
+        <attr name="themedSwitchThumbUncheckedColor" format="color" />
+        <attr name="themedSwitchThumbCheckedColor" format="color" />
+        <attr name="themedSwitchTrackUncheckedColor" format="color" />
+        <attr name="themedSwitchTrackCheckedColor" format="color" />
 
         <attr name="themedBadgeNotificationColor" format="color" />
 
@@ -198,7 +208,16 @@
 
         <attr name="themedCameraPickImagePanelBackgroundColor" format="color" />
 
-        <attr name="themedSelectedItemGradient" format="reference" />
+        <attr name="themedBottomNavigationItemCheckedColor" format="color" />
+        <attr name="themedBottomNavigationItemUncheckedColor" format="color" />
+
+        <attr name="themedHiddenContentDrawable" format="reference" />
+        <attr name="themedSelectedItemDrawable" format="reference" />
+
+        <attr name="themedSecurityPatternNodeEnabledDrawable" format="reference" />
+        <attr name="themedSecurityPatternNodeDisabledDrawable" format="reference" />
+
+        <attr name="themedSelectedItemBackgroundDrawable" format="reference" />
 
     </declare-styleable>
 

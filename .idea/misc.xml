@@ -3,12 +3,70 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Dev/Projects/PasswordSaver/app/src/main/res/layout/activity_home.xml" value="0.16" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_blue.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_finish_blue.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_finish_orange.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_middle_blue.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_middle_orange.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_orange.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_start_orange.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/bg_disabled_pattern_node.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/bg_enabled_pattern_node.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/hided_element_blue.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/hided_element_orange.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_disabled_pattern_node_orange.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_enabled_pattern_node_orange.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_hided_element_blue.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_hided_element_orange.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_item_selected_orange.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_password_item_selected.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/loading_animation.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app/src/main/res/layout/activity_home.xml" value="0.2" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/bg_disabled_pattern_node.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/bg_enabled_pattern_node.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/bg_ps_dialog.xml" value="0.1975" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/bg_rounded_rectangle.xml" value="0.1975" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/hided_element.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_add.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_delete.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_menu_edit.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_password_item_selected.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_pincode_input_type.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_popup_menu_copy.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_popup_menu_delete.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_popup_menu_select.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_secret_pincode_input_value.xml" value="0.229" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/shadow.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/layout/layout_alert_dialog.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/layout/layout_notification_badge.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/layout/layout_popup_window_menu.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/layout/layout_popup_window_menu_item.xml" value="0.4" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/layout/popup_window_menu_item.xml" value="0.2" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-security-impl/src/main/res/layout/activity_security.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-security-impl/src/main/res/layout/layout_pattern_code_node_view.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-security-impl/src/main/res/layout/layout_pincode_auth_view.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-security-impl/src/main/res/layout/layout_pincode_number_view.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabaccounts-impl/src/main/res/layout/accounts_item_layout.xml" value="0.23324275362318841" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabaccounts-impl/src/main/res/layout/empty_accounts_layout.xml" value="0.23324275362318841" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabaccounts-impl/src/main/res/layout/fragment_accounts_list.xml" value="0.1634963768115942" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabaccounts-impl/src/main/res/layout/fragment_manage_account.xml" value="0.23324275362318841" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/drawable/loading_animation.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/drawable/loading_gradient_finish.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/empty_passwords_layout.xml" value="0.10625" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/fragment_manage_password.xml" value="0.22871376811594202" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/fragment_passwords_list.xml" value="0.1634963768115942" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/layout_photo_chooser_dialog.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/layout_popup_menu.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/passwords_item_layout.xml" value="0.41446613088404133" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/default_spinner_item.xml" value="0.21920289855072464" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_about_settings.xml" value="0.23324275362318841" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_design_settings.xml" value="0.23324275362318841" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_privacy_settings.xml" value="0.23324275362318841" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_settings.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/settings_item_section_layout.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/settings_item_spinner_layout.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/settings_item_switch_layout.xml" value="0.21920289855072464" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/settings_item_text_layout.xml" value="0.21920289855072464" />
         <entry key="..\:/Users/kuzme/StudioProjects/PasswordSaver/app/src/main/res/layout/activity_home.xml" value="0.30954587581093607" />
         <entry key="..\:/Users/kuzme/StudioProjects/PasswordSaver/feature-tabaccounts-impl/src/main/res/layout/fragment_accounts_list.xml" value="0.151268115942029" />
         <entry key="..\:/Users/kuzme/StudioProjects/PasswordSaver/feature-tabaccounts-impl/src/main/res/layout/fragment_manage_account.xml" value="0.151268115942029" />

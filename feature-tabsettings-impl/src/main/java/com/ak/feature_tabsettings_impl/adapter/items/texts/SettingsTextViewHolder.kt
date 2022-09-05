@@ -3,7 +3,8 @@ package com.ak.feature_tabsettings_impl.adapter.items.texts
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewHolder
 import com.ak.base.adapter.AdapterDelegate
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.feature_tabsettings_impl.R
@@ -19,7 +20,7 @@ class TextAdapterDelegate(
 
     override fun getItemViewType() = viewType
 
-    override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup): CustomThemeRecyclerViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.settings_item_text_layout, parent, false)
         return SettingsTextHolder(
@@ -30,8 +31,8 @@ class TextAdapterDelegate(
 
     override fun onBindViewHolder(
         item: SettingsListItemModel,
-        viewHolder: RecyclerView.ViewHolder
-    ) {
+        viewHolder: CustomThemeRecyclerViewHolder,
+        theme: CustomTheme) {
         val itemModel = item as TextSettingsListItemModel
         val holder = viewHolder as SettingsTextHolder
         holder.bindViewHolder(itemModel)

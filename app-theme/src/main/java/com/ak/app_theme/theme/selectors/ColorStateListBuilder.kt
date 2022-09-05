@@ -3,7 +3,7 @@ package com.ak.app_theme.theme.selectors
 import android.content.res.ColorStateList
 import com.ak.app_theme.R
 import com.ak.app_theme.theme.CustomTheme
-import com.ak.app_theme.theme.CustomThemeApplier
+import com.ak.app_theme.theme.applier.CustomThemeApplier
 
 internal class ColorStateListBuilder(private val theme: CustomTheme?) {
     private val states = mutableListOf<IntArray>()

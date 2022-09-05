@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:tools="http://schemas.android.com/tools"
-        tools:background="@drawable/bg_top_rounded_rectangle_accent">
+        tools:background="@drawable/bg_top_rounded_rectangle_accent"
+        tools:backgroundTint="?themedPrimaryLightColor">
 
     <View
             android:layout_width="35dp"
@@ -19,42 +20,42 @@
             android:id="@+id/ivPhotoChooserGalleryPreview"
             android:layout_width="0dp"
             android:layout_height="150dp"
-            android:layout_marginTop="24dp"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:scaleType="centerCrop"
+            android:layout_marginBottom="16dp"
             android:background="?android:attr/selectableItemBackground"
-            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/texvPhotoChooserCameraPreview" />
+            app:layout_constraintStart_toEndOf="@+id/texvPhotoChooserCameraPreview"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <View
             android:id="@+id/vChooseGalleryAction"
             android:layout_width="0dp"
             android:layout_height="150dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_rounded_rectangle"
             android:clickable="true"
             android:focusable="true"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
             android:foreground="?android:attr/selectableItemBackground"
-            app:layout_constraintStart_toEndOf="@+id/vChooseCameraAction"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/vChooseCameraAction"
             app:layout_constraintTop_toTopOf="parent" />
 
     <TextureView
             android:id="@+id/texvPhotoChooserCameraPreview"
             android:layout_width="0dp"
             android:layout_height="150dp"
-            android:layout_marginTop="24dp"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/ivPhotoChooserGalleryPreview"
             app:layout_constraintStart_toStartOf="parent"
@@ -64,14 +65,14 @@
             android:id="@+id/vChooseCameraAction"
             android:layout_width="0dp"
             android:layout_height="150dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="16dp"
             android:background="@drawable/bg_rounded_rectangle"
-            android:foreground="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:layout_marginTop="24dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="8dp"
+            android:foreground="?android:attr/selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/vChooseGalleryAction"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,21 +88,23 @@
             app:layout_constraintTop_toTopOf="@+id/texvPhotoChooserCameraPreview">
 
         <ImageView
-                android:id="@+id/imageView"
+                android:id="@+id/ivCameraImage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_horizontal"
                 android:baselineAligned="false"
-                android:tint="@color/avatar_chooser_dialog_image_tint"
-                app:srcCompat="@drawable/ic_camera_action" />
+                app:srcCompat="@drawable/ic_camera_action"
+                app:tint="?staticColorWhite"
+                tools:tint="?staticColorWhite" />
 
         <TextView
+                android:id="@+id/tvCameraDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:maxLines="1"
                 android:text="@string/image_chooser_camera"
-                android:textColor="@color/avatar_chooser_dialog_text_color"
+                android:textColor="?staticColorWhite"
                 android:textSize="20sp" />
 
     </LinearLayout>
@@ -116,20 +119,22 @@
             app:layout_constraintTop_toTopOf="@+id/vChooseGalleryAction">
 
         <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/ivGalleryImage"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="center_horizontal"
-                android:tint="@color/avatar_chooser_dialog_image_tint"
-                app:srcCompat="@drawable/ic_gallery_action" />
+                app:srcCompat="@drawable/ic_gallery_action"
+                app:tint="?staticColorWhite"
+                tools:tint="?staticColorWhite" />
 
         <TextView
+                android:id="@+id/tvGalleryDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:maxLines="1"
                 android:text="@string/image_chooser_gallery"
-                android:textColor="@color/avatar_chooser_dialog_text_color"
+                android:textColor="?staticColorWhite"
                 android:textSize="20sp" />
 
     </LinearLayout>

@@ -21,14 +21,11 @@ import io.reactivex.rxjava3.subjects.BehaviorSubject
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-abstract class BaseManagePasswordViewModel: BasePSViewModel() {
-
-    @Inject
-    protected lateinit var bitmapDecoderManager: IBitmapDecoderManager
-    @Inject
-    protected lateinit var internalStorageManager: IPSInternalStorageManager
-    @Inject
-    protected lateinit var resourceManager: IResourceManager
+abstract class BaseManagePasswordViewModel(
+    protected val bitmapDecoderManager: IBitmapDecoderManager,
+    protected val internalStorageManager: IPSInternalStorageManager,
+    protected val resourceManager: IResourceManager,
+): BasePSViewModel() {
 
     private var nameChangeDis: Disposable? = null
     private var isAvatarDisplayed = false

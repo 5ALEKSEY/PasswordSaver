@@ -7,6 +7,7 @@ import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
+import com.ak.feature_tabpasswords_impl.screens.logic.IBitmapDecoderManager
 import com.ak.feature_tabpasswords_impl.screens.logic.IDataBufferManager
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.add.AddNewPasswordViewModel
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.camera.CameraPickImageViewModel
@@ -25,7 +26,7 @@ class PasswordsListViewModelAssistedFactory @Inject constructor(
     private val internalStorageManager: IPSInternalStorageManager,
     private val dataBufferManager: IDataBufferManager,
     private val resourceManager: IResourceManager,
-): IViewModelAssistedFactory<PasswordsListViewModel> {
+) : IViewModelAssistedFactory<PasswordsListViewModel> {
     override fun create(): PasswordsListViewModel {
         return PasswordsListViewModel(
             passwordsInteractor = passwordsInteractor,
@@ -39,7 +40,7 @@ class PasswordsListViewModelAssistedFactory @Inject constructor(
 
 class PasswordsActionModeViewModelAssistedFactory @Inject constructor(
     private val passwordsInteractor: IPasswordsInteractor,
-): IViewModelAssistedFactory<PasswordsActionModeViewModel> {
+) : IViewModelAssistedFactory<PasswordsActionModeViewModel> {
     override fun create(): PasswordsActionModeViewModel {
         return PasswordsActionModeViewModel(passwordsInteractor)
     }
@@ -47,24 +48,40 @@ class PasswordsActionModeViewModelAssistedFactory @Inject constructor(
 
 class EditPasswordViewModelAssistedFactory @Inject constructor(
     private val passwordsInteractor: IPasswordsInteractor,
-): IViewModelAssistedFactory<EditPasswordViewModel> {
+    private val bitmapDecoderManager: IBitmapDecoderManager,
+    private val internalStorageManager: IPSInternalStorageManager,
+    private val resourceManager: IResourceManager,
+) : IViewModelAssistedFactory<EditPasswordViewModel> {
     override fun create(): EditPasswordViewModel {
-        return EditPasswordViewModel(passwordsInteractor)
+        return EditPasswordViewModel(
+            passwordsInteractor = passwordsInteractor,
+            bitmapDecoderManager = bitmapDecoderManager,
+            internalStorageManager = internalStorageManager,
+            resourceManager = resourceManager,
+        )
     }
 }
 
 class AddNewPasswordViewModelAssistedFactory @Inject constructor(
     private val passwordsInteractor: IPasswordsInteractor,
-): IViewModelAssistedFactory<AddNewPasswordViewModel> {
+    private val bitmapDecoderManager: IBitmapDecoderManager,
+    private val internalStorageManager: IPSInternalStorageManager,
+    private val resourceManager: IResourceManager,
+) : IViewModelAssistedFactory<AddNewPasswordViewModel> {
     override fun create(): AddNewPasswordViewModel {
-        return AddNewPasswordViewModel(passwordsInteractor)
+        return AddNewPasswordViewModel(
+            passwordsInteractor = passwordsInteractor,
+            bitmapDecoderManager = bitmapDecoderManager,
+            internalStorageManager = internalStorageManager,
+            resourceManager = resourceManager,
+        )
     }
 }
 
 class CameraPickImageViewModelAssistedFactory @Inject constructor(
     private val internalStorageManager: IPSInternalStorageManager,
     private val resourceManager: IResourceManager,
-): IViewModelAssistedFactory<CameraPickImageViewModel> {
+) : IViewModelAssistedFactory<CameraPickImageViewModel> {
     override fun create(): CameraPickImageViewModel {
         return CameraPickImageViewModel(
             internalStorageManager = internalStorageManager,

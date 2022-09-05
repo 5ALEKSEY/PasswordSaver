@@ -1,98 +1,86 @@
 package com.ak.feature_tabaccounts_impl.screens.adapter
 
 import android.graphics.drawable.AnimationDrawable
-import android.view.ContextMenu
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.drawTextInner
-import com.ak.base.extensions.getColorCompat
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibilityInvisible
+import com.ak.base.ui.custom.popupmenu.PopupMenuHelper
+import com.ak.base.ui.custom.popupmenu.PopupWindowMenuItem
+import com.ak.base.ui.recycler.BasePopupMenuRecyclerViewHolder
 import com.ak.base.utils.PSUtils
 import com.ak.feature_tabaccounts_impl.R
-import kotlinx.android.synthetic.main.accounts_item_layout.view.*
+import kotlinx.android.synthetic.main.accounts_item_layout.view.cvAccountItemContainer
+import kotlinx.android.synthetic.main.accounts_item_layout.view.ivAccountAvatar
+import kotlinx.android.synthetic.main.accounts_item_layout.view.ivItemSelected
+import kotlinx.android.synthetic.main.accounts_item_layout.view.tvAccountLogin
+import kotlinx.android.synthetic.main.accounts_item_layout.view.tvAccountName
+import kotlinx.android.synthetic.main.accounts_item_layout.view.tvAccountPassword
+import kotlinx.android.synthetic.main.accounts_item_layout.view.vAccountItemRoot
 
 class AccountsListItemViewHolder(
     itemView: View,
     private val listener: AccountListClickListener
-) : RecyclerView.ViewHolder(itemView), View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
+) : BasePopupMenuRecyclerViewHolder(itemView) {
 
     private var accountItemModel: AccountItemModel? = null
 
-    companion object {
-        const val ACCOUNT_SHOW_ACTION_CLICK_DELAY_IN_MILLIS = 700L
+    override val popupMenuListener = object : PopupMenuHelper.Listener {
+        override fun onItemClicked(menuItemId: Int) {
+            val itemModel = accountItemModel ?: return
+            when (menuItemId) {
+                SELECT_ID -> listener.selectAccountItem(itemModel)
+                COPY_LOGIN_ID -> listener.copyAccountItemLogin(itemModel)
+                COPY_PASSWORD_ID -> listener.copyAccountItemPassword(itemModel)
+                EDIT_ID -> listener.editAccountItem(itemModel)
+                DELETE_ID -> listener.deleteAccountItem(itemModel)
+            }
+        }
 
-        const val CONTEXT_MENU_SELECT_ID = 1
-        const val CONTEXT_MENU_COPY_LOGIN_ID = 2
-        const val CONTEXT_MENU_COPY_PASSWORD_ID = 3
-        const val CONTEXT_MENU_EDIT_ID = 4
-        const val CONTEXT_MENU_DELETE_ID = 5
-    }
+        override fun onShow() {
+            accountItemModel?.let { listener.onShowPopupMenu(it) }
+        }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            CONTEXT_MENU_SELECT_ID -> {
-                accountItemModel?.let {
-                    listener.selectAccountItem(it)
-                    true
-                } ?: false
-            }
-            CONTEXT_MENU_COPY_LOGIN_ID -> {
-                accountItemModel?.let {
-                    listener.copyAccountItemLogin(it)
-                    true
-                } ?: false
-            }
-            CONTEXT_MENU_COPY_PASSWORD_ID -> {
-                accountItemModel?.let {
-                    listener.copyAccountItemPassword(it)
-                    true
-                } ?: false
-            }
-            CONTEXT_MENU_EDIT_ID -> {
-                accountItemModel?.let {
-                    listener.editAccountItem(it)
-                    true
-                } ?: false
-            }
-            CONTEXT_MENU_DELETE_ID -> {
-                accountItemModel?.let {
-                    listener.deleteAccountItem(it)
-                    true
-                } ?: false
-            }
-            else -> false
+        override fun onDismiss() {
+            accountItemModel?.let { listener.onDismissPopupmenu(it) }
         }
     }
 
-    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        accountItemModel?.let { listener.onCreateContextMenuForAccountItem(it) }
-        menu?.apply {
-            addContextMenuItem(this, CONTEXT_MENU_SELECT_ID, "Select")
-            addContextMenuItem(this, CONTEXT_MENU_COPY_LOGIN_ID, "Copy login")
-            addContextMenuItem(this, CONTEXT_MENU_COPY_PASSWORD_ID, "Copy password")
-            addContextMenuItem(this, CONTEXT_MENU_EDIT_ID, "Edit")
-            addContextMenuItem(this, CONTEXT_MENU_DELETE_ID, "Delete")
-        }
+    override fun applyTheme(theme: CustomTheme) {
+        super.applyTheme(theme)
+        CustomThemeApplier.applyBackgroundTint(
+            theme,
+            itemView.cvAccountItemContainer,
+            R.attr.themedSecondaryBackgroundColor,
+        )
+        CustomThemeApplier.applyTextColor(
+            theme,
+            R.attr.themedPrimaryTextColor,
+            itemView.tvAccountName,
+            itemView.tvAccountLogin,
+            itemView.tvAccountPassword,
+        )
+        CustomThemeApplier.applyCompoundDrawablesTint(
+            theme,
+            R.attr.themedPrimaryColor,
+            itemView.tvAccountLogin,
+            itemView.tvAccountPassword,
+        )
+
+        drawAccountAvatar(theme)
+        drawAccountText(theme)
+        drawPasswordContentText(theme)
     }
 
-    private fun addContextMenuItem(menu: ContextMenu, itemId: Int, itemTitle: String) {
-        menu.add(Menu.NONE, itemId, Menu.NONE, itemTitle).setOnMenuItemClickListener(this)
-    }
-
-    fun bindAccountListItemView(accountItemModel: AccountItemModel) {
+    fun bindAccountListItemView(accountItemModel: AccountItemModel, theme: CustomTheme) {
         this.accountItemModel = accountItemModel
         itemView.tvAccountName.text = accountItemModel.name
 
         itemView.tvAccountLogin.apply {
-            text = PSUtils.getHidedContentText(
-                itemView.context,
-                accountItemModel.isAccountContentVisible,
-                accountItemModel.login
-            )
+            drawAccountText(theme)
             maxLines = if (accountItemModel.isAccountContentVisible) {
                 AppConstants.MAX_LINES_VISIBLE_CONTENT
             } else {
@@ -101,11 +89,7 @@ class AccountsListItemViewHolder(
         }
 
         itemView.tvAccountPassword.apply {
-            text = PSUtils.getHidedContentText(
-                itemView.context,
-                accountItemModel.isAccountContentVisible,
-                accountItemModel.password
-            )
+            drawPasswordContentText(theme)
             maxLines = if (accountItemModel.isAccountContentVisible) {
                 AppConstants.MAX_LINES_VISIBLE_CONTENT
             } else {
@@ -114,46 +98,76 @@ class AccountsListItemViewHolder(
         }
 
         if (accountItemModel.isInActionModeState) {
+            disablePopupMenuListener()
             itemView.setOnClickListener {
                 listener.selectAccountItem(accountItemModel)
             }
-        } else {
-            itemView.setOnClickListener(null)
-        }
-
-        itemView.setOnCreateContextMenuListener(this)
-
-        if (accountItemModel.isInActionModeState) {
             itemView.setOnLongClickListener {
                 listener.selectAccountItem(accountItemModel)
                 return@setOnLongClickListener true
             }
         } else {
-            itemView.setOnLongClickListener(null)
+            enablePopupMenuListener()
         }
 
         initAdditionalItemClickListeners(accountItemModel)
 
-        setRootItemBackground(accountItemModel, itemView.vAccountItemRoot)
+        setRootItemBackground(accountItemModel, itemView.vAccountItemRoot, theme)
 
         if (!accountItemModel.isInActionModeState) {
             itemView.ivItemSelected.setVisibilityInvisible(false)
         } else {
-            itemView.ivItemSelected.setVisibilityInvisible(accountItemModel.isItemSelected)
+            itemView.ivItemSelected.apply {
+                setVisibilityInvisible(accountItemModel.isItemSelected)
+                setImageResource(theme.getDrawable(R.attr.themedSelectedItemDrawable))
+            }
         }
 
-        val fillColor = itemView.context.getColorCompat(R.color.staticColorTransparent)
-        val textColor = itemView.context.getColorCompat(R.color.colorPrimary)
+        drawAccountAvatar(theme)
+    }
+
+    private fun drawAccountText(theme: CustomTheme) {
+        val accountItemModel = accountItemModel ?: return
+
+        itemView.tvAccountLogin.text = PSUtils.getHiddenContentText(
+            itemView.context,
+            accountItemModel.isAccountContentVisible,
+            accountItemModel.login,
+            theme.getDrawable(R.attr.themedHiddenContentDrawable),
+        )
+    }
+
+    private fun drawPasswordContentText(theme: CustomTheme) {
+        val accountItemModel = accountItemModel ?: return
+
+        itemView.tvAccountPassword.text = PSUtils.getHiddenContentText(
+            itemView.context,
+            accountItemModel.isAccountContentVisible,
+            accountItemModel.password,
+            theme.getDrawable(R.attr.themedHiddenContentDrawable),
+        )
+    }
+
+    private fun drawAccountAvatar(theme: CustomTheme) {
+        val abbreviation = accountItemModel?.name?.let {
+            PSUtils.getAbbreviationFormName(it)
+        } ?: return
+
+        val fillColor = theme.getColor(R.attr.staticColorTransparent)
+        val textColor = theme.getColor(R.attr.themedPrimaryColor)
         val textSizeInPx = itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_inner_text_size)
         val avatarSizeInPx = itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_avatar_size)
-        itemView.ivAccountAvatar.drawTextInner(
-            itemView.context,
-            avatarSizeInPx,
-            fillColor,
-            textColor,
-            textSizeInPx,
-            PSUtils.getAbbreviationFormName(accountItemModel.name)
-        )
+        itemView.ivAccountAvatar.apply {
+            drawTextInner(
+                itemView.context,
+                avatarSizeInPx,
+                fillColor,
+                textColor,
+                textSizeInPx,
+                abbreviation,
+            )
+            borderColor = theme.getColor(R.attr.themedPrimaryDarkColor)
+        }
     }
 
     private fun initAdditionalItemClickListeners(accountItemModel: AccountItemModel) {
@@ -174,9 +188,9 @@ class AccountsListItemViewHolder(
         }
     }
 
-    private fun setRootItemBackground(accountItemModel: AccountItemModel, rootView: View) {
+    private fun setRootItemBackground(accountItemModel: AccountItemModel, rootView: View, theme: CustomTheme) {
         val bgResId = when {
-            accountItemModel.isLoadingModel -> R.drawable.loading_animation
+            accountItemModel.isLoadingModel -> theme.getDrawable(R.attr.themedSelectedItemBackgroundDrawable)
             else -> 0
         }
         rootView.setBackgroundResource(bgResId)
@@ -186,5 +200,49 @@ class AccountsListItemViewHolder(
             setExitFadeDuration(500)
             start()
         }
+    }
+
+    override fun generateMenuItems(): List<PopupWindowMenuItem> {
+        return listOf(
+            PopupWindowMenuItem(
+                SELECT_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_select),
+                PopupWindowMenuItem.Title(contentRes = R.string.account_popup_menu_item_select),
+            ),
+            PopupWindowMenuItem(
+                COPY_LOGIN_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_copy),
+                PopupWindowMenuItem.Title(contentRes = R.string.account_popup_menu_item_copy_login),
+            ),
+            PopupWindowMenuItem(
+                COPY_PASSWORD_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_copy),
+                PopupWindowMenuItem.Title(contentRes = R.string.account_popup_menu_item_copy_password),
+            ),
+            PopupWindowMenuItem(
+                EDIT_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_edit),
+                PopupWindowMenuItem.Title(contentRes = R.string.account_popup_menu_item_edit),
+            ),
+            PopupWindowMenuItem(
+                DELETE_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_delete),
+                PopupWindowMenuItem.Title(contentRes = R.string.account_popup_menu_item_delete),
+                PopupWindowMenuItem.ItemTint(
+                    titleTintAttrRes = R.attr.themedErrorColor,
+                    iconTintAttrRes = R.attr.themedErrorColor,
+                )
+            ),
+        )
+    }
+
+    private companion object {
+        const val ACCOUNT_SHOW_ACTION_CLICK_DELAY_IN_MILLIS = 700L
+
+        const val SELECT_ID = 1
+        const val COPY_LOGIN_ID = 2
+        const val COPY_PASSWORD_ID = 3
+        const val EDIT_ID = 4
+        const val DELETE_ID = 5
     }
 }

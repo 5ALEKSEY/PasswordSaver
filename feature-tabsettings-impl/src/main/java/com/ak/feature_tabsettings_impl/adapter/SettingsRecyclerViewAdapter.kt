@@ -3,6 +3,9 @@ package com.ak.feature_tabsettings_impl.adapter
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewAdapter
+import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewHolder
 import com.ak.base.adapter.AdapterDelegatesManager
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.sections.SectionAdapterDelegate
@@ -12,12 +15,12 @@ import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchAdapterDeleg
 import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchSettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.texts.TextAdapterDelegate
 
-class SettingsRecyclerViewAdapter constructor(
+class SettingsRecyclerViewAdapter(
     private val onSwitchSettingsChanged: ((settingId: Int, isChecked: Boolean) -> Unit)? = null,
     private val onSpinnerSettingsChanged: ((settingId: Int, newDataId: Int) -> Unit)? = null,
     private val onSectionSettingsClicked: ((settingId: Int) -> Unit)? = null,
     private val onTextSettingsClicked: ((settingId: Int) -> Unit)? = null
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+) : CustomThemeRecyclerViewAdapter<CustomThemeRecyclerViewHolder>() {
 
     companion object {
         const val SWITCH_SETTING_TYPE = 1
@@ -84,8 +87,8 @@ class SettingsRecyclerViewAdapter constructor(
 
     override fun getItemCount() = settingsItemsList.size
 
-    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
-        adapterDelegatesManager.onBindViewHolder(settingsItemsList[position], viewHolder)
+    override fun onBindViewHolder(theme: CustomTheme, viewHolder: CustomThemeRecyclerViewHolder, position: Int) {
+        adapterDelegatesManager.onBindViewHolder(settingsItemsList[position], viewHolder, theme)
     }
 
     fun addSettingsList(settingItems: List<SettingsListItemModel>) {

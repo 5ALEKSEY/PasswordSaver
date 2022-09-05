@@ -12,8 +12,8 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import com.ak.app_theme.R
 import com.ak.app_theme.theme.CustomTheme
-import com.ak.app_theme.theme.CustomThemeApplier
 import com.ak.app_theme.theme.CustomThemeDrawableBuilder
+import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.app_theme.theme.dpToPx
 import com.ak.app_theme.theme.drawable.VectorDrawableCompat
 import com.google.gson.Gson
@@ -442,6 +442,9 @@ class CustomThemeDrawableSelectorBuilder @JvmOverloads constructor(
             builder.addDrawableTintState(intArrayOf(-android.R.attr.state_checked), unCheckedState)
             builder.addDrawableTintState(intArrayOf(android.R.attr.state_checked), checkedState)
             builder.addDrawableTintState(intArrayOf(-android.R.attr.state_enabled), disabledState)
+            builder.addDrawableTintState(intArrayOf(android.R.attr.state_enabled), defaultState)
+            builder.addDrawableTintState(intArrayOf(android.R.attr.state_window_focused), defaultState)
+            builder.addDrawableTintState(intArrayOf(android.R.attr.state_accelerated), defaultState)
             builder.addDrawableTintState(intArrayOf(), defaultState)
 
             return builder.build()

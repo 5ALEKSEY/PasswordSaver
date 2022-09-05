@@ -8,18 +8,22 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.MotionEvent
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import androidx.core.util.forEach
+import androidx.core.util.valueIterator
+import androidx.core.view.ViewCompat
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.base.R
 import com.ak.base.extensions.dpToPx
-import com.ak.base.extensions.getColorCompat
 import com.ak.base.extensions.vibrate
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.math.sqrt
 
-class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs) {
+class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(context, attrs), CustomTheme.Support {
 
     companion object DefaultValues {
         private const val LINE_WIDTH = 12F
@@ -44,9 +48,13 @@ class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     //----------------------------------------------------------------------------------------------
 
 
-    private val mDefaultLineColor by lazy { context.getColorCompat(R.color.default_pattern_line_color) }
-    private val mFailedLineColor by lazy { context.getColorCompat(R.color.failed_pattern_line_color) }
-    private val mBackgroundColor by lazy { context.getColorCompat(R.color.security_background_color) }
+//    private var mDefaultLineColor by lazy { context.getColorCompat(R.color.default_pattern_line_color) }
+//    private var mFailedLineColor by lazy { context.getColorCompat(R.color.failed_pattern_line_color) }
+//    private var mBackgroundColor by lazy { context.getColorCompat(R.color.security_background_color) }
+//
+    private var mDefaultLineColor: Int? = null
+    private var mFailedLineColor: Int? = null
+    private var mBackgroundColor: Int? = null
 
     lateinit var mOnFinishedAction: (patternResultCode: String) -> Unit
 
@@ -62,8 +70,7 @@ class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     private val mLinePaths = arrayListOf<PatternLinePath>()
     private val mNodesMap = SparseArray<PatternNodeData>(mNodesNumber)
-    private val mNodesCodesList =
-        arrayListOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f")
+    private val mNodesCodesList = arrayListOf("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f")
     private val mInvokedNodesNumbers = arrayListOf<Int>()
 
     private var mIsAuthStarted = false
@@ -74,13 +81,14 @@ class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     init {
         initViewAttributes(attrs)
+        initColors(CustomThemeManager.getInstance().getTheme())
         setWillNotDraw(false)
         mCanvas = Canvas(mBitmap)
         // init paint
         mPaint.apply {
             isAntiAlias = true
             isDither = true
-            color = mDefaultLineColor
+            color = mDefaultLineColor ?: return@apply
             style = Paint.Style.STROKE
             strokeJoin = Paint.Join.ROUND
             strokeCap = Paint.Cap.ROUND
@@ -89,6 +97,19 @@ class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         }
         addNodeViews()
         clearAndReset()
+    }
+
+    override fun applyTheme(theme: CustomTheme) {
+        initColors(theme = theme, withRedraw = true)
+        mNodesMap.forEach { _, value -> value.nodeView.applyTheme(theme) }
+    }
+
+    private fun initColors(theme: CustomTheme, withRedraw: Boolean = false) {
+        mDefaultLineColor = theme.getColor(R.attr.staticColorWhite)
+        mFailedLineColor = theme.getColor(R.attr.themedErrorColor)
+        mBackgroundColor = theme.getColor(R.attr.themedPrimaryColor)
+
+        if (withRedraw) invalidate()
     }
 
     private fun initViewAttributes(attrs: AttributeSet?) {
@@ -153,7 +174,7 @@ class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         }
 
         canvas.save()
-        mCanvas.drawColor(mBackgroundColor)
+        mBackgroundColor?.let { mCanvas.drawColor(it) }
 
         mLinePaths.forEach {
             mPaint.color = it.color
@@ -177,11 +198,10 @@ class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
             for (j in 0..marginsCount) {
                 nodeNumber++
 
-                val patternNodeView =
-                    PatternCodeNodeView(
-                        context,
-                        null
-                    )
+                val patternNodeView = PatternCodeNodeView(
+                    context,
+                    null
+                ).apply { id = nodeNumber }
                 val params = LayoutParams(nodeViewPxSize, nodeViewPxSize)
 
                 val x = calculateNodeViewCoordinate(nodesMarginSize, i)
@@ -286,7 +306,7 @@ class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         mPath = Path()
         val linePath =
             PatternLinePath(
-                mDefaultLineColor,
+                mDefaultLineColor ?: return,
                 mPath
             )
         mLinePaths.add(linePath)
@@ -357,7 +377,7 @@ class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
     private fun startAuthFailedAnimation() {
         val shakeAnimation = AnimationUtils.loadAnimation(context, R.anim.medium_shake)
         mLinePaths.forEach {
-            it.color = mFailedLineColor
+            it.color = mFailedLineColor ?: return@forEach
         }
         mNodesMap.forEach { _, patternNodeData ->
             patternNodeData.nodeView.apply {

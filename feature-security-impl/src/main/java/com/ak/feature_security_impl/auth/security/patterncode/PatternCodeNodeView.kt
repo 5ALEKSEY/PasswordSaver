@@ -4,44 +4,61 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.ak.base.extensions.getColorCompat
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.feature_security_impl.R
 import kotlinx.android.synthetic.main.layout_pattern_code_node_view.view.ivNodePatternView
 
-class PatternCodeNodeView(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
+// TODO: state must be implemented as sealed class
+class PatternCodeNodeView(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs), CustomTheme.Support {
 
-    private val mFailedColor by lazy { context.getColorCompat(R.color.failed_action_color) }
-
-    private val mInitPatterNodeEnableState = false
-    private var mIsPatternNodeEnabled = mInitPatterNodeEnableState
+    private var failedColor: Int? = null
+    private var isPatternNodeEnabled = false
 
     init {
         LayoutInflater.from(context).inflate(R.layout.layout_pattern_code_node_view, this)
-        setNodeEnableState(mIsPatternNodeEnabled)
+        setNodeEnableState(isPatternNodeEnabled)
+        initColors()
+    }
+
+    override fun setId(id: Int) {
+        super.setId(View.generateViewId() + id)
+    }
+
+    override fun applyTheme(theme: CustomTheme) {
+        initColors(theme)
+        drawNodeState()
     }
 
     fun setNodeEnableState(isEnabled: Boolean) {
-        @DrawableRes val backgroundRes = getBackgroundDrawable(isEnabled)
-        ivNodePatternView.setImageDrawable(context.getDrawable(backgroundRes))
-        mIsPatternNodeEnabled = isEnabled
+        isPatternNodeEnabled = isEnabled
+        drawNodeState()
     }
 
     fun setNodeFailedState() {
-        setPatternNodeColor(mFailedColor)
-    }
-
-    private fun setPatternNodeColor(@ColorInt color: Int) {
         val drawable = ivNodePatternView.drawable
         drawable.setColorFilter(
-            color,
+            failedColor ?: return,
             PorterDuff.Mode.MULTIPLY
         )
     }
 
-    @DrawableRes
-    private fun getBackgroundDrawable(isEnabled: Boolean) =
-        if (isEnabled) R.drawable.bg_enabled_pattern_node else R.drawable.bg_disabled_pattern_node
+    private fun initColors(theme: CustomTheme = CustomThemeManager.getCurrentTheme()) {
+        failedColor = theme.getColor(R.attr.themedErrorColor)
+    }
+
+    private fun drawNodeState(theme: CustomTheme = CustomThemeManager.getCurrentTheme()) {
+        val drawableRes = theme.getDrawable(
+            if (isPatternNodeEnabled) {
+                R.attr.themedSecurityPatternNodeEnabledDrawable
+            } else {
+                R.attr.themedSecurityPatternNodeDisabledDrawable
+            }
+        )
+        ivNodePatternView.setImageResource(drawableRes)
+    }
 }

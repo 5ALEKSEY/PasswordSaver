@@ -39,8 +39,7 @@ class CustomThemeDrawableBuilder @JvmOverloads constructor(
     fun line() = apply { targetShape = GradientDrawable.LINE }
 
     fun solidColor(@ColorInt color: Int) = apply { solidColor = color }
-    fun solidColorAttr(@AttrRes colorAttr: Int) =
-        solidColor(theme?.getColor(colorAttr) ?: solidColor)
+    fun solidColorAttr(@AttrRes colorAttr: Int) = solidColor(theme?.getColor(colorAttr) ?: solidColor)
 
     fun strokeWidth(value: Int) = apply { strokeWidth = value }
     fun strokeWidthDp(value: Float) = apply { strokeWidth = value.dpToPx(context) }
@@ -86,11 +85,12 @@ class CustomThemeDrawableBuilder @JvmOverloads constructor(
 
     fun insetsDp(leftDp: Float, topDp: Float, rightDp: Float, bottomDp: Float) = insets(
         leftDp.dpToPx(context),
-        topDp.dpToPx(context), rightDp.dpToPx(context), bottomDp.dpToPx(context)
+        topDp.dpToPx(context),
+        rightDp.dpToPx(context),
+        bottomDp.dpToPx(context),
     )
 
-    private fun isNotEmpty(rect: Rect) =
-        rect.left > 0 || rect.right > 0 || rect.top > 0 || rect.bottom > 0
+    private fun isNotEmpty(rect: Rect) = rect.left > 0 || rect.right > 0 || rect.top > 0 || rect.bottom > 0
 
     fun addDrawableWithInsetsDp(
         drawable: Drawable,
@@ -100,14 +100,17 @@ class CustomThemeDrawableBuilder @JvmOverloads constructor(
             leftDp.dpToPx(context),
             topDp.dpToPx(context),
             rightDp.dpToPx(context),
-            bottomDp.dpToPx(context)
+            bottomDp.dpToPx(context),
         )
         layerDrawables.add(Pair(drawable, rect))
     }
 
     fun addDrawableWithInsetsDp(drawable: Drawable, valueDp: Float) = addDrawableWithInsetsDp(
         drawable,
-        valueDp, valueDp, valueDp, valueDp
+        valueDp,
+        valueDp,
+        valueDp,
+        valueDp,
     )
 
     fun addDrawable(drawable: Drawable) = addDrawableWithInsetsDp(drawable, 0f)

@@ -7,12 +7,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.DialogFragment
+import android.widget.TextView
 import androidx.fragment.app.FragmentManager
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.applier.CustomThemeApplier
+import com.ak.app_theme.theme.uicomponents.BaseThemeDialogFragment
 import com.ak.base.R
+import com.ak.base.extensions.setVisibilityInvisible
 import kotlinx.android.synthetic.main.layout_alert_dialog.view.*
 
-class PSDialog private constructor() : DialogFragment() {
+class PSDialog private constructor() : BaseThemeDialogFragment() {
 
     companion object {
         private const val DIALOG_TAG = "PSDialog"
@@ -77,12 +81,31 @@ class PSDialog private constructor() : DialogFragment() {
     var negativeClickListener: (() -> Unit)? = null
     var dismissDialogListener: (() -> Unit)? = null
 
+    private var containerView: View? = null
+    private var titleTextView: TextView? = null
+    private var descriptionTextView: TextView? = null
+    private var positiveBtn: TextView? = null
+    private var negativeBtn: TextView? = null
+
+    override fun applyTheme(theme: CustomTheme) {
+        super.applyTheme(theme)
+        CustomThemeApplier.applyBackgroundTint(theme, containerView, R.attr.themedPopupBackgroundColor)
+        CustomThemeApplier.applyTextColor(
+            theme,
+            R.attr.themedPrimaryTextColor,
+            titleTextView,
+            descriptionTextView,
+            negativeBtn,
+        )
+        CustomThemeApplier.applyTextColor(theme, positiveBtn, R.attr.themedAccentColor)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val dialogView = inflater.inflate(R.layout.layout_alert_dialog, container, false)
         isCancelable = arguments?.getBoolean(CANCELABLE_EXTRA, DEFAULT_CANCELABLE) ?: DEFAULT_CANCELABLE
         dialog?.window?.apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            setWindowAnimations(R.style.ps_dialog_animation)
+            setWindowAnimations(R.style.popup_animation_medium)
         }
         return dialogView
     }
@@ -95,19 +118,21 @@ class PSDialog private constructor() : DialogFragment() {
             return
         }
 
-        view.tvDialogTitle.text = dialogExtras.getString(TITLE_EXTRA, getString(DEFAULT_TITLE_STRING_ID))
-        view.tvDialogDescription.text = dialogExtras.getString(DESC_EXTRA)
-
-        view.tvDialogPositiveButton.text = dialogExtras.getString(POSITIVE_BTN_EXTRA, getString(DEFAULT_POS_BTN_STRING_ID))
-        setClickListenerWithDefault(view.tvDialogPositiveButton, positiveClickListener) { dismissAllowingStateLoss() }
-
-        view.tvDialogNegativeButton.text = dialogExtras.getString(NEGATIVE_BTN_EXTRA, getString(DEFAULT_NEG_BTN_STRING_ID))
-        setClickListenerWithDefault(view.tvDialogNegativeButton, negativeClickListener) { dismissAllowingStateLoss() }
-
-        view.tvDialogNegativeButton.visibility = if (dialogExtras.getBoolean(IS_OK_ONLY_EXTRA, DEFAULT_IS_OK_ONLY)) {
-            View.INVISIBLE
-        } else {
-            View.VISIBLE
+        containerView = view.llAlertDialogContainer
+        titleTextView = view.tvDialogTitle.apply {
+            text = dialogExtras.getString(TITLE_EXTRA, getString(DEFAULT_TITLE_STRING_ID))
+        }
+        descriptionTextView = view.tvDialogDescription.apply {
+            text = dialogExtras.getString(DESC_EXTRA)
+        }
+        positiveBtn = view.tvDialogPositiveButton.apply {
+            text = dialogExtras.getString(POSITIVE_BTN_EXTRA, getString(DEFAULT_POS_BTN_STRING_ID))
+            setClickListenerWithDefault(this, positiveClickListener) { dismissAllowingStateLoss() }
+        }
+        negativeBtn = view.tvDialogNegativeButton.apply {
+            text = dialogExtras.getString(NEGATIVE_BTN_EXTRA, getString(DEFAULT_NEG_BTN_STRING_ID))
+            setClickListenerWithDefault(this, negativeClickListener) { dismissAllowingStateLoss() }
+            setVisibilityInvisible(!dialogExtras.getBoolean(IS_OK_ONLY_EXTRA, DEFAULT_IS_OK_ONLY))
         }
     }
 

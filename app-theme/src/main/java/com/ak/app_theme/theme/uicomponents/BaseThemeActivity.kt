@@ -9,7 +9,7 @@ import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
 import com.ak.app_theme.R
 import com.ak.app_theme.theme.CustomTheme
-import com.ak.app_theme.theme.CustomThemeApplier
+import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.app_theme.theme.CustomThemeInterceptor
 import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.app_theme.theme.CustomThemedView
@@ -41,7 +41,9 @@ abstract class BaseThemeActivity : AppCompatActivity() {
     private fun attachThemeViewInflater() {
         themeInflaterSubscription = CustomThemeInterceptor.instance
             .getInflatedViewObservable()
-            .filter { view -> view.context != null && isEnabledThemeChangeListener() }
+            .filter {
+                view -> view.context != null && isEnabledThemeChangeListener()
+            }
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnNext { themedView ->
@@ -186,7 +188,8 @@ abstract class BaseThemeActivity : AppCompatActivity() {
         CustomThemeApplier.applyForWindow(
             theme,
             window,
-            getStatusBarColorResource()
+            getStatusBarColorResource(),
+            getNavigationBarColorResource(),
         )
         CustomThemeApplier.applyWindowBackground(
             theme,
@@ -201,12 +204,17 @@ abstract class BaseThemeActivity : AppCompatActivity() {
 
     @AttrRes
     protected open fun getWindowBackground(): Int {
-        return R.attr.themedBackgroundColor
+        return R.attr.themedPrimaryBackgroundColor
     }
 
     @AttrRes
     protected open fun getStatusBarColorResource(): Int {
         return R.attr.themedStatusBarColor
+    }
+
+    @AttrRes
+    protected open fun getNavigationBarColorResource(): Int {
+        return R.attr.themedNavigationBarColor
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

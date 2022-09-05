@@ -40,4 +40,15 @@
     <color name="loading_gradient_center">#F6FAFF</color>
     <color name="loading_gradient_end">#E6F5FF</color>
 
+    <color name="loading_gradient_start_blue">#FFFFFF</color>
+    <color name="loading_gradient_center_blue">#F6FAFF</color>
+    <color name="loading_gradient_end_blue">#E6F5FF</color>
+
+    <color name="loading_gradient_start_orange">#FFE1C9</color>
+    <color name="loading_gradient_center_orange">#FFCEA7</color>
+    <color name="loading_gradient_end_orange">#FFC598</color>
+
+    <color name="secure_pattern_node_accent_color_blue">#4171FF</color>
+    <color name="secure_pattern_node_accent_color_orange">#FFA864</color>
+
 </resources>

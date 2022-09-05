@@ -26,8 +26,6 @@ class CustomThemeInterceptor private constructor() : Interceptor {
         if (result.view != null && result.attrs != null) {
             val foundAttributes = HashMap<String, Any>()
 
-            //printAttributes(result)
-
             val tagResValue = result.attrs!!.getAttributeResourceValue(ANDROID_SCHEME, "tag", 0)
             if (tagResValue == R.string.skipThemeInterceptor) { // skip
                 return result

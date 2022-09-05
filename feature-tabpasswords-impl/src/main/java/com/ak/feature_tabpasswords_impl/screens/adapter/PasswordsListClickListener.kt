@@ -6,5 +6,6 @@ interface PasswordsListClickListener {
     fun copyPasswordItemContent(item: PasswordItemModel)
     fun editPasswordItem(item: PasswordItemModel)
     fun deletePasswordItem(item: PasswordItemModel)
-    fun onCreateContextMenuForPasswordItem(item: PasswordItemModel)
+    fun onShowPopupMenu(item: PasswordItemModel)
+    fun onDismissPopupmenu(item: PasswordItemModel)
 }

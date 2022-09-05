@@ -5,19 +5,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
-import androidx.recyclerview.widget.RecyclerView
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewAdapter
 import com.ak.feature_tabpasswords_impl.R
 
 class PasswordsListRecyclerAdapter(
     private val listener: PasswordsListClickListener
-) : RecyclerView.Adapter<PasswordsListItemViewHolder>() {
+) : CustomThemeRecyclerViewAdapter<PasswordsListItemViewHolder>() {
 
     private var itemsList = arrayListOf<PasswordItemModel>()
-
-    override fun onViewRecycled(holder: PasswordsListItemViewHolder) {
-        super.onViewRecycled(holder)
-        holder.onClear()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PasswordsListItemViewHolder {
         val view = LayoutInflater
@@ -28,8 +24,8 @@ class PasswordsListRecyclerAdapter(
 
     override fun getItemCount() = itemsList.size
 
-    override fun onBindViewHolder(viewHolder: PasswordsListItemViewHolder, position: Int) {
-        viewHolder.bindPasswordListItemView(itemsList[position])
+    override fun onBindViewHolder(theme: CustomTheme, viewHolder: PasswordsListItemViewHolder, position: Int) {
+        viewHolder.bindPasswordListItemView(itemsList[position], theme)
     }
 
     fun insertData(passwordModels: List<PasswordItemModel>) {

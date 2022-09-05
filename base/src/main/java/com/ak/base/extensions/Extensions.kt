@@ -1,6 +1,7 @@
 package com.ak.base.extensions
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -11,16 +12,19 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
-import androidx.appcompat.widget.Toolbar
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.ak.base.R
 import com.ak.base.constants.AppConstants
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import io.reactivex.rxjava3.core.SingleEmitter
 import java.util.Calendar
 import kotlinx.android.synthetic.main.layout_notification_badge.view.tvBadgeText
+
+fun <T : View> T.applyForLaidOut(block: T.() -> Unit) {
+    if (isLaidOut) {
+        block(this)
+    }
+}
 
 fun Float.dpToPx(context: Context?) =
     if (context != null) {
@@ -67,25 +71,6 @@ fun ImageView.drawTextInner(
     textToDraw: String
 ) {
     drawTextInner(context, width, fillColor, textColor, textSizeInPx, textToDraw)
-}
-
-fun Toolbar.turnOffToolbarScrolling(appBarLayout: AppBarLayout) {
-    //turn off scrolling
-    val toolbarLayoutParams = layoutParams as AppBarLayout.LayoutParams
-    toolbarLayoutParams.scrollFlags = 0
-    layoutParams = toolbarLayoutParams
-
-    changeAppBarLayoutScrollBehavior(appBarLayout, false)
-}
-
-fun Toolbar.turnOnToolbarScrolling(appBarLayout: AppBarLayout) {
-    //turn on scrolling
-    val toolbarLayoutParams = layoutParams as AppBarLayout.LayoutParams
-    toolbarLayoutParams.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
-            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
-    layoutParams = toolbarLayoutParams
-
-    changeAppBarLayoutScrollBehavior(appBarLayout, true)
 }
 
 fun View.setVisibility(isVisible: Boolean) {
@@ -157,6 +142,8 @@ fun <T> SingleEmitter<T>.onErrorSafe(error: Throwable) {
     }
 }
 
+fun Int.toColorStateList() = ColorStateList.valueOf(this)
+
 private fun getBottomNavViewMenuItem(bottomNavigationView: BottomNavigationView, menuItemId: Int): BottomNavigationItemView? {
     val menuItemView = bottomNavigationView.getChildAt(0)?.findViewById<View>(menuItemId)
     return if (menuItemView !is BottomNavigationItemView) {
@@ -164,10 +151,4 @@ private fun getBottomNavViewMenuItem(bottomNavigationView: BottomNavigationView,
     } else {
         menuItemView
     }
-}
-
-private fun changeAppBarLayoutScrollBehavior(appBarLayout: AppBarLayout, isScrollNeeds: Boolean) {
-    val appBarLayoutParams = appBarLayout.layoutParams as CoordinatorLayout.LayoutParams
-    appBarLayoutParams.behavior = if (isScrollNeeds) AppBarLayout.Behavior() else null
-    appBarLayout.layoutParams = appBarLayoutParams
 }

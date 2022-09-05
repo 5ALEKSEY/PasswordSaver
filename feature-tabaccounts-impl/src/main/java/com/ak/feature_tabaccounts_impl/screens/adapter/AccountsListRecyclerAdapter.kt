@@ -6,11 +6,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
 import androidx.recyclerview.widget.RecyclerView
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewAdapter
 import com.ak.feature_tabaccounts_impl.R
 
 class AccountsListRecyclerAdapter(
     private val listener: AccountListClickListener
-) : RecyclerView.Adapter<AccountsListItemViewHolder>() {
+) : CustomThemeRecyclerViewAdapter<AccountsListItemViewHolder>() {
 
     private var itemsList = arrayListOf<AccountItemModel>()
 
@@ -23,8 +25,8 @@ class AccountsListRecyclerAdapter(
 
     override fun getItemCount() = itemsList.size
 
-    override fun onBindViewHolder(viewHolder: AccountsListItemViewHolder, position: Int) {
-        viewHolder.bindAccountListItemView(itemsList[position])
+    override fun onBindViewHolder(theme: CustomTheme, viewHolder: AccountsListItemViewHolder, position: Int) {
+        viewHolder.bindAccountListItemView(itemsList[position], theme)
     }
 
     fun insertData(accountModels: List<AccountItemModel>) {

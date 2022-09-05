@@ -2,18 +2,28 @@ package com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.edi
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
+import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity
 import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.domain.entity.PasswordDomainEntity
 import com.ak.feature_tabpasswords_impl.domain.entity.mapToDomainEntity
+import com.ak.feature_tabpasswords_impl.screens.logic.IBitmapDecoderManager
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.BaseManagePasswordViewModel
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 
 class EditPasswordViewModel @Inject constructor(
-    private val passwordsInteractor: IPasswordsInteractor
-) : BaseManagePasswordViewModel() {
+    private val passwordsInteractor: IPasswordsInteractor,
+    bitmapDecoderManager: IBitmapDecoderManager,
+    internalStorageManager: IPSInternalStorageManager,
+    resourceManager: IResourceManager,
+) : BaseManagePasswordViewModel(
+    bitmapDecoderManager,
+    internalStorageManager,
+    resourceManager,
+) {
 
     private var passwordEntityForEdit: PasswordDomainEntity? = null
 

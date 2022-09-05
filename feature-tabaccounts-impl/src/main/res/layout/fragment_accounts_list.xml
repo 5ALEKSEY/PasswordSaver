@@ -25,19 +25,27 @@
                 tools:visibility="visible" />
 
         <TextView
+                android:id="@+id/tvLoadingDesc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:layout_marginEnd="32dp"
                 android:layout_marginStart="32dp"
                 android:text="@string/decrypting_data_message"
-                android:textColor="@color/colorPrimaryText"
+                android:textColor="?themedPrimaryTextColor"
                 android:textSize="20sp" />
 
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvAccountsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?themedPrimaryBackgroundColor"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
     <include
-            android:id="@+id/incEmptyView"
+            android:id="@+id/incAccountsEmptyView"
             android:visibility="gone"
             tools:visibility="visible"
             android:layout_width="wrap_content"
@@ -45,20 +53,15 @@
             android:layout_gravity="center"
             layout="@layout/empty_accounts_layout"/>
 
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvAccountsList"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabAddNewAccountAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_anchor="@id/rvAccountsList"
-            app:layout_anchorGravity="bottom|right|end"
-            android:src="@drawable/ic_add"
             android:layout_margin="16dp"
-            app:borderWidth="0dp"/>
+            android:src="@drawable/ic_add"
+            app:backgroundTint="?themedAccentColor"
+            app:borderWidth="0dp"
+            app:layout_anchor="@id/rvAccountsList"
+            app:layout_anchorGravity="bottom|right|end" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,6 +13,4 @@ interface IToolbarController {
     fun setupBackAction(@DrawableRes backIconResId: Int, action: () -> Unit)
     @MainThread
     fun clearBackAction()
-    @MainThread
-    fun switchToolbarScrollingState(isScrollingEnabled: Boolean)
 }

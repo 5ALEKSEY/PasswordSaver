@@ -1,9 +1,11 @@
 package com.ak.base.utils
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ImageSpan
+import androidx.annotation.DrawableRes
 import com.ak.base.R
 
 object PSUtils {
@@ -14,13 +16,14 @@ object PSUtils {
             list.size > 1 -> list[0].take(1) + list[1].take(1)
             list.size == 1 -> list[0].take(1)
             else -> ""
-        }.toUpperCase()
+        }.uppercase()
     }
 
-    fun getHidedContentText(
+    fun getHiddenContentText(
         context: Context,
         isContentVisible: Boolean,
-        hidedContent: String
+        hidedContent: String,
+        @DrawableRes hiddenElementRes: Int,
     ): CharSequence {
         return if (isContentVisible) {
             hidedContent
@@ -29,8 +32,8 @@ object PSUtils {
                 hidedContent.forEachIndexed { index, _ ->
                     val imageSpan = ImageSpan(
                         context,
-                        R.drawable.hided_element,
-                        ImageSpan.ALIGN_BOTTOM
+                        hiddenElementRes,
+                        ImageSpan.ALIGN_BOTTOM,
                     )
                     setSpan(imageSpan, index, index + 1, Spanned.SPAN_INCLUSIVE_EXCLUSIVE)
                 }

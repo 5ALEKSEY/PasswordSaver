@@ -12,13 +12,16 @@ import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.ak.app_theme.theme.uicomponents.BaseThemeFragment
 import com.ak.base.extensions.showToastMessage
 import com.ak.base.extensions.vibrate
 import com.ak.base.ui.toolbar.IToolbarController
+import com.ak.base.utils.LifecyclePostponedEventsManager
 import com.ak.base.viewmodel.BasePSViewModel
 
-abstract class BasePSFragment<VM : BasePSViewModel> : Fragment() {
+abstract class BasePSFragment<VM : BasePSViewModel> : BaseThemeFragment() {
 
+    protected lateinit var postponedEventManager: LifecyclePostponedEventsManager
     protected lateinit var navController: NavController
     protected lateinit var fragmentView: View
 
@@ -61,6 +64,9 @@ abstract class BasePSFragment<VM : BasePSViewModel> : Fragment() {
                 container,
                 false
         )
+
+        postponedEventManager = LifecyclePostponedEventsManager(viewLifecycleOwner.lifecycle)
+
         initView(fragmentView)
         subscriberToViewModel(viewModel)
         return fragmentView

@@ -9,8 +9,8 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 
 class CustomThemeManager private constructor() {
     companion object {
-        private const val BLUE_THEME_ID = 0
-        private const val ORANGE_THEME_ID = 1
+        const val BLUE_THEME_ID = 0
+        const val ORANGE_THEME_ID = 1
         const val DEFAULT_THEME_ID = BLUE_THEME_ID
 
         private val instance = CustomThemeManager()
@@ -41,11 +41,17 @@ class CustomThemeManager private constructor() {
 
     fun getTheme() = currentTheme
     fun setTheme(themeId: Int) = applyThemeAndNotify(findTheme(themeId))
+    fun setNextTheme() = applyNextThemeAndNotify()
 
     private fun applyThemeAndNotify(theme: CustomTheme) {
         currentTheme = theme
         savePrefsThemeId(theme.id)
         changeThemePublishSubject.onNext(theme)
+    }
+
+    private fun applyNextThemeAndNotify() {
+        val nextThemeId = (currentTheme.id + 1) % themes.size
+        applyThemeAndNotify(findTheme(nextThemeId))
     }
 
     fun getColor(@AttrRes attrRes: Int) = currentTheme.getColor(attrRes)

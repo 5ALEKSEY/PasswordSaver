@@ -2,10 +2,13 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cvAccountItemContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
+        android:backgroundTint="?themedSecondaryBackgroundColor"
         android:elevation="8dp"
+        android:tag="@string/skipThemeInterceptor"
         app:cardCornerRadius="16dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,11 +21,12 @@
                 android:id="@+id/tvAccountName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:layout_marginStart="6dp"
                 android:minLines="1"
-                android:textColor="@color/colorPrimaryText"
+                android:tag="@string/skipThemeInterceptor"
+                android:textColor="?themedPrimaryTextColor"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -36,8 +40,9 @@
                 android:layout_marginStart="6dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:src="@color/staticColorWhite"
-                app:civ_border_color="@color/colorPrimaryDark"
+                android:src="?staticColorTransparent"
+                android:tag="@string/skipThemeInterceptor"
+                app:civ_border_color="?themedPrimaryDarkColor"
                 app:civ_border_width="1dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +57,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/ivAccountAvatar"
                 app:layout_constraintEnd_toEndOf="@+id/ivAccountAvatar"
                 app:layout_constraintTop_toTopOf="@+id/ivAccountAvatar"
-                app:srcCompat="@drawable/ic_password_item_selected"
+                app:srcCompat="@drawable/ic_item_selected_blue"
                 tools:visibility="visible" />
 
         <LinearLayout
@@ -72,13 +77,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="2dp"
-                    android:drawableStart="@drawable/ic_account_login"
                     android:drawablePadding="6dp"
                     android:gravity="start|center_vertical"
                     android:maxLines="1"
                     android:minHeight="24dp"
-                    android:textColor="@color/colorPrimaryText"
+                    android:tag="@string/skipThemeInterceptor"
+                    android:textColor="?themedPrimaryTextColor"
                     android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_account_login"
+                    app:drawableTint="?themedPrimaryDarkColor"
                     tools:text="Figma Account Key" />
 
             <TextView
@@ -86,13 +93,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:drawableStart="@drawable/ic_account_password"
                     android:drawablePadding="6dp"
                     android:gravity="start|center_vertical"
                     android:maxLines="1"
                     android:minHeight="24dp"
-                    android:textColor="@color/colorPrimaryText"
+                    android:tag="@string/skipThemeInterceptor"
+                    android:textColor="?themedPrimaryTextColor"
                     android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/ic_account_password"
+                    app:drawableTint="?themedPrimaryDarkColor"
                     tools:text="*************************************" />
 
         </LinearLayout>

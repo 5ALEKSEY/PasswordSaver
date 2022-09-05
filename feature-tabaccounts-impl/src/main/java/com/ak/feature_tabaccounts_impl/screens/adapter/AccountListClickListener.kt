@@ -7,5 +7,6 @@ interface AccountListClickListener {
     fun copyAccountItemPassword(item: AccountItemModel)
     fun editAccountItem(item: AccountItemModel)
     fun deleteAccountItem(item: AccountItemModel)
-    fun onCreateContextMenuForAccountItem(item: AccountItemModel)
+    fun onShowPopupMenu(item: AccountItemModel)
+    fun onDismissPopupmenu(item: AccountItemModel)
 }

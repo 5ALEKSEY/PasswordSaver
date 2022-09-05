@@ -3,6 +3,8 @@ package com.ak.feature_tabsettings_impl.about
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.base.extensions.drawTextInner
 import com.ak.base.extensions.getColorCompat
 import com.ak.base.viewmodel.injectViewModel
@@ -46,6 +48,11 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
         viewModel.subscribeToAboutActionsLiveData().observe(viewLifecycleOwner, this::displayAboutActions)
     }
 
+    override fun applyTheme(theme: CustomTheme) {
+        super.applyTheme(theme)
+        displayLauncherImageText(getString(R.string.about_launch_image_text), theme)
+    }
+
     private fun setVersionInfo(versionInfo: String) {
         fragmentView.tvApplicationVersionInfo.text = versionInfo
     }
@@ -69,10 +76,10 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
 
     private fun initRecyclerView() {
         aboutRecyclerAdapter = SettingsRecyclerViewAdapter(
-            null,
+            { a, f -> },
             null,
             viewModel::onAboutActionClicked,
-            null
+            {d -> }
         )
         fragmentView.rvAboutActionsList.apply {
             adapter = aboutRecyclerAdapter
@@ -86,20 +93,23 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
         }
     }
 
-    private fun displayLauncherImageText(text: String) {
-        val fillColor = getColorCompat(R.color.colorPrimary)
-        val textColor = getColorCompat(R.color.staticColorWhite)
+    private fun displayLauncherImageText(text: String, theme: CustomTheme = CustomThemeManager.getCurrentTheme()) {
+        val fillColor = theme.getColor(R.attr.themedPrimaryColor)
+        val textColor = theme.getColor(R.attr.staticColorWhite)
         val aboutLauncherImageTextSizeInPx =
             resources.getDimensionPixelSize(R.dimen.about_image_launcher_text_size)
         val aboutLauncherImageSizeInPx =
             resources.getDimensionPixelSize(R.dimen.about_image_launcher_size)
-        fragmentView.ivAboutLauncherImage.drawTextInner(
-            requireContext(),
-            aboutLauncherImageSizeInPx,
-            fillColor,
-            textColor,
-            aboutLauncherImageTextSizeInPx,
-            text
-        )
+        fragmentView.ivAboutLauncherImage.apply {
+            drawTextInner(
+                requireContext(),
+                aboutLauncherImageSizeInPx,
+                fillColor,
+                textColor,
+                aboutLauncherImageTextSizeInPx,
+                text
+            )
+            borderColor = theme.getColor(R.attr.themedPrimaryDarkColor)
+        }
     }
 }

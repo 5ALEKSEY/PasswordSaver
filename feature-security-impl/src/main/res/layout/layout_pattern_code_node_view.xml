@@ -9,11 +9,11 @@
             android:id="@+id/ivNodePatternView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_enabled_pattern_node"
+            android:background="@drawable/ic_enabled_pattern_node_blue"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:background="@drawable/bg_disabled_pattern_node" />
+            tools:background="@drawable/ic_disabled_pattern_node_blue" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

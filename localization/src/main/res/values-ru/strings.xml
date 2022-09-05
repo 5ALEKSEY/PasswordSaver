@@ -88,5 +88,18 @@
     <string name="click_to_change_image">"Изменить"</string>
     <string name="oops_message">"Уупс!"</string>
     <string name="blue_theme_name">"Синяя"</string>
-    <string name="orange_theme_name">"Оранжевая"</string>
+    <string name="orange_theme_name">"Рыжик"</string>
+
+    <!-- Password Popup Menu Items -->
+    <string name="password_popup_menu_item_select">"Выбрать"</string>
+    <string name="password_popup_menu_item_copy">"Скопировать"</string>
+    <string name="password_popup_menu_item_edit">"Изменить"</string>
+    <string name="password_popup_menu_item_delete">"Удалить"</string>
+
+    <!-- Account Popup Menu Items -->
+    <string name="account_popup_menu_item_select">"Выбрать"</string>
+    <string name="account_popup_menu_item_copy_login">"Скопировать логин"</string>
+    <string name="account_popup_menu_item_copy_password">"Скопировать пароль"</string>
+    <string name="account_popup_menu_item_edit">"Изменить"</string>
+    <string name="account_popup_menu_item_delete">"Удалить"</string>
 </resources>

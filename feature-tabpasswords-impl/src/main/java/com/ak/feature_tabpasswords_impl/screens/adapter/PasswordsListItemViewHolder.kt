@@ -1,94 +1,76 @@
 package com.ak.feature_tabpasswords_impl.screens.adapter
 
 import android.graphics.drawable.AnimationDrawable
-import android.view.ContextMenu
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.drawTextInner
-import com.ak.base.extensions.getColorCompat
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibilityInvisible
+import com.ak.base.ui.custom.popupmenu.PopupMenuHelper
+import com.ak.base.ui.custom.popupmenu.PopupWindowMenuItem
+import com.ak.base.ui.recycler.BasePopupMenuRecyclerViewHolder
 import com.ak.base.utils.PSUtils
 import com.ak.feature_tabpasswords_impl.R
-import kotlinx.android.synthetic.main.passwords_item_layout.view.*
+import kotlinx.android.synthetic.main.passwords_item_layout.view.cvPasswordItemContainer
+import kotlinx.android.synthetic.main.passwords_item_layout.view.ivItemSelected
+import kotlinx.android.synthetic.main.passwords_item_layout.view.ivPasswordAvatar
+import kotlinx.android.synthetic.main.passwords_item_layout.view.tvPasswordContent
+import kotlinx.android.synthetic.main.passwords_item_layout.view.tvPasswordName
+import kotlinx.android.synthetic.main.passwords_item_layout.view.vPasswordItemRoot
 
 class PasswordsListItemViewHolder(
     itemView: View,
     private val listener: PasswordsListClickListener
-) : RecyclerView.ViewHolder(itemView), View.OnCreateContextMenuListener, MenuItem.OnMenuItemClickListener {
+) : BasePopupMenuRecyclerViewHolder(itemView) {
+
+    override val popupMenuListener = object : PopupMenuHelper.Listener {
+        override fun onItemClicked(menuItemId: Int) {
+            val itemModel = passwordItemModel ?: return
+            when (menuItemId) {
+                SELECT_ID -> listener.selectPasswordItem(itemModel)
+                COPY_ID -> listener.copyPasswordItemContent(itemModel)
+                EDIT_ID -> listener.editPasswordItem(itemModel)
+                DELETE_ID -> listener.deletePasswordItem(itemModel)
+            }
+        }
+
+        override fun onShow() {
+            passwordItemModel?.let { listener.onShowPopupMenu(it) }
+        }
+
+        override fun onDismiss() {
+            passwordItemModel?.let { listener.onDismissPopupmenu(it) }
+        }
+    }
 
     private var passwordItemModel: PasswordItemModel? = null
 
-    private companion object {
-        const val PASSWORD_SHOW_ACTION_CLICK_DELAY_IN_MILLIS = 700L
-
-        const val CONTEXT_MENU_SELECT_ID = 1
-        const val CONTEXT_MENU_COPY_ID = 2
-        const val CONTEXT_MENU_EDIT_ID = 3
-        const val CONTEXT_MENU_DELETE_ID = 4
+    override fun applyTheme(theme: CustomTheme) {
+        super.applyTheme(theme)
+        CustomThemeApplier.applyBackgroundTint(
+            theme,
+            itemView.cvPasswordItemContainer,
+            R.attr.themedSecondaryBackgroundColor,
+        )
+        CustomThemeApplier.applyTextColor(
+            theme,
+            R.attr.themedPrimaryTextColor,
+            itemView.tvPasswordName,
+            itemView.tvPasswordContent,
+        )
+        drawEmptyPasswordAvatarIfNeeds(theme)
+        drawPasswordContentText(theme)
     }
 
-    override fun onMenuItemClick(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
-            CONTEXT_MENU_SELECT_ID -> {
-                passwordItemModel?.let {
-                    listener.selectPasswordItem(it)
-                    true
-                } ?: false
-            }
-            CONTEXT_MENU_COPY_ID -> {
-                passwordItemModel?.let {
-                    listener.copyPasswordItemContent(it)
-                    true
-                } ?: false
-            }
-            CONTEXT_MENU_EDIT_ID -> {
-                passwordItemModel?.let {
-                    listener.editPasswordItem(it)
-                    true
-                } ?: false
-            }
-            CONTEXT_MENU_DELETE_ID -> {
-                passwordItemModel?.let {
-                    listener.deletePasswordItem(it)
-                    true
-                } ?: false
-            }
-            else -> false
-        }
-    }
-
-    override fun onCreateContextMenu(menu: ContextMenu?, v: View?, menuInfo: ContextMenu.ContextMenuInfo?) {
-        passwordItemModel?.let { listener.onCreateContextMenuForPasswordItem(it) }
-        menu?.apply {
-            addContextMenuItem(this, CONTEXT_MENU_SELECT_ID, "Select")
-            addContextMenuItem(this, CONTEXT_MENU_COPY_ID, "Copy password")
-            addContextMenuItem(this, CONTEXT_MENU_EDIT_ID, "Edit")
-            addContextMenuItem(this, CONTEXT_MENU_DELETE_ID, "Delete")
-        }
-    }
-
-    private fun addContextMenuItem(menu: ContextMenu, itemId: Int, itemTitle: String) {
-        menu.add(Menu.NONE, itemId, Menu.NONE, itemTitle).setOnMenuItemClickListener(this)
-    }
-
-    fun onClear() {
-        itemView.setOnCreateContextMenuListener(null)
-    }
-
-    fun bindPasswordListItemView(passwordItemModel: PasswordItemModel) {
+    fun bindPasswordListItemView(passwordItemModel: PasswordItemModel, theme: CustomTheme) {
         this.passwordItemModel = passwordItemModel
+
         itemView.tvPasswordName.text = passwordItemModel.name
 
         itemView.tvPasswordContent.apply {
-            text = PSUtils.getHidedContentText(
-                itemView.context,
-                passwordItemModel.isPasswordContentVisible,
-                passwordItemModel.password
-            )
+            drawPasswordContentText(theme)
             maxLines = if (passwordItemModel.isPasswordContentVisible) {
                 AppConstants.MAX_LINES_VISIBLE_CONTENT
             } else {
@@ -97,53 +79,71 @@ class PasswordsListItemViewHolder(
         }
 
         if (passwordItemModel.isInActionModeState) {
+            disablePopupMenuListener()
             itemView.setOnClickListener {
                 listener.selectPasswordItem(passwordItemModel)
             }
-        } else {
-            itemView.setOnClickListener(null)
-        }
-
-        itemView.setOnCreateContextMenuListener(this)
-
-        if (passwordItemModel.isInActionModeState) {
             itemView.setOnLongClickListener {
                 listener.selectPasswordItem(passwordItemModel)
                 return@setOnLongClickListener true
             }
         } else {
-            itemView.setOnLongClickListener(null)
+            enablePopupMenuListener()
         }
 
         initAdditionalItemClickListeners(passwordItemModel)
 
-        setRootItemBackground(passwordItemModel, itemView.vPasswordItemRoot)
+        setRootItemBackground(passwordItemModel, itemView.vPasswordItemRoot, theme)
 
         if (!passwordItemModel.isInActionModeState) {
             itemView.ivItemSelected.setVisibilityInvisible(false)
         } else {
-            itemView.ivItemSelected.setVisibilityInvisible(passwordItemModel.isItemSelected)
+            itemView.ivItemSelected.apply {
+                setVisibilityInvisible(passwordItemModel.isItemSelected)
+                setImageResource(theme.getDrawable(R.attr.themedSelectedItemDrawable))
+            }
         }
 
         if (passwordItemModel.passwordAvatarBitmap != null) {
             itemView.ivPasswordAvatar.setImageBitmap(passwordItemModel.passwordAvatarBitmap)
-        } else {
-            val fillColor = itemView.context.getColorCompat(R.color.staticColorTransparent)
-            val textColor = itemView.context.getColorCompat(R.color.colorPrimary)
-            val textSizeInPx = itemView.resources.getDimensionPixelSize(
-                R.dimen.card_avatar_inner_text_size
-            )
-            val avatarSizeInPx = itemView.resources.getDimensionPixelSize(
-                R.dimen.card_avatar_avatar_size
-            )
-            itemView.ivPasswordAvatar.drawTextInner(
+        }
+        drawEmptyPasswordAvatarIfNeeds(theme)
+    }
+
+    private fun drawPasswordContentText(theme: CustomTheme) {
+        val passwordItemModel = passwordItemModel ?: return
+
+        itemView.tvPasswordContent.text = PSUtils.getHiddenContentText(
+            itemView.context,
+            passwordItemModel.isPasswordContentVisible,
+            passwordItemModel.password,
+            theme.getDrawable(R.attr.themedHiddenContentDrawable),
+        )
+    }
+
+    private fun drawEmptyPasswordAvatarIfNeeds(theme: CustomTheme) {
+        val abbreviation = passwordItemModel?.name?.let {
+            PSUtils.getAbbreviationFormName(it)
+        } ?: return
+
+        val fillColor = theme.getColor(R.attr.staticColorTransparent)
+        val textColor = theme.getColor(R.attr.themedPrimaryColor)
+        val textSizeInPx = itemView.resources.getDimensionPixelSize(
+            R.dimen.card_avatar_inner_text_size
+        )
+        val avatarSizeInPx = itemView.resources.getDimensionPixelSize(
+            R.dimen.card_avatar_avatar_size
+        )
+        itemView.ivPasswordAvatar.apply {
+            drawTextInner(
                 itemView.context,
                 avatarSizeInPx,
                 fillColor,
                 textColor,
                 textSizeInPx,
-                PSUtils.getAbbreviationFormName(passwordItemModel.name)
+                abbreviation,
             )
+            borderColor = theme.getColor(R.attr.themedPrimaryDarkColor)
         }
     }
 
@@ -165,9 +165,9 @@ class PasswordsListItemViewHolder(
         }
     }
 
-    private fun setRootItemBackground(passwordItemModel: PasswordItemModel, rootView: View) {
+    private fun setRootItemBackground(passwordItemModel: PasswordItemModel, rootView: View, theme: CustomTheme) {
         val bgResId = when {
-            passwordItemModel.isLoadingModel -> R.drawable.loading_animation
+            passwordItemModel.isLoadingModel -> theme.getDrawable(R.attr.themedSelectedItemBackgroundDrawable)
             else -> 0
         }
         rootView.setBackgroundResource(bgResId)
@@ -177,5 +177,44 @@ class PasswordsListItemViewHolder(
             setExitFadeDuration(500)
             start()
         }
+    }
+
+    override fun generateMenuItems(): List<PopupWindowMenuItem> {
+        return listOf(
+            PopupWindowMenuItem(
+                SELECT_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_select),
+                PopupWindowMenuItem.Title(contentRes = R.string.password_popup_menu_item_select),
+            ),
+            PopupWindowMenuItem(
+                COPY_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_copy),
+                PopupWindowMenuItem.Title(contentRes = R.string.password_popup_menu_item_copy),
+            ),
+            PopupWindowMenuItem(
+                EDIT_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_edit),
+                PopupWindowMenuItem.Title(contentRes = R.string.password_popup_menu_item_edit),
+            ),
+            PopupWindowMenuItem(
+                DELETE_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_delete),
+                PopupWindowMenuItem.Title(contentRes = R.string.password_popup_menu_item_delete),
+                PopupWindowMenuItem.ItemTint(
+                    titleTintAttrRes = R.attr.themedErrorColor,
+                    iconTintAttrRes = R.attr.themedErrorColor,
+                )
+            ),
+        )
+    }
+
+    private companion object {
+        const val PASSWORD_SHOW_ACTION_CLICK_DELAY_IN_MILLIS = 700L
+
+        // Popup menu items ids
+        const val SELECT_ID = 0
+        const val COPY_ID = 1
+        const val EDIT_ID = 2
+        const val DELETE_ID = 3
     }
 }

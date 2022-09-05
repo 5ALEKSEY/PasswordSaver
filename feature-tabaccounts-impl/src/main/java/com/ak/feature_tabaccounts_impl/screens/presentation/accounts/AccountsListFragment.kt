@@ -24,7 +24,7 @@ import com.ak.feature_tabaccounts_impl.screens.adapter.AccountsListRecyclerAdapt
 import com.ak.feature_tabaccounts_impl.screens.presentation.base.BaseAccountsModuleFragment
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.accountLoadingContainer
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.fabAddNewAccountAction
-import kotlinx.android.synthetic.main.fragment_accounts_list.view.incEmptyView
+import kotlinx.android.synthetic.main.fragment_accounts_list.view.incAccountsEmptyView
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.loadingAnimation
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.rvAccountsList
 
@@ -57,8 +57,12 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
             viewModel.onDeleteAccountAction(item.accountId)
         }
 
-        override fun onCreateContextMenuForAccountItem(item: AccountItemModel) {
+        override fun onShowPopupMenu(item: AccountItemModel) {
             accountsAdapter.setContextMenuOpenedForAccountItem(item.accountId)
+        }
+
+        override fun onDismissPopupmenu(item: AccountItemModel) {
+            accountsAdapter.clearContextMenuOpenedForAccountItems()
         }
     }
 
@@ -105,9 +109,6 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
         viewModel.subscribeEmptyAccountsState().observe(viewLifecycleOwner, this::setEmptyAccountsState)
         viewModel.subscribeToAccountsList().observe(viewLifecycleOwner, this::displayAccounts)
         viewModel.subscribeToToolbarScrollingState().observe(viewLifecycleOwner) { isEnabled ->
-            applyForToolbarController {
-                switchToolbarScrollingState(isEnabled)
-            }
         }
         viewModel.subscribeToShowEditPasswordScreen().observe(viewLifecycleOwner, this::showEditAccountScreen)
 
@@ -138,16 +139,11 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
     }
 
     private fun setEmptyAccountsState(isEmptyViewVisible: Boolean) {
-        fragmentView.incEmptyView.setVisibility(isEmptyViewVisible)
+        fragmentView.incAccountsEmptyView.setVisibility(isEmptyViewVisible)
     }
 
     private fun showEditAccountScreen(accountId: Long) {
         navigator.navigateToEditAccount(accountId)
-    }
-
-    override fun onContextMenuClosed(menu: Menu?) {
-        super.onContextMenuClosed(menu)
-        accountsAdapter.clearContextMenuOpenedForAccountItems()
     }
 
     private fun initToolbar() {

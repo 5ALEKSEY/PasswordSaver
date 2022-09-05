@@ -1,4 +1,4 @@
-package com.ak.app_theme.theme
+package com.ak.app_theme.theme.applier
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -25,9 +25,13 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.FloatRange
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatCheckBox
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.widget.ImageViewCompat
-import androidx.recyclerview.widget.RecyclerView
+import androidx.core.widget.TextViewCompat
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.CustomThemedView
+import com.ak.app_theme.theme.selectors.CustomThemeColorSelectorBuilder
 import com.ak.app_theme.theme.uicomponents.CustomThemeBackgroundSupport
 import kotlin.math.max
 import kotlin.math.min
@@ -200,6 +204,11 @@ object CustomThemeApplier {
             return false
         }
 
+        if (ComplexViewsApplier.canApplyBackgroundTint(view)) {
+            Log.d(TAG, "applyBackgroundTint. Complex view applier will handle it. view=$view")
+            return false
+        }
+
         if (theme.isColor(resource)) {
             if (view is CustomThemeBackgroundSupport) {
                 view.setBackgroundTint(resource)
@@ -208,9 +217,11 @@ object CustomThemeApplier {
                     view.background = tint(it, theme.getColor(resource))
                 }
             }
+
+            return true
         }
 
-        return true
+        return false
     }
 
     @JvmStatic
@@ -245,6 +256,30 @@ object CustomThemeApplier {
         ) alpha: Float
     ): Int { // 0..1 -> 0..255
         return (alpha * 255).toInt()
+    }
+
+    @JvmStatic
+    fun applyCompoundDrawablesTint(theme: CustomTheme, attr: Int, vararg views: View?) {
+        for (view in views) {
+            applyCompoundDrawablesTint(theme, view, attr)
+        }
+    }
+
+    @JvmStatic
+    fun applyCompoundDrawablesTint(theme: CustomTheme, view: View?, attr: Int): Boolean {
+        if (view !is TextView) {
+            Log.d(TAG, "applyCompoundDrawablesTint for incorrect view: $view")
+            return false
+        }
+
+        if (view.compoundDrawables.isEmpty()) {
+            Log.d(TAG, "applyCompoundDrawablesTint. no compound drawables")
+            return false
+        }
+
+        TextViewCompat.setCompoundDrawableTintList(view, ColorStateList.valueOf(theme.getColor(attr)))
+
+        return true
     }
 
     @JvmStatic
@@ -398,30 +433,32 @@ object CustomThemeApplier {
         return true
     }
 
-    @JvmOverloads
     @JvmStatic
-    fun applyForRecyclerView(
+    fun applyForSwitch(
         theme: CustomTheme,
-        view: RecyclerView?,
-        dividerResource: Int? = null
+        view: SwitchCompat?,
+        @AttrRes uncheckedThumbAttr: Int,
+        @AttrRes checkedThumbAttr: Int,
+        @AttrRes uncheckedTrackAttr: Int,
+        @AttrRes checkedTrackAttr: Int,
     ): Boolean {
         if (view == null) {
-            Log.d(TAG, "applyForRecyclerView for null view")
+            Log.d(TAG, "applyForSwitch for null view")
             return false
         }
 
-        if (view.adapter is CustomTheme.Support) {
-            (view.adapter as CustomTheme.Support).applyTheme(theme)
-        }
+        view.thumbTintList = CustomThemeColorSelectorBuilder(theme)
+            .setDefaultColorAttr(uncheckedThumbAttr)
+            .setUnCheckedColorAttr(uncheckedThumbAttr)
+            .setCheckedColorAttr(checkedThumbAttr)
+            .build()
 
-        for (index in 0 until view.itemDecorationCount) {
-            val decoration = view.getItemDecorationAt(index)
-            if (decoration is CustomTheme.Support) {
-                decoration.applyTheme(theme)
-            }
-        }
+        view.trackTintList = CustomThemeColorSelectorBuilder(theme)
+            .setDefaultColorAttr(uncheckedTrackAttr)
+            .setUnCheckedColorAttr(uncheckedTrackAttr)
+            .setCheckedColorAttr(checkedTrackAttr)
+            .build()
 
-        view.invalidateItemDecorations()
         return true
     }
 
@@ -429,10 +466,12 @@ object CustomThemeApplier {
     fun applyForWindow(
         theme: CustomTheme,
         window: Window?,
-        @AttrRes statusBarRes: Int
+        @AttrRes statusBarRes: Int,
+        @AttrRes navigationBarRes: Int,
     ): Boolean {
         window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window?.statusBarColor = theme.getColor(statusBarRes)
+        window?.navigationBarColor = theme.getColor(navigationBarRes)
         return true
     }
 
@@ -484,13 +523,7 @@ object CustomThemeApplier {
             applyButtonTint(theme, view, it)
         }
 
-        if (view is RecyclerView) {
-            applyForRecyclerView(theme, view, themedView.getDividerResource())
-        }
-
-        if (view is CustomTheme.Support) {
-            view.applyTheme(theme)
-        }
+        ComplexViewsApplier.applyForComplexView(themedView, view, theme)
 
         return true
     }
