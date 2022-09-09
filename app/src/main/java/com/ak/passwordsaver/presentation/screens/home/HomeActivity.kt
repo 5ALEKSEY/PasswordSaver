@@ -120,7 +120,7 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
         setSecureRecentAppsScreenState(viewModel.getSecureApplicationState())
 
         // TODO: remove temp for testing
-        Observable.interval(2, 5, TimeUnit.SECONDS, Schedulers.computation())
+        Observable.interval(10, 10, TimeUnit.SECONDS, Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 CustomThemeManager.getInstance().setNextTheme()
