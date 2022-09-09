@@ -1,0 +1,56 @@
+<resources>
+
+    <style name="ActionModeStyle.Blue" parent="BaseActionModeStyle">
+        <item name="background">@color/color_accent_blue</item>
+    </style>
+
+    <style name="CustomTheme.Blue" parent="CustomTheme">
+        <item name="actionModeStyle">@style/ActionModeStyle.Blue</item>
+        <item name="themedStatusBarColor">#3651FB</item>
+        <item name="themedNavigationBarColor">#E8E8E8</item>
+        <item name="themedPrimaryBackgroundColor">#FFFFFF</item>
+        <item name="themedSecondaryBackgroundColor">#D8D8D8</item>
+
+        <item name="themedPopupBackgroundColor">#EAEAEA</item>
+
+        <item name="themedPrimaryColor">#3F51B5</item>
+        <item name="themedPrimaryDarkColor">#303F9F</item>
+        <item name="themedPrimaryLightColor">#5C6ED2</item>
+        <item name="themedAccentColor">#3DA2FF</item>
+
+        <item name="themedToolbarIconsAndTextColor">#FFFFFF</item>
+        <item name="themedPrimaryTextColor">#212121</item>
+        <item name="themedPrimaryTextHintColor">#737373</item>
+        <item name="themedSecondaryTextColor">#757575</item>
+
+        <item name="themedDividerColor">#BDBDBD</item>
+        <item name="themedErrorColor">#FC4F4F</item>
+        <item name="themedSuccessColor">#2FD236</item>
+
+        <item name="themedBadgeNotificationColor">#FF5050</item>
+
+        <item name="themedSwitchThumbUncheckedColor">#B6B6B6</item>
+        <item name="themedSwitchThumbCheckedColor">#3F51B5</item>
+        <item name="themedSwitchTrackUncheckedColor">#888888</item>
+        <item name="themedSwitchTrackCheckedColor">#3DA2FF</item>
+
+        <item name="themedPatternLineColor">#F8F8F8</item>
+        <item name="themedSecurityBackgroundColor">#3F51B5</item>
+        <item name="themedSecurityTextColor">#FFFFFF</item>
+        <item name="themedSecurityPincodeUnderTextColor">#E0DBDB</item>
+
+        <item name="themedBottomNavigationItemCheckedColor">#3DA2FF</item>
+        <item name="themedBottomNavigationItemUncheckedColor">#757575</item>
+
+        <item name="themedHiddenContentDrawable">@drawable/ic_hided_element_blue</item>
+        <item name="themedSelectedItemDrawable">@drawable/ic_item_selected_blue</item>
+
+        <item name="themedCameraPickImagePanelBackgroundColor">#66181818</item>
+
+        <item name="themedSelectedItemBackgroundDrawable">@drawable/a_loading_blue</item>
+
+        <item name="themedSecurityPatternNodeEnabledDrawable">@drawable/ic_enabled_pattern_node_blue</item>
+        <item name="themedSecurityPatternNodeDisabledDrawable">@drawable/ic_disabled_pattern_node_blue</item>
+    </style>
+
+</resources>
