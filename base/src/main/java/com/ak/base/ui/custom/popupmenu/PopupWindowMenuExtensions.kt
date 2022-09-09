@@ -64,8 +64,16 @@ private class TouchWithCoordinatesListener(
 ) : View.OnTouchListener {
 
     private var eventTimeDisposable: Disposable? = null
+    private var wasCancelled = false
     private var downX = -1F
     private var downY = -1F
+
+    private val onSingleClickProxy = { targetView: View, x: Float, y: Float ->
+        if (!wasCancelled) onSingleClick(targetView, x, y)
+    }
+    private val onLongClickProxy = { targetView: View, x: Float, y: Float ->
+        if (!wasCancelled) onLongClick(targetView, x, y)
+    }
 
     override fun onTouch(targetView: View?, event: MotionEvent?): Boolean {
         if (targetView == null || event == null) return false
@@ -73,7 +81,10 @@ private class TouchWithCoordinatesListener(
         when (event.action) {
             MotionEvent.ACTION_DOWN -> startEventLogic(targetView, event)
             MotionEvent.ACTION_MOVE -> if (!isMoveDistanceAcceptable(event)) stopEventLogic()
-            MotionEvent.ACTION_CANCEL,
+            MotionEvent.ACTION_CANCEL -> {
+                wasCancelled = true
+                stopEventLogic()
+            }
             MotionEvent.ACTION_UP -> stopEventLogic()
         }
 
@@ -81,6 +92,7 @@ private class TouchWithCoordinatesListener(
     }
 
     private fun startEventLogic(targetView: View, event: MotionEvent) {
+        wasCancelled = false
         startEventTimer(targetView)
         setDownCoordinates(event)
     }
@@ -93,9 +105,9 @@ private class TouchWithCoordinatesListener(
     private fun startEventTimer(targetView: View) {
         eventTimeDisposable = Single.timer(LONG_CLICK_HOLD_DELAY, TimeUnit.MILLISECONDS)
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnDispose { ifCanPerformClick { onSingleClick(targetView, downX, downY) } }
+            .doOnDispose { ifCanPerformClick { onSingleClickProxy(targetView, downX, downY) } }
             .subscribe { _ ->
-                ifCanPerformClick { onLongClick(targetView, downX, downY) }
+                ifCanPerformClick { onLongClickProxy(targetView, downX, downY) }
                 clearDownCoordinates()
             }
     }
