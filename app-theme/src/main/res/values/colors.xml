@@ -51,4 +51,7 @@
     <color name="secure_pattern_node_accent_color_blue">#4171FF</color>
     <color name="secure_pattern_node_accent_color_orange">#FFA864</color>
 
+    <color name="color_accent_blue">#3DA2FF</color>
+    <color name="color_accent_orange">#FFAE81</color>
+
 </resources>

@@ -7,17 +7,16 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="actionModeStyle">@style/ActionModeStyle</item>
         <item name="actionModeCloseDrawable">@drawable/ic_close</item>
         <item name="android:fontFamily">@font/app_font_family</item>
     </style>
 
-    <style name="ActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
+    <style name="BaseActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
         <item name="background">@color/colorAccent</item>
-        <item name="titleTextStyle">@style/ActionModeTitleTextStyle</item>
+        <item name="titleTextStyle">@style/BaseActionModeTitleTextStyle</item>
     </style>
 
-    <style name="ActionModeTitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionMode.Title">
+    <style name="BaseActionModeTitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionMode.Title">
         <item name="android:textColor">@color/colorToolbarIconsAndText</item>
     </style>
 
@@ -32,9 +31,16 @@
         <item name="staticColorWhite">#FFFFFF</item>
     </style>
 
-    <!--THEMES -->
+    <!-- THEMES -->
+
+    <!-- BLUE -->
+
+    <style name="ActionModeStyle.Blue" parent="BaseActionModeStyle">
+        <item name="background">@color/color_accent_blue</item>
+    </style>
 
     <style name="CustomTheme.Blue" parent="CustomTheme">
+        <item name="actionModeStyle">@style/ActionModeStyle.Blue</item>
         <item name="themedStatusBarColor">#3651FB</item>
         <item name="themedNavigationBarColor">#E8E8E8</item>
         <item name="themedPrimaryBackgroundColor">#FFFFFF</item>
@@ -82,7 +88,14 @@
         <item name="themedSecurityPatternNodeDisabledDrawable">@drawable/ic_disabled_pattern_node_blue</item>
     </style>
 
+    <!-- ORANGE -->
+
+    <style name="ActionModeStyle.Orange" parent="BaseActionModeStyle">
+        <item name="background">@color/color_accent_orange</item>
+    </style>
+
     <style name="CustomTheme.Orange" parent="CustomTheme.Blue">
+        <item name="actionModeStyle">@style/ActionModeStyle.Orange</item>
         <item name="themedStatusBarColor">#FB6B1C</item>
         <item name="themedNavigationBarColor">#272727</item>
         <item name="themedPrimaryBackgroundColor">#373737</item>
