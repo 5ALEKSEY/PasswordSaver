@@ -50,10 +50,13 @@ class PasswordsActionModeViewModel @Inject constructor(
     }
 
     fun onSelectedModeFinished() {
+        if (!isSelectedModeActive) return
+
         for (passwordId in selectedPasswordsIdsList) {
             selectedStateForItemLD.value = false to passwordId
         }
         isSelectedModeActive = false
+        selectedModeStateLD.value = false
         selectedPasswordsIdsList.clear()
     }
 

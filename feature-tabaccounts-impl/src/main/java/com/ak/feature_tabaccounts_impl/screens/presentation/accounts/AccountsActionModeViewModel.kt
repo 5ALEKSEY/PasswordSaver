@@ -50,10 +50,13 @@ class AccountsActionModeViewModel @Inject constructor(
     }
 
     fun onSelectedModeFinished() {
+        if (!isSelectedModeActive) return
+
         for (accountId in selectedAccountsIdsList) {
             selectedStateForItemLD.value = false to accountId
         }
         isSelectedModeActive = false
+        selectedModeStateLD.value = false
         selectedAccountsIdsList.clear()
     }
 
