@@ -3,9 +3,10 @@ package com.ak.feature_tabsettings_impl.main
 import android.content.Intent
 import android.view.View
 import androidx.lifecycle.Lifecycle
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.base.extensions.showToastMessage
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecorationSettings
 import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_tabsettings_impl.R
@@ -114,10 +115,14 @@ class SettingsFragment : BaseSettingsModuleFragment<SettingsViewModel>() {
 
         with(fragmentView.rvSettingsItemsList) {
             adapter = settingsRecyclerAdapter
-            val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(
-                DividerItemDecoration(context, linearLayoutManager.orientation)
+                PsDividerItemDecoration(
+                    PsDividerItemDecorationSettings(
+                        context = context,
+                        offsetDp = PsDividerItemDecorationSettings.Offset(left = 48F),
+                    )
+                )
             )
         }
     }
