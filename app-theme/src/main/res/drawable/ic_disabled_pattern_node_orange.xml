@@ -6,7 +6,7 @@
             android:height="@dimen/pattern_code_node_size">
 
         <shape android:shape="oval">
-            <solid android:color="@color/secure_pattern_node_accent_color_orange" />
+            <solid android:color="@color/color_accent_orange" />
         </shape>
 
     </item>

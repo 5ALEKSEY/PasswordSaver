@@ -21,8 +21,8 @@ class PsThemedBottomNavigationView @JvmOverloads constructor(
 
     private fun getItemColorStateList(theme: CustomTheme): ColorStateList? {
         return CustomThemeColorSelectorBuilder(theme)
-            .setDefaultColorAttr(R.attr.themedBottomNavigationItemUncheckedColor)
-            .setCheckedColorAttr(R.attr.themedBottomNavigationItemCheckedColor)
+            .setDefaultColorAttr(R.attr.themedSecondaryTextColor)
+            .setCheckedColorAttr(R.attr.themedPrimaryColor)
             .build()
     }
 }

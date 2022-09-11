@@ -17,6 +17,7 @@ abstract class BaseSettingsViewHolder<ItemModel : SettingsListItemModel>(itemVie
     override fun applyTheme(theme: CustomTheme) {
         CustomThemeApplier.applyTextColor(theme, R.attr.themedPrimaryTextColor, itemView.tvSettingName)
         CustomThemeApplier.applyTextColor(theme, R.attr.staticColorWhite, itemView.tvNewBadgeText)
+        CustomThemeApplier.applyBackgroundTint(theme, itemView.tvNewBadgeText, R.attr.themedAccentColor)
     }
 
     fun bindViewHolder(itemModel: ItemModel) {

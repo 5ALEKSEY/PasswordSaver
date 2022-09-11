@@ -209,7 +209,7 @@ abstract class BaseThemeActivity : AppCompatActivity() {
 
     @AttrRes
     protected open fun getStatusBarColorResource(): Int {
-        return R.attr.themedStatusBarColor
+        return R.attr.themedPrimaryColor
     }
 
     @AttrRes

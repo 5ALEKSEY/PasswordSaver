@@ -22,7 +22,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:background="@color/colorAccent" />
+                tools:background="@color/color_accent_blue" />
 
         <View
                 android:id="@+id/vSecureDivider"

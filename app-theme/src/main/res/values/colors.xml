@@ -4,53 +4,6 @@
     <color name="staticColorTransparent">#00FFFFFF</color>
     <color name="staticColorBlack">#000000</color>
     <color name="staticColorWhite">#FFFFFF</color>
-
-    // app theme colors
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorPrimaryLight">#5C6ED2</color>
-    <color name="colorAccent">#3DA2FF</color>
-
-    <color name="colorPrimaryText">#212121</color>
-    <color name="colorSecondaryText">#757575</color>
-    <color name="colorDivider">#BDBDBD</color>
-
-    <color name="colorError">#FC4F4F</color>
-    <color name="colorSuccess">#2FD236</color>
-
-    <color name="badge_notification_background_color">#FF5050</color>
-
-    <color name="failed_action_color">#FF6E6E</color>
-    <color name="success_action_color">#33AD00</color>
-
-    <color name="default_pattern_line_color">#F8F8F8</color>
-    <color name="failed_pattern_line_color">#8DFF3636</color>
-
-    <color name="security_background_color">@color/colorPrimary</color>
-    <color name="security_text_color">@color/staticColorWhite</color>
-    <color name="security_pincode_under_text_color">#E0DBDB</color>
-
-    <color name="avatar_chooser_dialog_text_color">@color/staticColorWhite</color>
-    <color name="avatar_chooser_dialog_image_tint">@color/staticColorWhite</color>
-
-    <color name="camera_pick_image_panel_background">#66181818</color>
-
-    <color name="loading_gradient_start">#FFFFFF</color>
-    <color name="loading_gradient_center">#F6FAFF</color>
-    <color name="loading_gradient_end">#E6F5FF</color>
-
-    <color name="loading_gradient_start_blue">#FFFFFF</color>
-    <color name="loading_gradient_center_blue">#F6FAFF</color>
-    <color name="loading_gradient_end_blue">#E6F5FF</color>
-
-    <color name="loading_gradient_start_orange">#FFE1C9</color>
-    <color name="loading_gradient_center_orange">#FFCEA7</color>
-    <color name="loading_gradient_end_orange">#FFC598</color>
-
-    <color name="secure_pattern_node_accent_color_blue">#4171FF</color>
-    <color name="secure_pattern_node_accent_color_orange">#FFA864</color>
-
-    <color name="color_accent_blue">#3DA2FF</color>
-    <color name="color_accent_orange">#FFAE81</color>
-
+    <color name="staticColorRed">#FC4F4F</color>
+    <color name="staticColorGreen">#2FD236</color>
 </resources>

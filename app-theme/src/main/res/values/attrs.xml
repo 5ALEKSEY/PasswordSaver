@@ -173,7 +173,6 @@
         <attr name="staticColorBlack" format="color" />
 
         <!-- ATTRS HERE !!!!!!!!  -->
-        <attr name="themedStatusBarColor" format="color" />
         <attr name="themedNavigationBarColor" format="color" />
         <attr name="themedPrimaryBackgroundColor" format="color" />
         <attr name="themedSecondaryBackgroundColor" format="color" />
@@ -198,18 +197,6 @@
         <attr name="themedSwitchThumbCheckedColor" format="color" />
         <attr name="themedSwitchTrackUncheckedColor" format="color" />
         <attr name="themedSwitchTrackCheckedColor" format="color" />
-
-        <attr name="themedBadgeNotificationColor" format="color" />
-
-        <attr name="themedPatternLineColor" format="color" />
-        <attr name="themedSecurityBackgroundColor" format="color" />
-        <attr name="themedSecurityTextColor" format="color" />
-        <attr name="themedSecurityPincodeUnderTextColor" format="color" />
-
-        <attr name="themedCameraPickImagePanelBackgroundColor" format="color" />
-
-        <attr name="themedBottomNavigationItemCheckedColor" format="color" />
-        <attr name="themedBottomNavigationItemUncheckedColor" format="color" />
 
         <attr name="themedHiddenContentDrawable" format="reference" />
         <attr name="themedSelectedItemDrawable" format="reference" />
