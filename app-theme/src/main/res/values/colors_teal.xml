@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_loading_gradient_start_teal">#3E3E3E</color>
+    <color name="color_loading_gradient_center_teal">#2C403C</color>
+    <color name="color_loading_gradient_end_teal">#37554E</color>
+
+    <color name="color_navigation_bar_teal">#272727</color>
+    <color name="color_primary_bg_teal">#2C2C2C</color>
+    <color name="color_secondary_bg_teal">#3E3E3E</color>
+    <color name="color_popup_bg_teal">#3A3A3A</color>
+
+    <color name="color_primary_teal">#004D40</color>
+    <color name="color_primary_dark_teal">#00251A</color>
+    <color name="color_primary_light_teal">#39796B</color>
+    <color name="color_accent_teal">#00BFA5</color>
+
+    <color name="color_toolbar_content_teal">#FFFFFF</color>
+    <color name="color_primary_text_teal">#FFF2ED</color>
+    <color name="color_primary_text_hint_teal">#FFFFFF</color>
+    <color name="color_secondary_text_teal">#95B6AD</color>
+
+    <color name="color_divider_teal">#CCCCCC</color>
+    <color name="color_error_teal">#FC4F4F</color>
+    <color name="color_success_teal">#2FD236</color>
+
+    <color name="color_switch_thumb_unchecked_teal">@color/staticColorWhite</color>
+    <color name="color_switch_thumb_checked_teal">@color/color_primary_teal</color>
+    <color name="color_switch_track_unchecked_teal">#BCBCBC</color>
+    <color name="color_switch_track_checked_teal">@color/color_primary_light_teal</color>
+
+</resources>

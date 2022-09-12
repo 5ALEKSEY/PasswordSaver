@@ -1,0 +1,44 @@
+<resources>
+
+    <style name="ActionModeStyle.Purple" parent="BaseActionModeStyle">
+        <item name="background">@color/color_accent_purple</item>
+    </style>
+
+    <style name="CustomTheme.Purple" parent="CustomTheme.Orange">
+        <item name="actionModeStyle">@style/ActionModeStyle.Purple</item>
+        <item name="themedNavigationBarColor">@color/color_navigation_bar_purple</item>
+        <item name="themedPrimaryBackgroundColor">@color/color_primary_bg_purple</item>
+        <item name="themedSecondaryBackgroundColor">@color/color_secondary_bg_purple</item>
+
+        <item name="themedPopupBackgroundColor">@color/color_popup_bg_purple</item>
+
+        <item name="themedPrimaryColor">@color/color_primary_purple</item>
+        <item name="themedPrimaryDarkColor">@color/color_primary_dark_purple</item>
+        <item name="themedPrimaryLightColor">@color/color_primary_light_purple</item>
+        <item name="themedAccentColor">@color/color_accent_purple</item>
+
+        <item name="themedToolbarIconsAndTextColor">@color/color_toolbar_content_purple</item>
+        <item name="themedPrimaryTextColor">@color/color_primary_text_purple</item>
+        <item name="themedPrimaryTextHintColor">@color/color_primary_text_hint_purple</item>
+        <item name="themedSecondaryTextColor">@color/color_secondary_text_purple</item>
+
+        <item name="themedDividerColor">@color/color_divider_purple</item>
+        <item name="themedErrorColor">@color/color_error_purple</item>
+        <item name="themedSuccessColor">@color/color_success_purple</item>
+
+        <item name="themedSwitchThumbUncheckedColor">@color/color_switch_thumb_unchecked_purple</item>
+        <item name="themedSwitchThumbCheckedColor">@color/color_switch_thumb_checked_purple</item>
+        <item name="themedSwitchTrackUncheckedColor">@color/color_switch_track_unchecked_purple</item>
+        <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_purple</item>
+
+        <item name="themedHiddenContentDrawable">@drawable/ic_hided_element_purple</item>
+        <item name="themedSelectedItemDrawable">@drawable/ic_item_selected_purple</item>
+
+        <item name="themedSelectedItemBackgroundDrawable">@drawable/a_loading_purple</item>
+
+        <item name="themedSecurityPatternNodeEnabledDrawable">@drawable/ic_enabled_pattern_node_purple</item>
+        <item name="themedSecurityPatternNodeDisabledDrawable">@drawable/ic_disabled_pattern_node_purple</item>
+
+    </style>
+
+</resources>

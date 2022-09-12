@@ -89,6 +89,8 @@
     <string name="oops_message">"Уупс!"</string>
     <string name="blue_theme_name">"Синяя"</string>
     <string name="orange_theme_name">"Рыжик"</string>
+    <string name="purple_theme_name">"Лунтик"</string>
+    <string name="teal_theme_name">"Бирюзовенький"</string>
 
     <!-- Password Popup Menu Items -->
     <string name="password_popup_menu_item_select">"Выбрать"</string>

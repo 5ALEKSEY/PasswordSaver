@@ -11,6 +11,8 @@ class CustomThemeManager private constructor() {
     companion object {
         const val BLUE_THEME_ID = 0
         const val ORANGE_THEME_ID = 1
+        const val PURPLE_THEME_ID = 2
+        const val TEAL_THEME_ID = 3
         const val DEFAULT_THEME_ID = BLUE_THEME_ID
 
         private val instance = CustomThemeManager()
@@ -86,6 +88,22 @@ class CustomThemeManager private constructor() {
                 .id(ORANGE_THEME_ID)
                 .name(R.string.orange_theme_name)
                 .themeStyle(R.style.CustomTheme_Orange)
+                .build()
+        )
+
+        themes.add(
+            CustomTheme.Builder(context)
+                .id(PURPLE_THEME_ID)
+                .name(R.string.purple_theme_name)
+                .themeStyle(R.style.CustomTheme_Purple)
+                .build()
+        )
+
+        themes.add(
+            CustomTheme.Builder(context)
+                .id(TEAL_THEME_ID)
+                .name(R.string.teal_theme_name)
+                .themeStyle(R.style.CustomTheme_Teal)
                 .build()
         )
 

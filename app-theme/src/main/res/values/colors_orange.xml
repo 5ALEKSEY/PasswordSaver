@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_loading_gradient_start_orange">#FFE1C9</color>
-    <color name="color_loading_gradient_center_orange">#FFCEA7</color>
-    <color name="color_loading_gradient_end_orange">#FFC598</color>
+    <color name="color_loading_gradient_start_orange">#3E3E3E</color>
+    <color name="color_loading_gradient_center_orange">#554E48</color>
+    <color name="color_loading_gradient_end_orange">#675A50</color>
 
     <color name="color_navigation_bar_orange">#272727</color>
     <color name="color_primary_bg_orange">#2C2C2C</color>
