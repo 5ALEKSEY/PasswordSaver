@@ -27,6 +27,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.graphics.ColorUtils
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.widget.ImageViewCompat
 import androidx.core.widget.TextViewCompat
 import com.ak.app_theme.theme.CustomTheme
@@ -469,9 +470,12 @@ object CustomThemeApplier {
         @AttrRes statusBarRes: Int,
         @AttrRes navigationBarRes: Int,
     ): Boolean {
-        window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window?.statusBarColor = theme.getColor(statusBarRes)
-        window?.navigationBarColor = theme.getColor(navigationBarRes)
+        window?.apply {
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = theme.getColor(statusBarRes)
+            navigationBarColor = theme.getColor(navigationBarRes)
+            WindowInsetsControllerCompat(this, decorView).isAppearanceLightNavigationBars = theme.isLight
+        }
         return true
     }
 

@@ -214,7 +214,7 @@ abstract class BaseThemeActivity : AppCompatActivity() {
 
     @AttrRes
     protected open fun getNavigationBarColorResource(): Int {
-        return R.attr.themedNavigationBarColor
+        return R.attr.themedPrimaryBackgroundColor
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

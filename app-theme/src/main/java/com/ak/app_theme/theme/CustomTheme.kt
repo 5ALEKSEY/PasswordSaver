@@ -8,6 +8,7 @@ import android.util.SparseIntArray
 import android.util.TypedValue
 import android.view.ContextThemeWrapper
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
@@ -18,7 +19,8 @@ class CustomTheme private constructor(
     val context: Context,
     val id: Int,
     val nameResId: Int,
-    @StyleRes val themeStyle: Int
+    @StyleRes val themeStyle: Int,
+    val isLight: Boolean,
 ) {
 
     companion object {
@@ -182,16 +184,43 @@ class CustomTheme private constructor(
         fun applyTheme(theme: CustomTheme)
     }
 
-    data class Description(val id: Int, val nameResId: Int)
+    data class Description(
+        val id: Int,
+        val nameResId: Int,
+        val isLight: Boolean,
+        @ColorInt
+        val impressColor1: Int,
+        @ColorInt
+        val impressColor2: Int,
+        @ColorInt
+        val impressColor3: Int,
+    )
 
     data class Builder(private val context: Context) {
         private var themeId = -1
         private var themeNameResId = 0
         private var themeStyle = 0
+        private var themeIsLight = true
 
         fun id(id: Int) = apply { themeId = id }
         fun name(@StringRes nameRes: Int) = apply { themeNameResId = nameRes }
         fun themeStyle(@StyleRes style: Int) = apply { themeStyle = style }
-        fun build() = CustomTheme(context, themeId, themeNameResId, themeStyle)
+        fun lightThemeFlag(isLight: Boolean) = apply { themeIsLight = isLight }
+        fun build() = CustomTheme(
+            context = context,
+            id = themeId,
+            nameResId = themeNameResId,
+            themeStyle = themeStyle,
+            isLight = themeIsLight,
+        )
     }
 }
+
+fun CustomTheme.toDescription() = CustomTheme.Description(
+    id,
+    nameResId,
+    isLight,
+    getColor(R.attr.themedPrimaryColor),
+    getColor(R.attr.themedPrimaryDarkColor),
+    getColor(R.attr.themedPrimaryLightColor),
+)

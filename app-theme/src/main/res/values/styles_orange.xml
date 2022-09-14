@@ -6,7 +6,6 @@
 
     <style name="CustomTheme.Orange" parent="CustomTheme.Blue">
         <item name="actionModeStyle">@style/ActionModeStyle.Orange</item>
-        <item name="themedNavigationBarColor">@color/color_navigation_bar_orange</item>
         <item name="themedPrimaryBackgroundColor">@color/color_primary_bg_orange</item>
         <item name="themedSecondaryBackgroundColor">@color/color_secondary_bg_orange</item>
 

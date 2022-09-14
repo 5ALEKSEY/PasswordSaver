@@ -6,7 +6,6 @@
 
     <style name="CustomTheme.Blue" parent="CustomTheme">
         <item name="actionModeStyle">@style/ActionModeStyle.Blue</item>
-        <item name="themedNavigationBarColor">@color/color_navigation_bar_blue</item>
         <item name="themedPrimaryBackgroundColor">@color/color_primary_bg_blue</item>
         <item name="themedSecondaryBackgroundColor">@color/color_secondary_bg_blue</item>
 

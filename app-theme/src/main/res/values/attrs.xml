@@ -173,7 +173,6 @@
         <attr name="staticColorBlack" format="color" />
 
         <!-- ATTRS HERE !!!!!!!!  -->
-        <attr name="themedNavigationBarColor" format="color" />
         <attr name="themedPrimaryBackgroundColor" format="color" />
         <attr name="themedSecondaryBackgroundColor" format="color" />
 

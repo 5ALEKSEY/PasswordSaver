@@ -35,9 +35,7 @@ class CustomThemeManager private constructor() {
     private val themes = mutableListOf<CustomTheme>()
     private lateinit var currentTheme: CustomTheme
 
-    fun getAvailableThemes() = themes.map {
-        CustomTheme.Description(it.id, it.nameResId)
-    }
+    fun getAvailableThemes() = themes.map { it.toDescription() }
 
     fun getChangeThemeListener(): Observable<CustomTheme> = changeThemePublishSubject
 
@@ -80,6 +78,7 @@ class CustomThemeManager private constructor() {
                 .id(BLUE_THEME_ID)
                 .name(R.string.blue_theme_name)
                 .themeStyle(R.style.CustomTheme_Blue)
+                .lightThemeFlag(true)
                 .build()
         )
 
@@ -88,6 +87,7 @@ class CustomThemeManager private constructor() {
                 .id(ORANGE_THEME_ID)
                 .name(R.string.orange_theme_name)
                 .themeStyle(R.style.CustomTheme_Orange)
+                .lightThemeFlag(false)
                 .build()
         )
 
@@ -96,6 +96,7 @@ class CustomThemeManager private constructor() {
                 .id(PURPLE_THEME_ID)
                 .name(R.string.purple_theme_name)
                 .themeStyle(R.style.CustomTheme_Purple)
+                .lightThemeFlag(false)
                 .build()
         )
 
@@ -104,6 +105,7 @@ class CustomThemeManager private constructor() {
                 .id(TEAL_THEME_ID)
                 .name(R.string.teal_theme_name)
                 .themeStyle(R.style.CustomTheme_Teal)
+                .lightThemeFlag(false)
                 .build()
         )
 
