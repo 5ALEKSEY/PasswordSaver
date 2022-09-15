@@ -73,6 +73,10 @@ class SecurityActivity : BaseThemeActivity() {
         sendAuthActionResult(false)
     }
 
+    override fun getNavigationBarColorResource(): Int {
+        return R.attr.themedPrimaryColor
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         FeatureSecurityComponent.get().inject(this)
         super.onCreate(savedInstanceState)
@@ -80,10 +84,6 @@ class SecurityActivity : BaseThemeActivity() {
         initViewModel()
         initView()
         subscribeToViewModel(viewModel)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     private fun initViewModel() {
