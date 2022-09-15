@@ -107,10 +107,7 @@ class SettingsFragment : BaseSettingsModuleFragment<SettingsViewModel>() {
 
     private fun initRecyclerView() {
         settingsRecyclerAdapter = SettingsRecyclerViewAdapter(
-            null,
-            null,
-            viewModel::onSectionClicked,
-            null
+            onSectionSettingsClicked = viewModel::onSectionClicked,
         )
 
         with(fragmentView.rvSettingsItemsList) {

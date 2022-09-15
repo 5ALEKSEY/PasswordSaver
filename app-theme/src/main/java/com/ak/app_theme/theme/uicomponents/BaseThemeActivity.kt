@@ -1,18 +1,22 @@
 package com.ak.app_theme.theme.uicomponents
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
+import android.view.View
+import android.widget.ImageView
 import androidx.annotation.AttrRes
 import androidx.annotation.CallSuper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.ak.app_theme.R
 import com.ak.app_theme.theme.CustomTheme
-import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.app_theme.theme.CustomThemeInterceptor
 import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.app_theme.theme.CustomThemedView
+import com.ak.app_theme.theme.applier.CustomThemeApplier
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
@@ -63,7 +67,11 @@ abstract class BaseThemeActivity : AppCompatActivity() {
                     .getChangeThemeListener()
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnNext { onThemeChanged(it) }
+                    .doOnNext {
+                        if (!onThemeChangedWithAnimation(it)) {
+                            onThemeChanged(it)
+                        }
+                    }
                     .subscribe()
             }
         } else {
@@ -71,7 +79,16 @@ abstract class BaseThemeActivity : AppCompatActivity() {
         }
     }
 
-    private fun onThemeChanged(theme: CustomTheme) {
+    private fun onThemeChangedWithAnimation(theme: CustomTheme): Boolean {
+        return ApplyThemeWithAnimationHelper.changeThemeWithAnimation(
+            getChangeThemeContentView(),
+            getChangeThemeStubView(),
+            { onThemeChanged(theme = theme, applyForWindow = false) },
+            { applyForWindow(theme) },
+        )
+    }
+
+    private fun onThemeChanged(theme: CustomTheme, applyForWindow: Boolean = true) {
         this.theme = theme
         setTheme(theme.themeStyle)
 
@@ -88,7 +105,7 @@ abstract class BaseThemeActivity : AppCompatActivity() {
             }
         }
 
-        applyTheme(theme)
+        applyTheme(theme, applyForWindow)
     }
 
     protected fun addThemedView(view: CustomTheme.Support) {
@@ -184,18 +201,8 @@ abstract class BaseThemeActivity : AppCompatActivity() {
     }
 
     @CallSuper
-    protected open fun applyTheme(theme: CustomTheme) {
-        CustomThemeApplier.applyForWindow(
-            theme,
-            window,
-            getStatusBarColorResource(),
-            getNavigationBarColorResource(),
-        )
-        CustomThemeApplier.applyWindowBackground(
-            theme,
-            window,
-            getWindowBackground()
-        )
+    protected open fun applyTheme(theme: CustomTheme, applyForWindow: Boolean = true) {
+        if (applyForWindow) applyForWindow(theme)
 
         for (supportThemeView in supportThemeViews) {
             supportThemeView.applyTheme(theme)
@@ -215,6 +222,14 @@ abstract class BaseThemeActivity : AppCompatActivity() {
     @AttrRes
     protected open fun getNavigationBarColorResource(): Int {
         return R.attr.themedPrimaryBackgroundColor
+    }
+
+    protected open fun getChangeThemeContentView(): View? {
+        return null
+    }
+
+    protected open fun getChangeThemeStubView(): ImageView? {
+        return null
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -259,5 +274,24 @@ abstract class BaseThemeActivity : AppCompatActivity() {
         themedViews.clear()
 
         super.onDestroy()
+    }
+
+    private fun applyForWindow(theme: CustomTheme) {
+        CustomThemeApplier.applyForWindow(
+            theme,
+            window,
+            getStatusBarColorResource(),
+            getNavigationBarColorResource(),
+        )
+        CustomThemeApplier.applyWindowBackground(
+            theme,
+            window,
+            getWindowBackground()
+        )
+    }
+
+    private fun ImageView.applyStubThemeView(stubBitmap: Bitmap?) {
+        setImageBitmap(stubBitmap)
+        isVisible = stubBitmap != null
     }
 }

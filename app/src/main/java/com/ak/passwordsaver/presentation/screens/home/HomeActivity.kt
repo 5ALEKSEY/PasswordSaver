@@ -3,6 +3,7 @@ package com.ak.passwordsaver.presentation.screens.home
 import android.os.Bundle
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
@@ -70,6 +71,12 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
     private val toolbarView by lazy {
         findViewById<Toolbar>(R.id.tbHomeToolbar)
     }
+    private val content by lazy {
+        findViewById<View>(R.id.clHomeContent)
+    }
+    private val themeStubView by lazy {
+        findViewById<ImageView>(R.id.ivHomeThemeStubView)
+    }
 
     private val destChangeListener = NavController.OnDestinationChangedListener { _, destAction, _ ->
         if (destAction !is NavGraph) {
@@ -85,6 +92,10 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
     }
 
     override fun getScreenLayoutResId() = R.layout.activity_home
+
+    override fun getChangeThemeContentView(): View? = content
+
+    override fun getChangeThemeStubView(): ImageView? = themeStubView
 
     override fun createViewModel(): HomeViewModel {
         return injectViewModel(viewModelsFactory)
@@ -120,7 +131,7 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
         setSecureRecentAppsScreenState(viewModel.getSecureApplicationState())
 
         // TODO: remove temp for testing
-        Observable.interval(10, 10, TimeUnit.SECONDS, Schedulers.computation())
+        Observable.interval(5, 5, TimeUnit.SECONDS, Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe {
                 CustomThemeManager.getInstance().setNextTheme()

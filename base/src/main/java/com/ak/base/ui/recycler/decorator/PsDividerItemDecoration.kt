@@ -8,7 +8,6 @@ import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.base.R
 
-
 class PsDividerItemDecoration(
     private val settings: PsDividerItemDecorationSettings,
 ) : DividerItemDecoration(settings.context, LinearLayoutManager.VERTICAL), CustomTheme.Support {

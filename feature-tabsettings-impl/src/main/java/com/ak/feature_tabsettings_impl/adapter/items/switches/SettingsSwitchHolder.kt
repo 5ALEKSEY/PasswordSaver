@@ -5,8 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.applier.CustomThemeApplier
-import com.ak.app_theme.theme.selectors.CustomThemeColorSelectorBuilder
-import com.ak.app_theme.theme.selectors.CustomThemeDrawableSelectorBuilder
 import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewHolder
 import com.ak.base.adapter.AdapterDelegate
 import com.ak.feature_tabsettings_impl.R

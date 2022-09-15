@@ -91,6 +91,7 @@
     <string name="orange_theme_name">Orange</string>
     <string name="purple_theme_name">Purple</string>
     <string name="teal_theme_name">Teal</string>
+    <string name="change_theme_setting_name">App Theme</string>
 
     <!-- Password Popup Menu Items -->
     <string name="password_popup_menu_item_select">Select</string>

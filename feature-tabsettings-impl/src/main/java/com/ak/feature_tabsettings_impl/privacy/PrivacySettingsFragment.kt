@@ -3,10 +3,11 @@ package com.ak.feature_tabsettings_impl.privacy
 import android.content.Intent
 import android.provider.Settings
 import android.view.View
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.base.ui.dialog.PSDialog
 import com.ak.base.ui.dialog.PSDialogBuilder
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecorationSettings
 import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_tabsettings_impl.R
@@ -95,10 +96,9 @@ class PrivacySettingsFragment : BaseSettingsModuleFragment<PrivacySettingsViewMo
 
     private fun initRecyclerView() {
         settingsRecyclerAdapter = SettingsRecyclerViewAdapter(
-            viewModel::onSwitchSettingsItemChanged,
-            viewModel::onSpinnerItemChanged,
-            null,
-            viewModel::onTextSettingsItemClicked
+            onSwitchSettingsChanged = viewModel::onSwitchSettingsItemChanged,
+            onSpinnerSettingsChanged = viewModel::onSpinnerItemChanged,
+            onTextSettingsClicked = viewModel::onTextSettingsItemClicked
         )
         fragmentView.rvPrivacySettingsItemsList.apply {
             adapter = settingsRecyclerAdapter
@@ -108,7 +108,7 @@ class PrivacySettingsFragment : BaseSettingsModuleFragment<PrivacySettingsViewMo
                 false
             )
             layoutManager = linLayoutManager
-            addItemDecoration(DividerItemDecoration(context, linLayoutManager.orientation))
+            addItemDecoration(PsDividerItemDecoration(PsDividerItemDecorationSettings(context)))
         }
     }
 

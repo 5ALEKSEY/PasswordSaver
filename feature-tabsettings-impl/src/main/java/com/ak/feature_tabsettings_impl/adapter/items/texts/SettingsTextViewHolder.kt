@@ -13,7 +13,7 @@ import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 
 class TextAdapterDelegate(
     private val viewType: Int,
-    private val onTextSettingsClicked: (settingId: Int) -> Unit
+    private val onTextSettingsClicked: (settingId: Int) -> Unit,
 ) : AdapterDelegate<SettingsListItemModel> {
 
     override fun isForViewType(item: SettingsListItemModel) = item is TextSettingsListItemModel
@@ -32,7 +32,8 @@ class TextAdapterDelegate(
     override fun onBindViewHolder(
         item: SettingsListItemModel,
         viewHolder: CustomThemeRecyclerViewHolder,
-        theme: CustomTheme) {
+        theme: CustomTheme,
+    ) {
         val itemModel = item as TextSettingsListItemModel
         val holder = viewHolder as SettingsTextHolder
         holder.bindViewHolder(itemModel)
@@ -41,7 +42,7 @@ class TextAdapterDelegate(
 
 class SettingsTextHolder(
     itemView: View,
-    private val onTextSettingsClicked: (settingId: Int) -> Unit
+    private val onTextSettingsClicked: (settingId: Int) -> Unit,
 ) : BaseSettingsViewHolder<TextSettingsListItemModel>(itemView) {
 
     override fun setViewHolderData(itemModel: TextSettingsListItemModel) {

@@ -20,7 +20,7 @@ abstract class BaseSettingsViewHolder<ItemModel : SettingsListItemModel>(itemVie
         CustomThemeApplier.applyBackgroundTint(theme, itemView.tvNewBadgeText, R.attr.themedAccentColor)
     }
 
-    fun bindViewHolder(itemModel: ItemModel) {
+    open fun bindViewHolder(itemModel: ItemModel) {
         itemView.tvSettingName.text = itemModel.settingName
         itemView.tvNewBadgeText.isVisible = itemModel.hasNewBadge
         setViewHolderData(itemModel)

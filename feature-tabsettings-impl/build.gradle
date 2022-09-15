@@ -83,4 +83,6 @@ dependencies {
     implementation deps.recyclerView
     implementation deps.circleImageView
     implementation deps.navComponent
+
+    implementation deps.gifDrawable
 }

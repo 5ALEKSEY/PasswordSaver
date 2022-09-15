@@ -1,12 +1,12 @@
 package com.ak.feature_tabsettings_impl.about
 
 import android.view.View
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.base.extensions.drawTextInner
-import com.ak.base.extensions.getColorCompat
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecorationSettings
 import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
@@ -76,10 +76,9 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
 
     private fun initRecyclerView() {
         aboutRecyclerAdapter = SettingsRecyclerViewAdapter(
-            { a, f -> },
-            null,
-            viewModel::onAboutActionClicked,
-            {d -> }
+            onSwitchSettingsChanged = { a, f -> },
+            onSectionSettingsClicked = viewModel::onAboutActionClicked,
+            onTextSettingsClicked = { d -> }
         )
         fragmentView.rvAboutActionsList.apply {
             adapter = aboutRecyclerAdapter
@@ -89,7 +88,7 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
                 false
             )
             layoutManager = linearLayoutManager
-            addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation))
+            addItemDecoration(PsDividerItemDecoration(PsDividerItemDecorationSettings(context)))
         }
     }
 

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cvThemeChangeDescriptionRoot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:backgroundTint="?themedSecondaryBackgroundColor"
+        android:tag="@string/skipThemeInterceptor"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clThemeChangeDescriptionContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civThemeDescriptionImpressionColor1"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintEnd_toStartOf="@+id/civThemeDescriptionImpressionColor2"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@id/civThemeDescriptionImpressionColor2"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="?themedPrimaryColor" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civThemeDescriptionImpressionColor2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="4dp"
+                app:layout_constraintEnd_toStartOf="@+id/civThemeDescriptionImpressionColor3"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/civThemeDescriptionImpressionColor1"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="?themedPrimaryDarkColor" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civThemeDescriptionImpressionColor3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="14dp"
+                android:layout_marginEnd="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/civThemeDescriptionImpressionColor2"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="?themedPrimaryLightColor" />
+
+        <TextView
+                android:id="@+id/tvThemeDescriptionName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingTop="2dp"
+                android:paddingBottom="4dp"
+                android:tag="@string/skipThemeInterceptor"
+                android:textColor="?themedPrimaryTextColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/civThemeDescriptionImpressionColor1"
+                tools:text="Theme name" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

@@ -3,6 +3,8 @@ package com.ak.feature_tabsettings_impl.design
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecorationSettings
 import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
@@ -31,6 +33,16 @@ class DesignSettingsFragment : BaseSettingsModuleFragment<DesignSettingsViewMode
         initRecyclerView()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadSettingsData()
+    }
+
+    override fun subscriberToViewModel(viewModel: DesignSettingsViewModel) {
+        super.subscriberToViewModel(viewModel)
+        viewModel.subscribeToDesignSettingsListLiveData().observe(viewLifecycleOwner, this::displayAppSettings)
+    }
+
     private fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
         settingsRecyclerAdapter.addSettingsList(settingsItems)
     }
@@ -46,10 +58,7 @@ class DesignSettingsFragment : BaseSettingsModuleFragment<DesignSettingsViewMode
 
     private fun initRecyclerView() {
         settingsRecyclerAdapter = SettingsRecyclerViewAdapter(
-            null,
-            null,
-            null,
-            null
+            onThemeChanged = viewModel::onThemeChanged,
         )
 
         fragmentView.rvDesignSettingsItemsList.apply {
@@ -57,10 +66,10 @@ class DesignSettingsFragment : BaseSettingsModuleFragment<DesignSettingsViewMode
             val linLayoutManager = LinearLayoutManager(
                 context,
                 LinearLayoutManager.VERTICAL,
-                false
+                false,
             )
             layoutManager = linLayoutManager
-            addItemDecoration(DividerItemDecoration(context, linLayoutManager.orientation))
+            addItemDecoration(PsDividerItemDecoration(PsDividerItemDecorationSettings(context)))
         }
     }
 }

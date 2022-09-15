@@ -14,12 +14,14 @@ import com.ak.feature_tabsettings_impl.adapter.items.spinners.SpinnerSettingsLis
 import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchAdapterDelegate
 import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchSettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.texts.TextAdapterDelegate
+import com.ak.feature_tabsettings_impl.adapter.items.themechange.ThemeChangeAdapterDelegate
 
-class SettingsRecyclerViewAdapter(
+class SettingsRecyclerViewAdapter constructor(
     private val onSwitchSettingsChanged: ((settingId: Int, isChecked: Boolean) -> Unit)? = null,
     private val onSpinnerSettingsChanged: ((settingId: Int, newDataId: Int) -> Unit)? = null,
     private val onSectionSettingsClicked: ((settingId: Int) -> Unit)? = null,
-    private val onTextSettingsClicked: ((settingId: Int) -> Unit)? = null
+    private val onTextSettingsClicked: ((settingId: Int) -> Unit)? = null,
+    private val onThemeChanged: ((newTheme: CustomTheme.Description) -> Unit)? = null,
 ) : CustomThemeRecyclerViewAdapter<CustomThemeRecyclerViewHolder>() {
 
     companion object {
@@ -27,6 +29,7 @@ class SettingsRecyclerViewAdapter(
         const val SPINNER_SETTING_TYPE = 2
         const val SECTION_SETTING_TYPE = 3
         const val TEXT_SETTING_TYPE = 4
+        const val THEME_CHANGE_SETTING_TYPE = 5
     }
 
     private val settingsItemsList = arrayListOf<SettingsListItemModel>()
@@ -54,33 +57,42 @@ class SettingsRecyclerViewAdapter(
     init {
         if (onSwitchSettingsChanged != null) {
             adapterDelegatesManager.addDelegate(SwitchAdapterDelegate(
-                    SWITCH_SETTING_TYPE,
-                    mAdapterSwitchSettingsChangedListener
+                SWITCH_SETTING_TYPE,
+                mAdapterSwitchSettingsChangedListener,
             ))
         }
         if (onSpinnerSettingsChanged != null) {
             adapterDelegatesManager.addDelegate(SpinnerAdapterDelegate(
-                    SPINNER_SETTING_TYPE,
-                    mAdapterSpinnerSettingsChangedListener
+                SPINNER_SETTING_TYPE,
+                mAdapterSpinnerSettingsChangedListener,
             ))
         }
         if (onSectionSettingsClicked != null) {
             adapterDelegatesManager.addDelegate(SectionAdapterDelegate(
-                    SECTION_SETTING_TYPE,
-                    onSectionSettingsClicked
+                SECTION_SETTING_TYPE,
+                onSectionSettingsClicked,
             ))
         }
         if (onTextSettingsClicked != null) {
-            adapterDelegatesManager.addDelegate(TextAdapterDelegate(
+            adapterDelegatesManager.addDelegate(
+                TextAdapterDelegate(
                     TEXT_SETTING_TYPE,
-                    onTextSettingsClicked
-            ))
+                    onTextSettingsClicked,
+                )
+            )
+        }
+        if (onThemeChanged != null) {
+            adapterDelegatesManager.addDelegate(
+                ThemeChangeAdapterDelegate(
+                    THEME_CHANGE_SETTING_TYPE,
+                    onThemeChanged,
+                )
+            )
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         adapterDelegatesManager.onCreateViewHolder(parent, viewType)
-
 
     override fun getItemViewType(position: Int) =
         adapterDelegatesManager.getItemViewType(settingsItemsList[position])
@@ -93,8 +105,8 @@ class SettingsRecyclerViewAdapter(
 
     fun addSettingsList(settingItems: List<SettingsListItemModel>) {
         val diffCallback = PrivacyDiffUtilCallback(
-                settingsItemsList,
-                settingItems
+            settingsItemsList,
+            settingItems,
         )
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
@@ -105,7 +117,8 @@ class SettingsRecyclerViewAdapter(
 
     class PrivacyDiffUtilCallback(
         private val oldList: List<SettingsListItemModel>,
-        private val newList: List<SettingsListItemModel>) : DiffUtil.Callback() {
+        private val newList: List<SettingsListItemModel>,
+    ) : DiffUtil.Callback() {
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
             oldList[oldItemPosition].settingId == newList[newItemPosition].settingId
