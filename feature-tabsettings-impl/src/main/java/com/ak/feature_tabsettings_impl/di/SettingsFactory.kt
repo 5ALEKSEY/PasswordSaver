@@ -38,10 +38,11 @@ class AboutSettingsViewModelAssistedFactory @Inject constructor() : IViewModelAs
 }
 
 class DesignSettingsViewModelAssistedFactory @Inject constructor(
+    private val settingsPreferencesManager: ISettingsPreferencesManager,
     private val resourceManager: IResourceManager,
 ) : IViewModelAssistedFactory<DesignSettingsViewModel> {
     override fun create(): DesignSettingsViewModel {
-        return DesignSettingsViewModel(resourceManager)
+        return DesignSettingsViewModel(settingsPreferencesManager, resourceManager)
     }
 }
 

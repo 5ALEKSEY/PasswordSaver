@@ -80,6 +80,8 @@ abstract class BaseThemeActivity : AppCompatActivity() {
     }
 
     private fun onThemeChangedWithAnimation(theme: CustomTheme): Boolean {
+        if (!canChangeThemeWithAnimation()) return false
+
         return ApplyThemeWithAnimationHelper.changeThemeWithAnimation(
             getChangeThemeContentView(),
             getChangeThemeStubView(),
@@ -222,6 +224,10 @@ abstract class BaseThemeActivity : AppCompatActivity() {
     @AttrRes
     protected open fun getNavigationBarColorResource(): Int {
         return R.attr.themedPrimaryBackgroundColor
+    }
+
+    protected open fun canChangeThemeWithAnimation(): Boolean {
+        return false
     }
 
     protected open fun getChangeThemeContentView(): View? {

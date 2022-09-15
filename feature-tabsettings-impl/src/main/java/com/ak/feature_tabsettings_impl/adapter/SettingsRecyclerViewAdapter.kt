@@ -2,7 +2,6 @@ package com.ak.feature_tabsettings_impl.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewAdapter
 import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewHolder
@@ -104,7 +103,7 @@ class SettingsRecyclerViewAdapter constructor(
     }
 
     fun addSettingsList(settingItems: List<SettingsListItemModel>) {
-        val diffCallback = PrivacyDiffUtilCallback(
+        val diffCallback = SettingsDiffUtilCallback(
             settingsItemsList,
             settingItems,
         )
@@ -115,7 +114,7 @@ class SettingsRecyclerViewAdapter constructor(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    class PrivacyDiffUtilCallback(
+    class SettingsDiffUtilCallback(
         private val oldList: List<SettingsListItemModel>,
         private val newList: List<SettingsListItemModel>,
     ) : DiffUtil.Callback() {

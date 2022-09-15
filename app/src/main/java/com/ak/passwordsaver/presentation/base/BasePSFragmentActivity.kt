@@ -8,6 +8,7 @@ import com.ak.app_theme.theme.uicomponents.BaseThemeActivity
 import com.ak.base.extensions.showToastMessage
 import com.ak.base.extensions.vibrate
 import com.ak.base.viewmodel.BasePSViewModel
+import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_security_api.interfaces.IPSAuthManager
 import javax.inject.Inject
@@ -19,6 +20,8 @@ abstract class BasePSFragmentActivity<VM : BasePSViewModel> : BaseThemeActivity(
     protected lateinit var authManager: IPSAuthManager
     @Inject
     protected lateinit var authChecker: IAuthCheckerStarter
+    @Inject
+    protected lateinit var settingsPrefManager: ISettingsPreferencesManager
 
     protected lateinit var viewModel: VM
 
@@ -26,6 +29,8 @@ abstract class BasePSFragmentActivity<VM : BasePSViewModel> : BaseThemeActivity(
     abstract fun getScreenLayoutResId(): Int
 
     abstract fun createViewModel(): VM
+
+    override fun canChangeThemeWithAnimation() = settingsPrefManager.isChangeThemeWithAnimationEnabled()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

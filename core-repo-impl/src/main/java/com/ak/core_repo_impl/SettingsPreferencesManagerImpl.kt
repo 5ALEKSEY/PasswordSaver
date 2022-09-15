@@ -14,9 +14,12 @@ class SettingsPreferencesManagerImpl @Inject constructor(
     private val mContext: Context
 ) : ISettingsPreferencesManager {
 
-    companion object {
+    private companion object {
+        // TODO: Create preferences migrator
         @Deprecated("This one should be deleted")
         const val PASSWORD_SHOWING_TYPE_SHARED_KEY = "password_showing_type"
+
+        // Security
         const val IS_PINCODE_ENABLED_SHARED_KEY = "is_pincode_enabled"
         const val IS_PATTERN_ENABLED_SHARED_KEY = "is_pattern_enabled"
         const val IS_BIOMETRIC_ENABLED_SHARED_KEY = "is_biometric_enabled"
@@ -24,13 +27,14 @@ class SettingsPreferencesManagerImpl @Inject constructor(
         const val PINCODE_VALUE_SHARED_KEY = "pincode_value"
         const val PATTERN_VALUE_SHARED_KEY = "pattern_value"
         const val BLOCK_SECURITY_INPUT_TIME_SHARED_KEY = "block_security_input_time"
+
+        // Design
+        const val IS_CHANGE_THEME_WITH_ANIMATION_ENABLED_SHARED_KEY = "is_ch_theme_with_anim_enabled"
     }
 
-    override fun getLockAppStatesList() =
-        AppLockStateHelper.getAppLockStateStringList(mContext)
+    override fun getLockAppStatesList() = AppLockStateHelper.getAppLockStateStringList(mContext)
 
-    override fun isPincodeEnabled() =
-        settingsPreferences.getBoolean(IS_PINCODE_ENABLED_SHARED_KEY, false)
+    override fun isPincodeEnabled() = settingsPreferences.getBoolean(IS_PINCODE_ENABLED_SHARED_KEY, false)
 
     override fun setPincodeEnableState(isEnabled: Boolean) {
         settingsPreferences.edit().putBoolean(IS_PINCODE_ENABLED_SHARED_KEY, isEnabled).apply()
@@ -81,6 +85,13 @@ class SettingsPreferencesManagerImpl @Inject constructor(
             .apply()
     }
 
-    override fun getBlockSecurityInputTime() =
-        settingsPreferences.getLong(BLOCK_SECURITY_INPUT_TIME_SHARED_KEY, 0L)
+    override fun getBlockSecurityInputTime() = settingsPreferences.getLong(BLOCK_SECURITY_INPUT_TIME_SHARED_KEY, 0L)
+
+    override fun isChangeThemeWithAnimationEnabled(): Boolean {
+        return settingsPreferences.getBoolean(IS_CHANGE_THEME_WITH_ANIMATION_ENABLED_SHARED_KEY, false)
+    }
+
+    override fun setChangeThemeWithAnimationEnabledState(isEnabled: Boolean) {
+        settingsPreferences.edit().putBoolean(IS_CHANGE_THEME_WITH_ANIMATION_ENABLED_SHARED_KEY, isEnabled).apply()
+    }
 }

@@ -40,11 +40,10 @@ class DesignSettingsFragment : BaseSettingsModuleFragment<DesignSettingsViewMode
 
     override fun subscriberToViewModel(viewModel: DesignSettingsViewModel) {
         super.subscriberToViewModel(viewModel)
-        viewModel.subscribeToDesignSettingsListLiveData().observe(viewLifecycleOwner, this::displayAppSettings)
-    }
-
-    private fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
-        settingsRecyclerAdapter.addSettingsList(settingsItems)
+        viewModel.subscribeToDesignSettingsListLiveData().observe(
+            viewLifecycleOwner,
+            settingsRecyclerAdapter::addSettingsList,
+        )
     }
 
     private fun initToolbar() {
@@ -59,6 +58,7 @@ class DesignSettingsFragment : BaseSettingsModuleFragment<DesignSettingsViewMode
     private fun initRecyclerView() {
         settingsRecyclerAdapter = SettingsRecyclerViewAdapter(
             onThemeChanged = viewModel::onThemeChanged,
+            onSwitchSettingsChanged = viewModel::onSwitchSettingsItemChanged,
         )
 
         fragmentView.rvDesignSettingsItemsList.apply {

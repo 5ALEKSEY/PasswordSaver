@@ -1,8 +1,8 @@
 package com.ak.core_repo_api.intefaces
 
 interface ISettingsPreferencesManager {
-    fun getLockAppStatesList(): List<String>
     // Security
+    fun getLockAppStatesList(): List<String>
     fun isPincodeEnabled(): Boolean
     fun setPincodeEnableState(isEnabled: Boolean)
     fun getUserPincodeValue(): String
@@ -19,7 +19,10 @@ interface ISettingsPreferencesManager {
     fun getLockAppStateChoose(): AppLockState
     fun setLockAppStateChoose(appLockState: AppLockState)
 
-
     fun setBlockSecurityInputTime(blockSecurityInputTime: Long)
     fun getBlockSecurityInputTime(): Long
+
+    // Design
+    fun isChangeThemeWithAnimationEnabled(): Boolean
+    fun setChangeThemeWithAnimationEnabledState(isEnabled: Boolean)
 }

@@ -92,6 +92,8 @@
     <string name="purple_theme_name">"Лунтик"</string>
     <string name="teal_theme_name">"Бирюза"</string>
     <string name="change_theme_setting_name">"Тема приложения"</string>
+    <string name="change_theme_with_animation_setting_name">"Анимация темы"</string>
+    <string name="change_theme_with_animation_setting_desc">"Тема приложения будет изменяться с анимацией"</string>
 
     <!-- Password Popup Menu Items -->
     <string name="password_popup_menu_item_select">"Выбрать"</string>
