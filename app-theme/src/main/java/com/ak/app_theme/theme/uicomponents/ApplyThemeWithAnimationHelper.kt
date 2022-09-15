@@ -12,8 +12,8 @@ import kotlin.math.hypot
 
 object ApplyThemeWithAnimationHelper {
 
-    private const val CHANGE_THEME_ANIMATION_DURATION_MILLIS = 900L
-    private const val CHANGE_WINDOW_THEME_DELAY_MILLIS = 470L
+    private const val CHANGE_THEME_ANIMATION_DURATION_MILLIS = 300L
+    private const val CHANGE_WINDOW_THEME_DELAY_MILLIS = 140L
 
     fun changeThemeWithAnimation(
         contentView: View?,
