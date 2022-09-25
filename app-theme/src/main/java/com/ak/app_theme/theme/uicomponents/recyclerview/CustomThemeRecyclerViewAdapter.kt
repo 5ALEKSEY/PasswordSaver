@@ -5,7 +5,7 @@ import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.CustomThemeManager
 
 abstract class CustomThemeRecyclerViewAdapter<T : CustomThemeRecyclerViewHolder>(
-    private var theme: CustomTheme = CustomThemeManager.getCurrentTheme()
+    private var theme: CustomTheme = CustomThemeManager.getCurrentAppliedTheme()
 ) : RecyclerView.Adapter<T>(), CustomTheme.Support {
 
     abstract fun onBindViewHolder(theme: CustomTheme, viewHolder: T, position: Int)
@@ -19,7 +19,7 @@ abstract class CustomThemeRecyclerViewAdapter<T : CustomThemeRecyclerViewHolder>
         theme: CustomTheme,
         holder: T,
         position: Int,
-        payloads: MutableList<Any>
+        payloads: MutableList<Any>,
     ) {
         super.onBindViewHolder(holder, position, payloads)
     }

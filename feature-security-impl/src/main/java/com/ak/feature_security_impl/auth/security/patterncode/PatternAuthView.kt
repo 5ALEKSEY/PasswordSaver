@@ -8,12 +8,9 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.util.SparseArray
 import android.view.MotionEvent
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.RelativeLayout
 import androidx.core.util.forEach
-import androidx.core.util.valueIterator
-import androidx.core.view.ViewCompat
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.base.R
@@ -81,7 +78,7 @@ class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
 
     init {
         initViewAttributes(attrs)
-        initColors(CustomThemeManager.getInstance().getTheme())
+        initColors(CustomThemeManager.getInstance().getAppliedTheme())
         setWillNotDraw(false)
         mCanvas = Canvas(mBitmap)
         // init paint

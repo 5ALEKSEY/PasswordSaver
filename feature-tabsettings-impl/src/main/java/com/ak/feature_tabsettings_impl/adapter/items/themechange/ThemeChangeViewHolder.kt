@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.settings_item_theme_change_layout.view.giv
 
 class ThemeChangeAdapterDelegate(
     private val viewType: Int,
-    private val onThemeChanged: (newTheme: CustomTheme.Description) -> Unit,
+    private val onThemeChanged: (newThemeId: Int) -> Unit,
 ) : AdapterDelegate<SettingsListItemModel> {
 
     override fun isForViewType(item: SettingsListItemModel) = item is ThemeChangeSettingsListItemModel
@@ -44,7 +44,7 @@ class ThemeChangeAdapterDelegate(
 
 class ThemeChangeViewHolder(
     itemView: View,
-    private val onThemeChanged: (newTheme: CustomTheme.Description) -> Unit,
+    private val onThemeChanged: (newThemeId: Int) -> Unit,
 ) : BaseSettingsViewHolder<ThemeChangeSettingsListItemModel>(itemView) {
 
     private val changeThemePicture by lazy { itemView.findViewById<ImageView>(R.id.givChangeThemePicture) }

@@ -1,4 +1,4 @@
-package com.ak.feature_tabsettings_impl.adapter.items.themechange
+package com.ak.feature_tabsettings_impl.design.configurenative
 
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -15,10 +15,17 @@ import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewA
 import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewHolder
 import com.ak.feature_tabsettings_impl.R
 
-class ThemeChangeDescriptionsAdapter(
+class ConfigureNativeThemeDescriptionsAdapter(
+    initialSelectedDescriptionId: Int,
     private val descriptions: List<CustomTheme.Description>,
-    private val onThemeChanged: (newThemeId: Int) -> Unit,
-) : CustomThemeRecyclerViewAdapter<ThemeChangeDescriptionsAdapter.ThemeChangeDescriptionViewHolder>() {
+) : CustomThemeRecyclerViewAdapter<ConfigureNativeThemeDescriptionsAdapter.ThemeChangeDescriptionViewHolder>() {
+
+    var selectedDescriptionId = initialSelectedDescriptionId
+
+    private val onThemeChangedListener = { newTheme: CustomTheme.Description ->
+        selectedDescriptionId = newTheme.id
+        notifyDataSetChanged()
+    }
 
     override fun onBindViewHolder(
         theme: CustomTheme,
@@ -38,15 +45,12 @@ class ThemeChangeDescriptionsAdapter(
             parent,
             false,
         )
-        return ThemeChangeDescriptionViewHolder(itemView, onThemeChanged)
+        return ThemeChangeDescriptionViewHolder(itemView)
     }
 
     override fun getItemCount() = descriptions.size
 
-    inner class ThemeChangeDescriptionViewHolder(
-        itemView: View,
-        private val onThemeChanged: (newThemeId: Int) -> Unit,
-    ) : CustomThemeRecyclerViewHolder(itemView) {
+    inner class ThemeChangeDescriptionViewHolder(itemView: View) : CustomThemeRecyclerViewHolder(itemView) {
 
         private val root by lazy { itemView.findViewById<View>(R.id.cvThemeChangeDescriptionRoot) }
         private val content by lazy { itemView.findViewById<View>(R.id.clThemeChangeDescriptionContent) }
@@ -61,7 +65,7 @@ class ThemeChangeDescriptionsAdapter(
         }
 
         fun bind(themeDescription: CustomTheme.Description) {
-            itemView.setOnClickListener { onThemeChanged(themeDescription.id) }
+            itemView.setOnClickListener { onThemeChangedListener(themeDescription) }
             themeName.setText(themeDescription.nameResId)
             content.background = getThemeDescriptionBackground(themeDescription)
 
@@ -72,8 +76,7 @@ class ThemeChangeDescriptionsAdapter(
 
         // Not really good approach, but ...... fast and simple :)
         private fun getThemeDescriptionBackground(themeDescription: CustomTheme.Description): Drawable? {
-            val currentTheme = CustomThemeManager.getCurrentSelectedTheme()
-            return if (themeDescription.id == currentTheme.id) {
+            return if (themeDescription.id == selectedDescriptionId) {
                 CustomThemeDrawableSelectorBuilder(CustomThemeManager.getCurrentAppliedTheme(), itemView.context)
                     .rectangle()
                     .setDefaultColorAttr(R.attr.themedSecondaryBackgroundColor)

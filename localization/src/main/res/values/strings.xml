@@ -87,6 +87,7 @@
     <string name="save_account_button_text">Save</string>
     <string name="click_to_change_image">Click to change</string>
     <string name="oops_message">Oops!</string>
+    <string name="native_theme_name">Native</string>
     <string name="blue_theme_name">Blue</string>
     <string name="orange_theme_name">Orange</string>
     <string name="purple_theme_name">Purple</string>
@@ -107,4 +108,18 @@
     <string name="account_popup_menu_item_copy_password">Copy password</string>
     <string name="account_popup_menu_item_edit">Edit</string>
     <string name="account_popup_menu_item_delete">Delete</string>
+
+    <!-- Configure native theme -->
+    <string name="native_theme_configuration_title">Native theme configuration</string>
+    <string name="native_theme_configuration_select_light_title">Select light theme</string>
+    <string name="native_theme_configuration_select_dark_title">Select dark theme</string>
+    <string name="native_theme_configuration_apply_action">Apply</string>
+    <string name="native_theme_configuration_cancel_action">Cancel</string>
+    <string name="native_theme_config_attention_popup_title">Attention</string>
+    <string name="native_theme_config_attention_popup_desc">To set \'Native\' theme you need to create it\'s configuration and select \'light\' and \'dark\' variants. Do you want to continue?</string>
+    <string name="native_theme_config_attention_popup_positive">yes</string>
+    <string name="native_theme_config_attention_popup_negative">No</string>
+    <string name="change_theme_use_native_setting_name">Native theme</string>
+    <string name="change_theme_use_native_setting_desc">Theme will be changed according to your device settings</string>
+    <string name="change_theme_change_native_config_setting_name">Change \'Native\' theme configuration</string>
 </resources>

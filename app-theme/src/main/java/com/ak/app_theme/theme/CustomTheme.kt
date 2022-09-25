@@ -23,6 +23,8 @@ class CustomTheme private constructor(
     val isLight: Boolean,
 ) {
 
+    val isNative = themeStyle == 0
+
     companion object {
         private const val TAG = "CustomTheme"
 
@@ -45,58 +47,58 @@ class CustomTheme private constructor(
     private val styles = SparseIntArray()
 
     init {
-        Log.d("a", "a")
-        check(themeStyle != 0) { "theme style is 0. Can't parse theme extras" }
-        context.obtainStyledAttributes(themeStyle, R.styleable.CustomThemeAttributes).use {
-            val contextWrapper = ContextThemeWrapper(context, themeStyle)
+        if (!isNative) {
+            context.obtainStyledAttributes(themeStyle, R.styleable.CustomThemeAttributes).use {
+                val contextWrapper = ContextThemeWrapper(context, themeStyle)
 
-            for (position in 0 until it.indexCount) {
-                val index = it.getIndex(position)
-                val attributeId = R.styleable.CustomThemeAttributes[index]
+                for (position in 0 until it.indexCount) {
+                    val index = it.getIndex(position)
+                    val attributeId = R.styleable.CustomThemeAttributes[index]
 
-                val resId = it.getResourceId(index, 0)
-                if (resId != 0) {
-                    when (context.resources.getResourceTypeName(resId)) {
-                        "color" -> colors.put(attributeId, it.getColor(index, 0))
-                        "drawable" -> drawables.put(attributeId, resId)
-                        "style" -> styles.put(attributeId, resId)
-                        else -> Log.e(
-                            TAG,
-                            "unsupported resource type: ${context.resources.getResourceTypeName(
-                                resId
-                            )}, " +
+                    val resId = it.getResourceId(index, 0)
+                    if (resId != 0) {
+                        when (context.resources.getResourceTypeName(resId)) {
+                            "color" -> colors.put(attributeId, it.getColor(index, 0))
+                            "drawable" -> drawables.put(attributeId, resId)
+                            "style" -> styles.put(attributeId, resId)
+                            else -> Log.e(
+                                TAG,
+                                "unsupported resource type: ${context.resources.getResourceTypeName(
+                                    resId
+                                )}, " +
                                     "for attribute: ${getResourceName(attributeId)} in theme: ${getThemeName()}"
-                        )
-                    }
-                } else {
-                    val value = it.peekValue(index)
-
-                    if (value != null && !parseTypedValue(attributeId, value)) {
-                        if (value.type == TypedValue.TYPE_ATTRIBUTE) {
-                            val attrValue = TypedValue()
-                            var parsed = false
-                            if (contextWrapper.theme.resolveAttribute(
-                                    value.data,
-                                    attrValue,
-                                    true
-                                )
-                            ) {
-                                parsed = parseTypedValue(attributeId, attrValue)
-                            }
-
-                            if (!parsed) {
-                                Log.e(
-                                    TAG,
-                                    "can not resolve value for attribute: ${getResourceName(
-                                        attributeId
-                                    )} in theme: ${getThemeName()}"
-                                )
-                            }
-                        } else {
-                            Log.e(
-                                TAG, "unsupported value type: ${value.type}, " +
-                                        "for attribute: ${getResourceName(attributeId)} in theme: ${getThemeName()}"
                             )
+                        }
+                    } else {
+                        val value = it.peekValue(index)
+
+                        if (value != null && !parseTypedValue(attributeId, value)) {
+                            if (value.type == TypedValue.TYPE_ATTRIBUTE) {
+                                val attrValue = TypedValue()
+                                var parsed = false
+                                if (contextWrapper.theme.resolveAttribute(
+                                        value.data,
+                                        attrValue,
+                                        true
+                                    )
+                                ) {
+                                    parsed = parseTypedValue(attributeId, attrValue)
+                                }
+
+                                if (!parsed) {
+                                    Log.e(
+                                        TAG,
+                                        "can not resolve value for attribute: ${getResourceName(
+                                            attributeId
+                                        )} in theme: ${getThemeName()}"
+                                    )
+                                }
+                            } else {
+                                Log.e(
+                                    TAG, "unsupported value type: ${value.type}, " +
+                                    "for attribute: ${getResourceName(attributeId)} in theme: ${getThemeName()}"
+                                )
+                            }
                         }
                     }
                 }
@@ -220,7 +222,7 @@ fun CustomTheme.toDescription() = CustomTheme.Description(
     id,
     nameResId,
     isLight,
-    getColor(R.attr.themedPrimaryColor),
-    getColor(R.attr.themedPrimaryDarkColor),
-    getColor(R.attr.themedPrimaryLightColor),
+    if (isNative) 0 else getColor(R.attr.themedPrimaryColor),
+    if (isNative) 0 else getColor(R.attr.themedPrimaryDarkColor),
+    if (isNative) 0 else getColor(R.attr.themedPrimaryLightColor),
 )

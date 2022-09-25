@@ -7,12 +7,19 @@ import com.ak.app_theme.R
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.PublishSubject
 
+// TODO: Should be providable with dagger
 class CustomThemeManager private constructor() {
     companion object {
-        const val BLUE_THEME_ID = 0
-        const val ORANGE_THEME_ID = 1
-        const val PURPLE_THEME_ID = 2
-        const val TEAL_THEME_ID = 3
+        const val NATIVE_THEME_ID = 0
+
+        // Light themes
+        const val BLUE_THEME_ID = 1
+
+        // Dark themes
+        const val ORANGE_THEME_ID = 2
+        const val PURPLE_THEME_ID = 3
+        const val TEAL_THEME_ID = 4
+
         const val DEFAULT_THEME_ID = BLUE_THEME_ID
 
         private val instance = CustomThemeManager()
@@ -21,7 +28,10 @@ class CustomThemeManager private constructor() {
         fun getInstance() = instance
 
         @JvmStatic
-        fun getCurrentTheme() = instance.getTheme()
+        fun getCurrentSelectedTheme() = instance.getSelectedTheme()
+
+        @JvmStatic
+        fun getCurrentAppliedTheme() = instance.getAppliedTheme()
 
         @JvmStatic
         fun getThemeColor(@AttrRes attrRes: Int) = instance.getColor(attrRes)
@@ -35,43 +45,67 @@ class CustomThemeManager private constructor() {
     private val themes = mutableListOf<CustomTheme>()
     private lateinit var currentTheme: CustomTheme
 
+    fun getSelectedTheme() = findThemeInternal(CustomThemePreferencesMng.getThemeId())
+
+    fun getAppliedTheme() = currentTheme
+
     fun getAvailableThemes() = themes.map { it.toDescription() }
 
     fun getChangeThemeListener(): Observable<CustomTheme> = changeThemePublishSubject
 
-    fun getTheme() = currentTheme
-    fun setTheme(themeId: Int) = applyThemeAndNotify(findTheme(themeId))
-    fun setNextTheme() = applyNextThemeAndNotify()
-
-    private fun applyThemeAndNotify(theme: CustomTheme) {
-        currentTheme = theme
-        savePrefsThemeId(theme.id)
-        changeThemePublishSubject.onNext(theme)
+    fun refreshTheme(context: Context) {
+        currentTheme = findTheme(CustomThemePreferencesMng.getThemeId(), context)
     }
 
-    private fun applyNextThemeAndNotify() {
-        val nextThemeId = (currentTheme.id + 1) % themes.size
-        applyThemeAndNotify(findTheme(nextThemeId))
+    fun setTheme(themeId: Int, context: Context) {
+        CustomThemePreferencesMng.setThemeId(themeId)
+        refreshTheme(context)
+        changeThemePublishSubject.onNext(currentTheme)
+    }
+
+    fun setNextTheme(context: Context) {
+        val nextThemeIdCandidate = (currentTheme.id + 1) % themes.size
+        val nextThemeId = if (nextThemeIdCandidate == NATIVE_THEME_ID) {
+            nextThemeIdCandidate + 1
+        } else {
+            nextThemeIdCandidate
+        }
+        setTheme(nextThemeId, context)
     }
 
     fun getColor(@AttrRes attrRes: Int) = currentTheme.getColor(attrRes)
     fun getColor(@AttrRes attrRes: Int, @FloatRange(from = 0.0, to = 1.0) alpha: Float) =
         currentTheme.getColor(attrRes, alpha)
 
-    private fun getPrefsThemeId() = CustomThemePreferencesMng.getThemeId()
+    private fun findTheme(themeId: Int, context: Context): CustomTheme {
+        return if (themeId != NATIVE_THEME_ID) {
+            findThemeInternal(themeId)
+        } else {
+            val nativeThemeId = if (context.isDarkNativeUiMode()) {
+                CustomThemePreferencesMng.getNativeDarkThemeId()
+            } else {
+                CustomThemePreferencesMng.getNativeLightThemeId()
+            }
 
-    private fun savePrefsThemeId(id: Int) = CustomThemePreferencesMng.setThemeId(id)
+            findThemeInternal(nativeThemeId)
+        }
+    }
 
-    private fun findTheme(themeId: Int) = themes.find { it.id == themeId }
-        ?: throw IllegalStateException("findTheme=> there is no theme with id = $themeId")
-
-    fun refreshTheme(context: Context) {
-        val themeId = getPrefsThemeId()
-        currentTheme = findTheme(themeId)
+    private fun findThemeInternal(themeId: Int): CustomTheme {
+        return themes.find {
+            it.id == themeId
+        } ?: throw IllegalStateException("findTheme=> there is no theme with id = $themeId")
     }
 
     fun init(context: Context) {
         CustomThemePreferencesMng.initialize(context.applicationContext)
+
+        themes.add(
+            CustomTheme.Builder(context)
+                .id(NATIVE_THEME_ID)
+                .name(R.string.native_theme_name)
+                .build()
+        )
 
         themes.add(
             CustomTheme.Builder(context)

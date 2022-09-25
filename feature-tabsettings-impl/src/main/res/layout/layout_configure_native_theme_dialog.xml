@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/llConfigureNativeThemeDialogRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_rounded"
+        android:backgroundTint="?themedPopupBackgroundColor"
+        android:orientation="vertical"
+        android:padding="12dp">
+
+    <TextView
+            android:id="@+id/tvConfigureNativeThemeDialogTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:gravity="center"
+            android:text="@string/native_theme_configuration_title"
+            android:textColor="?themedPrimaryTextColor"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    <TextView
+            android:id="@+id/tvConfigureNativeThemeLightDescriptionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingHorizontal="8dp"
+            android:text="@string/native_theme_configuration_select_light_title"
+            android:textColor="?themedPrimaryTextColor"
+            android:textSize="17sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvConfigureNativeThemeLightDescriptionsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?themedPopupBackgroundColor"
+            android:orientation="horizontal"
+            android:overScrollMode="never"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="1"
+            tools:listitem="@layout/settings_item_theme_change_description_layout" />
+
+    <TextView
+            android:id="@+id/tvConfigureNativeThemeDarkDescriptionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingHorizontal="8dp"
+            android:text="@string/native_theme_configuration_select_dark_title"
+            android:textColor="?themedPrimaryTextColor"
+            android:textSize="17sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvConfigureNativeThemeDarkDescriptionsList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?themedPopupBackgroundColor"
+            android:orientation="horizontal"
+            android:overScrollMode="never"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="2dp"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="1"
+            tools:listitem="@layout/settings_item_theme_change_description_layout" />
+
+    <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+        <TextView
+                android:id="@+id/tvConfigureNativeThemeApplyAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:paddingStart="18dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="18dp"
+                android:paddingBottom="8dp"
+                android:text="@string/native_theme_configuration_apply_action"
+                android:textAllCaps="true"
+                android:textColor="?themedAccentColor"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        <TextView
+                android:id="@+id/tvConfigureNativeThemeCancelAction"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/tvConfigureNativeThemeApplyAction"
+                android:paddingStart="18dp"
+                android:paddingTop="8dp"
+                android:paddingEnd="18dp"
+                android:paddingBottom="8dp"
+                android:text="@string/native_theme_configuration_cancel_action"
+                android:textAllCaps="true"
+                android:textColor="?themedPrimaryTextColor"
+                android:textSize="14sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

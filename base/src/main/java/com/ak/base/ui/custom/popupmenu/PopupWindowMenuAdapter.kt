@@ -40,7 +40,7 @@ class PopupWindowMenuAdapter(
             menuItem.title.content?.let { menuItemTitle.text = it }
             menuItem.title.contentRes?.let { menuItemTitle.text = itemView.resources.getText(it) }
 
-            setMenuItemTheme(CustomThemeManager.getCurrentTheme())
+            setMenuItemTheme(CustomThemeManager.getCurrentAppliedTheme())
         }
 
         private fun setMenuItemTheme(theme: CustomTheme) {

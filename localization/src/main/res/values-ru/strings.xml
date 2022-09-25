@@ -87,6 +87,7 @@
     <string name="save_account_button_text">"Сохранить"</string>
     <string name="click_to_change_image">"Изменить"</string>
     <string name="oops_message">"Уупс!"</string>
+    <string name="native_theme_name">"Нативная"</string>
     <string name="blue_theme_name">"Синяя"</string>
     <string name="orange_theme_name">"Рыжик"</string>
     <string name="purple_theme_name">"Лунтик"</string>
@@ -107,4 +108,18 @@
     <string name="account_popup_menu_item_copy_password">"Скопировать пароль"</string>
     <string name="account_popup_menu_item_edit">"Изменить"</string>
     <string name="account_popup_menu_item_delete">"Удалить"</string>
+
+    <!-- Configure native theme -->
+    <string name="native_theme_configuration_title">"Конфигурация нативной темы"</string>
+    <string name="native_theme_configuration_select_light_title">"Выберите светлую тему"</string>
+    <string name="native_theme_configuration_select_dark_title">"Выберите темную тему"</string>
+    <string name="native_theme_configuration_apply_action">"Применить"</string>
+    <string name="native_theme_configuration_cancel_action">"Отменить"</string>
+    <string name="native_theme_config_attention_popup_title">Attention</string>
+    <string name="native_theme_config_attention_popup_desc">To set \'Native\' theme you need create it\'s configuration and select \'light\' and \'dark\' variants. Do you want to continue?</string>
+    <string name="native_theme_config_attention_popup_positive">yes</string>
+    <string name="native_theme_config_attention_popup_negative">No</string>
+    <string name="change_theme_use_native_setting_name">Native theme</string>
+    <string name="change_theme_use_native_setting_desc">Theme will be changed according to your device settings</string>
+    <string name="change_theme_change_native_config_setting_name">Change \'Native\' theme configuration</string>
 </resources>

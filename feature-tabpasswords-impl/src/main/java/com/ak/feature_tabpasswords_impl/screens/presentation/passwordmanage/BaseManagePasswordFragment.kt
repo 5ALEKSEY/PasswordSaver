@@ -183,7 +183,7 @@ abstract class BaseManagePasswordFragment<ManageVM : BaseManagePasswordViewModel
         drawTextForPasswordAvatar(viewModel.subscribeToAvatarText().value ?: "", theme)
     }
 
-    private fun drawTextForPasswordAvatar(text: String, theme: CustomTheme = CustomThemeManager.getInstance().getTheme()) {
+    private fun drawTextForPasswordAvatar(text: String, theme: CustomTheme = CustomThemeManager.getInstance().getAppliedTheme()) {
         val isTextDrawNeeds = text.isNotEmpty()
         val fillColor = theme.getColor(R.attr.themedPrimaryLightColor)
         val textColor = theme.getColor(R.attr.staticColorWhite)

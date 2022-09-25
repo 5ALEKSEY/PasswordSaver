@@ -1,6 +1,7 @@
 package com.ak.app_theme.theme.uicomponents
 
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
@@ -110,6 +111,11 @@ abstract class BaseThemeActivity : AppCompatActivity() {
         applyTheme(theme, applyForWindow)
     }
 
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        analyzeTheme()
+    }
+
     protected fun addThemedView(view: CustomTheme.Support) {
         if (!supportThemeViews.contains(view)) {
             supportThemeViews.add(view)
@@ -190,7 +196,7 @@ abstract class BaseThemeActivity : AppCompatActivity() {
     private fun getCustomTheme(): CustomTheme {
         val themeMgr = CustomThemeManager.getInstance()
         themeMgr.refreshTheme(this)
-        return themeMgr.getTheme()
+        return themeMgr.getAppliedTheme()
     }
 
     private fun analyzeTheme() {

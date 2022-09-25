@@ -2,12 +2,10 @@ package com.ak.app_theme.theme.uicomponents
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.AttrRes
 import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.CustomThemeManager
-import com.ak.app_theme.theme.CustomThemedView
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -33,7 +31,7 @@ abstract class BaseThemeFragment : Fragment() {
     }
 
     private fun analyzeTheme() {
-        setTheme(CustomThemeManager.getCurrentTheme())
+        setTheme(CustomThemeManager.getCurrentAppliedTheme())
     }
 
     fun setTheme(theme: CustomTheme) {

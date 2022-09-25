@@ -31,7 +31,7 @@ abstract class BaseThemeDialogFragment : DialogFragment() {
     }
 
     private fun analyzeTheme() {
-        setTheme(CustomThemeManager.getCurrentTheme())
+        setTheme(CustomThemeManager.getCurrentAppliedTheme())
     }
 
     fun setTheme(theme: CustomTheme) {

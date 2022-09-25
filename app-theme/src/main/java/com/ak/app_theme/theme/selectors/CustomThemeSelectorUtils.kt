@@ -35,7 +35,7 @@ object CustomThemeSelectorUtils {
     @JvmOverloads
     fun getColorBackgroundSelector(context: Context, attrs: AttributeSet?,
                                    isInEditMode: Boolean = false) : CustomThemeColorSelectorBuilder? {
-        val theme = if (isInEditMode) null else CustomThemeManager.getCurrentTheme()
+        val theme = if (isInEditMode) null else CustomThemeManager.getCurrentAppliedTheme()
         return CustomThemeSelectorFabric.getColorBackgroundSelector(context, attrs, theme)
     }
 
@@ -48,7 +48,7 @@ object CustomThemeSelectorUtils {
     @JvmOverloads
     fun getBackgroundSelector(context: Context, attrs: AttributeSet?,
                               isInEditMode: Boolean = false) : CustomThemeDrawableSelectorBuilder? {
-        val theme = if (isInEditMode) null else CustomThemeManager.getCurrentTheme()
+        val theme = if (isInEditMode) null else CustomThemeManager.getCurrentAppliedTheme()
         return CustomThemeSelectorFabric.getBackgroundSelector(context, attrs, theme)
     }
 
@@ -59,7 +59,7 @@ object CustomThemeSelectorUtils {
 
     @JvmStatic
     fun getBackgroundSelector(@AttrRes styleAttr:Int) : CustomThemeDrawableSelectorBuilder? {
-        return getBackgroundSelector(CustomThemeManager.getCurrentTheme(), styleAttr)
+        return getBackgroundSelector(CustomThemeManager.getCurrentAppliedTheme(), styleAttr)
     }
 
     @JvmStatic
@@ -72,7 +72,7 @@ object CustomThemeSelectorUtils {
     @JvmOverloads
     fun getImageSelector(context: Context, attrs: AttributeSet?,
                          isInEditMode: Boolean = false) : CustomThemeDrawableSelectorBuilder? {
-        val theme = if (isInEditMode) null else CustomThemeManager.getCurrentTheme()
+        val theme = if (isInEditMode) null else CustomThemeManager.getCurrentAppliedTheme()
         return CustomThemeSelectorFabric.getImageSelector(context, attrs, theme)
     }
 
@@ -83,7 +83,7 @@ object CustomThemeSelectorUtils {
 
     @JvmStatic
     fun getImageSelector(@AttrRes styleAttr:Int) : CustomThemeDrawableSelectorBuilder? {
-        return getImageSelector(CustomThemeManager.getCurrentTheme(), styleAttr)
+        return getImageSelector(CustomThemeManager.getCurrentAppliedTheme(), styleAttr)
     }
 
     @JvmStatic

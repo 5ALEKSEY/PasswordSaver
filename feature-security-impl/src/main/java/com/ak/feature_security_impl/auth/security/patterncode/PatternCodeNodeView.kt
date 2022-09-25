@@ -5,8 +5,6 @@ import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import androidx.annotation.ColorInt
-import androidx.annotation.DrawableRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.CustomThemeManager
@@ -47,11 +45,11 @@ class PatternCodeNodeView(context: Context, attrs: AttributeSet?) : ConstraintLa
         )
     }
 
-    private fun initColors(theme: CustomTheme = CustomThemeManager.getCurrentTheme()) {
+    private fun initColors(theme: CustomTheme = CustomThemeManager.getCurrentAppliedTheme()) {
         failedColor = theme.getColor(R.attr.themedErrorColor)
     }
 
-    private fun drawNodeState(theme: CustomTheme = CustomThemeManager.getCurrentTheme()) {
+    private fun drawNodeState(theme: CustomTheme = CustomThemeManager.getCurrentAppliedTheme()) {
         val drawableRes = theme.getDrawable(
             if (isPatternNodeEnabled) {
                 R.attr.themedSecurityPatternNodeEnabledDrawable

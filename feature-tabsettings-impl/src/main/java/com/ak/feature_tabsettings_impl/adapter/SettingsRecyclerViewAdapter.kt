@@ -14,13 +14,14 @@ import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchAdapterDeleg
 import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchSettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.texts.TextAdapterDelegate
 import com.ak.feature_tabsettings_impl.adapter.items.themechange.ThemeChangeAdapterDelegate
+import com.ak.feature_tabsettings_impl.adapter.items.themechange.ThemeChangeSettingsListItemModel
 
 class SettingsRecyclerViewAdapter constructor(
     private val onSwitchSettingsChanged: ((settingId: Int, isChecked: Boolean) -> Unit)? = null,
     private val onSpinnerSettingsChanged: ((settingId: Int, newDataId: Int) -> Unit)? = null,
     private val onSectionSettingsClicked: ((settingId: Int) -> Unit)? = null,
     private val onTextSettingsClicked: ((settingId: Int) -> Unit)? = null,
-    private val onThemeChanged: ((newTheme: CustomTheme.Description) -> Unit)? = null,
+    private val onThemeChanged: ((newThemeId: Int) -> Unit)? = null,
 ) : CustomThemeRecyclerViewAdapter<CustomThemeRecyclerViewHolder>() {
 
     companion object {
@@ -131,13 +132,17 @@ class SettingsRecyclerViewAdapter constructor(
             val newItem = newList[newItemPosition]
             val isSameId = oldItem.settingId == newItem.settingId
             val isSameName = oldItem.settingName.contentEquals(newItem.settingName)
+            val defaultCondition = isSameId && isSameName
             if (oldItem is SwitchSettingsListItemModel && newItem is SwitchSettingsListItemModel) {
-                return isSameId && isSameName && (oldItem.isChecked == newItem.isChecked)
+                return defaultCondition && (oldItem.isChecked == newItem.isChecked)
             }
             if (oldItem is SpinnerSettingsListItemModel && newItem is SpinnerSettingsListItemModel) {
-                return isSameId && isSameName && (oldItem.selectedItemPosition == newItem.selectedItemPosition)
+                return defaultCondition && (oldItem.selectedItemPosition == newItem.selectedItemPosition)
             }
-            return isSameId && isSameName
+            if (oldItem is ThemeChangeSettingsListItemModel && newItem is ThemeChangeSettingsListItemModel) {
+                return defaultCondition && (oldItem.selectedThemeId == newItem.selectedThemeId)
+            }
+            return defaultCondition
         }
     }
 }

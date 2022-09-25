@@ -101,13 +101,12 @@ class PSDialog private constructor() : BaseThemeDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val dialogView = inflater.inflate(R.layout.layout_alert_dialog, container, false)
         isCancelable = arguments?.getBoolean(CANCELABLE_EXTRA, DEFAULT_CANCELABLE) ?: DEFAULT_CANCELABLE
         dialog?.window?.apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             setWindowAnimations(R.style.popup_animation_medium)
         }
-        return dialogView
+        return inflater.inflate(R.layout.layout_alert_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -92,7 +92,7 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
         }
     }
 
-    private fun displayLauncherImageText(text: String, theme: CustomTheme = CustomThemeManager.getCurrentTheme()) {
+    private fun displayLauncherImageText(text: String, theme: CustomTheme = CustomThemeManager.getCurrentAppliedTheme()) {
         val fillColor = theme.getColor(R.attr.themedPrimaryColor)
         val textColor = theme.getColor(R.attr.staticColorWhite)
         val aboutLauncherImageTextSizeInPx =
