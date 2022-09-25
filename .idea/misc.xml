@@ -5,16 +5,20 @@
       <map>
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_blue.xml" value="0.2035" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_finish_blue.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_finish_green.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_finish_orange.xml" value="0.2035" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_finish_purple.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_finish_teal.xml" value="0.19" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_green.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_middle_blue.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_middle_green.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_middle_orange.xml" value="0.2035" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_middle_purple.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_middle_teal.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_orange.xml" value="0.2035" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_purple.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_start_blue.xml" value="0.19" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_start_green.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_start_orange.xml" value="0.2035" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_start_purple.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/a_loading_start_teal.xml" value="0.19" />
@@ -27,20 +31,24 @@
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/hided_element_orange.xml" value="0.2035" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_close.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_disabled_pattern_node_blue.xml" value="0.19" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_disabled_pattern_node_green.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_disabled_pattern_node_orange.xml" value="0.229" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_disabled_pattern_node_purple.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_disabled_pattern_node_teal.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_easter_bunny_rabbit_svgrepo_com.xml" value="0.188" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_enabled_pattern_node_blue.xml" value="0.19" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_enabled_pattern_node_green.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_enabled_pattern_node_orange.xml" value="0.229" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_enabled_pattern_node_purple.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_enabled_pattern_node_teal.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_hedgehog_svgrepo_com.xml" value="0.193" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_hided_element_blue.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_hided_element_green.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_hided_element_orange.xml" value="0.2035" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_hided_element_purple.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_hided_element_teal.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_item_selected_blue.xml" value="0.19" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_item_selected_green.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_item_selected_orange.xml" value="0.2035" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_item_selected_purple.xml" value="0.19" />
         <entry key="..\:/Dev/Projects/PasswordSaver/app-theme/src/main/res/drawable/ic_item_selected_teal.xml" value="0.19" />

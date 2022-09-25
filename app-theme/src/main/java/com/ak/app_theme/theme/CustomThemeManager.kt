@@ -13,12 +13,13 @@ class CustomThemeManager private constructor() {
         const val NATIVE_THEME_ID = 0
 
         // Light themes
-        const val BLUE_THEME_ID = 1
+        const val BLUE_THEME_ID = 100
+        const val GREEN_THEME_ID = 101
 
         // Dark themes
-        const val ORANGE_THEME_ID = 2
-        const val PURPLE_THEME_ID = 3
-        const val TEAL_THEME_ID = 4
+        const val ORANGE_THEME_ID = 200
+        const val PURPLE_THEME_ID = 201
+        const val TEAL_THEME_ID = 202
 
         const val DEFAULT_THEME_ID = BLUE_THEME_ID
 
@@ -112,6 +113,15 @@ class CustomThemeManager private constructor() {
                 .id(BLUE_THEME_ID)
                 .name(R.string.blue_theme_name)
                 .themeStyle(R.style.CustomTheme_Blue)
+                .lightThemeFlag(true)
+                .build()
+        )
+
+        themes.add(
+            CustomTheme.Builder(context)
+                .id(GREEN_THEME_ID)
+                .name(R.string.green_theme_name)
+                .themeStyle(R.style.CustomTheme_Green)
                 .lightThemeFlag(true)
                 .build()
         )

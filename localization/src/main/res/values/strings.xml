@@ -89,6 +89,7 @@
     <string name="oops_message">Oops!</string>
     <string name="native_theme_name">Native</string>
     <string name="blue_theme_name">Blue</string>
+    <string name="green_theme_name">Green</string>
     <string name="orange_theme_name">Orange</string>
     <string name="purple_theme_name">Purple</string>
     <string name="teal_theme_name">Teal</string>
