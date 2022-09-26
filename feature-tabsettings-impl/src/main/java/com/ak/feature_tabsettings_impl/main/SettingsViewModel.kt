@@ -7,6 +7,7 @@ import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
+import com.ak.feature_tabsettings_impl.BuildConfig
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.sections.SectionSettingsListItemModel
@@ -19,6 +20,7 @@ class SettingsViewModel @Inject constructor(
 ) : BasePSViewModel() {
 
     companion object {
+        const val DEBUG_SECTION_SETTING_ID = 0
         const val DESIGN_SECTION_SETTING_ID = 1
         const val PRIVACY_SECTION_SETTING_ID = 2
         const val ABOUT_SECTION_SETTING_ID = 3
@@ -29,12 +31,14 @@ class SettingsViewModel @Inject constructor(
     private val showAuthForPrivacySettingsLiveData = SingleEventLiveData<Unit?>()
     private val showPrivacySettingsLiveData = SingleEventLiveData<Unit?>()
     private val showAboutSettingsLiveData = SingleEventLiveData<Unit?>()
+    private val showDebugSettingsLiveData = SingleEventLiveData<Unit?>()
 
     fun subscribeToAppSettingsListLiveData(): LiveData<List<SettingsListItemModel>> = appSettingsListLiveData
     fun subscribeToOpenDesignSettingsLiveData(): LiveData<Unit?> = showDesignSettingsLiveData
     fun subscribeToOpenAuthForPrivacySettingsLiveData(): LiveData<Unit?> = showAuthForPrivacySettingsLiveData
     fun subscribeToOpenPrivacySettingsLiveData(): LiveData<Unit?> = showPrivacySettingsLiveData
     fun subscribeToOpenAboutSettingsLiveData(): LiveData<Unit?> = showAboutSettingsLiveData
+    fun subscribeToOpenDebugSettingsLiveData(): LiveData<Unit?> = showDebugSettingsLiveData
 
     fun loadSettingsData() {
         val designSectionItemModel = SectionSettingsListItemModel(
@@ -55,10 +59,22 @@ class SettingsViewModel @Inject constructor(
             R.drawable.ic_about_section_action
         )
 
-        val sections = listOf(
+        val debugSectionItemModel = if (BuildConfig.DEBUG) {
+            SectionSettingsListItemModel(
+                DEBUG_SECTION_SETTING_ID,
+                resourceManager.getString(R.string.debug_setting_name),
+                R.drawable.ic_debug_section_action
+            )
+
+        } else {
+            null
+        }
+
+        val sections = listOfNotNull(
             designSectionItemModel,
             privacySectionItemModel,
-            aboutSectionItemModel
+            aboutSectionItemModel,
+            debugSectionItemModel,
         )
         appSettingsListLiveData.value = sections
     }
@@ -75,6 +91,7 @@ class SettingsViewModel @Inject constructor(
                 }
             }
             ABOUT_SECTION_SETTING_ID -> showAboutSettingsLiveData.call()
+            DEBUG_SECTION_SETTING_ID -> showDebugSettingsLiveData.call()
         }
     }
 

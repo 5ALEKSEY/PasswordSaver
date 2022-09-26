@@ -51,4 +51,10 @@ class PasswordsRepositoryImpl @Inject constructor(
         }
             .map { updatedRows -> updatedRows >= 0 }
             .subscribeOn(Schedulers.io())
+
+    override fun clearAll(): Single<Boolean> =
+        Single.fromCallable {
+            passwordsLocalStore.getPasswordsDao().clearPasswords()
+            return@fromCallable true
+        }.subscribeOn(Schedulers.io())
 }

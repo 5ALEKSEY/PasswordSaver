@@ -19,6 +19,9 @@ interface AccountsDao {
     @Query("SELECT * FROM ${AccountDBEntity.TABLE_NAME} WHERE ${AccountDBEntity.COLUMN_ACCOUNT_ID} = :accountId LIMIT 1")
     fun getAccountById(accountId: Long): Single<AccountDBEntity>
 
+    @Query("DELETE FROM ${AccountDBEntity.TABLE_NAME}")
+    fun clearAccounts()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewAccount(vararg accountDbEntities: AccountDBEntity): List<Long>
 

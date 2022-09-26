@@ -9,6 +9,7 @@ import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
 import com.ak.base.ui.recycler.decorator.PsDividerItemDecorationSettings
 import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
+import com.ak.feature_tabsettings_impl.BuildConfig
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
@@ -47,6 +48,7 @@ class SettingsFragment : BaseSettingsModuleFragment<SettingsViewModel>() {
         viewModel.subscribeToOpenDesignSettingsLiveData().observe(viewLifecycleOwner) { showDesignSettings() }
         viewModel.subscribeToOpenPrivacySettingsLiveData().observe(viewLifecycleOwner) { showPrivacySettings() }
         viewModel.subscribeToOpenAboutSettingsLiveData().observe(viewLifecycleOwner) { showAboutScreen() }
+        viewModel.subscribeToOpenDebugSettingsLiveData().observe(viewLifecycleOwner) { showDebugScreen() }
         viewModel.subscribeToOpenAuthForPrivacySettingsLiveData().observe(viewLifecycleOwner) { startAuthAndOpenPrivacySettings() }
         viewModel.subscribeToAppSettingsListLiveData().observe(viewLifecycleOwner, this::displayAppSettings)
     }
@@ -71,6 +73,14 @@ class SettingsFragment : BaseSettingsModuleFragment<SettingsViewModel>() {
     private fun showAboutScreen() {
         context?.let {
             navController.navigate(R.id.action_settingsFragment_to_aboutSettingsFragment)
+        }
+    }
+
+    private fun showDebugScreen() {
+        if (!BuildConfig.DEBUG) return
+
+        context?.let {
+            navController.navigate(R.id.action_settingsFragment_to_debugSettingsFragment)
         }
     }
 

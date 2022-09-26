@@ -80,7 +80,9 @@
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/bg_ps_dialog.xml" value="0.1975" />
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/bg_rounded_rectangle.xml" value="0.1975" />
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/hided_element.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_about_section_action.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_add.xml" value="0.2035" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_debug_section_action.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_delete.xml" value="0.229" />
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_menu_edit.xml" value="0.229" />
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_password_item_action.xml" value="0.19" />
@@ -123,6 +125,7 @@
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/menu/passwords_list_action_mode_menu.xml" value="0.2421875" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/default_spinner_item.xml" value="0.21920289855072464" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_about_settings.xml" value="0.23324275362318841" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_debug_settings.xml" value="0.1" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_design_settings.xml" value="0.23324275362318841" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_privacy_settings.xml" value="0.23324275362318841" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_settings.xml" value="0.21920289855072464" />

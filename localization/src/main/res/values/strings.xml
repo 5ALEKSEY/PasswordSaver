@@ -66,6 +66,7 @@
     <string name="design_setting_name">Design</string>
     <string name="privacy_setting_name">Privacy</string>
     <string name="about_setting_name">About</string>
+    <string name="debug_setting_name">Debug</string>
     <string name="auth_failed_funny_text">Is it honestly you??? :)</string>
     <string name="show_password_button_text">Show</string>
     <string name="hide_password_button_text">Hide</string>

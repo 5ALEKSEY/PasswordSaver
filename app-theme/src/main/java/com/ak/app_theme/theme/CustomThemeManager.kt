@@ -65,13 +65,20 @@ class CustomThemeManager private constructor() {
     }
 
     fun setNextTheme(context: Context) {
-        val nextThemeIdCandidate = (currentTheme.id + 1) % themes.size
-        val nextThemeId = if (nextThemeIdCandidate == NATIVE_THEME_ID) {
-            nextThemeIdCandidate + 1
+        val currentThemePosition = themes.indexOf(currentTheme)
+        val nextThemePositionCandidate = if (currentThemePosition == -1) {
+            themes.indexOfFirst { it.id == DEFAULT_THEME_ID }
         } else {
-            nextThemeIdCandidate
+            (currentThemePosition + 1) % themes.size
         }
-        setTheme(nextThemeId, context)
+
+        val nextThemePosition = if (themes[nextThemePositionCandidate].isNative) {
+            nextThemePositionCandidate + 1
+        } else {
+            nextThemePositionCandidate
+        }
+
+        setTheme(themes[nextThemePosition].id, context)
     }
 
     fun getColor(@AttrRes attrRes: Int) = currentTheme.getColor(attrRes)

@@ -9,4 +9,5 @@ interface IPasswordsRepository {
     fun deletePasswordsByIds(passwordIds: List<Long>): Single<Boolean>
     fun addNewPasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean>
     fun updatePasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean>
+    fun clearAll(): Single<Boolean>
 }

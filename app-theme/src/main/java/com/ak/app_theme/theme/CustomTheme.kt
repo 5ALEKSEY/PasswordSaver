@@ -106,6 +106,8 @@ class CustomTheme private constructor(
         }
     }
 
+
+
     private fun getThemeName() = context.getString(nameResId)
 
     private fun parseTypedValue(attributeId: Int, value: TypedValue): Boolean {
@@ -180,6 +182,21 @@ class CustomTheme private constructor(
         }
 
         return styles.get(attribute)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as CustomTheme
+
+        if (id != other.id) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id
     }
 
     interface Support {

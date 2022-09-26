@@ -12,7 +12,6 @@ import androidx.navigation.NavGraph
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.base.extensions.removeTextBadgeByMenuId
 import com.ak.base.extensions.setTextBadgeByMenuId
 import com.ak.base.extensions.setVisibility
@@ -26,10 +25,6 @@ import com.ak.passwordsaver.injector.ClearComponentsByDestinationChangeManager
 import com.ak.passwordsaver.presentation.base.BasePSFragmentActivity
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -129,13 +124,6 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
         super.onCreate(savedInstanceState)
         initToolbar()
         setSecureRecentAppsScreenState(viewModel.getSecureApplicationState())
-
-        // TODO: remove temp for testing
-//        Observable.interval(5, 5, TimeUnit.SECONDS, Schedulers.computation())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe {
-//                CustomThemeManager.getInstance().setNextTheme(this)
-//            }
     }
 
     override fun onStart() {

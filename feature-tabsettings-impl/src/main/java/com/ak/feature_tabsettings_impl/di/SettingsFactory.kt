@@ -3,11 +3,14 @@ package com.ak.feature_tabsettings_impl.di
 import androidx.lifecycle.ViewModel
 import com.ak.base.viewmodel.BaseViewModelFactory
 import com.ak.base.viewmodel.IViewModelAssistedFactory
+import com.ak.core_repo_api.intefaces.IAccountsRepository
+import com.ak.core_repo_api.intefaces.IPasswordsRepository
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.feature_security_api.interfaces.IPSBiometricManager
 import com.ak.feature_tabsettings_impl.about.AboutSettingsViewModel
+import com.ak.feature_tabsettings_impl.debug.DebugSettingsViewModel
 import com.ak.feature_tabsettings_impl.design.DesignSettingsViewModel
 import com.ak.feature_tabsettings_impl.main.SettingsViewModel
 import com.ak.feature_tabsettings_impl.privacy.PrivacySettingsViewModel
@@ -34,6 +37,22 @@ class SettingsViewModelAssistedFactory @Inject constructor(
 class AboutSettingsViewModelAssistedFactory @Inject constructor() : IViewModelAssistedFactory<AboutSettingsViewModel> {
     override fun create(): AboutSettingsViewModel {
         return AboutSettingsViewModel()
+    }
+}
+
+class DebugSettingsViewModelAssistedFactory @Inject constructor(
+    private val featuresUpdateManager: IFeaturesUpdateManager,
+    private val resourceManager: IResourceManager,
+    private val passwordsRepository: IPasswordsRepository,
+    private val accountsRepository: IAccountsRepository,
+) : IViewModelAssistedFactory<DebugSettingsViewModel> {
+    override fun create(): DebugSettingsViewModel {
+        return DebugSettingsViewModel(
+            featuresUpdateManager = featuresUpdateManager,
+            resourceManager = resourceManager,
+            passwordsRepository = passwordsRepository,
+            accountsRepository = accountsRepository,
+        )
     }
 }
 

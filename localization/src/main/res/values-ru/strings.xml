@@ -66,6 +66,7 @@
     <string name="design_setting_name">"Дизайн"</string>
     <string name="privacy_setting_name">"Приватность"</string>
     <string name="about_setting_name">"О приложении"</string>
+    <string name="debug_setting_name">Debug</string>
     <string name="auth_failed_funny_text">"Это точно вы???:)"</string>
     <string name="show_password_button_text">"Показать"</string>
     <string name="hide_password_button_text">"Спрятать"</string>
@@ -116,11 +117,11 @@
     <string name="native_theme_configuration_select_dark_title">"Выберите темную тему"</string>
     <string name="native_theme_configuration_apply_action">"Применить"</string>
     <string name="native_theme_configuration_cancel_action">"Отменить"</string>
-    <string name="native_theme_config_attention_popup_title">Attention</string>
-    <string name="native_theme_config_attention_popup_desc">To set \'Native\' theme you need create it\'s configuration and select \'light\' and \'dark\' variants. Do you want to continue?</string>
-    <string name="native_theme_config_attention_popup_positive">yes</string>
-    <string name="native_theme_config_attention_popup_negative">No</string>
-    <string name="change_theme_use_native_setting_name">Native theme</string>
+    <string name="native_theme_config_attention_popup_title">"Внимание"</string>
+    <string name="native_theme_config_attention_popup_desc">"To set \'Native\' theme you need create it\'s configuration and select \'light\' and \'dark\' variants. Do you want to continue?"</string>
+    <string name="native_theme_config_attention_popup_positive">"Да"</string>
+    <string name="native_theme_config_attention_popup_negative">"Нет"</string>
+    <string name="change_theme_use_native_setting_name">"Нативная тема"</string>
     <string name="change_theme_use_native_setting_desc">Theme will be changed according to your device settings</string>
     <string name="change_theme_change_native_config_setting_name">Change \'Native\' theme configuration</string>
 </resources>

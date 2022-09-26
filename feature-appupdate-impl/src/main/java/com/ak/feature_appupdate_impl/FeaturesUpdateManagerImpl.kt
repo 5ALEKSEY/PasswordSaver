@@ -36,6 +36,10 @@ class FeaturesUpdateManagerImpl @Inject constructor(
         )
     }
 
+    override fun resetTabAccountsFeatureViewedState() {
+        featuresUpdateSP.edit().putBoolean(ACCOUNT_TAB_FEATURE_VIEWED_SHARED_KEY, false).apply()
+    }
+
     override fun isFingerprintFeatureViewed(): Boolean {
         return featuresUpdateSP.getBoolean(FINGERPRINT_FEATURE_VIEWED_SHARED_KEY, false)
     }
@@ -47,6 +51,10 @@ class FeaturesUpdateManagerImpl @Inject constructor(
         )
     }
 
+    override fun resetFingerprintFeatureViewedState() {
+        featuresUpdateSP.edit().putBoolean(FINGERPRINT_FEATURE_VIEWED_SHARED_KEY, false).apply()
+    }
+
     override fun isAppThemeFeatureViewed(): Boolean {
         return featuresUpdateSP.getBoolean(APP_THEME_FEATURE_VIEWED_SHARED_KEY, false)
     }
@@ -56,6 +64,10 @@ class FeaturesUpdateManagerImpl @Inject constructor(
             featureSpKey = APP_THEME_FEATURE_VIEWED_SHARED_KEY,
             featureType = IFeaturesUpdateManager.FeatureType.APP_THEME,
         )
+    }
+
+    override fun resetAppThemeFeatureViewedState() {
+        featuresUpdateSP.edit().putBoolean(APP_THEME_FEATURE_VIEWED_SHARED_KEY, false).apply()
     }
 
     override fun subscribeToViewedFeatureState(featureType: IFeaturesUpdateManager.FeatureType): Observable<Boolean> {

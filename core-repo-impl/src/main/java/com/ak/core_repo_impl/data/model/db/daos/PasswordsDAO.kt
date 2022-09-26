@@ -19,6 +19,9 @@ interface PasswordsDAO {
     @Query("SELECT * FROM ${PasswordDBEntity.TABLE_NAME} WHERE ${PasswordDBEntity.COLUMN_PASSWORD_ID} = :passwordId LIMIT 1")
     fun getPasswordById(passwordId: Long): Single<PasswordDBEntity>
 
+    @Query("DELETE FROM ${PasswordDBEntity.TABLE_NAME}")
+    fun clearPasswords()
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewPassword(vararg passwordDBEntity: PasswordDBEntity): List<Long>
 

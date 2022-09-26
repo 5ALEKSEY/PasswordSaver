@@ -51,4 +51,10 @@ class AccountsRepositoryImpl @Inject constructor(
         }
             .map { updatedRows -> updatedRows >= 0 }
             .subscribeOn(Schedulers.io())
+
+    override fun clearAll(): Single<Boolean> =
+        Single.fromCallable {
+            accountsLocalStore.getAccountsDao().clearAccounts()
+            return@fromCallable true
+        }.subscribeOn(Schedulers.io())
 }

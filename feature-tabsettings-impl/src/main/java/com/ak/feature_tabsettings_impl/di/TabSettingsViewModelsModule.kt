@@ -6,6 +6,7 @@ import com.ak.base.scopes.FeatureScope
 import com.ak.base.viewmodel.IViewModelAssistedFactory
 import com.ak.base.viewmodel.annotation.ViewModelInjectKey
 import com.ak.feature_tabsettings_impl.about.AboutSettingsViewModel
+import com.ak.feature_tabsettings_impl.debug.DebugSettingsViewModel
 import com.ak.feature_tabsettings_impl.design.DesignSettingsViewModel
 import com.ak.feature_tabsettings_impl.main.SettingsViewModel
 import com.ak.feature_tabsettings_impl.privacy.PrivacySettingsViewModel
@@ -56,5 +57,13 @@ abstract class TabSettingsViewModelsModule {
     @ViewModelInjectKey(PrivacySettingsViewModel::class)
     abstract fun bindPrivacySettingsViewModelAssistedFactory(
         factory: PrivacySettingsViewModelAssistedFactory
+    ): IViewModelAssistedFactory<out ViewModel>
+
+    @Binds
+    @IntoMap
+    @FeatureScope
+    @ViewModelInjectKey(DebugSettingsViewModel::class)
+    abstract fun bindDebugSettingsViewModelAssistedFactory(
+        factory: DebugSettingsViewModelAssistedFactory
     ): IViewModelAssistedFactory<out ViewModel>
 }

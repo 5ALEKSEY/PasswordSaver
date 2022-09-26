@@ -7,6 +7,7 @@ import com.ak.feature_appupdate_api.api.FeatureAppUpdateApi
 import com.ak.feature_security_api.api.FeatureSecurityApi
 import com.ak.feature_tabsettings_api.FeatureTabSettingsApi
 import com.ak.feature_tabsettings_impl.about.AboutSettingsFragment
+import com.ak.feature_tabsettings_impl.debug.DebugSettingsFragment
 import com.ak.feature_tabsettings_impl.design.DesignSettingsFragment
 import com.ak.feature_tabsettings_impl.main.SettingsFragment
 import com.ak.feature_tabsettings_impl.privacy.PrivacySettingsFragment
@@ -56,6 +57,7 @@ abstract class FeatureTabSettingsComponent : FeatureTabSettingsApi {
     abstract fun inject(fragment: PrivacySettingsFragment)
     abstract fun inject(fragment: DesignSettingsFragment)
     abstract fun inject(fragment: AboutSettingsFragment)
+    abstract fun inject(fragment: DebugSettingsFragment)
 
     @Component(dependencies = [CoreRepositoryApi::class, FeatureSecurityApi::class, FeatureAppUpdateApi::class])
     @FeatureScope
