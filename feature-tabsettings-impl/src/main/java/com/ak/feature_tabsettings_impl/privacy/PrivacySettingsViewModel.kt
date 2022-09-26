@@ -20,7 +20,7 @@ class PrivacySettingsViewModel @Inject constructor(
     private val settingsPreferencesManager: ISettingsPreferencesManager,
     private val psBiometricManager: IPSBiometricManager,
     private val featuresUpdateManager: IFeaturesUpdateManager,
-    private val resourceManager: IResourceManager
+    private val resourceManager: IResourceManager,
 ) : BasePSViewModel() {
 
     companion object {
@@ -65,7 +65,7 @@ class PrivacySettingsViewModel @Inject constructor(
                 }
             }
             BIOMETRIC_ENABLE_SETTINGS_ID -> {
-                when(psBiometricManager.getBiometricFeatureAvailableStatus()) {
+                when (psBiometricManager.getBiometricFeatureAvailableStatus()) {
                     IPSBiometricManager.AvailableStatus.AVAILABLE -> {
                         settingsPreferencesManager.setBiometricEnableState(isChecked)
                         loadSettingsData()
@@ -74,6 +74,9 @@ class PrivacySettingsViewModel @Inject constructor(
                         if (isChecked) {
                             showAddNewFingerprintLiveData.call()
                         }
+                    }
+                    IPSBiometricManager.AvailableStatus.UNAVAILABLE -> {
+                        // no op
                     }
                 }
             }

@@ -11,9 +11,15 @@ interface IFeaturesUpdateManager {
     fun isFingerprintFeatureViewed(): Boolean
     fun markFingerprintFeatureAsViewed()
 
+    // application theme design
+    fun isAppThemeFeatureViewed(): Boolean
+    fun markAppThemeFeatureAsViewed()
+
     fun subscribeToViewedFeatureState(featureType: FeatureType): Observable<Boolean>
 
     enum class FeatureType {
-        TAB_ACCOUNTS, FINGERPRINT
+        TAB_ACCOUNTS,
+        FINGERPRINT,
+        APP_THEME,
     }
 }

@@ -33,6 +33,7 @@ class HomeViewModel @Inject constructor(
     fun subscribeToFeatureBadgeTextLiveData(): LiveData<Pair<Int, Int?>> = featureBadgeTextLiveData
 
     fun checkFeaturesBadgeUpdate() {
+        // Accounts tab
         if (isAccountsTabWithNewBadge()) {
             featureBadgeTextLiveData.value = R.id.accounts_nav_graph to R.string.new_feature_badge
         }
@@ -42,17 +43,25 @@ class HomeViewModel @Inject constructor(
             }
             .let(this::bindDisposable)
 
+        // Passwords tab
         if (isPasswordsTabWithNewBadge()) {
             featureBadgeTextLiveData.value = R.id.passwords_nav_graph to R.string.new_feature_badge
         }
 
+        // Settings tab
+        fun deleteNewBadgeForSettingsTabIfNeeded() {
+            if (!isSettingsTabWithNewBadge()) {
+                featureBadgeTextLiveData.value = R.id.settings_nav_graph to null
+            }
+        }
         if (isSettingsTabWithNewBadge()) {
             featureBadgeTextLiveData.value = R.id.settings_nav_graph to R.string.new_feature_badge
         }
         featuresUpdateManager.subscribeToViewedFeatureState(IFeaturesUpdateManager.FeatureType.FINGERPRINT)
-            .subscribe {
-                featureBadgeTextLiveData.value = R.id.settings_nav_graph to null
-            }
+            .subscribe { deleteNewBadgeForSettingsTabIfNeeded() }
+            .let(this::bindDisposable)
+        featuresUpdateManager.subscribeToViewedFeatureState(IFeaturesUpdateManager.FeatureType.APP_THEME)
+            .subscribe { deleteNewBadgeForSettingsTabIfNeeded() }
             .let(this::bindDisposable)
     }
 
@@ -92,5 +101,8 @@ class HomeViewModel @Inject constructor(
 
     private fun isPasswordsTabWithNewBadge() = false
 
-    private fun isSettingsTabWithNewBadge() = !featuresUpdateManager.isFingerprintFeatureViewed()
+    private fun isSettingsTabWithNewBadge(): Boolean {
+        return !featuresUpdateManager.isFingerprintFeatureViewed()
+            || !featuresUpdateManager.isAppThemeFeatureViewed()
+    }
 }

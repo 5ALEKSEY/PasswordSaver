@@ -1,6 +1,5 @@
 package com.ak.feature_tabsettings_impl.design
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ak.app_theme.theme.CustomThemeManager
@@ -9,6 +8,7 @@ import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchSettingsListItemModel
@@ -18,6 +18,7 @@ import javax.inject.Inject
 
 class DesignSettingsViewModel @Inject constructor(
     private val settingsPrefManager: ISettingsPreferencesManager,
+    private val featuresUpdateManager: IFeaturesUpdateManager,
     private val resourceManager: IResourceManager,
 ) : BasePSViewModel() {
 
@@ -37,7 +38,6 @@ class DesignSettingsViewModel @Inject constructor(
                 settingsPrefManager.setChangeThemeWithAnimationEnabledState(isChecked)
             }
             THEME_USE_NATIVE_SETTINGS_ID -> {
-                Log.d("TEST", "onSwitchSettingsItemChanged. isChecked=$isChecked")
                 val newThemeId = if (isChecked) {
                     CustomThemeManager.NATIVE_THEME_ID
                 } else {
@@ -64,7 +64,6 @@ class DesignSettingsViewModel @Inject constructor(
     }
 
     fun loadSettingsData() {
-        Log.d("TEST", "loadSettingsData")
         val availableThemes = CustomThemeManager.getInstance()
             .getAvailableThemes()
             .filter { it.id != CustomThemeManager.NATIVE_THEME_ID }
@@ -73,7 +72,9 @@ class DesignSettingsViewModel @Inject constructor(
             resourceManager.getString(R.string.change_theme_setting_name),
             availableThemes,
             CustomThemeManager.getCurrentSelectedTheme().id,
+            !featuresUpdateManager.isAppThemeFeatureViewed(),
         )
+        featuresUpdateManager.markAppThemeFeatureAsViewed()
 
         val themeUseNativeTheme = SwitchSettingsListItemModel(
             THEME_USE_NATIVE_SETTINGS_ID,

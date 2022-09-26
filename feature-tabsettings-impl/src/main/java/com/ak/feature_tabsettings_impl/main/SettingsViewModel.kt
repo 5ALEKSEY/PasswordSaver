@@ -15,8 +15,8 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val settingsPreferencesManager: ISettingsPreferencesManager,
     private val featuresUpdateManager: IFeaturesUpdateManager,
-    private val resourceManager: IResourceManager
-): BasePSViewModel() {
+    private val resourceManager: IResourceManager,
+) : BasePSViewModel() {
 
     companion object {
         const val DESIGN_SECTION_SETTING_ID = 1
@@ -40,7 +40,8 @@ class SettingsViewModel @Inject constructor(
         val designSectionItemModel = SectionSettingsListItemModel(
             DESIGN_SECTION_SETTING_ID,
             resourceManager.getString(R.string.design_setting_name),
-            R.drawable.ic_design_section_action
+            R.drawable.ic_design_section_action,
+            isDesignSectionHasNewBadge(),
         )
         val privacySectionItemModel = SectionSettingsListItemModel(
             PRIVACY_SECTION_SETTING_ID,
@@ -76,6 +77,8 @@ class SettingsViewModel @Inject constructor(
             ABOUT_SECTION_SETTING_ID -> showAboutSettingsLiveData.call()
         }
     }
+
+    private fun isDesignSectionHasNewBadge() = !featuresUpdateManager.isAppThemeFeatureViewed()
 
     private fun isPrivacySectionHasNewBadge() = !featuresUpdateManager.isFingerprintFeatureViewed()
 }

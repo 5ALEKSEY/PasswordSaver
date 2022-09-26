@@ -38,37 +38,7 @@ class AboutSettingsViewModel @Inject constructor() : BasePSViewModel() {
     }
 
     private fun loadAboutActions() {
-        val designSectionItemModel = SectionSettingsListItemModel(
-            REPORT_ABOUT_ACTION_ID,
-            "Report",
-            R.drawable.ic_report_action
-        )
-        val a = listOf(
-            designSectionItemModel,
-            SwitchSettingsListItemModel(
-                2,
-                "Name 1",
-                "Description 1",
-                false,
-                true,
-            ),
-            TextSettingsListItemModel(4, "Name text"),
-            SwitchSettingsListItemModel(
-                3,
-                "Name 2",
-                "Description 2",
-                false,
-                false,
-            ),
-            SwitchSettingsListItemModel(
-                3,
-                "Name 3",
-                "Description 3",
-                true,
-                false,
-            )
-        )
-        aboutActionsLiveData.value = a
+
     }
 
     private fun loadApplicationVersion() {
