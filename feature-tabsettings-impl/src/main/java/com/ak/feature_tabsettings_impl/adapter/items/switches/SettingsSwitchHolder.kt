@@ -68,10 +68,12 @@ class SettingsSwitchHolder(
         itemView.sSettingEnablingState.isChecked = itemModel.isChecked
         itemView.tvSettingDescription.text = itemModel.settingDescription
         itemView.setOnClickListener {
-            itemView.sSettingEnablingState.isChecked = !itemView.sSettingEnablingState.isChecked
+            val newState = !itemView.sSettingEnablingState.isChecked
+            itemView.sSettingEnablingState.isChecked = newState
+            onSwitchSettingsChanged.invoke(adapterPosition, newState)
         }
-        itemView.sSettingEnablingState.setOnCheckedChangeListener { _, isChecked ->
-            onSwitchSettingsChanged.invoke(adapterPosition, isChecked)
+        itemView.sSettingEnablingState.setOnClickListener {
+            onSwitchSettingsChanged.invoke(adapterPosition, itemView.sSettingEnablingState.isChecked)
         }
     }
 }

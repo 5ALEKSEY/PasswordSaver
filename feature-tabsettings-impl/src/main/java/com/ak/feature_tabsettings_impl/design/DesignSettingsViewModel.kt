@@ -1,5 +1,6 @@
 package com.ak.feature_tabsettings_impl.design
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ak.app_theme.theme.CustomThemeManager
@@ -36,6 +37,7 @@ class DesignSettingsViewModel @Inject constructor(
                 settingsPrefManager.setChangeThemeWithAnimationEnabledState(isChecked)
             }
             THEME_USE_NATIVE_SETTINGS_ID -> {
+                Log.d("TEST", "onSwitchSettingsItemChanged. isChecked=$isChecked")
                 val newThemeId = if (isChecked) {
                     CustomThemeManager.NATIVE_THEME_ID
                 } else {
@@ -62,6 +64,7 @@ class DesignSettingsViewModel @Inject constructor(
     }
 
     fun loadSettingsData() {
+        Log.d("TEST", "loadSettingsData")
         val availableThemes = CustomThemeManager.getInstance()
             .getAvailableThemes()
             .filter { it.id != CustomThemeManager.NATIVE_THEME_ID }
