@@ -57,4 +57,6 @@ class AccountsRepositoryImpl @Inject constructor(
             accountsLocalStore.getAccountsDao().clearAccounts()
             return@fromCallable true
         }.subscribeOn(Schedulers.io())
+
+    override fun getAccountsCount() = accountsLocalStore.getAccountsDao().getAccountsCount()
 }

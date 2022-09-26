@@ -22,6 +22,9 @@ interface AccountsDao {
     @Query("DELETE FROM ${AccountDBEntity.TABLE_NAME}")
     fun clearAccounts()
 
+    @Query("SELECT COUNT(*) FROM ${AccountDBEntity.TABLE_NAME}")
+    fun getAccountsCount(): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewAccount(vararg accountDbEntities: AccountDBEntity): List<Long>
 

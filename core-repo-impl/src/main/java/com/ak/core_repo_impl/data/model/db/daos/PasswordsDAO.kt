@@ -22,6 +22,9 @@ interface PasswordsDAO {
     @Query("DELETE FROM ${PasswordDBEntity.TABLE_NAME}")
     fun clearPasswords()
 
+    @Query("SELECT COUNT(*) FROM ${PasswordDBEntity.TABLE_NAME}")
+    fun getPasswordsCount(): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewPassword(vararg passwordDBEntity: PasswordDBEntity): List<Long>
 

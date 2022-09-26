@@ -10,4 +10,5 @@ interface IPasswordsRepository {
     fun addNewPasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean>
     fun updatePasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean>
     fun clearAll(): Single<Boolean>
+    fun getPasswordsCount(): Int
 }

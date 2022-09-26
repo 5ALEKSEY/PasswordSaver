@@ -9,4 +9,6 @@
     <string name="debug_reset_app_theme_new_badge_setting_name" translatable="false">Reset \'App Theme\' feature badge</string>
     <string name="debug_reset_passwords_storage_setting_name" translatable="false">Reset \'Passwords\' storage</string>
     <string name="debug_reset_accounts_storage_setting_name" translatable="false">Reset \'Accounts\' storage</string>
+    <string name="debug_add_random_password_setting_name" translatable="false">Add random password\nCurrent count: %1$d</string>
+    <string name="debug_add_random_account_setting_name" translatable="false">Add random account\nCurrent count: %1$d</string>
 </resources>

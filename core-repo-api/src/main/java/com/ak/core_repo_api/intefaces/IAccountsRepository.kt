@@ -10,4 +10,5 @@ interface IAccountsRepository {
     fun addNewAccounts(accountRepoEntities: List<AccountRepoEntity>): Single<Boolean>
     fun updateAccounts(accountRepoEntities: List<AccountRepoEntity>): Single<Boolean>
     fun clearAll(): Single<Boolean>
+    fun getAccountsCount(): Int
 }

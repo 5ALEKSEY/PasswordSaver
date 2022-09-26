@@ -57,4 +57,6 @@ class PasswordsRepositoryImpl @Inject constructor(
             passwordsLocalStore.getPasswordsDao().clearPasswords()
             return@fromCallable true
         }.subscribeOn(Schedulers.io())
+
+    override fun getPasswordsCount() = passwordsLocalStore.getPasswordsDao().getPasswordsCount()
 }
