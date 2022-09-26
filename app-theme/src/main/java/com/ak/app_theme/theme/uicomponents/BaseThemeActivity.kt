@@ -217,6 +217,22 @@ abstract class BaseThemeActivity : AppCompatActivity() {
         }
     }
 
+    @CallSuper
+    protected open fun applyForWindow(theme: CustomTheme) {
+        CustomThemeApplier.applyForWindow(
+            theme,
+            window,
+            getStatusBarColorResource(),
+            getNavigationBarColorResource(),
+            isAppearanceLightNavigationBars(theme),
+        )
+        CustomThemeApplier.applyWindowBackground(
+            theme,
+            window,
+            getWindowBackground(),
+        )
+    }
+
     @AttrRes
     protected open fun getWindowBackground(): Int {
         return R.attr.themedPrimaryBackgroundColor
@@ -225,6 +241,10 @@ abstract class BaseThemeActivity : AppCompatActivity() {
     @AttrRes
     protected open fun getStatusBarColorResource(): Int {
         return R.attr.themedPrimaryColor
+    }
+
+    protected open fun isAppearanceLightNavigationBars(theme: CustomTheme): Boolean {
+        return theme.isLight
     }
 
     @AttrRes
@@ -286,20 +306,6 @@ abstract class BaseThemeActivity : AppCompatActivity() {
         themedViews.clear()
 
         super.onDestroy()
-    }
-
-    private fun applyForWindow(theme: CustomTheme) {
-        CustomThemeApplier.applyForWindow(
-            theme,
-            window,
-            getStatusBarColorResource(),
-            getNavigationBarColorResource(),
-        )
-        CustomThemeApplier.applyWindowBackground(
-            theme,
-            window,
-            getWindowBackground()
-        )
     }
 
     private fun ImageView.applyStubThemeView(stubBitmap: Bitmap?) {

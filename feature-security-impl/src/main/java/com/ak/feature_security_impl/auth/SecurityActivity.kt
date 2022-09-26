@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
+import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.uicomponents.BaseThemeActivity
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.vibrate
@@ -75,6 +76,10 @@ class SecurityActivity : BaseThemeActivity() {
 
     override fun getNavigationBarColorResource(): Int {
         return R.attr.themedPrimaryColor
+    }
+
+    override fun isAppearanceLightNavigationBars(theme: CustomTheme): Boolean {
+        return false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

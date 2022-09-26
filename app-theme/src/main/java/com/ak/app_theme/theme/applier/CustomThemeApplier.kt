@@ -469,12 +469,16 @@ object CustomThemeApplier {
         window: Window?,
         @AttrRes statusBarRes: Int,
         @AttrRes navigationBarRes: Int,
+        isAppearanceLightNavigationBars: Boolean,
     ): Boolean {
         window?.apply {
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             statusBarColor = theme.getColor(statusBarRes)
             navigationBarColor = theme.getColor(navigationBarRes)
-            WindowInsetsControllerCompat(this, decorView).isAppearanceLightNavigationBars = theme.isLight
+            WindowInsetsControllerCompat(
+                this,
+                decorView
+            ).isAppearanceLightNavigationBars = isAppearanceLightNavigationBars
         }
         return true
     }
