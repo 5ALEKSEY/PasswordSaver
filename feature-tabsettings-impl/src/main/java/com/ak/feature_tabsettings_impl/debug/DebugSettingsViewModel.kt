@@ -66,7 +66,10 @@ class DebugSettingsViewModel @Inject constructor(
         val switchThemePeriodically = SwitchSettingsListItemModel(
             SWITCH_THEME_PERIODICALLY_SETTING_ID,
             resourceManager.getString(R.string.debug_periodic_theme_switch_setting_name),
-            resourceManager.getString(R.string.debug_periodic_theme_switch_setting_desc),
+            resourceManager.getString(
+                R.string.debug_periodic_theme_switch_setting_desc,
+                DebugNextThemeSwitcher.NEXT_THEME_SWITCH_PERIOD_IN_SECONDS,
+            ),
             DebugNextThemeSwitcher.isThemeSwitchingEnabled(),
         )
 

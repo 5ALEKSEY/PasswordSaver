@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object DebugNextThemeSwitcher {
 
-    private const val NEXT_THEME_SWITCH_PERIOD_IN_SECONDS = 8L
+    const val NEXT_THEME_SWITCH_PERIOD_IN_SECONDS = 8L
 
     private var themeSwitchDisposable: Disposable? = null
 
