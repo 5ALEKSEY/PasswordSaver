@@ -12,7 +12,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class PasswordsRepositoryImpl @Inject constructor(
-    private val passwordsLocalStore: PSDatabase
+    private val passwordsLocalStore: PSDatabase,
 ) : IPasswordsRepository {
 
     override fun getAllPasswords(): Flowable<List<PasswordRepoEntity>> =
@@ -59,4 +59,20 @@ class PasswordsRepositoryImpl @Inject constructor(
         }.subscribeOn(Schedulers.io())
 
     override fun getPasswordsCount() = passwordsLocalStore.getPasswordsDao().getPasswordsCount()
+
+    override fun pinPassword(passwordId: Long, pinnedTimestamp: Long): Single<Boolean> =
+        Single.fromCallable {
+            passwordsLocalStore.getPasswordsDao()
+                .markPasswordAsPinned(passwordId, pinnedTimestamp)
+        }
+            .map { updatedRows -> updatedRows >= 0 }
+            .subscribeOn(Schedulers.io())
+
+    override fun unpinPassword(passwordId: Long): Single<Boolean> =
+        Single.fromCallable {
+            passwordsLocalStore.getPasswordsDao()
+                .markPasswordAsUnpinned(passwordId)
+        }
+            .map { updatedRows -> updatedRows >= 0 }
+            .subscribeOn(Schedulers.io())
 }

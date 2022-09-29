@@ -102,6 +102,8 @@
     <string name="password_popup_menu_item_select">Select</string>
     <string name="password_popup_menu_item_copy">Copy</string>
     <string name="password_popup_menu_item_edit">Edit</string>
+    <string name="password_popup_menu_item_pin">Pin</string>
+    <string name="password_popup_menu_item_unpin">Unpin</string>
     <string name="password_popup_menu_item_delete">Delete</string>
 
     <!-- Account Popup Menu Items -->

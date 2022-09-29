@@ -16,11 +16,19 @@ data class AccountDBEntity(
     @ColumnInfo(name = COLUMN_ACCOUNT_LOGIN)
     var accountLoginValue: String,
     @ColumnInfo(name = COLUMN_ACCOUNT_PASSWORD)
-    var accountPasswordValue: String
+    var accountPasswordValue: String,
+    @ColumnInfo(name = COLUMN_ACCOUNT_PIN_TIMESTAMP)
+    var accountPinTimestampValue: Long?,
 ) : AccountRepoEntity {
 
     @Ignore
-    constructor(passwordId: Long) : this(passwordId, "", "", "")
+    constructor(accountId: Long) : this(
+        accountId,
+        "",
+        "",
+        "",
+        null,
+    )
 
     companion object {
         const val TABLE_NAME = "Accounts"
@@ -30,6 +38,7 @@ data class AccountDBEntity(
         const val COLUMN_ACCOUNT_NAME = "account_name" // account alias
         const val COLUMN_ACCOUNT_LOGIN = "account_login" // login of account
         const val COLUMN_ACCOUNT_PASSWORD = "account_password" // password of account
+        const val COLUMN_ACCOUNT_PIN_TIMESTAMP = "account_pin_tmstp" // pin timestamp
     }
 
     override fun getAccountId(): Long? = accountIdValue
@@ -39,4 +48,6 @@ data class AccountDBEntity(
     override fun getAccountLogin(): String = accountLoginValue
 
     override fun getAccountPassword(): String = accountPasswordValue
+
+    override fun getAccountPinTimestamp(): Long? = accountPinTimestampValue
 }

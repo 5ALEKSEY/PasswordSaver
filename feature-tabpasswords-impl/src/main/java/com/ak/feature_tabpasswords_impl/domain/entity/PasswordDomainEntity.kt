@@ -3,18 +3,20 @@ package com.ak.feature_tabpasswords_impl.domain.entity
 import com.ak.core_repo_api.intefaces.PasswordRepoEntity
 import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity
 
-class PasswordDomainEntity(
+class PasswordDomainEntity constructor(
     var passwordIdValue: Long?,
     var passwordNameValue: String,
     var passwordAvatarPathValue: String,
-    var passwordContentValue: String
+    var passwordContentValue: String,
+    var passwordPinTimestampValue: Long?,
 ) : PasswordFeatureEntity, PasswordRepoEntity {
 
     constructor(name: String, avatarPath: String?, content: String) : this(
         null,
         name,
         avatarPath ?: "",
-        content
+        content,
+        null,
     )
 
     override fun getPasswordId(): Long? = passwordIdValue
@@ -24,4 +26,6 @@ class PasswordDomainEntity(
     override fun getPasswordAvatarPath(): String = passwordAvatarPathValue
 
     override fun getPasswordContent(): String = passwordContentValue
+
+    override fun getPasswordPinTimestamp(): Long? = passwordPinTimestampValue
 }

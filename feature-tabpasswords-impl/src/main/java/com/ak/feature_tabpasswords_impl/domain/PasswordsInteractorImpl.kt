@@ -55,6 +55,14 @@ class PasswordsInteractorImpl @Inject constructor(
         getInvokedEncryptionUseCase(passwordFeatureEntities.mapFeatureToDomainEntitiesList())
             .flatMap { encryptedEntities -> passwordsRepository.updatePasswords(encryptedEntities) }
 
+    override fun pinPassword(passwordId: Long, pinnedTimestamp: Long): Single<Boolean> {
+        return passwordsRepository.pinPassword(passwordId, pinnedTimestamp)
+    }
+
+    override fun unpinPassword(passwordId: Long): Single<Boolean> {
+        return passwordsRepository.unpinPassword(passwordId)
+    }
+
     private fun getInvokedDecryptionUseCase(passwordRepoEntities: List<PasswordRepoEntity>) =
         Observable.fromIterable(passwordRepoEntities.mapRepoToDomainEntitiesList())
             .concatMap { entity ->

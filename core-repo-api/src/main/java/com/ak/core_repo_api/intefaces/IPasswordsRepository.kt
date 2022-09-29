@@ -11,4 +11,6 @@ interface IPasswordsRepository {
     fun updatePasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean>
     fun clearAll(): Single<Boolean>
     fun getPasswordsCount(): Int
+    fun pinPassword(passwordId: Long, pinnedTimestamp: Long): Single<Boolean>
+    fun unpinPassword(passwordId: Long): Single<Boolean>
 }

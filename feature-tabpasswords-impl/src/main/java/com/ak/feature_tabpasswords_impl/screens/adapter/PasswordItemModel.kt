@@ -8,10 +8,11 @@ data class PasswordItemModel constructor(
     val name: String,
     val passwordAvatarBitmap: Bitmap?,
     val password: String,
+    val isPinned: Boolean,
     val isLoadingModel: Boolean = false,
     val isItemSelected: Boolean = false,
     val isPasswordContentVisible: Boolean = false,
-    val isInActionModeState: Boolean = false
+    val isInActionModeState: Boolean = false,
 ): ContextMenu.ContextMenuInfo {
     companion object {
         fun getSearchingTempModel(passwordId: Long) = getModelForId(passwordId)
@@ -20,7 +21,8 @@ data class PasswordItemModel constructor(
             passwordId,
             "",
             null,
-            ""
+            "",
+            false,
         )
     }
 
@@ -29,6 +31,7 @@ data class PasswordItemModel constructor(
                 || this.name != passwordItemModel.name
                 || this.passwordAvatarBitmap != passwordItemModel.passwordAvatarBitmap
                 || this.password != passwordItemModel.password
+                || this.isPinned != passwordItemModel.isPinned
                 || this.isLoadingModel != passwordItemModel.isLoadingModel
                 || this.isItemSelected != passwordItemModel.isItemSelected
                 || this.isPasswordContentVisible != passwordItemModel.isPasswordContentVisible

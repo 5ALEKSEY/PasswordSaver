@@ -59,4 +59,20 @@ class AccountsRepositoryImpl @Inject constructor(
         }.subscribeOn(Schedulers.io())
 
     override fun getAccountsCount() = accountsLocalStore.getAccountsDao().getAccountsCount()
+
+    override fun pinAccount(accountIds: Long, pinnedTimestamp: Long): Single<Boolean> =
+        Single.fromCallable {
+            accountsLocalStore.getAccountsDao()
+                .markAccountAsPinned(accountIds, pinnedTimestamp)
+        }
+            .map { updatedRows -> updatedRows >= 0 }
+            .subscribeOn(Schedulers.io())
+
+    override fun unpinAccount(accountIds: Long): Single<Boolean> =
+        Single.fromCallable {
+            accountsLocalStore.getAccountsDao()
+                .markAccountAsUnpinned(accountIds)
+        }
+            .map { updatedRows -> updatedRows >= 0 }
+            .subscribeOn(Schedulers.io())
 }

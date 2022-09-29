@@ -11,4 +11,6 @@ interface IAccountsRepository {
     fun updateAccounts(accountRepoEntities: List<AccountRepoEntity>): Single<Boolean>
     fun clearAll(): Single<Boolean>
     fun getAccountsCount(): Int
+    fun pinAccount(accountIds: Long, pinnedTimestamp: Long): Single<Boolean>
+    fun unpinAccount(accountIds: Long): Single<Boolean>
 }

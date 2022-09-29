@@ -12,4 +12,6 @@ interface IPasswordsInteractor {
     fun addNewPasswords(passwordFeatureEntities: List<PasswordFeatureEntity>): Single<Boolean>
     fun updatePassword(passwordFeatureEntity: PasswordFeatureEntity): Single<Boolean>
     fun updatePasswords(passwordFeatureEntities: List<PasswordFeatureEntity>): Single<Boolean>
+    fun pinPassword(passwordId: Long, pinnedTimestamp: Long): Single<Boolean>
+    fun unpinPassword(passwordId: Long): Single<Boolean>
 }

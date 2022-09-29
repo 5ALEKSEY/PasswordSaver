@@ -5,4 +5,6 @@
 
     <dimen name="add_avatar_inner_text_size">60sp</dimen>
     <dimen name="card_avatar_inner_text_size">36sp</dimen>
+
+    <dimen name="pinned_password_icon_size">22dp</dimen>
 </resources>

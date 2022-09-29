@@ -191,6 +191,7 @@ class DebugSettingsViewModel @Inject constructor(
                 override fun getPasswordAvatarPath() = ""
                 override fun getPasswordName() = "Password_${randomInt()}"
                 override fun getPasswordContent() = encryptedStrings.random()
+                override fun getPasswordPinTimestamp(): Long?  = null
             }
         }
 
@@ -200,6 +201,7 @@ class DebugSettingsViewModel @Inject constructor(
                 override fun getAccountName() = "Account_${randomInt()}"
                 override fun getAccountLogin() = encryptedStrings.random()
                 override fun getAccountPassword() = encryptedStrings.random()
+                override fun getAccountPinTimestamp(): Long? = null
             }
         }
     }

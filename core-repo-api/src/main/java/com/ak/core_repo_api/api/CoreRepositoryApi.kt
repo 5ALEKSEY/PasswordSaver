@@ -6,6 +6,7 @@ import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
 import com.ak.core_repo_api.intefaces.IPasswordsRepository
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.core_repo_api.intefaces.IDateAndTimeManager
 
 interface CoreRepositoryApi {
     fun providePasswordsRepository(): IPasswordsRepository
@@ -15,4 +16,5 @@ interface CoreRepositoryApi {
     fun provideAuthPreferencesManager(): IAuthPreferencesManager
     fun provideInternalStorageManager(): IPSInternalStorageManager
     fun provideResourceManager(): IResourceManager
+    fun provideDateAndTimeManager(): IDateAndTimeManager
 }

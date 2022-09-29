@@ -55,6 +55,14 @@ class AccountsInteractorImpl @Inject constructor(
         getInvokedEncryptionUseCase(accountFeatureEntities.mapFeatureToDomainEntitiesList())
             .flatMap { encryptedEntities -> accountsRepository.updateAccounts(encryptedEntities) }
 
+    override fun pinAccount(accountId: Long, pinnedTimestamp: Long): Single<Boolean> {
+        return accountsRepository.pinAccount(accountId, pinnedTimestamp)
+    }
+
+    override fun unpinAccount(accountId: Long): Single<Boolean> {
+        return accountsRepository.unpinAccount(accountId)
+    }
+
     private fun getInvokedDecryptionUseCase(accountRepoEntities: List<AccountRepoEntity>) =
         Observable.fromIterable(accountRepoEntities.mapRepoToDomainEntitiesList())
             .concatMap { entity ->

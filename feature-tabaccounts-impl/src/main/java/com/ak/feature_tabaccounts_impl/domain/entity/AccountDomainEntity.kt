@@ -21,4 +21,6 @@ class AccountDomainEntity(
     override fun getAccountLogin(): String = accountLoginValue
 
     override fun getAccountPassword(): String = accountPasswordValue
+
+    override fun getAccountPinTimestamp(): Long? = 0L
 }

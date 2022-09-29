@@ -3,6 +3,7 @@ package com.ak.feature_tabpasswords_impl.di.modules
 import androidx.lifecycle.ViewModel
 import com.ak.base.viewmodel.BaseViewModelFactory
 import com.ak.base.viewmodel.IViewModelAssistedFactory
+import com.ak.core_repo_api.intefaces.IDateAndTimeManager
 import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
@@ -26,6 +27,7 @@ class PasswordsListViewModelAssistedFactory @Inject constructor(
     private val internalStorageManager: IPSInternalStorageManager,
     private val dataBufferManager: IDataBufferManager,
     private val resourceManager: IResourceManager,
+    private val dateAndTimeManager: IDateAndTimeManager,
 ) : IViewModelAssistedFactory<PasswordsListViewModel> {
     override fun create(): PasswordsListViewModel {
         return PasswordsListViewModel(
@@ -34,6 +36,7 @@ class PasswordsListViewModelAssistedFactory @Inject constructor(
             internalStorageManager = internalStorageManager,
             dataBufferManager = dataBufferManager,
             resourceManager = resourceManager,
+            dateAndTimeManager = dateAndTimeManager,
         )
     }
 }

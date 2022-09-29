@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.ak.base.constants.AppConstants
 import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
+import com.ak.core_repo_api.intefaces.IDateAndTimeManager
 import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
@@ -22,7 +23,8 @@ class PasswordsListViewModel @Inject constructor(
     private val settingsPreferencesManager: ISettingsPreferencesManager,
     private val internalStorageManager: IPSInternalStorageManager,
     private val dataBufferManager: IDataBufferManager,
-    private val resourceManager: IResourceManager
+    private val resourceManager: IResourceManager,
+    private val dateAndTimeManager: IDateAndTimeManager,
 ) : BasePSViewModel() {
 
     private val loadingStateLD = MutableLiveData<Boolean>()
@@ -81,6 +83,30 @@ class PasswordsListViewModel @Inject constructor(
             .let(this::bindDisposable)
     }
 
+    fun pinPassword(passwordId: Long) {
+        passwordsInteractor.pinPassword(passwordId, dateAndTimeManager.getCurrentTimeInMillis())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                },
+                { throwable ->
+                    shortTimeMessageLiveData.value = throwable.message ?: "unknown"
+                })
+            .let(this::bindDisposable)
+    }
+
+    fun unpinPassword(passwordId: Long) {
+        passwordsInteractor.unpinPassword(passwordId)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                },
+                { throwable ->
+                    shortTimeMessageLiveData.value = throwable.message ?: "unknown"
+                })
+            .let(this::bindDisposable)
+    }
+
     private inline fun getPasswordDataAndStartAction(passwordsId: Long, crossinline action: (entity: PasswordFeatureEntity) -> Unit) {
         passwordsInteractor.getPasswordById(passwordsId)
             .observeOn(AndroidSchedulers.mainThread())
@@ -107,7 +133,8 @@ class PasswordsListViewModel @Inject constructor(
                     it.getPasswordId()!!,
                     it.getPasswordName(),
                     avatarBitmap,
-                    it.getPasswordContent()
+                    it.getPasswordContent(),
+                    it.getPasswordPinTimestamp() != null,
                 )
             )
         }

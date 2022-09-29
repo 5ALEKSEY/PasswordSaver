@@ -2,7 +2,9 @@ package com.ak.feature_tabpasswords_impl.screens.adapter
 
 import android.graphics.drawable.AnimationDrawable
 import android.view.View
+import androidx.core.view.isVisible
 import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.CustomThemeDrawableBuilder
 import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.drawTextInner
@@ -14,6 +16,7 @@ import com.ak.base.ui.recycler.BasePopupMenuRecyclerViewHolder
 import com.ak.base.utils.PSUtils
 import com.ak.feature_tabpasswords_impl.R
 import kotlinx.android.synthetic.main.passwords_item_layout.view.cvPasswordItemContainer
+import kotlinx.android.synthetic.main.passwords_item_layout.view.ivItemPinned
 import kotlinx.android.synthetic.main.passwords_item_layout.view.ivItemSelected
 import kotlinx.android.synthetic.main.passwords_item_layout.view.ivPasswordAvatar
 import kotlinx.android.synthetic.main.passwords_item_layout.view.tvPasswordContent
@@ -22,7 +25,7 @@ import kotlinx.android.synthetic.main.passwords_item_layout.view.vPasswordItemRo
 
 class PasswordsListItemViewHolder(
     itemView: View,
-    private val listener: PasswordsListClickListener
+    private val listener: PasswordsListClickListener,
 ) : BasePopupMenuRecyclerViewHolder(itemView) {
 
     override val popupMenuListener = object : PopupMenuHelper.Listener {
@@ -32,6 +35,8 @@ class PasswordsListItemViewHolder(
                 SELECT_ID -> listener.selectPasswordItem(itemModel)
                 COPY_ID -> listener.copyPasswordItemContent(itemModel)
                 EDIT_ID -> listener.editPasswordItem(itemModel)
+                PIN_ID -> listener.pinPasswordItem(itemModel)
+                UNPIN_ID -> listener.unpinPasswordItem(itemModel)
                 DELETE_ID -> listener.deletePasswordItem(itemModel)
             }
         }
@@ -60,6 +65,7 @@ class PasswordsListItemViewHolder(
             itemView.tvPasswordName,
             itemView.tvPasswordContent,
         )
+        applyPinItemBackground(theme)
         drawEmptyPasswordAvatarIfNeeds(theme)
         drawPasswordContentText(theme)
     }
@@ -108,6 +114,8 @@ class PasswordsListItemViewHolder(
             itemView.ivPasswordAvatar.setImageBitmap(passwordItemModel.passwordAvatarBitmap)
         }
         drawEmptyPasswordAvatarIfNeeds(theme)
+
+        itemView.ivItemPinned.isVisible = passwordItemModel.isPinned
     }
 
     private fun drawPasswordContentText(theme: CustomTheme) {
@@ -119,6 +127,14 @@ class PasswordsListItemViewHolder(
             passwordItemModel.password,
             theme.getDrawable(R.attr.themedHiddenContentDrawable),
         )
+    }
+
+    private fun applyPinItemBackground(theme: CustomTheme) {
+        itemView.ivItemPinned.background = CustomThemeDrawableBuilder(theme, itemView.context)
+            .oval()
+            .solidColorAttr(R.attr.themedAccentColor)
+            .radius(itemView.resources.getDimensionPixelSize(R.dimen.pinned_password_icon_size).toFloat())
+            .build()
     }
 
     private fun drawEmptyPasswordAvatarIfNeeds(theme: CustomTheme) {
@@ -180,22 +196,46 @@ class PasswordsListItemViewHolder(
     }
 
     override fun generateMenuItems(): List<PopupWindowMenuItem> {
-        return listOf(
+        val menuItems = mutableListOf<PopupWindowMenuItem>()
+
+        menuItems.add(
             PopupWindowMenuItem(
                 SELECT_ID,
                 PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_select),
                 PopupWindowMenuItem.Title(contentRes = R.string.password_popup_menu_item_select),
             ),
+        )
+        menuItems.add(
             PopupWindowMenuItem(
                 COPY_ID,
                 PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_copy),
                 PopupWindowMenuItem.Title(contentRes = R.string.password_popup_menu_item_copy),
-            ),
+            )
+        )
+        menuItems.add(
             PopupWindowMenuItem(
                 EDIT_ID,
                 PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_edit),
                 PopupWindowMenuItem.Title(contentRes = R.string.password_popup_menu_item_edit),
-            ),
+            )
+        )
+
+        val pinMenuItem = if (passwordItemModel?.isPinned == true) {
+            PopupWindowMenuItem(
+                UNPIN_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_unpin),
+                PopupWindowMenuItem.Title(contentRes = R.string.password_popup_menu_item_unpin),
+            )
+        } else {
+            PopupWindowMenuItem(
+                PIN_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_pin),
+                PopupWindowMenuItem.Title(contentRes = R.string.password_popup_menu_item_pin),
+            )
+        }
+        menuItems.add(pinMenuItem)
+
+        menuItems.add(
             PopupWindowMenuItem(
                 DELETE_ID,
                 PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_delete),
@@ -204,8 +244,10 @@ class PasswordsListItemViewHolder(
                     titleTintAttrRes = R.attr.themedErrorColor,
                     iconTintAttrRes = R.attr.themedErrorColor,
                 )
-            ),
+            )
         )
+
+        return menuItems
     }
 
     private companion object {
@@ -215,6 +257,8 @@ class PasswordsListItemViewHolder(
         const val SELECT_ID = 0
         const val COPY_ID = 1
         const val EDIT_ID = 2
-        const val DELETE_ID = 3
+        const val PIN_ID = 3
+        const val UNPIN_ID = 4
+        const val DELETE_ID = 5
     }
 }

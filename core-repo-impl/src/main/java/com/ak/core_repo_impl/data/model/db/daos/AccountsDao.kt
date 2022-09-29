@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.ak.core_repo_impl.data.model.db.entities.AccountDBEntity
+import com.ak.core_repo_impl.data.model.db.entities.PasswordDBEntity
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
 
@@ -24,6 +25,16 @@ interface AccountsDao {
 
     @Query("SELECT COUNT(*) FROM ${AccountDBEntity.TABLE_NAME}")
     fun getAccountsCount(): Int
+
+    @Query("UPDATE ${AccountDBEntity.TABLE_NAME} " +
+               "SET ${AccountDBEntity.COLUMN_ACCOUNT_PIN_TIMESTAMP} = :pinnedTimestamp " +
+               "WHERE ${AccountDBEntity.COLUMN_ACCOUNT_ID} = :accountId")
+    fun markAccountAsPinned(accountId: Long, pinnedTimestamp: Long): Int
+
+    @Query("UPDATE ${AccountDBEntity.TABLE_NAME} " +
+               "SET ${AccountDBEntity.COLUMN_ACCOUNT_PIN_TIMESTAMP} = NULL " +
+               "WHERE ${AccountDBEntity.COLUMN_ACCOUNT_ID} = :accountId")
+    fun markAccountAsUnpinned(accountId: Long): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewAccount(vararg accountDbEntities: AccountDBEntity): List<Long>

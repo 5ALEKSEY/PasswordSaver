@@ -5,4 +5,5 @@ interface PasswordRepoEntity {
     fun getPasswordName(): String
     fun getPasswordAvatarPath(): String
     fun getPasswordContent(): String
+    fun getPasswordPinTimestamp(): Long?
 }

@@ -58,6 +58,14 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
             }
         }
 
+        override fun pinPasswordItem(item: PasswordItemModel) {
+            viewModel.pinPassword(item.passwordId)
+        }
+
+        override fun unpinPasswordItem(item: PasswordItemModel) {
+            viewModel.unpinPassword(item.passwordId)
+        }
+
         override fun onShowPopupMenu(item: PasswordItemModel) {
             passwordsAdapter.setContextMenuOpenedForPasswordItem(item.passwordId)
         }

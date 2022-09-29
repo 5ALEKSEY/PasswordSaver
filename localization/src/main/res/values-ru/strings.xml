@@ -102,6 +102,8 @@
     <string name="password_popup_menu_item_select">"Выбрать"</string>
     <string name="password_popup_menu_item_copy">"Скопировать"</string>
     <string name="password_popup_menu_item_edit">"Изменить"</string>
+    <string name="password_popup_menu_item_pin">"Закрепить"</string>
+    <string name="password_popup_menu_item_unpin">"Открепить"</string>
     <string name="password_popup_menu_item_delete">"Удалить"</string>
 
     <!-- Account Popup Menu Items -->
