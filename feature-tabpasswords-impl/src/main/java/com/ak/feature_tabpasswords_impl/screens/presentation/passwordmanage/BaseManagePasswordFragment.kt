@@ -136,6 +136,10 @@ abstract class BaseManagePasswordFragment<ManageVM : BaseManagePasswordViewModel
         fragmentView.btnManagePasswordAction.setSafeClickListener {
             managePasswordAction()
         }
+
+        // Theme
+        addThemedView(fragmentView.tilPasswordNameLayout)
+        addThemedView(fragmentView.tilPasswordContentLayout)
     }
 
     override fun subscriberToViewModel(viewModel: ManageVM) {

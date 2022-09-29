@@ -56,6 +56,11 @@ abstract class BaseManageAccountFragment<ManagerVM : BaseManageAccountViewModel>
         fragmentView.btnManageAccountAction.setSafeClickListener {
             manageAccountAction()
         }
+
+        // Theme
+        addThemedView(fragmentView.tilAccountNameLayout)
+        addThemedView(fragmentView.tilAccountLoginLayout)
+        addThemedView(fragmentView.tilAccountPasswordLayout)
     }
 
     override fun subscriberToViewModel(viewModel: ManagerVM) {
