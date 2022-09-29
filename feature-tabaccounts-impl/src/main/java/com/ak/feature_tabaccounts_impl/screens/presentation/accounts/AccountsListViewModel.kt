@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.ak.base.constants.AppConstants
 import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
+import com.ak.core_repo_api.intefaces.IDateAndTimeManager
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.feature_tabaccounts_api.interfaces.AccountFeatureEntity
 import com.ak.feature_tabaccounts_api.interfaces.IAccountsInteractor
@@ -18,7 +19,8 @@ import javax.inject.Inject
 class AccountsListViewModel @Inject constructor(
     private val accountsInteractor: IAccountsInteractor,
     private val dataBufferManager: IDataBufferManager,
-    private val resourceManager: IResourceManager
+    private val resourceManager: IResourceManager,
+    private val dateAndTimeManager: IDateAndTimeManager,
 ) : BasePSViewModel() {
 
     private val loadingStateLD = MutableLiveData<Boolean>()
@@ -85,6 +87,30 @@ class AccountsListViewModel @Inject constructor(
             .let(this::bindDisposable)
     }
 
+    fun pinAccount(accountId: Long) {
+        accountsInteractor.pinAccount(accountId, dateAndTimeManager.getCurrentTimeInMillis())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                },
+                { throwable ->
+                    shortTimeMessageLiveData.value = throwable.message ?: "unknown"
+                })
+            .let(this::bindDisposable)
+    }
+
+    fun unpinAccount(accountId: Long) {
+        accountsInteractor.unpinAccount(accountId)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                {
+                },
+                { throwable ->
+                    shortTimeMessageLiveData.value = throwable.message ?: "unknown"
+                })
+            .let(this::bindDisposable)
+    }
+
     private inline fun getAccountDataAndStartAction(accountId: Long, crossinline action: (entity: AccountFeatureEntity) -> Unit) {
         accountsInteractor.getAccountById(accountId)
             .observeOn(AndroidSchedulers.mainThread())
@@ -110,7 +136,8 @@ class AccountsListViewModel @Inject constructor(
                     it.getAccountId()!!,
                     it.getAccountName(),
                     it.getAccountLogin(),
-                    it.getAccountPassword()
+                    it.getAccountPassword(),
+                    it.getAccountPinTimestamp() != null,
                 )
             )
         }

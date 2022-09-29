@@ -7,6 +7,8 @@ interface AccountListClickListener {
     fun copyAccountItemPassword(item: AccountItemModel)
     fun editAccountItem(item: AccountItemModel)
     fun deleteAccountItem(item: AccountItemModel)
+    fun pinAccount(item: AccountItemModel)
+    fun unpinAccount(item: AccountItemModel)
     fun onShowPopupMenu(item: AccountItemModel)
     fun onDismissPopupmenu(item: AccountItemModel)
 }

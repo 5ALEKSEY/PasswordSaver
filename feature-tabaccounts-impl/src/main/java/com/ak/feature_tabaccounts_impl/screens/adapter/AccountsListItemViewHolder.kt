@@ -2,7 +2,9 @@ package com.ak.feature_tabaccounts_impl.screens.adapter
 
 import android.graphics.drawable.AnimationDrawable
 import android.view.View
+import androidx.core.view.isVisible
 import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.CustomThemeDrawableBuilder
 import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.drawTextInner
@@ -15,6 +17,7 @@ import com.ak.base.utils.PSUtils
 import com.ak.feature_tabaccounts_impl.R
 import kotlinx.android.synthetic.main.accounts_item_layout.view.cvAccountItemContainer
 import kotlinx.android.synthetic.main.accounts_item_layout.view.ivAccountAvatar
+import kotlinx.android.synthetic.main.accounts_item_layout.view.ivItemPinned
 import kotlinx.android.synthetic.main.accounts_item_layout.view.ivItemSelected
 import kotlinx.android.synthetic.main.accounts_item_layout.view.tvAccountLogin
 import kotlinx.android.synthetic.main.accounts_item_layout.view.tvAccountName
@@ -23,7 +26,7 @@ import kotlinx.android.synthetic.main.accounts_item_layout.view.vAccountItemRoot
 
 class AccountsListItemViewHolder(
     itemView: View,
-    private val listener: AccountListClickListener
+    private val listener: AccountListClickListener,
 ) : BasePopupMenuRecyclerViewHolder(itemView) {
 
     private var accountItemModel: AccountItemModel? = null
@@ -36,6 +39,8 @@ class AccountsListItemViewHolder(
                 COPY_LOGIN_ID -> listener.copyAccountItemLogin(itemModel)
                 COPY_PASSWORD_ID -> listener.copyAccountItemPassword(itemModel)
                 EDIT_ID -> listener.editAccountItem(itemModel)
+                PIN_ID -> listener.pinAccount(itemModel)
+                UNPIN_ID -> listener.unpinAccount(itemModel)
                 DELETE_ID -> listener.deleteAccountItem(itemModel)
             }
         }
@@ -69,7 +74,7 @@ class AccountsListItemViewHolder(
             itemView.tvAccountLogin,
             itemView.tvAccountPassword,
         )
-
+        applyPinItemBackground(theme)
         drawAccountAvatar(theme)
         drawAccountText(theme)
         drawPasswordContentText(theme)
@@ -124,6 +129,8 @@ class AccountsListItemViewHolder(
         }
 
         drawAccountAvatar(theme)
+
+        itemView.ivItemPinned.isVisible = accountItemModel.isPinned
     }
 
     private fun drawAccountText(theme: CustomTheme) {
@@ -146,6 +153,14 @@ class AccountsListItemViewHolder(
             accountItemModel.password,
             theme.getDrawable(R.attr.themedHiddenContentDrawable),
         )
+    }
+
+    private fun applyPinItemBackground(theme: CustomTheme) {
+        itemView.ivItemPinned.background = CustomThemeDrawableBuilder(theme, itemView.context)
+            .oval()
+            .solidColorAttr(R.attr.themedAccentColor)
+            .radius(itemView.resources.getDimensionPixelSize(R.dimen.pinned_account_icon_size).toFloat())
+            .build()
     }
 
     private fun drawAccountAvatar(theme: CustomTheme) {
@@ -203,27 +218,53 @@ class AccountsListItemViewHolder(
     }
 
     override fun generateMenuItems(): List<PopupWindowMenuItem> {
-        return listOf(
+        val menuItems = mutableListOf<PopupWindowMenuItem>()
+
+        menuItems.add(
             PopupWindowMenuItem(
                 SELECT_ID,
                 PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_select),
                 PopupWindowMenuItem.Title(contentRes = R.string.account_popup_menu_item_select),
-            ),
+            )
+        )
+        menuItems.add(
             PopupWindowMenuItem(
                 COPY_LOGIN_ID,
                 PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_copy),
                 PopupWindowMenuItem.Title(contentRes = R.string.account_popup_menu_item_copy_login),
-            ),
+            )
+        )
+        menuItems.add(
             PopupWindowMenuItem(
                 COPY_PASSWORD_ID,
                 PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_copy),
                 PopupWindowMenuItem.Title(contentRes = R.string.account_popup_menu_item_copy_password),
-            ),
+            )
+        )
+        menuItems.add(
             PopupWindowMenuItem(
                 EDIT_ID,
                 PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_edit),
                 PopupWindowMenuItem.Title(contentRes = R.string.account_popup_menu_item_edit),
-            ),
+            )
+        )
+
+        val pinMenuItem = if (accountItemModel?.isPinned == true) {
+            PopupWindowMenuItem(
+                UNPIN_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_unpin),
+                PopupWindowMenuItem.Title(contentRes = R.string.password_popup_menu_item_unpin),
+            )
+        } else {
+            PopupWindowMenuItem(
+                PIN_ID,
+                PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_pin),
+                PopupWindowMenuItem.Title(contentRes = R.string.password_popup_menu_item_pin),
+            )
+        }
+        menuItems.add(pinMenuItem)
+
+        menuItems.add(
             PopupWindowMenuItem(
                 DELETE_ID,
                 PopupWindowMenuItem.Image(drawableRes = R.drawable.ic_popup_menu_delete),
@@ -232,17 +273,21 @@ class AccountsListItemViewHolder(
                     titleTintAttrRes = R.attr.themedErrorColor,
                     iconTintAttrRes = R.attr.themedErrorColor,
                 )
-            ),
+            )
         )
+
+        return menuItems
     }
 
     private companion object {
         const val ACCOUNT_SHOW_ACTION_CLICK_DELAY_IN_MILLIS = 700L
 
-        const val SELECT_ID = 1
-        const val COPY_LOGIN_ID = 2
-        const val COPY_PASSWORD_ID = 3
-        const val EDIT_ID = 4
-        const val DELETE_ID = 5
+        const val SELECT_ID = 0
+        const val COPY_LOGIN_ID = 1
+        const val COPY_PASSWORD_ID = 2
+        const val EDIT_ID = 3
+        const val PIN_ID = 4
+        const val UNPIN_ID = 5
+        const val DELETE_ID = 6
     }
 }

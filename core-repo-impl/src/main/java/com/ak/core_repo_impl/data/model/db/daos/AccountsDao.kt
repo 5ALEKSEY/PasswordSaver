@@ -14,7 +14,10 @@ import io.reactivex.rxjava3.core.Single
 @Dao
 interface AccountsDao {
 
-    @Query("SELECT * FROM ${AccountDBEntity.TABLE_NAME} ORDER BY ${AccountDBEntity.COLUMN_ACCOUNT_ID} DESC")
+    @Query("SELECT * FROM ${AccountDBEntity.TABLE_NAME} " +
+               "ORDER BY " +
+               "${AccountDBEntity.COLUMN_ACCOUNT_PIN_TIMESTAMP} DESC, " +
+               "${AccountDBEntity.COLUMN_ACCOUNT_ID} DESC")
     fun getAllAccounts(): Flowable<List<AccountDBEntity>>
 
     @Query("SELECT * FROM ${AccountDBEntity.TABLE_NAME} WHERE ${AccountDBEntity.COLUMN_ACCOUNT_ID} = :accountId LIMIT 1")

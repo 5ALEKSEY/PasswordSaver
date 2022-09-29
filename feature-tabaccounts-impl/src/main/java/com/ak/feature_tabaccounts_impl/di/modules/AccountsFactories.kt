@@ -3,6 +3,7 @@ package com.ak.feature_tabaccounts_impl.di.modules
 import androidx.lifecycle.ViewModel
 import com.ak.base.viewmodel.BaseViewModelFactory
 import com.ak.base.viewmodel.IViewModelAssistedFactory
+import com.ak.core_repo_api.intefaces.IDateAndTimeManager
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.feature_tabaccounts_api.interfaces.IAccountsInteractor
 import com.ak.feature_tabaccounts_impl.screens.logic.IDataBufferManager
@@ -20,12 +21,14 @@ class AccountsListViewModelAssistedFactory @Inject constructor(
     private val accountsInteractor: IAccountsInteractor,
     private val dataBufferManager: IDataBufferManager,
     private val resourceManager: IResourceManager,
+    private val dateAndTimeManager: IDateAndTimeManager,
 ): IViewModelAssistedFactory<AccountsListViewModel> {
     override fun create(): AccountsListViewModel {
         return AccountsListViewModel(
             accountsInteractor = accountsInteractor,
             dataBufferManager = dataBufferManager,
             resourceManager = resourceManager,
+            dateAndTimeManager = dateAndTimeManager,
         )
     }
 }

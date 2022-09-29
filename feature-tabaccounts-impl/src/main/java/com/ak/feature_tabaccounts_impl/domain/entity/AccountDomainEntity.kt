@@ -7,11 +7,16 @@ class AccountDomainEntity(
     var accountIdValue: Long?,
     var accountNameValue: String,
     var accountLoginValue: String,
-    var accountPasswordValue: String
+    var accountPasswordValue: String,
+    var accountPinTimestampValue: Long?,
 ) : AccountFeatureEntity, AccountRepoEntity {
 
     constructor(accountName: String, accountLogin: String, accountPassword: String) : this(
-            null, accountName, accountLogin, accountPassword
+        null,
+        accountName,
+        accountLogin,
+        accountPassword,
+        null,
     )
 
     override fun getAccountId(): Long? = accountIdValue
@@ -22,5 +27,5 @@ class AccountDomainEntity(
 
     override fun getAccountPassword(): String = accountPasswordValue
 
-    override fun getAccountPinTimestamp(): Long? = 0L
+    override fun getAccountPinTimestamp(): Long? = accountPinTimestampValue
 }

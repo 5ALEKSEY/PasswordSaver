@@ -53,6 +53,14 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
             viewModel.onEditAccountAction(item.accountId)
         }
 
+        override fun pinAccount(item: AccountItemModel) {
+            viewModel.pinAccount(item.accountId)
+        }
+
+        override fun unpinAccount(item: AccountItemModel) {
+            viewModel.unpinAccount(item.accountId)
+        }
+
         override fun deleteAccountItem(item: AccountItemModel) {
             viewModel.onDeleteAccountAction(item.accountId)
         }
