@@ -197,8 +197,6 @@
         <attr name="themedSwitchTrackUncheckedColor" format="color" />
         <attr name="themedSwitchTrackCheckedColor" format="color" />
 
-        <attr name="themedHiddenContentDrawable" format="reference" />
-
         <attr name="themedSecurityPatternNodeEnabledDrawable" format="reference" />
         <attr name="themedSecurityPatternNodeDisabledDrawable" format="reference" />
 

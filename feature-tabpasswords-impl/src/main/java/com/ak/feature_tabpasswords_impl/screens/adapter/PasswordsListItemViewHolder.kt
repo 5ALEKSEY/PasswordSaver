@@ -7,7 +7,9 @@ import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.CustomThemeDrawableBuilder
 import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.base.constants.AppConstants
+import com.ak.base.extensions.dpToPx
 import com.ak.base.extensions.drawTextInner
+import com.ak.base.extensions.pxToDp
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibilityInvisible
 import com.ak.base.ui.custom.popupmenu.PopupMenuHelper
@@ -77,12 +79,12 @@ class PasswordsListItemViewHolder(
         itemView.tvPasswordName.text = passwordItemModel.name
 
         itemView.tvPasswordContent.apply {
-            drawPasswordContentText(theme)
             maxLines = if (passwordItemModel.isPasswordContentVisible) {
                 AppConstants.MAX_LINES_VISIBLE_CONTENT
             } else {
                 AppConstants.MAX_LINES_INVISIBLE_CONTENT
             }
+            drawPasswordContentText(theme)
         }
 
         if (passwordItemModel.isInActionModeState) {
@@ -121,11 +123,34 @@ class PasswordsListItemViewHolder(
     private fun drawPasswordContentText(theme: CustomTheme) {
         val passwordItemModel = passwordItemModel ?: return
 
-        itemView.tvPasswordContent.text = PSUtils.getHiddenContentText(
-            itemView.context,
+        val hiddenItemRadiusPx = itemView.resources.getDimensionPixelSize(R.dimen.password_hidden_item_radius)
+        val hiddenItemSizePx = itemView.resources.getDimensionPixelSize(R.dimen.password_hidden_item_size)
+        val hiddenItemPaddingPx = itemView.resources.getDimensionPixelSize(R.dimen.password_hidden_item_padding)
+
+        val hiddenContentOvalDrawable = CustomThemeDrawableBuilder(theme, itemView.context)
+            .oval()
+            .radius(hiddenItemRadiusPx.toFloat())
+            .solidColorAttr(R.attr.themedPrimaryTextColor)
+            .build()
+
+        val hiddenContentDrawable = CustomThemeDrawableBuilder(theme, itemView.context)
+            .oval()
+            .size(hiddenItemSizePx, hiddenItemSizePx)
+            .addDrawableWithInsetsDp(
+                drawable = hiddenContentOvalDrawable,
+                leftDp = 0F,
+                topDp = hiddenItemPaddingPx.pxToDp(itemView.context),
+                rightDp = hiddenItemPaddingPx.pxToDp(itemView.context),
+                bottomDp = 0F,
+            )
+            .build().apply {
+                setBounds(0, 0, hiddenItemSizePx, hiddenItemSizePx)
+            }
+
+        itemView.tvPasswordContent.text = PSUtils.getHiddenContentTextTemp(
             passwordItemModel.isPasswordContentVisible,
             passwordItemModel.password,
-            theme.getDrawable(R.attr.themedHiddenContentDrawable),
+            hiddenContentDrawable,
         )
     }
 

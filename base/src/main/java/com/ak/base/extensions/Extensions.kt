@@ -26,11 +26,19 @@ fun <T : View> T.applyForLaidOut(block: T.() -> Unit) {
     }
 }
 
+fun Int.pxToDp(context: Context?): Float {
+    return if (context != null) {
+        this / context.resources.displayMetrics.density
+    } else {
+        this.toFloat()
+    }
+}
+
 fun Float.dpToPx(context: Context?) =
     if (context != null) {
         TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        this,
+            TypedValue.COMPLEX_UNIT_DIP,
+            this,
             context.applicationContext.resources.displayMetrics
         ).toInt()
     } else {

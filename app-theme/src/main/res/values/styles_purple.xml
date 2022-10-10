@@ -30,8 +30,6 @@
         <item name="themedSwitchTrackUncheckedColor">@color/color_switch_track_unchecked_purple</item>
         <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_purple</item>
 
-        <item name="themedHiddenContentDrawable">@drawable/ic_hided_element_purple</item>
-
         <item name="themedSelectedItemBackgroundDrawable">@drawable/a_loading_purple</item>
 
         <item name="themedSecurityPatternNodeEnabledDrawable">@drawable/ic_enabled_pattern_node_purple</item>

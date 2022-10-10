@@ -5,4 +5,8 @@
 
     <dimen name="pinned_account_icon_size">22dp</dimen>
     <dimen name="pinned_account_selected_item_icon_size">22dp</dimen>
+
+    <dimen name="account_hidden_item_size">12dp</dimen>
+    <dimen name="account_hidden_item_radius">10dp</dimen>
+    <dimen name="account_hidden_item_padding">2dp</dimen>
 </resources>

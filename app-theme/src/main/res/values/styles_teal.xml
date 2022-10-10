@@ -30,8 +30,6 @@
         <item name="themedSwitchTrackUncheckedColor">@color/color_switch_track_unchecked_teal</item>
         <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_teal</item>
 
-        <item name="themedHiddenContentDrawable">@drawable/ic_hided_element_teal</item>
-
         <item name="themedSelectedItemBackgroundDrawable">@drawable/a_loading_teal</item>
 
         <item name="themedSecurityPatternNodeEnabledDrawable">@drawable/ic_enabled_pattern_node_teal</item>

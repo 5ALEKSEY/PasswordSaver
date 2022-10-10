@@ -1,6 +1,7 @@
 package com.ak.feature_tabaccounts_impl.screens.adapter
 
 import android.graphics.drawable.AnimationDrawable
+import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.core.view.isVisible
 import com.ak.app_theme.theme.CustomTheme
@@ -8,6 +9,7 @@ import com.ak.app_theme.theme.CustomThemeDrawableBuilder
 import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.drawTextInner
+import com.ak.base.extensions.pxToDp
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibilityInvisible
 import com.ak.base.ui.custom.popupmenu.PopupMenuHelper
@@ -86,21 +88,21 @@ class AccountsListItemViewHolder(
         itemView.tvAccountName.text = accountItemModel.name
 
         itemView.tvAccountLogin.apply {
-            drawAccountText(theme)
             maxLines = if (accountItemModel.isAccountContentVisible) {
                 AppConstants.MAX_LINES_VISIBLE_CONTENT
             } else {
                 AppConstants.MAX_LINES_INVISIBLE_CONTENT
             }
+            drawAccountText(theme)
         }
 
         itemView.tvAccountPassword.apply {
-            drawPasswordContentText(theme)
             maxLines = if (accountItemModel.isAccountContentVisible) {
                 AppConstants.MAX_LINES_VISIBLE_CONTENT
             } else {
                 AppConstants.MAX_LINES_INVISIBLE_CONTENT
             }
+            drawPasswordContentText(theme)
         }
 
         if (accountItemModel.isInActionModeState) {
@@ -136,22 +138,20 @@ class AccountsListItemViewHolder(
     private fun drawAccountText(theme: CustomTheme) {
         val accountItemModel = accountItemModel ?: return
 
-        itemView.tvAccountLogin.text = PSUtils.getHiddenContentText(
-            itemView.context,
+        itemView.tvAccountLogin.text = PSUtils.getHiddenContentTextTemp(
             accountItemModel.isAccountContentVisible,
             accountItemModel.login,
-            theme.getDrawable(R.attr.themedHiddenContentDrawable),
+            createHiddenItemDrawable(theme),
         )
     }
 
     private fun drawPasswordContentText(theme: CustomTheme) {
         val accountItemModel = accountItemModel ?: return
 
-        itemView.tvAccountPassword.text = PSUtils.getHiddenContentText(
-            itemView.context,
+        itemView.tvAccountPassword.text = PSUtils.getHiddenContentTextTemp(
             accountItemModel.isAccountContentVisible,
             accountItemModel.password,
-            theme.getDrawable(R.attr.themedHiddenContentDrawable),
+            createHiddenItemDrawable(theme),
         )
     }
 
@@ -223,6 +223,32 @@ class AccountsListItemViewHolder(
             setExitFadeDuration(500)
             start()
         }
+    }
+
+    private fun createHiddenItemDrawable(theme: CustomTheme): Drawable {
+        val hiddenItemRadiusPx = itemView.resources.getDimensionPixelSize(R.dimen.account_hidden_item_radius)
+        val hiddenItemSizePx = itemView.resources.getDimensionPixelSize(R.dimen.account_hidden_item_size)
+        val hiddenItemPaddingPx = itemView.resources.getDimensionPixelSize(R.dimen.account_hidden_item_padding)
+
+        val hiddenContentOvalDrawable = CustomThemeDrawableBuilder(theme, itemView.context)
+            .oval()
+            .radius(hiddenItemRadiusPx.toFloat())
+            .solidColorAttr(R.attr.themedPrimaryTextColor)
+            .build()
+
+        return CustomThemeDrawableBuilder(theme, itemView.context)
+            .oval()
+            .size(hiddenItemSizePx, hiddenItemSizePx)
+            .addDrawableWithInsetsDp(
+                drawable = hiddenContentOvalDrawable,
+                leftDp = 0F,
+                topDp = hiddenItemPaddingPx.pxToDp(itemView.context),
+                rightDp = hiddenItemPaddingPx.pxToDp(itemView.context),
+                bottomDp = 0F,
+            )
+            .build().apply {
+                setBounds(0, 0, hiddenItemSizePx, hiddenItemSizePx)
+            }
     }
 
     override fun generateMenuItems(): List<PopupWindowMenuItem> {
