@@ -31,7 +31,6 @@
         <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_orange</item>
 
         <item name="themedHiddenContentDrawable">@drawable/ic_hided_element_orange</item>
-        <item name="themedSelectedItemDrawable">@drawable/ic_item_selected_orange</item>
 
         <item name="themedSelectedItemBackgroundDrawable">@drawable/a_loading_orange</item>
 

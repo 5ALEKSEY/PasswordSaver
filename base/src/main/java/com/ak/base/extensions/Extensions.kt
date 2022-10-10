@@ -73,6 +73,7 @@ fun ImageView.drawTextInner(
     drawTextInner(context, width, fillColor, textColor, textSizeInPx, textToDraw)
 }
 
+// TODO: Why don't to user 'isVisible' ext
 fun View.setVisibility(isVisible: Boolean) {
     visibility = if (isVisible) {
         View.VISIBLE

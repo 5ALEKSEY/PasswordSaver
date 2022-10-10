@@ -31,7 +31,6 @@
         <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_blue</item>
 
         <item name="themedHiddenContentDrawable">@drawable/ic_hided_element_blue</item>
-        <item name="themedSelectedItemDrawable">@drawable/ic_item_selected_blue</item>
 
         <item name="themedSelectedItemBackgroundDrawable">@drawable/a_loading_blue</item>
 

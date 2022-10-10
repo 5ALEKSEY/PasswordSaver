@@ -7,4 +7,5 @@
     <dimen name="card_avatar_inner_text_size">36sp</dimen>
 
     <dimen name="pinned_password_icon_size">22dp</dimen>
+    <dimen name="pinned_password_selected_item_icon_size">22dp</dimen>
 </resources>

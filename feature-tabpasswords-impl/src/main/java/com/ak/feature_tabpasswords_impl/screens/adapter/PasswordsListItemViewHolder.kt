@@ -65,6 +65,7 @@ class PasswordsListItemViewHolder(
             itemView.tvPasswordName,
             itemView.tvPasswordContent,
         )
+        applySelectedItemIconBackground(theme)
         applyPinItemBackground(theme)
         drawEmptyPasswordAvatarIfNeeds(theme)
         drawPasswordContentText(theme)
@@ -106,7 +107,6 @@ class PasswordsListItemViewHolder(
         } else {
             itemView.ivItemSelected.apply {
                 setVisibilityInvisible(passwordItemModel.isItemSelected)
-                setImageResource(theme.getDrawable(R.attr.themedSelectedItemDrawable))
             }
         }
 
@@ -134,6 +134,14 @@ class PasswordsListItemViewHolder(
             .oval()
             .solidColorAttr(R.attr.themedAccentColor)
             .radius(itemView.resources.getDimensionPixelSize(R.dimen.pinned_password_icon_size).toFloat())
+            .build()
+    }
+
+    private fun applySelectedItemIconBackground(theme: CustomTheme) {
+        itemView.ivItemSelected.background = CustomThemeDrawableBuilder(theme, itemView.context)
+            .oval()
+            .solidColorAttr(R.attr.themedAccentColor)
+            .radius(itemView.resources.getDimensionPixelSize(R.dimen.pinned_password_selected_item_icon_size).toFloat())
             .build()
     }
 

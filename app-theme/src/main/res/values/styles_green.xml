@@ -31,7 +31,6 @@
         <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_green</item>
 
         <item name="themedHiddenContentDrawable">@drawable/ic_hided_element_green</item>
-        <item name="themedSelectedItemDrawable">@drawable/ic_item_selected_green</item>
 
         <item name="themedSelectedItemBackgroundDrawable">@drawable/a_loading_green</item>
 

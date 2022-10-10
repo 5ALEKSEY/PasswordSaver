@@ -74,6 +74,7 @@ class AccountsListItemViewHolder(
             itemView.tvAccountLogin,
             itemView.tvAccountPassword,
         )
+        applySelectedItemIconBackground(theme)
         applyPinItemBackground(theme)
         drawAccountAvatar(theme)
         drawAccountText(theme)
@@ -124,7 +125,6 @@ class AccountsListItemViewHolder(
         } else {
             itemView.ivItemSelected.apply {
                 setVisibilityInvisible(accountItemModel.isItemSelected)
-                setImageResource(theme.getDrawable(R.attr.themedSelectedItemDrawable))
             }
         }
 
@@ -160,6 +160,14 @@ class AccountsListItemViewHolder(
             .oval()
             .solidColorAttr(R.attr.themedAccentColor)
             .radius(itemView.resources.getDimensionPixelSize(R.dimen.pinned_account_icon_size).toFloat())
+            .build()
+    }
+
+    private fun applySelectedItemIconBackground(theme: CustomTheme) {
+        itemView.ivItemSelected.background = CustomThemeDrawableBuilder(theme, itemView.context)
+            .oval()
+            .solidColorAttr(R.attr.themedAccentColor)
+            .radius(itemView.resources.getDimensionPixelSize(R.dimen.pinned_account_selected_item_icon_size).toFloat())
             .build()
     }
 

@@ -83,6 +83,7 @@
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_about_section_action.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_add.xml" value="0.2035" />
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_backspace_action.xml" value="0.1785" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_check.xml" value="0.1855" />
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_debug_section_action.xml" value="0.21" />
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_delete.xml" value="0.229" />
         <entry key="..\:/Dev/Projects/PasswordSaver/base/src/main/res/drawable/ic_item_pinned.xml" value="0.2145" />
@@ -130,7 +131,7 @@
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/fragment_passwords_list.xml" value="0.1634963768115942" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/layout_photo_chooser_dialog.xml" value="0.21920289855072464" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/layout_popup_menu.xml" value="0.21920289855072464" />
-        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/passwords_item_layout.xml" value="0.5066137566137566" />
+        <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/layout/passwords_item_layout.xml" value="0.2" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabpasswords-impl/src/main/res/menu/passwords_list_action_mode_menu.xml" value="0.2421875" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/default_spinner_item.xml" value="0.21920289855072464" />
         <entry key="..\:/Dev/Projects/PasswordSaver/feature-tabsettings-impl/src/main/res/layout/fragment_about_settings.xml" value="0.23324275362318841" />
