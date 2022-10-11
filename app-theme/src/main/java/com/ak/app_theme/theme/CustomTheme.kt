@@ -13,6 +13,8 @@ import androidx.annotation.FloatRange
 import androidx.annotation.StringRes
 import androidx.annotation.StyleRes
 import androidx.core.content.res.use
+import androidx.core.util.containsKey
+import androidx.core.util.isNotEmpty
 import com.ak.app_theme.R
 
 class CustomTheme private constructor(
@@ -21,9 +23,11 @@ class CustomTheme private constructor(
     val nameResId: Int,
     @StyleRes val themeStyle: Int,
     val isLight: Boolean,
+    val overriddenColors: SparseIntArray = SparseIntArray(),
 ) {
 
     val isNative = themeStyle == 0
+    val isCustom = overriddenColors.isNotEmpty()
 
     companion object {
         private const val TAG = "CustomTheme"
@@ -43,8 +47,6 @@ class CustomTheme private constructor(
     }
 
     private val colors = SparseIntArray()
-    private val drawables = SparseIntArray()
-    private val styles = SparseIntArray()
 
     init {
         if (!isNative) {
@@ -55,12 +57,15 @@ class CustomTheme private constructor(
                     val index = it.getIndex(position)
                     val attributeId = R.styleable.CustomThemeAttributes[index]
 
+                    if (overriddenColors.containsKey(attributeId)) {
+                        colors.put(attributeId, overriddenColors[attributeId])
+                        continue
+                    }
+
                     val resId = it.getResourceId(index, 0)
                     if (resId != 0) {
                         when (context.resources.getResourceTypeName(resId)) {
                             "color" -> colors.put(attributeId, it.getColor(index, 0))
-                            "drawable" -> drawables.put(attributeId, resId)
-                            "style" -> styles.put(attributeId, resId)
                             else -> Log.e(
                                 TAG,
                                 "unsupported resource type: ${context.resources.getResourceTypeName(
@@ -139,8 +144,6 @@ class CustomTheme private constructor(
     }
 
     fun isColor(@AttrRes attribute: Int) = exist(colors, attribute)
-    fun isDrawable(@AttrRes attribute: Int) = exist(drawables, attribute)
-    fun isStyle(@AttrRes attribute: Int) = exist(styles, attribute)
 
     @Throws(Resources.NotFoundException::class)
     fun getColor(@AttrRes attribute: Int, @FloatRange(from = 0.0, to = 1.0) alpha: Float): Int {
@@ -164,24 +167,6 @@ class CustomTheme private constructor(
         }
 
         return colors.get(attribute)
-    }
-
-    @Throws(Resources.NotFoundException::class)
-    fun getDrawable(@AttrRes attribute: Int): Int {
-        if (!isDrawable(attribute)) {
-            throw Resources.NotFoundException("drawable ${getResourceName(attribute)} not found in theme: ${getThemeName()}")
-        }
-
-        return drawables.get(attribute)
-    }
-
-    @Throws(Resources.NotFoundException::class)
-    fun getStyle(@AttrRes attribute: Int): Int {
-        if (!isStyle(attribute)) {
-            throw Resources.NotFoundException("style ${getResourceName(attribute)} not found in theme: ${getThemeName()}")
-        }
-
-        return styles.get(attribute)
     }
 
     override fun equals(other: Any?): Boolean {
@@ -220,17 +205,22 @@ class CustomTheme private constructor(
         private var themeNameResId = 0
         private var themeStyle = 0
         private var themeIsLight = true
+        private val overriddenColors = SparseIntArray()
 
         fun id(id: Int) = apply { themeId = id }
         fun name(@StringRes nameRes: Int) = apply { themeNameResId = nameRes }
         fun themeStyle(@StyleRes style: Int) = apply { themeStyle = style }
         fun lightThemeFlag(isLight: Boolean) = apply { themeIsLight = isLight }
+        fun overrideColorAttr(@AttrRes colorAttr: Int, @ColorInt newValue: Int) = apply {
+            overriddenColors.put(colorAttr, newValue)
+        }
         fun build() = CustomTheme(
             context = context,
             id = themeId,
             nameResId = themeNameResId,
             themeStyle = themeStyle,
             isLight = themeIsLight,
+            overriddenColors = overriddenColors,
         )
     }
 }

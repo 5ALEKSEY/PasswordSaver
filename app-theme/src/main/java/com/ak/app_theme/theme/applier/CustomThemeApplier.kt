@@ -88,10 +88,6 @@ object CustomThemeApplier {
         return getDrawable(theme.context, drawableResId)
     }
 
-    fun getDrawableByAttr(theme: CustomTheme, @AttrRes drawableAttr: Int): Drawable? {
-        return getDrawable(theme, theme.getDrawable(drawableAttr))
-    }
-
     @JvmStatic
     fun getTintedDrawable(context: Context, @DrawableRes drawableResId: Int, @ColorInt color: Int): Drawable? {
         getDrawable(context, drawableResId)?.let {
@@ -119,7 +115,6 @@ object CustomThemeApplier {
 
         when {
             theme.isColor(resource) -> view.foreground = ColorDrawable(theme.getColor(resource))
-            theme.isDrawable(resource) -> view.foreground = getDrawableByAttr(theme, resource)
             else -> {
                 Log.d(TAG, "applyForeground - incorrect resource type: ${theme.getResourceName(resource)}")
                 return false
@@ -161,7 +156,6 @@ object CustomThemeApplier {
 
         when {
             theme.isColor(resource) -> view.setBackgroundColor(theme.getColor(resource))
-            theme.isDrawable(resource) -> view.setBackgroundResource(theme.getDrawable(resource))
             else -> {
                 Log.d(
                     TAG,

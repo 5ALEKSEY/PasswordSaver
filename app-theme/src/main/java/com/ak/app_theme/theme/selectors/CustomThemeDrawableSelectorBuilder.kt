@@ -253,12 +253,6 @@ class CustomThemeDrawableSelectorBuilder @JvmOverloads constructor(
             return loadDrawable(state, it)
         }
 
-        state.drawableAttribute?.let {
-            theme?.let { theme ->
-                return CustomThemeApplier.getDrawableByAttr(theme, it)
-            }
-        }
-
         return null
     }
 
