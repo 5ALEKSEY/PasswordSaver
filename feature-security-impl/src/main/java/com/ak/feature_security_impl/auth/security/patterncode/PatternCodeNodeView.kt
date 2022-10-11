@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.CustomThemeDrawableBuilder
 import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.feature_security_impl.R
 import kotlinx.android.synthetic.main.layout_pattern_code_node_view.view.ivNodePatternView
@@ -50,13 +51,17 @@ class PatternCodeNodeView(context: Context, attrs: AttributeSet?) : ConstraintLa
     }
 
     private fun drawNodeState(theme: CustomTheme = CustomThemeManager.getCurrentAppliedTheme()) {
-        val drawableRes = theme.getDrawable(
-            if (isPatternNodeEnabled) {
-                R.attr.themedSecurityPatternNodeEnabledDrawable
-            } else {
-                R.attr.themedSecurityPatternNodeDisabledDrawable
-            }
+        val nodeColorAttr = if (isPatternNodeEnabled) R.attr.themedAccentColor else R.attr.staticColorWhite
+        val nodeRadiusPx = context.resources.getDimensionPixelSize(R.dimen.pattern_code_node_size)
+
+        ivNodePatternView.setImageDrawable(
+            CustomThemeDrawableBuilder(theme, context)
+                .oval()
+                .solidColorAttr(nodeColorAttr)
+                .radius(nodeRadiusPx.toFloat())
+                .build().apply {
+                    setBounds(0, 0, nodeRadiusPx, nodeRadiusPx)
+                }
         )
-        ivNodePatternView.setImageResource(drawableRes)
     }
 }

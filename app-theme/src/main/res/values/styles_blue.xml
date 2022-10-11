@@ -31,10 +31,6 @@
         <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_blue</item>
 
         <item name="themedSelectedItemBackgroundDrawable">@drawable/a_loading_blue</item>
-
-        <item name="themedSecurityPatternNodeEnabledDrawable">@drawable/ic_enabled_pattern_node_blue</item>
-        <item name="themedSecurityPatternNodeDisabledDrawable">@drawable/ic_disabled_pattern_node_blue</item>
-
     </style>
 
 </resources>

@@ -31,10 +31,6 @@
         <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_orange</item>
 
         <item name="themedSelectedItemBackgroundDrawable">@drawable/a_loading_orange</item>
-
-        <item name="themedSecurityPatternNodeEnabledDrawable">@drawable/ic_enabled_pattern_node_orange</item>
-        <item name="themedSecurityPatternNodeDisabledDrawable">@drawable/ic_disabled_pattern_node_orange</item>
-
     </style>
 
 </resources>
