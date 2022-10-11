@@ -11,6 +11,7 @@ import com.ak.core_repo_impl.data.model.db.entities.PasswordDBEntity
 @Database(
     version = BuildConfig.DATA_BASE_VERSION,
     entities = [PasswordDBEntity::class, AccountDBEntity::class],
+    exportSchema = false,
 )
 abstract class PSDatabase : RoomDatabase() {
 

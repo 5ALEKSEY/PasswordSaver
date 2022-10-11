@@ -26,16 +26,6 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         vectorDrawables.useSupportLibrary = true
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [
-                        disableEmptyStrategyCheck: 'true',
-                        defaultMoxyStrategy      : 'moxy.viewstate.strategy.OneExecutionStateStrategy',
-                        enableEmptyStrategyHelper: 'false',
-                ]
-            }
-        }
     }
     buildTypes {
         release {

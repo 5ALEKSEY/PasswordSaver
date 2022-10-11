@@ -23,16 +23,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
-
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [
-                        disableEmptyStrategyCheck: 'true',
-                        defaultMoxyStrategy: 'moxy.viewstate.strategy.OneExecutionStateStrategy',
-                        enableEmptyStrategyHelper: 'false',
-                ]
-            }
-        }
     }
 
     compileOptions {
