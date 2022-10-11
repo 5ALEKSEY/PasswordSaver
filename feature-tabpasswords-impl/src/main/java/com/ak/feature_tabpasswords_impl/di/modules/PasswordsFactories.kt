@@ -23,7 +23,6 @@ class PasswordsViewModelsFactoryComposite @Inject constructor(
 
 class PasswordsListViewModelAssistedFactory @Inject constructor(
     private val passwordsInteractor: IPasswordsInteractor,
-    private val settingsPreferencesManager: ISettingsPreferencesManager,
     private val internalStorageManager: IPSInternalStorageManager,
     private val dataBufferManager: IDataBufferManager,
     private val resourceManager: IResourceManager,
@@ -32,7 +31,6 @@ class PasswordsListViewModelAssistedFactory @Inject constructor(
     override fun create(): PasswordsListViewModel {
         return PasswordsListViewModel(
             passwordsInteractor = passwordsInteractor,
-            settingsPreferencesManager = settingsPreferencesManager,
             internalStorageManager = internalStorageManager,
             dataBufferManager = dataBufferManager,
             resourceManager = resourceManager,

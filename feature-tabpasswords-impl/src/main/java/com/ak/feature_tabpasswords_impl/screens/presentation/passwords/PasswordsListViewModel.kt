@@ -20,7 +20,6 @@ import javax.inject.Inject
 
 class PasswordsListViewModel @Inject constructor(
     private val passwordsInteractor: IPasswordsInteractor,
-    private val settingsPreferencesManager: ISettingsPreferencesManager,
     private val internalStorageManager: IPSInternalStorageManager,
     private val dataBufferManager: IDataBufferManager,
     private val resourceManager: IResourceManager,
