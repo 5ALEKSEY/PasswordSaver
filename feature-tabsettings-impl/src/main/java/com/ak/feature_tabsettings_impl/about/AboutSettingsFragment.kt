@@ -1,74 +1,86 @@
 package com.ak.feature_tabsettings_impl.about
 
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.base.extensions.drawTextInner
-import com.ak.base.extensions.getColorCompat
-import com.ak.base.ui.BasePSFragment
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecorationSettings
+import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
+import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_about_settings.*
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
+import kotlinx.android.synthetic.main.fragment_about_settings.view.ivAboutLauncherImage
+import kotlinx.android.synthetic.main.fragment_about_settings.view.rvAboutActionsList
+import kotlinx.android.synthetic.main.fragment_about_settings.view.tvApplicationVersionInfo
 
-class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
-    IAboutSettingsView {
-
-    @InjectPresenter
-    lateinit var aboutSettingsPresenter: AboutSettingsPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): AboutSettingsPresenter = daggerPresenter
+class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>() {
 
     private lateinit var aboutRecyclerAdapter: SettingsRecyclerViewAdapter
 
     override fun getFragmentLayoutResId() = R.layout.fragment_about_settings
 
-    override fun injectFragment() {
-        FeatureTabSettingsComponent.get().inject(this)
+    override fun injectFragment(component: FeatureTabSettingsComponent) {
+        component.inject(this)
     }
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun createViewModel(): AboutSettingsViewModel {
+        return injectViewModel(viewModelsFactory)
+    }
+
+    override fun initView(fragmentView: View) {
+        super.initView(fragmentView)
         initToolbar()
         initRecyclerView()
         displayLauncherImageText(getString(R.string.about_launch_image_text))
+        viewModel.onInitSettings()
     }
 
-    override fun setVersionInfo(versionInfo: String) {
-        tvApplicationVersionInfo.text = versionInfo
+    override fun subscriberToViewModel(viewModel: AboutSettingsViewModel) {
+        super.subscriberToViewModel(viewModel)
+        viewModel.subscribeToStartReportLiveData().observe(viewLifecycleOwner) {
+            startReportAction()
+        }
+        viewModel.subscribeToVersionInfoLiveData().observe(viewLifecycleOwner, this::setVersionInfo)
+        viewModel.subscribeToAboutActionsLiveData().observe(viewLifecycleOwner, this::displayAboutActions)
     }
 
-    override fun displayAboutActions(settingsItems: List<SettingsListItemModel>) {
+    override fun applyTheme(theme: CustomTheme) {
+        super.applyTheme(theme)
+        displayLauncherImageText(getString(R.string.about_launch_image_text), theme)
+    }
+
+    private fun setVersionInfo(versionInfo: String) {
+        fragmentView.tvApplicationVersionInfo.text = versionInfo
+    }
+
+    private fun displayAboutActions(settingsItems: List<SettingsListItemModel>) {
         aboutRecyclerAdapter.addSettingsList(settingsItems)
     }
 
-    override fun startReportAction() {
+    private fun startReportAction() {
 //        showShortTimeMessage("report. aga. shhha")
     }
 
     private fun initToolbar() {
-        if (activity != null && activity is AppCompatActivity) {
-            (activity as AppCompatActivity).apply {
-                setSupportActionBar(tbAboutSettingsBar)
-                tbAboutSettingsBar.setNavigationOnClickListener {
-                    navController.popBackStack()
-                }
+        applyForToolbarController {
+            setToolbarTitle(R.string.privacy_settings_toolbar_title)
+            setupBackAction(R.drawable.ic_back_action) {
+                navController.popBackStack()
             }
         }
     }
 
     private fun initRecyclerView() {
         aboutRecyclerAdapter = SettingsRecyclerViewAdapter(
-            null,
-            null,
-            aboutSettingsPresenter::onAboutActionClicked,
-            null
+            onSwitchSettingsChanged = { a, f -> },
+            onSectionSettingsClicked = viewModel::onAboutActionClicked,
+            onTextSettingsClicked = { d -> }
         )
-        rvAboutActionsList.apply {
+        fragmentView.rvAboutActionsList.apply {
             adapter = aboutRecyclerAdapter
             val linearLayoutManager = LinearLayoutManager(
                 context,
@@ -76,23 +88,27 @@ class AboutSettingsFragment : BasePSFragment<AboutSettingsPresenter>(),
                 false
             )
             layoutManager = linearLayoutManager
-            addItemDecoration(DividerItemDecoration(context, linearLayoutManager.orientation))
+            addItemDecoration(PsDividerItemDecoration(PsDividerItemDecorationSettings(context)))
         }
     }
 
-    private fun displayLauncherImageText(text: String) {
-        val fillColor = getColorCompat(R.color.colorPrimary)
-        val textColor = getColorCompat(R.color.colorWhite)
+    private fun displayLauncherImageText(text: String, theme: CustomTheme = CustomThemeManager.getCurrentAppliedTheme()) {
+        val fillColor = theme.getColor(R.attr.themedPrimaryColor)
+        val textColor = theme.getColor(R.attr.staticColorWhite)
         val aboutLauncherImageTextSizeInPx =
             resources.getDimensionPixelSize(R.dimen.about_image_launcher_text_size)
         val aboutLauncherImageSizeInPx =
             resources.getDimensionPixelSize(R.dimen.about_image_launcher_size)
-        ivAboutLauncherImage.drawTextInner(
-            aboutLauncherImageSizeInPx,
-            fillColor,
-            textColor,
-            aboutLauncherImageTextSizeInPx,
-            text
-        )
+        fragmentView.ivAboutLauncherImage.apply {
+            drawTextInner(
+                requireContext(),
+                aboutLauncherImageSizeInPx,
+                fillColor,
+                textColor,
+                aboutLauncherImageTextSizeInPx,
+                text
+            )
+            borderColor = theme.getColor(R.attr.themedPrimaryDarkColor)
+        }
     }
 }

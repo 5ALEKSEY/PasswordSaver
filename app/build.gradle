@@ -110,9 +110,6 @@ dependencies {
     implementation deps.dagger
     kapt deps.daggerKapt
 
-    implementation deps.moxy
-    kapt deps.moxyKapt
-
     implementation deps.rx
     implementation deps.rxAndroid
 
@@ -121,4 +118,6 @@ dependencies {
     implementation deps.lifecycle
     implementation deps.gson
     implementation deps.navComponent
+
+    implementation deps.viewPump
 }

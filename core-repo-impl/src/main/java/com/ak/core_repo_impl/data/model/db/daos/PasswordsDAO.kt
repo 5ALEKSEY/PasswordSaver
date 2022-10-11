@@ -7,17 +7,37 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.ak.core_repo_impl.data.model.db.entities.PasswordDBEntity
-import io.reactivex.Flowable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
 
 @Dao
 interface PasswordsDAO {
 
-    @Query("SELECT * FROM ${PasswordDBEntity.TABLE_NAME} ORDER BY ${PasswordDBEntity.COLUMN_PASSWORD_ID} DESC")
+    @Query("SELECT * FROM ${PasswordDBEntity.TABLE_NAME} " +
+               "ORDER BY " +
+               "${PasswordDBEntity.COLUMN_PASSWORD_PIN_TIMESTAMP} DESC, " +
+               "${PasswordDBEntity.COLUMN_PASSWORD_ID} DESC")
     fun getAllPasswords(): Flowable<List<PasswordDBEntity>>
 
-    @Query("SELECT * FROM ${PasswordDBEntity.TABLE_NAME} WHERE ${PasswordDBEntity.COLUMN_PASSWORD_ID} = :passwordId LIMIT 1")
+    @Query("SELECT * FROM ${PasswordDBEntity.TABLE_NAME} " +
+               "WHERE ${PasswordDBEntity.COLUMN_PASSWORD_ID} = :passwordId LIMIT 1")
     fun getPasswordById(passwordId: Long): Single<PasswordDBEntity>
+
+    @Query("DELETE FROM ${PasswordDBEntity.TABLE_NAME}")
+    fun clearPasswords()
+
+    @Query("SELECT COUNT(*) FROM ${PasswordDBEntity.TABLE_NAME}")
+    fun getPasswordsCount(): Int
+
+    @Query("UPDATE ${PasswordDBEntity.TABLE_NAME} " +
+               "SET ${PasswordDBEntity.COLUMN_PASSWORD_PIN_TIMESTAMP} = :pinnedTimestamp " +
+               "WHERE ${PasswordDBEntity.COLUMN_PASSWORD_ID} = :passwordId")
+    fun markPasswordAsPinned(passwordId: Long, pinnedTimestamp: Long): Int
+
+    @Query("UPDATE ${PasswordDBEntity.TABLE_NAME} " +
+               "SET ${PasswordDBEntity.COLUMN_PASSWORD_PIN_TIMESTAMP} = NULL " +
+               "WHERE ${PasswordDBEntity.COLUMN_PASSWORD_ID} = :passwordId")
+    fun markPasswordAsUnpinned(passwordId: Long): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertNewPassword(vararg passwordDBEntity: PasswordDBEntity): List<Long>

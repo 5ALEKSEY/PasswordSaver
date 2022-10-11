@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="CustomThemeView">
+        <attr name="divider" format="reference" />
+        <attr name="widgetPopupBackground" format="reference" />
+        <attr name="auto" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomThemeTextSelectorAttributes">
+        <attr name="textAlpha" format="float" />
+        <attr name="textColorDefault" format="reference" />
+        <attr name="textColorDefaultAlpha" format="float" />
+        <attr name="textColorPressed" format="reference" />
+        <attr name="textColorPressedAlpha" format="float" />
+        <attr name="textColorSelected" format="reference" />
+        <attr name="textColorSelectedAlpha" format="float" />
+        <attr name="textColorFocused" format="reference" />
+        <attr name="textColorFocusedAlpha" format="float" />
+        <attr name="textColorUnChecked" format="reference" />
+        <attr name="textColorUnCheckedAlpha" format="float" />
+        <attr name="textColorChecked" format="reference" />
+        <attr name="textColorCheckedAlpha" format="float" />
+        <attr name="textColorDisabled" format="reference" />
+        <attr name="textColorDisabledAlpha" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomThemeBackgroundSelectorAttributes">
+        <attr name="backgroundShape" format="enum">
+            <enum name="rectangle" value="0" />
+            <enum name="oval" value="1" />
+        </attr>
+
+        <attr name="backgroundAlpha" format="float" />
+        <attr name="backgroundStrokeWidth" format="dimension" />
+        <attr name="backgroundStrokeColor" format="reference" />
+        <attr name="backgroundWidth" format="dimension" />
+        <attr name="backgroundHeight" format="dimension" />
+        <attr name="backgroundRadius" format="dimension" />
+        <attr name="backgroundTopLeftRadius" format="dimension" />
+        <attr name="backgroundTopRightRadius" format="dimension" />
+        <attr name="backgroundBottomLeftRadius" format="dimension" />
+        <attr name="backgroundBottomRightRadius" format="dimension" />
+
+        <attr name="backgroundDefault" format="reference" />
+        <attr name="backgroundDefaultTint" format="reference" />
+        <attr name="backgroundDefaultRadius" format="dimension" />
+        <attr name="backgroundDefaultStrokeWidth" format="dimension" />
+        <attr name="backgroundDefaultStrokeColor" format="reference" />
+        <attr name="backgroundDefaultAlpha" format="float" />
+
+        <attr name="backgroundPressed" format="reference" />
+        <attr name="backgroundPressedTint" format="reference" />
+        <attr name="backgroundPressedRadius" format="dimension" />
+        <attr name="backgroundPressedStrokeWidth" format="dimension" />
+        <attr name="backgroundPressedStrokeColor" format="reference" />
+        <attr name="backgroundPressedAlpha" format="float" />
+
+        <attr name="backgroundSelected" format="reference" />
+        <attr name="backgroundSelectedTint" format="reference" />
+        <attr name="backgroundSelectedRadius" format="dimension" />
+        <attr name="backgroundSelectedStrokeWidth" format="dimension" />
+        <attr name="backgroundSelectedStrokeColor" format="reference" />
+        <attr name="backgroundSelectedAlpha" format="float" />
+
+        <attr name="backgroundFocused" format="reference" />
+        <attr name="backgroundFocusedTint" format="reference" />
+        <attr name="backgroundFocusedRadius" format="dimension" />
+        <attr name="backgroundFocusedStrokeWidth" format="dimension" />
+        <attr name="backgroundFocusedStrokeColor" format="reference" />
+        <attr name="backgroundFocusedAlpha" format="float" />
+
+        <attr name="backgroundUnChecked" format="reference" />
+        <attr name="backgroundUnCheckedTint" format="reference" />
+        <attr name="backgroundUnCheckedRadius" format="dimension" />
+        <attr name="backgroundUnCheckedStrokeWidth" format="dimension" />
+        <attr name="backgroundUnCheckedStrokeColor" format="reference" />
+        <attr name="backgroundUnCheckedAlpha" format="float" />
+
+        <attr name="backgroundChecked" format="reference" />
+        <attr name="backgroundCheckedTint" format="reference" />
+        <attr name="backgroundCheckedRadius" format="dimension" />
+        <attr name="backgroundCheckedStrokeWidth" format="dimension" />
+        <attr name="backgroundCheckedStrokeColor" format="reference" />
+        <attr name="backgroundCheckedAlpha" format="float" />
+
+        <attr name="backgroundDisabled" format="reference" />
+        <attr name="backgroundDisabledTint" format="reference" />
+        <attr name="backgroundDisabledRadius" format="dimension" />
+        <attr name="backgroundDisabledStrokeWidth" format="dimension" />
+        <attr name="backgroundDisabledStrokeColor" format="reference" />
+        <attr name="backgroundDisabledAlpha" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomThemeImageSelectorAttributes">
+        <attr name="srcShape" format="enum">
+            <enum name="rectangle" value="0" />
+            <enum name="oval" value="1" />
+        </attr>
+
+        <attr name="srcAlpha" format="float" />
+        <attr name="srcStrokeWidth" format="dimension" />
+        <attr name="srcStrokeColor" format="reference" />
+        <attr name="srcWidth" format="dimension" />
+        <attr name="srcHeight" format="dimension" />
+        <attr name="srcRadius" format="dimension" />
+        <attr name="srcTopLeftRadius" format="dimension" />
+        <attr name="srcTopRightRadius" format="dimension" />
+        <attr name="srcBottomLeftRadius" format="dimension" />
+        <attr name="srcBottomRightRadius" format="dimension" />
+
+        <attr name="srcDefault" format="reference" />
+        <attr name="srcDefaultTintConfig" format="string" />
+        <attr name="srcDefaultTint" format="reference" />
+        <attr name="srcDefaultRadius" format="dimension" />
+        <attr name="srcDefaultStrokeWidth" format="dimension" />
+        <attr name="srcDefaultStrokeColor" format="reference" />
+        <attr name="srcDefaultAlpha" format="float" />
+
+        <attr name="srcPressed" format="reference" />
+        <attr name="srcPressedTint" format="reference" />
+        <attr name="srcPressedTintConfig" format="string" />
+        <attr name="srcPressedRadius" format="dimension" />
+        <attr name="srcPressedStrokeWidth" format="dimension" />
+        <attr name="srcPressedStrokeColor" format="reference" />
+        <attr name="srcPressedAlpha" format="float" />
+
+        <attr name="srcSelected" format="reference" />
+        <attr name="srcSelectedTint" format="reference" />
+        <attr name="srcSelectedTintConfig" format="string" />
+        <attr name="srcSelectedRadius" format="dimension" />
+        <attr name="srcSelectedStrokeWidth" format="dimension" />
+        <attr name="srcSelectedStrokeColor" format="reference" />
+        <attr name="srcSelectedAlpha" format="float" />
+
+        <attr name="srcFocused" format="reference" />
+        <attr name="srcFocusedTint" format="reference" />
+        <attr name="srcFocusedTintConfig" format="string" />
+        <attr name="srcFocusedRadius" format="dimension" />
+        <attr name="srcFocusedStrokeWidth" format="dimension" />
+        <attr name="srcFocusedStrokeColor" format="reference" />
+        <attr name="srcFocusedAlpha" format="float" />
+
+        <attr name="srcUnChecked" format="reference" />
+        <attr name="srcUnCheckedTint" format="reference" />
+        <attr name="srcUnCheckedTintConfig" format="string" />
+        <attr name="srcUnCheckedRadius" format="dimension" />
+        <attr name="srcUnCheckedStrokeWidth" format="dimension" />
+        <attr name="srcUnCheckedStrokeColor" format="reference" />
+        <attr name="srcUnCheckedAlpha" format="float" />
+
+        <attr name="srcChecked" format="reference" />
+        <attr name="srcCheckedTint" format="reference" />
+        <attr name="srcCheckedTintConfig" format="string" />
+        <attr name="srcCheckedRadius" format="dimension" />
+        <attr name="srcCheckedStrokeWidth" format="dimension" />
+        <attr name="srcCheckedStrokeColor" format="reference" />
+        <attr name="srcCheckedAlpha" format="float" />
+
+        <attr name="srcDisabled" format="reference" />
+        <attr name="srcDisabledTint" format="reference" />
+        <attr name="srcDisabledTintConfig" format="string" />
+        <attr name="srcDisabledRadius" format="dimension" />
+        <attr name="srcDisabledStrokeWidth" format="dimension" />
+        <attr name="srcDisabledStrokeColor" format="reference" />
+        <attr name="srcDisabledAlpha" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomThemeAttributes">
+        <!-- STATIC COLORS -->
+        <attr name="staticColorTransparent" format="color" />
+        <attr name="staticColorWhite" format="color" />
+        <attr name="staticColorBlack" format="color" />
+
+        <!-- ATTRS HERE !!!!!!!!  -->
+        <attr name="themedPrimaryBackgroundColor" format="color" />
+        <attr name="themedSecondaryBackgroundColor" format="color" />
+
+        <attr name="themedPopupBackgroundColor" format="color" />
+
+        <attr name="themedPrimaryColor" format="color" />
+        <attr name="themedPrimaryDarkColor" format="color" />
+        <attr name="themedPrimaryLightColor" format="color" />
+        <attr name="themedAccentColor" format="color" />
+
+        <attr name="themedToolbarIconsAndTextColor" format="color" />
+        <attr name="themedPrimaryTextColor" format="color" />
+        <attr name="themedPrimaryTextHintColor" format="color" />
+        <attr name="themedSecondaryTextColor" format="color" />
+
+        <attr name="themedDividerColor" format="color" />
+        <attr name="themedErrorColor" format="color" />
+        <attr name="themedSuccessColor" format="color" />
+
+        <attr name="themedSwitchThumbUncheckedColor" format="color" />
+        <attr name="themedSwitchThumbCheckedColor" format="color" />
+        <attr name="themedSwitchTrackUncheckedColor" format="color" />
+        <attr name="themedSwitchTrackCheckedColor" format="color" />
+
+        <attr name="themedSelectedGradientStartColor" format="color" />
+        <attr name="themedSelectedGradientCenterColor" format="color" />
+        <attr name="themedSelectedGradientEndColor" format="color" />
+
+    </declare-styleable>
+
+</resources>

@@ -1,0 +1,38 @@
+<resources>
+
+    <style name="ActionModeStyle.Blue" parent="BaseActionModeStyle">
+        <item name="background">@color/color_accent_blue</item>
+    </style>
+
+    <style name="CustomTheme.Blue" parent="CustomTheme">
+        <item name="actionModeStyle">@style/ActionModeStyle.Blue</item>
+        <item name="themedPrimaryBackgroundColor">@color/color_primary_bg_blue</item>
+        <item name="themedSecondaryBackgroundColor">@color/color_secondary_bg_blue</item>
+
+        <item name="themedPopupBackgroundColor">@color/color_popup_bg_blue</item>
+
+        <item name="themedPrimaryColor">@color/color_primary_blue</item>
+        <item name="themedPrimaryDarkColor">@color/color_primary_dark_blue</item>
+        <item name="themedPrimaryLightColor">@color/color_primary_light_blue</item>
+        <item name="themedAccentColor">@color/color_accent_blue</item>
+
+        <item name="themedToolbarIconsAndTextColor">@color/color_toolbar_content_blue</item>
+        <item name="themedPrimaryTextColor">@color/color_primary_text_blue</item>
+        <item name="themedPrimaryTextHintColor">@color/color_primary_text_hint_blue</item>
+        <item name="themedSecondaryTextColor">@color/color_secondary_text_blue</item>
+
+        <item name="themedDividerColor">@color/color_divider_blue</item>
+        <item name="themedErrorColor">@color/color_error_blue</item>
+        <item name="themedSuccessColor">@color/color_success_blue</item>
+
+        <item name="themedSwitchThumbUncheckedColor">@color/color_switch_thumb_unchecked_blue</item>
+        <item name="themedSwitchThumbCheckedColor">@color/color_switch_thumb_checked_blue</item>
+        <item name="themedSwitchTrackUncheckedColor">@color/color_switch_track_unchecked_blue</item>
+        <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_blue</item>
+
+        <item name="themedSelectedGradientStartColor">@color/color_loading_gradient_start_blue</item>
+        <item name="themedSelectedGradientCenterColor">@color/color_loading_gradient_center_blue</item>
+        <item name="themedSelectedGradientEndColor">@color/color_loading_gradient_end_blue</item>
+    </style>
+
+</resources>

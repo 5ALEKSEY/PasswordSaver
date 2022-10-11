@@ -1,31 +1,27 @@
 package com.ak.feature_tabsettings_impl.main
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.DividerItemDecoration
+import android.view.View
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ak.base.ui.BasePSFragment
+import com.ak.base.extensions.showToastMessage
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
+import com.ak.base.ui.recycler.decorator.PsDividerItemDecorationSettings
+import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
+import com.ak.feature_tabsettings_impl.BuildConfig
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
+import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_settings.*
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_settings.view.rvSettingsItemsList
 
-class SettingsFragment : BasePSFragment<SettingsPresenter>(),
-    ISettingsView {
+class SettingsFragment : BaseSettingsModuleFragment<SettingsViewModel>() {
 
     @Inject
     protected lateinit var authChecker: IAuthCheckerStarter
-
-    @InjectPresenter
-    lateinit var settingsPresenter: SettingsPresenter
-
-    @ProvidePresenter
-    fun providePresenter(): SettingsPresenter = daggerPresenter
 
     private lateinit var settingsRecyclerAdapter: SettingsRecyclerViewAdapter
 
@@ -33,87 +29,109 @@ class SettingsFragment : BasePSFragment<SettingsPresenter>(),
 
     override fun isBackPressEnabled() = false
 
-    override fun injectFragment() {
-        FeatureTabSettingsComponent.get().inject(this)
+    override fun injectFragment(component: FeatureTabSettingsComponent) {
+        component.inject(this)
     }
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun createViewModel(): SettingsViewModel {
+        return injectViewModel(viewModelsFactory)
+    }
+
+    override fun initView(fragmentView: View) {
+        super.initView(fragmentView)
         initToolbar()
         initRecyclerView()
     }
 
-    override fun onResume() {
-        super.onResume()
-        settingsPresenter.loadSettingsData()
+    override fun subscriberToViewModel(viewModel: SettingsViewModel) {
+        super.subscriberToViewModel(viewModel)
+        viewModel.subscribeToOpenDesignSettingsLiveData().observe(viewLifecycleOwner) { showDesignSettings() }
+        viewModel.subscribeToOpenPrivacySettingsLiveData().observe(viewLifecycleOwner) { showPrivacySettings() }
+        viewModel.subscribeToOpenAboutSettingsLiveData().observe(viewLifecycleOwner) { showAboutScreen() }
+        viewModel.subscribeToOpenDebugSettingsLiveData().observe(viewLifecycleOwner) { showDebugScreen() }
+        viewModel.subscribeToOpenAuthForPrivacySettingsLiveData().observe(viewLifecycleOwner) { startAuthAndOpenPrivacySettings() }
+        viewModel.subscribeToAppSettingsListLiveData().observe(viewLifecycleOwner, this::displayAppSettings)
     }
 
-    override fun showDesignSettings() {
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadSettingsData()
+    }
+
+    private fun showDesignSettings() {
         context?.let {
             navController.navigate(R.id.action_settingsFragment_to_designSettingsFragment)
         }
     }
 
-    override fun showPrivacySettings() {
+    private fun showPrivacySettings() {
         context?.let {
             navController.navigate(R.id.action_settingsFragment_to_privacySettingsFragment)
         }
     }
 
-    override fun showAboutScreen() {
+    private fun showAboutScreen() {
         context?.let {
             navController.navigate(R.id.action_settingsFragment_to_aboutSettingsFragment)
         }
     }
 
-    override fun startAuthAndOpenPrivacySettings() {
+    private fun showDebugScreen() {
+        if (!BuildConfig.DEBUG) return
+
+        context?.let {
+            navController.navigate(R.id.action_settingsFragment_to_debugSettingsFragment)
+        }
+    }
+
+    private fun startAuthAndOpenPrivacySettings() {
         activity?.let {
             authChecker.startAuthCheck(
-                    it,
-                    this,
-                    IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE,
-                    object : IAuthCheckerStarter.CheckAuthCallback {
-                        override fun onAuthSuccessfully() {
+                it,
+                this,
+                IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE,
+                object : IAuthCheckerStarter.CheckAuthCallback {
+                    override fun onAuthSuccessfully() {
+                        postponedEventManager.postponeOrInvokeFor(Lifecycle.Event.ON_RESUME) {
                             showPrivacySettings()
                         }
-
-                        override fun onAuthFailed() {
-                            showShortTimeMessage(getString(R.string.auth_failed_funny_text))
-                        }
                     }
+
+                    override fun onAuthFailed() {
+                        showToastMessage(getString(R.string.auth_failed_funny_text))
+                    }
+                }
             )
         }
     }
 
-    override fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
+    private fun displayAppSettings(settingsItems: List<SettingsListItemModel>) {
         settingsRecyclerAdapter.addSettingsList(settingsItems)
     }
 
     private fun initToolbar() {
-        if (activity != null && activity is AppCompatActivity) {
-            (activity as AppCompatActivity).apply {
-                setSupportActionBar(tbSettingsBar)
-                supportActionBar?.title = getString(R.string.settings_toolbar_title)
-            }
+        applyForToolbarController {
+            setToolbarTitle(R.string.settings_toolbar_title)
         }
     }
 
     private fun initRecyclerView() {
         settingsRecyclerAdapter = SettingsRecyclerViewAdapter(
-            null,
-            null,
-            settingsPresenter::onSectionClicked,
-            null
+            onSectionSettingsClicked = viewModel::onSectionClicked,
         )
-        rvSettingsItemsList.adapter = settingsRecyclerAdapter
-        val linearLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        rvSettingsItemsList.layoutManager = linearLayoutManager
-        rvSettingsItemsList.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                linearLayoutManager.orientation
+
+        with(fragmentView.rvSettingsItemsList) {
+            adapter = settingsRecyclerAdapter
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(
+                PsDividerItemDecoration(
+                    PsDividerItemDecorationSettings(
+                        context = context,
+                        offsetDp = PsDividerItemDecorationSettings.Offset(left = 48F),
+                    )
+                )
             )
-        )
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

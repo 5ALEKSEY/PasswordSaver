@@ -2,26 +2,30 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:background="?android:attr/selectableItemBackground"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        tools:background="?themedPrimaryBackgroundColor">
 
     <ImageView
             android:id="@+id/ivSettingsSectionImage"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_margin="8dp"
+            android:tag="@string/skipThemeInterceptor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:tint="?themedPrimaryTextColor"
             tools:src="@drawable/ic_privacy_section_action" />
 
     <TextView
             android:id="@+id/tvSettingName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:textColor="@color/primaryText"
+            android:layout_marginStart="16dp"
+            android:tag="@string/skipThemeInterceptor"
+            android:textColor="?themedPrimaryTextColor"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/ivSettingsSectionImage"
             app:layout_constraintStart_toEndOf="@+id/ivSettingsSectionImage"
@@ -35,15 +39,17 @@
             android:layout_gravity="top|center_horizontal"
             android:layout_marginStart="4dp"
             android:background="@drawable/bg_badge_notification"
+            android:backgroundTint="?themedAccentColor"
             android:gravity="center"
             android:padding="3dp"
-            android:textColor="@color/colorWhite"
-            android:visibility="gone"
-            tools:visibility="visible"
+            android:tag="@string/skipThemeInterceptor"
+            android:text="@string/new_feature_badge"
+            android:textColor="?staticColorWhite"
             android:textSize="10sp"
-            app:layout_constraintTop_toTopOf="@id/tvSettingName"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tvSettingName"
             app:layout_constraintStart_toEndOf="@id/tvSettingName"
-            android:text="@string/new_feature_badge" />
+            app:layout_constraintTop_toTopOf="@id/tvSettingName"
+            tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

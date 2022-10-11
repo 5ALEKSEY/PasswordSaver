@@ -1,7 +1,7 @@
 package com.ak.feature_tabaccounts_api.interfaces
 
-import io.reactivex.Flowable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
 
 interface IAccountsInteractor {
     fun getAllAccounts(): Flowable<List<AccountFeatureEntity>>
@@ -12,4 +12,6 @@ interface IAccountsInteractor {
     fun addNewAccounts(accountFeatureEntities: List<AccountFeatureEntity>): Single<Boolean>
     fun updateAccount(accountFeatureEntity: AccountFeatureEntity): Single<Boolean>
     fun updateAccounts(accountFeatureEntities: List<AccountFeatureEntity>): Single<Boolean>
+    fun pinAccount(accountId: Long, pinnedTimestamp: Long): Single<Boolean>
+    fun unpinAccount(accountId: Long): Single<Boolean>
 }

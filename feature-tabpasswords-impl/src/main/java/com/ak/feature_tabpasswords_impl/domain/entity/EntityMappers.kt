@@ -11,7 +11,8 @@ fun PasswordRepoEntity.mapToDomainEntity() = PasswordDomainEntity(
     this.getPasswordId(),
     this.getPasswordName(),
     this.getPasswordAvatarPath(),
-    this.getPasswordContent()
+    this.getPasswordContent(),
+    this.getPasswordPinTimestamp(),
 )
 
 fun List<PasswordFeatureEntity>.mapFeatureToDomainEntitiesList(): List<PasswordDomainEntity> {
@@ -22,5 +23,6 @@ fun PasswordFeatureEntity.mapToDomainEntity() = PasswordDomainEntity(
     this.getPasswordId(),
     this.getPasswordName(),
     this.getPasswordAvatarPath(),
-    this.getPasswordContent()
+    this.getPasswordContent(),
+    this.getPasswordPinTimestamp(),
 )

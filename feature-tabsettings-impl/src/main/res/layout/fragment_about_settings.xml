@@ -5,26 +5,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tbAboutSettingsBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_back_action"
-            app:title="About"
-            app:titleTextColor="@color/iconsAndText" />
-
     <RelativeLayout
             android:id="@+id/ivAboutImageContainer"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:background="@color/colorPrimary"
+            android:background="?themedPrimaryColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tbAboutSettingsBar">
+            app:layout_constraintTop_toTopOf="parent">
 
         <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/ivAboutLauncherImage"
@@ -32,8 +20,8 @@
                 android:layout_height="150dp"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="150dp"
-                android:src="@color/colorPrimary"
-                app:civ_border_color="@color/colorPrimaryDark"
+                android:src="?themedPrimaryColor"
+                app:civ_border_color="?themedPrimaryDarkColor"
                 app:civ_border_width="2dp" />
 
         <TextView
@@ -43,7 +31,7 @@
                 android:layout_below="@id/ivAboutLauncherImage"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/colorWhite"
+                android:textColor="?staticColorWhite"
                 tools:text="v. 1.0.0-debug" />
 
     </RelativeLayout>
@@ -52,6 +40,7 @@
             android:id="@+id/rvAboutActionsList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="?themedPrimaryBackgroundColor"
             android:overScrollMode="never"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,37 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tbManageAccountBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:titleTextColor="@color/iconsAndText"
-            app:navigationIcon="@drawable/ic_back_action"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+        android:layout_height="match_parent"
+        tools:background="?themedPrimaryBackgroundColor">
 
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:overScrollMode="never"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tbManageAccountBar">
+            app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:orientation="vertical">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.ak.base.ui.custom.PsThemedTextInputLayout
                     android:id="@+id/tilAccountNameLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -41,14 +31,18 @@
                         android:id="@+id/tietAccountNameField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_password_name_input_field"
+                        android:drawablePadding="8dp"
+                        android:drawableTint="?themedPrimaryColor"
                         android:hint="@string/name_field_name"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        android:nextFocusDown="@id/tietAccountLoginField" />
+                        android:nextFocusDown="@id/tietAccountLoginField"
+                        android:textColor="?themedPrimaryTextColor" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.ak.base.ui.custom.PsThemedTextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.ak.base.ui.custom.PsThemedTextInputLayout
                     android:id="@+id/tilAccountLoginLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -58,14 +52,18 @@
                         android:id="@+id/tietAccountLoginField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_account_login"
+                        android:drawablePadding="8dp"
+                        android:drawableTint="?themedPrimaryColor"
                         android:hint="@string/login_field_name"
                         android:imeOptions="actionNext"
                         android:inputType="text"
-                        android:nextFocusDown="@id/tietAccountPasswordField"/>
+                        android:nextFocusDown="@id/tietAccountPasswordField"
+                        android:textColor="?themedPrimaryTextColor" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.ak.base.ui.custom.PsThemedTextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.ak.base.ui.custom.PsThemedTextInputLayout
                     android:id="@+id/tilAccountPasswordLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -75,19 +73,27 @@
                         android:id="@+id/tietAccountPasswordField"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:drawableStart="@drawable/ic_account_password"
+                        android:drawablePadding="8dp"
+                        android:drawableTint="?themedPrimaryColor"
                         android:hint="@string/password_field_name"
                         android:imeOptions="actionDone"
-                        android:inputType="text" />
+                        android:inputType="text"
+                        android:textColor="?themedPrimaryTextColor" />
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </com.ak.base.ui.custom.PsThemedTextInputLayout>
 
             <Button
                     android:id="@+id/btnManageAccountAction"
                     style="@style/PSButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
                     android:layout_marginTop="32dp"
-                    android:text="@string/save_account_button_text"/>
+                    android:backgroundTint="?themedPrimaryLightColor"
+                    android:minWidth="160dp"
+                    android:text="@string/save_account_button_text"
+                    android:textColor="?staticColorWhite" />
 
         </LinearLayout>
 

@@ -16,11 +16,19 @@ data class PasswordDBEntity(
     @ColumnInfo(name = COLUMN_PASSWORD_AVATAR_PATH)
     var passwordAvatarPathValue: String,
     @ColumnInfo(name = COLUMN_PASSWORD_CONTENT)
-    var passwordContentValue: String
+    var passwordContentValue: String,
+    @ColumnInfo(name = COLUMN_PASSWORD_PIN_TIMESTAMP)
+    var passwordPinTimestampValue: Long?,
 ) : PasswordRepoEntity {
 
     @Ignore
-    constructor(passwordId: Long) : this(passwordId, "", "", "")
+    constructor(passwordId: Long) : this(
+        passwordId,
+        "",
+        "",
+        "",
+        null,
+    )
 
     companion object {
         const val TABLE_NAME = "Passwords"
@@ -30,6 +38,7 @@ data class PasswordDBEntity(
         const val COLUMN_PASSWORD_NAME = "password_name" // password alias
         const val COLUMN_PASSWORD_AVATAR_PATH = "password_avatar_path" // url of password picture
         const val COLUMN_PASSWORD_CONTENT = "password_content" // url of password picture
+        const val COLUMN_PASSWORD_PIN_TIMESTAMP = "password_pin_tmstp" // pin timestamp
     }
 
     override fun getPasswordId(): Long? = passwordIdValue
@@ -39,4 +48,6 @@ data class PasswordDBEntity(
     override fun getPasswordAvatarPath(): String = passwordAvatarPathValue
 
     override fun getPasswordContent(): String = passwordContentValue
+
+    override fun getPasswordPinTimestamp(): Long? = passwordPinTimestampValue
 }

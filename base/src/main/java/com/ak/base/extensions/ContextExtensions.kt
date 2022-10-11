@@ -8,7 +8,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.FontRes
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 
@@ -59,8 +62,14 @@ fun Fragment.showToastMessage(message: String, duration: Int = Toast.LENGTH_SHOR
     activity?.showToastMessage(message, duration)
 }
 
+fun Context.getDrawableCompat(@DrawableRes drawableRes: Int) = ContextCompat.getDrawable(this, drawableRes)
+
 fun Context.getColorCompat(@ColorRes colorRes: Int) = ContextCompat.getColor(this, colorRes)
+
+fun Context.getFontCompat(@FontRes fontRes: Int) = ResourcesCompat.getFont(this, fontRes)
 
 fun FragmentActivity.getColorCompat(@ColorRes colorRes: Int) = baseContext.getColorCompat(colorRes)
 
 fun Fragment.getColorCompat(@ColorRes colorRes: Int) = activity?.getColorCompat(colorRes) ?: 0
+
+fun Fragment.getFontCompat(@FontRes fontRes: Int) = activity?.getFontCompat(fontRes) ?: 0

@@ -4,6 +4,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        tools:background="?themedPrimaryBackgroundColor"
         android:background="?android:attr/selectableItemBackground">
 
     <TextView
@@ -13,9 +14,10 @@
             android:layout_marginStart="12dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="16dp"
-            android:textColor="@color/primaryText"
+            android:textColor="?themedPrimaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:tag="@string/skipThemeInterceptor"
             app:layout_constraintEnd_toStartOf="@+id/sSettingEnablingState"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,9 +31,11 @@
             android:layout_gravity="top|center_horizontal"
             android:layout_marginStart="4dp"
             android:background="@drawable/bg_badge_notification"
+            android:backgroundTint="?themedAccentColor"
             android:gravity="center"
             android:padding="3dp"
-            android:textColor="@color/colorWhite"
+            android:textColor="?staticColorWhite"
+            android:tag="@string/skipThemeInterceptor"
             android:visibility="gone"
             tools:visibility="visible"
             android:textSize="10sp"
@@ -47,7 +51,8 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="10dp"
-            android:textColor="@color/secondaryText"
+            android:textColor="?themedSecondaryTextColor"
+            android:tag="@string/skipThemeInterceptor"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sSettingEnablingState"
@@ -56,11 +61,12 @@
             app:layout_constraintTop_toBottomOf="@+id/tvSettingName"
             tools:text="Description ede ded ed ededededde dedededde dedededededede ededededdededd deddededede dedededed" />
 
-    <Switch
+    <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/sSettingEnablingState"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:tag="@string/skipThemeInterceptor"
             app:layout_constraintBottom_toBottomOf="@+id/tvSettingDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tvSettingName" />

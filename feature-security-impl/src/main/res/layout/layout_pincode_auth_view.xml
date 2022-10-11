@@ -10,7 +10,7 @@
             android:id="@+id/clRootPincodeAuthView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:background="@color/colorPrimary">
+            tools:background="?themedPrimaryColor">
 
         <com.ak.feature_security_impl.auth.security.pincode.PincodeContentInputView
                 android:id="@+id/cPincodeInputView"
@@ -22,12 +22,13 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:background="@color/colorAccent" />
+                tools:background="@color/color_accent_blue" />
 
         <View
+                android:id="@+id/vSecureDivider"
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:background="@color/colorWhite"
+                android:background="?staticColorWhite"
                 app:layout_constraintBottom_toBottomOf="@+id/cPincodeInputView"
                 app:layout_constraintEnd_toEndOf="@+id/cPincodeNumberView3"
                 app:layout_constraintStart_toStartOf="@+id/cPincodeNumberView1" />

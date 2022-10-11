@@ -1,0 +1,38 @@
+<resources>
+
+    <style name="ActionModeStyle.Teal" parent="BaseActionModeStyle">
+        <item name="background">@color/color_accent_teal</item>
+    </style>
+
+    <style name="CustomTheme.Teal" parent="CustomTheme.Orange">
+        <item name="actionModeStyle">@style/ActionModeStyle.Teal</item>
+        <item name="themedPrimaryBackgroundColor">@color/color_primary_bg_teal</item>
+        <item name="themedSecondaryBackgroundColor">@color/color_secondary_bg_teal</item>
+
+        <item name="themedPopupBackgroundColor">@color/color_popup_bg_teal</item>
+
+        <item name="themedPrimaryColor">@color/color_primary_teal</item>
+        <item name="themedPrimaryDarkColor">@color/color_primary_dark_teal</item>
+        <item name="themedPrimaryLightColor">@color/color_primary_light_teal</item>
+        <item name="themedAccentColor">@color/color_accent_teal</item>
+
+        <item name="themedToolbarIconsAndTextColor">@color/color_toolbar_content_teal</item>
+        <item name="themedPrimaryTextColor">@color/color_primary_text_teal</item>
+        <item name="themedPrimaryTextHintColor">@color/color_primary_text_hint_teal</item>
+        <item name="themedSecondaryTextColor">@color/color_secondary_text_teal</item>
+
+        <item name="themedDividerColor">@color/color_divider_teal</item>
+        <item name="themedErrorColor">@color/color_error_teal</item>
+        <item name="themedSuccessColor">@color/color_success_teal</item>
+
+        <item name="themedSwitchThumbUncheckedColor">@color/color_switch_thumb_unchecked_teal</item>
+        <item name="themedSwitchThumbCheckedColor">@color/color_switch_thumb_checked_teal</item>
+        <item name="themedSwitchTrackUncheckedColor">@color/color_switch_track_unchecked_teal</item>
+        <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_teal</item>
+
+        <item name="themedSelectedGradientStartColor">@color/color_loading_gradient_start_teal</item>
+        <item name="themedSelectedGradientCenterColor">@color/color_loading_gradient_center_teal</item>
+        <item name="themedSelectedGradientEndColor">@color/color_loading_gradient_end_teal</item>
+    </style>
+
+</resources>

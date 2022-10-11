@@ -5,15 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListUpdateCallback
-import androidx.recyclerview.widget.RecyclerView
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewAdapter
 import com.ak.feature_tabpasswords_impl.R
 
 class PasswordsListRecyclerAdapter(
-    private val onShowPasswordAction: (passwordId: Long, newVisibilityState: Boolean) -> Unit,
-    private val onShowPasswordItemActions: (passwordId: Long) -> Unit,
-    private val onPasswordItemSingleClick: (passwordId: Long) -> Unit,
-    private val onPasswordItemLongClick: (passwordId: Long) -> Unit
-) : RecyclerView.Adapter<PasswordsListItemViewHolder>() {
+    private val listener: PasswordsListClickListener
+) : CustomThemeRecyclerViewAdapter<PasswordsListItemViewHolder>() {
 
     private var itemsList = arrayListOf<PasswordItemModel>()
 
@@ -21,19 +19,13 @@ class PasswordsListRecyclerAdapter(
         val view = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.passwords_item_layout, parent, false)
-        return PasswordsListItemViewHolder(
-            view,
-            onShowPasswordAction,
-            onShowPasswordItemActions,
-            onPasswordItemSingleClick,
-            onPasswordItemLongClick
-        )
+        return PasswordsListItemViewHolder(view, listener)
     }
 
     override fun getItemCount() = itemsList.size
 
-    override fun onBindViewHolder(viewHolder: PasswordsListItemViewHolder, position: Int) {
-        viewHolder.bindPasswordListItemView(itemsList[position])
+    override fun onBindViewHolder(theme: CustomTheme, viewHolder: PasswordsListItemViewHolder, position: Int) {
+        viewHolder.bindPasswordListItemView(itemsList[position], theme)
     }
 
     fun insertData(passwordModels: List<PasswordItemModel>) {
@@ -53,17 +45,22 @@ class PasswordsListRecyclerAdapter(
     fun setItemsActionModeState(isInActionMode: Boolean) {
         for (i in 0 until itemsList.size) {
             val itemModel = itemsList[i]
-            itemModel.isInActionModeState = isInActionMode
-            changePasswordItem(itemModel, i)
+            changePasswordItem(itemModel.copy(isInActionModeState = isInActionMode), i)
         }
     }
 
-    fun setPasswordContentVisibility(passwordId: Long, isContentVisible: Boolean) {
-        val index = itemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
+    fun clearContextMenuOpenedForPasswordItems() {
+        for (i in 0 until itemsList.size) {
+            val itemModel = itemsList[i]
+            changePasswordItem(itemModel.copy(isLoadingModel = false), i)
+        }
+    }
+
+    fun setContextMenuOpenedForPasswordItem(passwordId: Long) {
+        val position = itemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
         itemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }
             ?.let {
-                it.isPasswordContentVisible = isContentVisible
-                changePasswordItem(it, index)
+                changePasswordItem(it.copy(isLoadingModel = true), position)
             }
     }
 
@@ -71,8 +68,15 @@ class PasswordsListRecyclerAdapter(
         val position = itemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
         itemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }
             ?.let {
-                it.isItemSelected = isSelected
-                changePasswordItem(it, position)
+                changePasswordItem(it.copy(isItemSelected = isSelected), position)
+            }
+    }
+
+    fun setPasswordContentVisibility(passwordId: Long, isContentVisible: Boolean) {
+        val index = itemsList.indexOf(PasswordItemModel.getSearchingTempModel(passwordId))
+        itemsList.find { passwordItemModel -> passwordItemModel.passwordId == passwordId }
+            ?.let {
+                changePasswordItem(it.copy(isPasswordContentVisible = isContentVisible), index)
             }
     }
 

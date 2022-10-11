@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ps_dialog_animation">
-        <item name="android:windowEnterAnimation">@anim/ps_dialog_enter</item>
-        <item name="android:windowExitAnimation">@anim/ps_dialog_exit</item>
+    <style name="popup_animation_medium">
+        <item name="android:windowEnterAnimation">@anim/popup_enter</item>
+        <item name="android:windowExitAnimation">@anim/popup_exit</item>
+    </style>
+
+    <style name="popup_animation_quick">
+        <item name="android:windowEnterAnimation">@anim/popup_enter_quick</item>
+        <item name="android:windowExitAnimation">@anim/popup_exit_quick</item>
     </style>
 
 </resources>

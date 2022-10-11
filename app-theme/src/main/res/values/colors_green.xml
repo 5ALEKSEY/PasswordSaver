@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_loading_gradient_start_green">#FFFFFF</color>
+    <color name="color_loading_gradient_center_green">#F9FFF6</color>
+    <color name="color_loading_gradient_end_green">#F0FFE6</color>
+
+    <color name="color_primary_bg_green">#FAFAFA</color>
+    <color name="color_secondary_bg_green">#FFFFFF</color>
+    <color name="color_popup_bg_green">#EAEAEA</color>
+
+    <color name="color_primary_green">#4A7A28</color>
+    <color name="color_primary_dark_green">#255D00</color>
+    <color name="color_primary_light_green">#8BC65E</color>
+    <color name="color_accent_green">#C0F39A</color>
+
+    <color name="color_toolbar_content_green">#FFFFFF</color>
+    <color name="color_primary_text_green">#212121</color>
+    <color name="color_primary_text_hint_green">#737373</color>
+    <color name="color_secondary_text_green">#8E8E8E</color>
+
+    <color name="color_divider_green">#979797</color>
+    <color name="color_error_green">#FC4F4F</color>
+    <color name="color_success_green">#2FD236</color>
+
+    <color name="color_switch_thumb_unchecked_green">#F6F6F6</color>
+    <color name="color_switch_thumb_checked_green">@color/color_primary_green</color>
+    <color name="color_switch_track_unchecked_green">#BCBCBC</color>
+    <color name="color_switch_track_checked_green">@color/color_primary_light_green</color>
+
+</resources>

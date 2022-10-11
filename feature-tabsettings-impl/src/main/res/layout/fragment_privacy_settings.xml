@@ -4,24 +4,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tbPrivacySettingsBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_back_action"
-            app:titleTextColor="@color/iconsAndText" />
-
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvPrivacySettingsItemsList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:background="?themedPrimaryBackgroundColor"
             android:overScrollMode="never"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tbPrivacySettingsBar" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

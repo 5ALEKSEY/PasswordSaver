@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    // static colors
+    <color name="staticColorTransparent">#00FFFFFF</color>
+    <color name="staticColorBlack">#000000</color>
+    <color name="staticColorWhite">#FFFFFF</color>
+    <color name="staticColorRed">#FC4F4F</color>
+    <color name="staticColorGreen">#2FD236</color>
+</resources>

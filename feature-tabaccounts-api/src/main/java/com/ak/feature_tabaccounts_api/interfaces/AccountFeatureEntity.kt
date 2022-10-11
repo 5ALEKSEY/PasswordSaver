@@ -5,4 +5,5 @@ interface AccountFeatureEntity {
     fun getAccountName(): String
     fun getAccountLogin(): String
     fun getAccountPassword(): String
+    fun getAccountPinTimestamp(): Long?
 }

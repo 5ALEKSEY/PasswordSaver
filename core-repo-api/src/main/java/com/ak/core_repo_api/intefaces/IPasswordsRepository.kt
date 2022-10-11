@@ -1,7 +1,7 @@
 package com.ak.core_repo_api.intefaces
 
-import io.reactivex.Flowable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
 
 interface IPasswordsRepository {
     fun getAllPasswords(): Flowable<List<PasswordRepoEntity>>
@@ -9,4 +9,8 @@ interface IPasswordsRepository {
     fun deletePasswordsByIds(passwordIds: List<Long>): Single<Boolean>
     fun addNewPasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean>
     fun updatePasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean>
+    fun clearAll(): Single<Boolean>
+    fun getPasswordsCount(): Int
+    fun pinPassword(passwordId: Long, pinnedTimestamp: Long): Single<Boolean>
+    fun unpinPassword(passwordId: Long): Single<Boolean>
 }

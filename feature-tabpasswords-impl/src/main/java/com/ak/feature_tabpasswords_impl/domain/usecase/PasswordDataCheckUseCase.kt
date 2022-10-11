@@ -8,12 +8,12 @@ class PasswordDataCheckUseCase {
         val incorrectFields = arrayListOf<Int>()
         var isVerifySuccess = true
 
-        if (passwordName.isEmpty()) {
+        if (passwordName.isBlank()) {
             emptyFields.add(PasswordDataCheckException.PASSWORD_NAME_FIELD)
             isVerifySuccess = false
         }
 
-        if (passwordContent.isEmpty()) {
+        if (passwordContent.isBlank()) {
             emptyFields.add(PasswordDataCheckException.PASSWORD_CONTENT_FIELD)
             isVerifySuccess = false
         }

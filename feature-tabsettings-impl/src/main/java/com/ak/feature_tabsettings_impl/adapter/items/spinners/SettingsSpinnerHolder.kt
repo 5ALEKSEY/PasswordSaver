@@ -5,12 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import androidx.recyclerview.widget.RecyclerView
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.applier.CustomThemeApplier
+import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewHolder
 import com.ak.base.adapter.AdapterDelegate
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.BaseSettingsViewHolder
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
-import kotlinx.android.synthetic.main.settings_item_spinner_layout.view.*
+import kotlinx.android.synthetic.main.settings_item_spinner_layout.view.sSettingSpinnerChooser
+import kotlinx.android.synthetic.main.settings_item_spinner_layout.view.tvSettingDescription
 
 class SpinnerAdapterDelegate(
     private val viewType: Int,
@@ -21,7 +24,7 @@ class SpinnerAdapterDelegate(
 
     override fun getItemViewType() = viewType
 
-    override fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup): CustomThemeRecyclerViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.settings_item_spinner_layout, parent, false)
         return SettingsSpinnerHolder(
@@ -32,7 +35,8 @@ class SpinnerAdapterDelegate(
 
     override fun onBindViewHolder(
         item: SettingsListItemModel,
-        viewHolder: RecyclerView.ViewHolder
+        viewHolder: CustomThemeRecyclerViewHolder,
+        theme: CustomTheme,
     ) {
         val itemModel = item as SpinnerSettingsListItemModel
         val holder = viewHolder as SettingsSpinnerHolder
@@ -44,6 +48,15 @@ class SettingsSpinnerHolder(
     itemView: View,
     private val onSpinnerSettingsChanged: (settingId: Int, newDataId: Int) -> Unit
 ) : BaseSettingsViewHolder<SpinnerSettingsListItemModel>(itemView) {
+
+    override fun applyTheme(theme: CustomTheme) {
+        super.applyTheme(theme)
+        CustomThemeApplier.applyTextColor(
+            theme,
+            R.attr.themedSecondaryTextColor,
+            itemView.tvSettingDescription,
+        )
+    }
 
     override fun setViewHolderData(itemModel: SpinnerSettingsListItemModel) {
         val arrayAdapter = ArrayAdapter<String>(itemView.context, R.layout.default_spinner_item)

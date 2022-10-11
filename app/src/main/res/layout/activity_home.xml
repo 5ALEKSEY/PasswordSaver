@@ -1,40 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".presentation.screens.home.HomeActivity">
 
-    <fragment
-            android:id="@+id/bottomNavHostFragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+    <ImageView
+            android:id="@+id/ivHomeThemeStubView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:defaultNavHost="true"
-            app:layout_constraintBottom_toTopOf="@+id/vBottomBarDivider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/nav_graph" />
-
-    <View
-            android:id="@+id/vBottomBarDivider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/shadow"
-            app:layout_constraintBottom_toTopOf="@+id/bnvBottomBar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bnvBottomBar"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@color/iconsAndText"
+            android:layout_height="match_parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/navigation_bar_menu" />
+            app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clHomeContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/ablHomeBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/tbHomeToolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?themedPrimaryColor"
+                    app:titleTextAppearance="@style/Toolbar.TitleText"
+                    app:titleTextColor="?themedToolbarIconsAndTextColor" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <fragment
+                android:id="@+id/bottomNavHostFragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:defaultNavHost="true"
+                app:layout_constraintBottom_toTopOf="@+id/vBottomBarDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ablHomeBarLayout"
+                app:navGraph="@navigation/nav_graph" />
+
+        <View
+                android:id="@+id/vBottomBarDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?themedDividerColor"
+                app:layout_constraintBottom_toTopOf="@+id/bnvBottomBar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        <com.ak.base.ui.custom.PsThemedBottomNavigationView
+                android:id="@+id/bnvBottomBar"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="?attr/themedPrimaryBackgroundColor"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:menu="@menu/navigation_bar_menu" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

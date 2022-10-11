@@ -5,14 +5,14 @@ import com.ak.core_repo_api.intefaces.PasswordRepoEntity
 import com.ak.core_repo_impl.data.model.db.PSDatabase
 import com.ak.core_repo_impl.data.model.db.entities.PasswordDBEntity
 import com.ak.core_repo_impl.data.model.mapper.mapToPasswordDbEntitiesList
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class PasswordsRepositoryImpl @Inject constructor(
-    private val passwordsLocalStore: PSDatabase
+    private val passwordsLocalStore: PSDatabase,
 ) : IPasswordsRepository {
 
     override fun getAllPasswords(): Flowable<List<PasswordRepoEntity>> =
@@ -48,6 +48,30 @@ class PasswordsRepositoryImpl @Inject constructor(
     override fun updatePasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean> =
         Single.fromCallable {
             passwordsLocalStore.getPasswordsDao().updatePasswords(*passwordRepoEntities.mapToPasswordDbEntitiesList().toTypedArray())
+        }
+            .map { updatedRows -> updatedRows >= 0 }
+            .subscribeOn(Schedulers.io())
+
+    override fun clearAll(): Single<Boolean> =
+        Single.fromCallable {
+            passwordsLocalStore.getPasswordsDao().clearPasswords()
+            return@fromCallable true
+        }.subscribeOn(Schedulers.io())
+
+    override fun getPasswordsCount() = passwordsLocalStore.getPasswordsDao().getPasswordsCount()
+
+    override fun pinPassword(passwordId: Long, pinnedTimestamp: Long): Single<Boolean> =
+        Single.fromCallable {
+            passwordsLocalStore.getPasswordsDao()
+                .markPasswordAsPinned(passwordId, pinnedTimestamp)
+        }
+            .map { updatedRows -> updatedRows >= 0 }
+            .subscribeOn(Schedulers.io())
+
+    override fun unpinPassword(passwordId: Long): Single<Boolean> =
+        Single.fromCallable {
+            passwordsLocalStore.getPasswordsDao()
+                .markPasswordAsUnpinned(passwordId)
         }
             .map { updatedRows -> updatedRows >= 0 }
             .subscribeOn(Schedulers.io())

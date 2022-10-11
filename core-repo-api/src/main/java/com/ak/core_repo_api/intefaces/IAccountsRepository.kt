@@ -1,7 +1,7 @@
 package com.ak.core_repo_api.intefaces
 
-import io.reactivex.Flowable
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Single
 
 interface IAccountsRepository {
     fun getAllAccounts(): Flowable<List<AccountRepoEntity>>
@@ -9,4 +9,8 @@ interface IAccountsRepository {
     fun deleteAccountsByIds(accountIds: List<Long>): Single<Boolean>
     fun addNewAccounts(accountRepoEntities: List<AccountRepoEntity>): Single<Boolean>
     fun updateAccounts(accountRepoEntities: List<AccountRepoEntity>): Single<Boolean>
+    fun clearAll(): Single<Boolean>
+    fun getAccountsCount(): Int
+    fun pinAccount(accountIds: Long, pinnedTimestamp: Long): Single<Boolean>
+    fun unpinAccount(accountIds: Long): Single<Boolean>
 }

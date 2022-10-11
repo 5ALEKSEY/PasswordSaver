@@ -5,15 +5,15 @@ import com.ak.base.scopes.FeatureScope
 import com.ak.core_repo_api.api.CoreRepositoryApi
 import com.ak.feature_security_api.api.FeatureSecurityApi
 import com.ak.feature_security_impl.auth.SecurityActivity
-import com.ak.feature_security_impl.auth.SecurityPresenter
 import com.ak.feature_security_impl.di.modules.SecurityManagerModule
+import com.ak.feature_security_impl.di.modules.SecurityViewModelsModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
 @Component(
-        modules = [SecurityManagerModule::class],
-        dependencies = [FeatureSecurityDependencies::class]
+    modules = [SecurityManagerModule::class, SecurityViewModelsModule::class],
+    dependencies = [FeatureSecurityDependencies::class]
 )
 @Singleton
 abstract class FeatureSecurityComponent : FeatureSecurityApi {
@@ -22,7 +22,7 @@ abstract class FeatureSecurityComponent : FeatureSecurityApi {
         @Volatile
         private var featureSecurityComponent: FeatureSecurityComponent? = null
 
-        fun initAndGet(dependencies: FeatureSecurityDependencies, applicationContext: Context): FeatureSecurityComponent {
+        fun initializeAndGet(dependencies: FeatureSecurityDependencies, applicationContext: Context): FeatureSecurityComponent {
             if (featureSecurityComponent == null) {
                 featureSecurityComponent = DaggerFeatureSecurityComponent.builder()
                     .injectAppContext(applicationContext)
@@ -30,13 +30,15 @@ abstract class FeatureSecurityComponent : FeatureSecurityApi {
                     .build()
             }
 
-            return featureSecurityComponent!!
+            return requireNotNull(featureSecurityComponent) {
+                "FeatureSecurityComponent is null. initializeAndGet() didn't initialize it"
+            }
         }
 
         fun get(): FeatureSecurityComponent = if (featureSecurityComponent != null) {
             featureSecurityComponent!!
         } else {
-            throw IllegalStateException("FeatureSecurityComponent is null. initAndGet() should be called before")
+            throw IllegalStateException("FeatureSecurityComponent is null. initializeAndGet() should be called before")
         }
 
     }
@@ -50,7 +52,6 @@ abstract class FeatureSecurityComponent : FeatureSecurityApi {
     }
 
     abstract fun inject(activity: SecurityActivity)
-    abstract fun inject(presenter: SecurityPresenter)
 
     @Component(dependencies = [CoreRepositoryApi::class])
     @FeatureScope

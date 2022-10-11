@@ -1,6 +1,7 @@
 package com.ak.base.extensions
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -11,21 +12,33 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
-import androidx.appcompat.widget.Toolbar
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.ak.base.R
 import com.ak.base.constants.AppConstants
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.layout_notification_badge.view.*
-import java.util.*
+import io.reactivex.rxjava3.core.SingleEmitter
+import java.util.Calendar
+import kotlinx.android.synthetic.main.layout_notification_badge.view.tvBadgeText
+
+fun <T : View> T.applyForLaidOut(block: T.() -> Unit) {
+    if (isLaidOut) {
+        block(this)
+    }
+}
+
+fun Int.pxToDp(context: Context?): Float {
+    return if (context != null) {
+        this / context.resources.displayMetrics.density
+    } else {
+        this.toFloat()
+    }
+}
 
 fun Float.dpToPx(context: Context?) =
     if (context != null) {
         TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        this,
+            TypedValue.COMPLEX_UNIT_DIP,
+            this,
             context.applicationContext.resources.displayMetrics
         ).toInt()
     } else {
@@ -33,6 +46,7 @@ fun Float.dpToPx(context: Context?) =
     }
 
 fun ImageView.drawTextInner(
+    context: Context,
     imageSizeInPx: Int,
     fillColor: Int,
     textColor: Int,
@@ -46,6 +60,7 @@ fun ImageView.drawTextInner(
         color = textColor
         textAlign = Paint.Align.CENTER
         textSize = textSizeInPx.toFloat()
+        typeface = context.getFontCompat(R.font.app_font_family)
         xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_OVER)
     }
     canvas.drawBitmap(bitmap, 0F, 0F, paint)
@@ -57,33 +72,16 @@ fun ImageView.drawTextInner(
 }
 
 fun ImageView.drawTextInner(
+    context: Context,
     fillColor: Int,
     textColor: Int,
     textSizeInPx: Int,
     textToDraw: String
 ) {
-    drawTextInner(width, fillColor, textColor, textSizeInPx, textToDraw)
+    drawTextInner(context, width, fillColor, textColor, textSizeInPx, textToDraw)
 }
 
-fun Toolbar.turnOffToolbarScrolling(appBarLayout: AppBarLayout) {
-    //turn off scrolling
-    val toolbarLayoutParams = layoutParams as AppBarLayout.LayoutParams
-    toolbarLayoutParams.scrollFlags = 0
-    layoutParams = toolbarLayoutParams
-
-    changeAppBarLayoutScrollBehavior(appBarLayout, false)
-}
-
-fun Toolbar.turnOnToolbarScrolling(appBarLayout: AppBarLayout) {
-    //turn on scrolling
-    val toolbarLayoutParams = layoutParams as AppBarLayout.LayoutParams
-    toolbarLayoutParams.scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL or
-            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
-    layoutParams = toolbarLayoutParams
-
-    changeAppBarLayoutScrollBehavior(appBarLayout, true)
-}
-
+// TODO: Why don't to user 'isVisible' ext
 fun View.setVisibility(isVisible: Boolean) {
     visibility = if (isVisible) {
         View.VISIBLE
@@ -141,6 +139,20 @@ inline fun View.setSafeClickListener(
     })
 }
 
+fun <T> SingleEmitter<T>.onSuccessSafe(value: T) {
+    if (!isDisposed) {
+        onSuccess(value)
+    }
+}
+
+fun <T> SingleEmitter<T>.onErrorSafe(error: Throwable) {
+    if (!isDisposed) {
+        onError(error)
+    }
+}
+
+fun Int.toColorStateList() = ColorStateList.valueOf(this)
+
 private fun getBottomNavViewMenuItem(bottomNavigationView: BottomNavigationView, menuItemId: Int): BottomNavigationItemView? {
     val menuItemView = bottomNavigationView.getChildAt(0)?.findViewById<View>(menuItemId)
     return if (menuItemView !is BottomNavigationItemView) {
@@ -148,10 +160,4 @@ private fun getBottomNavViewMenuItem(bottomNavigationView: BottomNavigationView,
     } else {
         menuItemView
     }
-}
-
-private fun changeAppBarLayoutScrollBehavior(appBarLayout: AppBarLayout, isScrollNeeds: Boolean) {
-    val appBarLayoutParams = appBarLayout.layoutParams as CoordinatorLayout.LayoutParams
-    appBarLayoutParams.behavior = if (isScrollNeeds) AppBarLayout.Behavior() else null
-    appBarLayout.layoutParams = appBarLayoutParams
 }

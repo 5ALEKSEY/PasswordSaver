@@ -4,7 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.LinearLayout
 
-class PincodeContentInputView(context: Context?, attrs: AttributeSet?) :
+class PincodeContentInputView(context: Context, attrs: AttributeSet?) :
     LinearLayout(context, attrs) {
 
     companion object {

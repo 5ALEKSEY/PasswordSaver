@@ -1,0 +1,38 @@
+<resources>
+
+    <style name="ActionModeStyle.Orange" parent="BaseActionModeStyle">
+        <item name="background">@color/color_accent_orange</item>
+    </style>
+
+    <style name="CustomTheme.Orange" parent="CustomTheme.Blue">
+        <item name="actionModeStyle">@style/ActionModeStyle.Orange</item>
+        <item name="themedPrimaryBackgroundColor">@color/color_primary_bg_orange</item>
+        <item name="themedSecondaryBackgroundColor">@color/color_secondary_bg_orange</item>
+
+        <item name="themedPopupBackgroundColor">@color/color_popup_bg_orange</item>
+
+        <item name="themedPrimaryColor">@color/color_primary_orange</item>
+        <item name="themedPrimaryDarkColor">@color/color_primary_dark_orange</item>
+        <item name="themedPrimaryLightColor">@color/color_primary_light_orange</item>
+        <item name="themedAccentColor">@color/color_accent_orange</item>
+
+        <item name="themedToolbarIconsAndTextColor">@color/color_toolbar_content_orange</item>
+        <item name="themedPrimaryTextColor">@color/color_primary_text_orange</item>
+        <item name="themedPrimaryTextHintColor">@color/color_primary_text_hint_orange</item>
+        <item name="themedSecondaryTextColor">@color/color_secondary_text_orange</item>
+
+        <item name="themedDividerColor">@color/color_divider_orange</item>
+        <item name="themedErrorColor">@color/color_error_orange</item>
+        <item name="themedSuccessColor">@color/color_success_orange</item>
+
+        <item name="themedSwitchThumbUncheckedColor">@color/color_switch_thumb_unchecked_orange</item>
+        <item name="themedSwitchThumbCheckedColor">@color/color_switch_thumb_checked_orange</item>
+        <item name="themedSwitchTrackUncheckedColor">@color/color_switch_track_unchecked_orange</item>
+        <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_orange</item>
+
+        <item name="themedSelectedGradientStartColor">@color/color_loading_gradient_start_orange</item>
+        <item name="themedSelectedGradientCenterColor">@color/color_loading_gradient_center_orange</item>
+        <item name="themedSelectedGradientEndColor">@color/color_loading_gradient_end_orange</item>
+    </style>
+
+</resources>

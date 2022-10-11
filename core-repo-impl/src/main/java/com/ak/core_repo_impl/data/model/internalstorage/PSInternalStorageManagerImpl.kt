@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 
 class PSInternalStorageManagerImpl @Inject constructor(
-    private val context: Context
+    private val context: Context,
 ) : IPSInternalStorageManager {
 
     companion object {

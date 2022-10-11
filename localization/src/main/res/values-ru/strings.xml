@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">PasswordSaver</string>
     <string name="password_showing_dialog_type">"Диалог"</string>
     <string name="password_showing_toast_type">"Тост"</string>
     <string name="immediately_lock_state">"Моментально"</string>
@@ -28,6 +29,7 @@
     <string name="no_added_fingerprints_dialog_desc">"Извините, вы не добавили ни одного отпечатка пальца в своем устройстве. Вы можете перейти в настройки безопасности и добавить новый. После этого вы можете вернуться и включить эту опцию в приложении."</string>
     <string name="no_added_fingerprints_dialog_pos_btn">"Настройки"</string>
     <string name="privacy_settings_toolbar_title">"Приватность"</string>
+    <string name="about_settings_toolbar_title">"О приложении"</string>
     <string name="nav_tab_passwords_name">"Пароли"</string>
     <string name="nav_tab_accounts_name">"Аккаунты"</string>
     <string name="nav_tab_settings_name">"Настройки"</string>
@@ -64,11 +66,14 @@
     <string name="design_setting_name">"Дизайн"</string>
     <string name="privacy_setting_name">"Приватность"</string>
     <string name="about_setting_name">"О приложении"</string>
+    <string name="debug_setting_name">Debug</string>
     <string name="auth_failed_funny_text">"Это точно вы???:)"</string>
     <string name="show_password_button_text">"Показать"</string>
     <string name="hide_password_button_text">"Спрятать"</string>
     <string name="image_chooser_camera">"Камера"</string>
     <string name="image_chooser_gallery">"Галерея"</string>
+    <string name="chooser_show_password_content">"Показать пароль"</string>
+    <string name="chooser_hide_password_content">"Спрятать пароль"</string>
     <string name="chooser_copy_password_content">"Скопировать пароль"</string>
     <string name="chooser_edit_password_content">"Редактировать пароль"</string>
     <string name="chooser_delete_password_content">"Удалить пароль"</string>
@@ -77,11 +82,48 @@
     <string name="chooser_edit_account">"Редактировать аккаунт"</string>
     <string name="chooser_delete_account">"Удалить аккаунт"</string>
     <string name="decrypting_data_message">"Подождите. Идет расшифровка данных …"</string>
-    <string name="no_saved_password_data_message">"Извините, у вас нет сохраненных паролей. Пожалуйста, нажмите на + "</string>
-    <string name="no_saved_account_data_message">"Извините, у вас нет сохраненных аккаунтов. Пожалуйста, нажмите на + "</string>
-    <string name="save_password_button_text">"Сохранить пароль"</string>
-    <string name="save_account_button_text">"Сохранить аккаунт"</string>
+    <string name="no_saved_password_data_message">"Извините, у вас нет сохраненных паролей. Пожалуйста нажмите на + "</string>
+    <string name="no_saved_account_data_message">"Извините, у вас нет сохраненных аккаунтов. Пожалуйста нажмите на + "</string>
+    <string name="save_password_button_text">"Сохранить"</string>
+    <string name="save_account_button_text">"Сохранить"</string>
     <string name="click_to_change_image">"Изменить"</string>
     <string name="oops_message">"Уупс!"</string>
-    <string name="application_name">"PasswordSaver"</string>
+    <string name="native_theme_name">"Нативная"</string>
+    <string name="blue_theme_name">"Синяя"</string>
+    <string name="green_theme_name">"Зелёнка"</string>
+    <string name="orange_theme_name">"Рыжик"</string>
+    <string name="purple_theme_name">"Лунтик"</string>
+    <string name="teal_theme_name">"Бирюза"</string>
+    <string name="change_theme_setting_name">"Тема приложения"</string>
+    <string name="change_theme_with_animation_setting_name">"Анимация темы"</string>
+    <string name="change_theme_with_animation_setting_desc">"Тема приложения будет изменяться с анимацией"</string>
+
+    <!-- Password Popup Menu Items -->
+    <string name="password_popup_menu_item_select">"Выбрать"</string>
+    <string name="password_popup_menu_item_copy">"Скопировать"</string>
+    <string name="password_popup_menu_item_edit">"Изменить"</string>
+    <string name="password_popup_menu_item_pin">"Закрепить"</string>
+    <string name="password_popup_menu_item_unpin">"Открепить"</string>
+    <string name="password_popup_menu_item_delete">"Удалить"</string>
+
+    <!-- Account Popup Menu Items -->
+    <string name="account_popup_menu_item_select">"Выбрать"</string>
+    <string name="account_popup_menu_item_copy_login">"Скопировать логин"</string>
+    <string name="account_popup_menu_item_copy_password">"Скопировать пароль"</string>
+    <string name="account_popup_menu_item_edit">"Изменить"</string>
+    <string name="account_popup_menu_item_delete">"Удалить"</string>
+
+    <!-- Configure native theme -->
+    <string name="native_theme_configuration_title">"Конфигурация нативной темы"</string>
+    <string name="native_theme_configuration_select_light_title">"Выберите светлую тему"</string>
+    <string name="native_theme_configuration_select_dark_title">"Выберите темную тему"</string>
+    <string name="native_theme_configuration_apply_action">"Применить"</string>
+    <string name="native_theme_configuration_cancel_action">"Отменить"</string>
+    <string name="native_theme_config_attention_popup_title">"Внимание"</string>
+    <string name="native_theme_config_attention_popup_desc">"To set \'Native\' theme you need create it\'s configuration and select \'light\' and \'dark\' variants. Do you want to continue?"</string>
+    <string name="native_theme_config_attention_popup_positive">"Да"</string>
+    <string name="native_theme_config_attention_popup_negative">"Нет"</string>
+    <string name="change_theme_use_native_setting_name">"Нативная тема"</string>
+    <string name="change_theme_use_native_setting_desc">Theme will be changed according to your device settings</string>
+    <string name="change_theme_change_native_config_setting_name">Change \'Native\' theme configuration</string>
 </resources>

@@ -5,10 +5,10 @@ import com.ak.core_repo_api.intefaces.IAccountsRepository
 import com.ak.core_repo_impl.data.model.db.PSDatabase
 import com.ak.core_repo_impl.data.model.db.entities.AccountDBEntity
 import com.ak.core_repo_impl.data.model.mapper.mapToAccountDbEntitiesList
-import io.reactivex.Flowable
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Flowable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.Single
+import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 
 class AccountsRepositoryImpl @Inject constructor(
@@ -48,6 +48,30 @@ class AccountsRepositoryImpl @Inject constructor(
     override fun updateAccounts(accountRepoEntities: List<AccountRepoEntity>): Single<Boolean> =
         Single.fromCallable {
             accountsLocalStore.getAccountsDao().updateAccounts(*accountRepoEntities.mapToAccountDbEntitiesList().toTypedArray())
+        }
+            .map { updatedRows -> updatedRows >= 0 }
+            .subscribeOn(Schedulers.io())
+
+    override fun clearAll(): Single<Boolean> =
+        Single.fromCallable {
+            accountsLocalStore.getAccountsDao().clearAccounts()
+            return@fromCallable true
+        }.subscribeOn(Schedulers.io())
+
+    override fun getAccountsCount() = accountsLocalStore.getAccountsDao().getAccountsCount()
+
+    override fun pinAccount(accountIds: Long, pinnedTimestamp: Long): Single<Boolean> =
+        Single.fromCallable {
+            accountsLocalStore.getAccountsDao()
+                .markAccountAsPinned(accountIds, pinnedTimestamp)
+        }
+            .map { updatedRows -> updatedRows >= 0 }
+            .subscribeOn(Schedulers.io())
+
+    override fun unpinAccount(accountIds: Long): Single<Boolean> =
+        Single.fromCallable {
+            accountsLocalStore.getAccountsDao()
+                .markAccountAsUnpinned(accountIds)
         }
             .map { updatedRows -> updatedRows >= 0 }
             .subscribeOn(Schedulers.io())

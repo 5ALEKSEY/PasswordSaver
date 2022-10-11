@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        tools:background="?themedPrimaryBackgroundColor">
+
+    <pl.droidsonroids.gif.GifImageView
+            android:id="@+id/givChangeThemePicture"
+            android:layout_width="0dp"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/gif_theme_change_animation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/tvSettingName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:padding="4dp"
+            android:tag="@string/skipThemeInterceptor"
+            android:text="@string/change_theme_setting_name"
+            android:textColor="?themedPrimaryTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/givChangeThemePicture" />
+
+    <TextView
+            android:id="@+id/tvNewBadgeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/bg_badge_notification"
+            android:backgroundTint="?themedAccentColor"
+            android:gravity="center"
+            android:padding="3dp"
+            android:tag="@string/skipThemeInterceptor"
+            android:text="@string/new_feature_badge"
+            android:textColor="?staticColorWhite"
+            android:textSize="10sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/tvSettingName"
+            app:layout_constraintStart_toEndOf="@id/tvSettingName"
+            app:layout_constraintTop_toTopOf="@id/tvSettingName"
+            tools:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvThemesDescriptionsList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:scrollbars="none"
+            android:overScrollMode="never"
+            android:background="?themedPrimaryBackgroundColor"
+            android:orientation="horizontal"
+            android:tag="@string/skipThemeInterceptor"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSettingName"
+            tools:itemCount="5"
+            tools:listitem="@layout/settings_item_theme_change_description_layout" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

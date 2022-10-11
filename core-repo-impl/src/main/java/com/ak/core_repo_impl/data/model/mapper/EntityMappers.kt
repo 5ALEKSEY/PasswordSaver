@@ -9,7 +9,8 @@ fun PasswordRepoEntity.mapToDbEntity() = PasswordDBEntity(
         this.getPasswordId(),
         this.getPasswordName(),
         this.getPasswordAvatarPath(),
-        this.getPasswordContent()
+        this.getPasswordContent(),
+        this.getPasswordPinTimestamp(),
 )
 
 fun List<PasswordRepoEntity>.mapToPasswordDbEntitiesList(): List<PasswordDBEntity> {
@@ -20,7 +21,8 @@ fun AccountRepoEntity.mapToDbEntity() = AccountDBEntity(
         this.getAccountId(),
         this.getAccountName(),
         this.getAccountLogin(),
-        this.getAccountPassword()
+        this.getAccountPassword(),
+        this.getAccountPinTimestamp(),
 )
 
 fun List<AccountRepoEntity>.mapToAccountDbEntitiesList(): List<AccountDBEntity> {

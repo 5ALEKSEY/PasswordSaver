@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="color_loading_gradient_start_blue">#FFFFFF</color>
+    <color name="color_loading_gradient_center_blue">#F6FAFF</color>
+    <color name="color_loading_gradient_end_blue">#E6F5FF</color>
+
+    <color name="color_primary_bg_blue">#FAFAFA</color>
+    <color name="color_secondary_bg_blue">#FFFFFF</color>
+    <color name="color_popup_bg_blue">#EAEAEA</color>
+
+    <color name="color_primary_blue">#3F51B5</color>
+    <color name="color_primary_dark_blue">#303F9F</color>
+    <color name="color_primary_light_blue">#AFBCFF</color>
+    <color name="color_accent_blue">#2D9AFF</color>
+
+    <color name="color_toolbar_content_blue">#FFFFFF</color>
+    <color name="color_primary_text_blue">#212121</color>
+    <color name="color_primary_text_hint_blue">#737373</color>
+    <color name="color_secondary_text_blue">#8E8E8E</color>
+
+    <color name="color_divider_blue">#979797</color>
+    <color name="color_error_blue">#FC4F4F</color>
+    <color name="color_success_blue">#2FD236</color>
+
+    <color name="color_switch_thumb_unchecked_blue">#F6F6F6</color>
+    <color name="color_switch_thumb_checked_blue">@color/color_primary_blue</color>
+    <color name="color_switch_track_unchecked_blue">#BCBCBC</color>
+    <color name="color_switch_track_checked_blue">@color/color_primary_light_blue</color>
+
+</resources>

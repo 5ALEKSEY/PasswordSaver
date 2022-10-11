@@ -2,7 +2,9 @@ package com.ak.feature_tabsettings_impl.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewAdapter
+import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewHolder
 import com.ak.base.adapter.AdapterDelegatesManager
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.sections.SectionAdapterDelegate
@@ -11,19 +13,23 @@ import com.ak.feature_tabsettings_impl.adapter.items.spinners.SpinnerSettingsLis
 import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchAdapterDelegate
 import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchSettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.texts.TextAdapterDelegate
+import com.ak.feature_tabsettings_impl.adapter.items.themechange.ThemeChangeAdapterDelegate
+import com.ak.feature_tabsettings_impl.adapter.items.themechange.ThemeChangeSettingsListItemModel
 
 class SettingsRecyclerViewAdapter constructor(
     private val onSwitchSettingsChanged: ((settingId: Int, isChecked: Boolean) -> Unit)? = null,
     private val onSpinnerSettingsChanged: ((settingId: Int, newDataId: Int) -> Unit)? = null,
     private val onSectionSettingsClicked: ((settingId: Int) -> Unit)? = null,
-    private val onTextSettingsClicked: ((settingId: Int) -> Unit)? = null
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val onTextSettingsClicked: ((settingId: Int) -> Unit)? = null,
+    private val onThemeChanged: ((newThemeId: Int) -> Unit)? = null,
+) : CustomThemeRecyclerViewAdapter<CustomThemeRecyclerViewHolder>() {
 
     companion object {
         const val SWITCH_SETTING_TYPE = 1
         const val SPINNER_SETTING_TYPE = 2
         const val SECTION_SETTING_TYPE = 3
         const val TEXT_SETTING_TYPE = 4
+        const val THEME_CHANGE_SETTING_TYPE = 5
     }
 
     private val settingsItemsList = arrayListOf<SettingsListItemModel>()
@@ -51,47 +57,56 @@ class SettingsRecyclerViewAdapter constructor(
     init {
         if (onSwitchSettingsChanged != null) {
             adapterDelegatesManager.addDelegate(SwitchAdapterDelegate(
-                    SWITCH_SETTING_TYPE,
-                    mAdapterSwitchSettingsChangedListener
+                SWITCH_SETTING_TYPE,
+                mAdapterSwitchSettingsChangedListener,
             ))
         }
         if (onSpinnerSettingsChanged != null) {
             adapterDelegatesManager.addDelegate(SpinnerAdapterDelegate(
-                    SPINNER_SETTING_TYPE,
-                    mAdapterSpinnerSettingsChangedListener
+                SPINNER_SETTING_TYPE,
+                mAdapterSpinnerSettingsChangedListener,
             ))
         }
         if (onSectionSettingsClicked != null) {
             adapterDelegatesManager.addDelegate(SectionAdapterDelegate(
-                    SECTION_SETTING_TYPE,
-                    onSectionSettingsClicked
+                SECTION_SETTING_TYPE,
+                onSectionSettingsClicked,
             ))
         }
         if (onTextSettingsClicked != null) {
-            adapterDelegatesManager.addDelegate(TextAdapterDelegate(
+            adapterDelegatesManager.addDelegate(
+                TextAdapterDelegate(
                     TEXT_SETTING_TYPE,
-                    onTextSettingsClicked
-            ))
+                    onTextSettingsClicked,
+                )
+            )
+        }
+        if (onThemeChanged != null) {
+            adapterDelegatesManager.addDelegate(
+                ThemeChangeAdapterDelegate(
+                    THEME_CHANGE_SETTING_TYPE,
+                    onThemeChanged,
+                )
+            )
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         adapterDelegatesManager.onCreateViewHolder(parent, viewType)
 
-
     override fun getItemViewType(position: Int) =
         adapterDelegatesManager.getItemViewType(settingsItemsList[position])
 
     override fun getItemCount() = settingsItemsList.size
 
-    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
-        adapterDelegatesManager.onBindViewHolder(settingsItemsList[position], viewHolder)
+    override fun onBindViewHolder(theme: CustomTheme, viewHolder: CustomThemeRecyclerViewHolder, position: Int) {
+        adapterDelegatesManager.onBindViewHolder(settingsItemsList[position], viewHolder, theme)
     }
 
     fun addSettingsList(settingItems: List<SettingsListItemModel>) {
-        val diffCallback = PrivacyDiffUtilCallback(
-                settingsItemsList,
-                settingItems
+        val diffCallback = SettingsDiffUtilCallback(
+            settingsItemsList,
+            settingItems,
         )
         val diffResult = DiffUtil.calculateDiff(diffCallback)
 
@@ -100,9 +115,10 @@ class SettingsRecyclerViewAdapter constructor(
         diffResult.dispatchUpdatesTo(this)
     }
 
-    class PrivacyDiffUtilCallback(
+    class SettingsDiffUtilCallback(
         private val oldList: List<SettingsListItemModel>,
-        private val newList: List<SettingsListItemModel>) : DiffUtil.Callback() {
+        private val newList: List<SettingsListItemModel>,
+    ) : DiffUtil.Callback() {
 
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
             oldList[oldItemPosition].settingId == newList[newItemPosition].settingId
@@ -116,13 +132,17 @@ class SettingsRecyclerViewAdapter constructor(
             val newItem = newList[newItemPosition]
             val isSameId = oldItem.settingId == newItem.settingId
             val isSameName = oldItem.settingName.contentEquals(newItem.settingName)
+            val defaultCondition = isSameId && isSameName
             if (oldItem is SwitchSettingsListItemModel && newItem is SwitchSettingsListItemModel) {
-                return isSameId && isSameName && (oldItem.isChecked == newItem.isChecked)
+                return defaultCondition && (oldItem.isChecked == newItem.isChecked)
             }
             if (oldItem is SpinnerSettingsListItemModel && newItem is SpinnerSettingsListItemModel) {
-                return isSameId && isSameName && (oldItem.selectedItemPosition == newItem.selectedItemPosition)
+                return defaultCondition && (oldItem.selectedItemPosition == newItem.selectedItemPosition)
             }
-            return isSameId && isSameName
+            if (oldItem is ThemeChangeSettingsListItemModel && newItem is ThemeChangeSettingsListItemModel) {
+                return defaultCondition && (oldItem.selectedThemeId == newItem.selectedThemeId)
+            }
+            return defaultCondition
         }
     }
 }

@@ -10,9 +10,12 @@ import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import com.ak.base.extensions.vibrate
 import com.ak.feature_security_impl.R
-import kotlinx.android.synthetic.main.layout_pincode_auth_view.view.*
+import kotlinx.android.synthetic.main.layout_pincode_auth_view.view.cPincodeInputView
+import kotlinx.android.synthetic.main.layout_pincode_auth_view.view.clRootPincodeAuthView
+import kotlinx.android.synthetic.main.layout_pincode_auth_view.view.ivBackspaceAction
+import kotlinx.android.synthetic.main.layout_pincode_auth_view.view.ivBiometricAuthMark
 
-class PincodeAuthView(context: Context?, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
+class PincodeAuthView(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
 
     companion object {
         private const val FAILED_AUTH_VIBRATION_DELAY_IN_MILLIS = 300L

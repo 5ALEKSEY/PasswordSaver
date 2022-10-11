@@ -14,10 +14,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.appcompat.app.AppCompatActivity
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.base.constants.AppConstants
+import com.ak.base.extensions.applyForLaidOut
 import com.ak.base.extensions.drawTextInner
-import com.ak.base.extensions.getColorCompat
 import com.ak.base.extensions.hideKeyboard
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibility
@@ -28,20 +29,25 @@ import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.gall
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.ui.PhotoChooserBottomSheetDialog
 import com.eazypermissions.common.model.PermissionResult
 import com.eazypermissions.coroutinespermission.PermissionManager
-import kotlinx.android.synthetic.main.fragment_manage_password.*
+import javax.inject.Inject
+import kotlinx.android.synthetic.main.fragment_manage_password.tietPasswordNameField
+import kotlinx.android.synthetic.main.fragment_manage_password.view.btnManagePasswordAction
+import kotlinx.android.synthetic.main.fragment_manage_password.view.ivPasswordAvatarChooser
+import kotlinx.android.synthetic.main.fragment_manage_password.view.lvAvatarChooserImageDesc
+import kotlinx.android.synthetic.main.fragment_manage_password.view.tietPasswordContentField
+import kotlinx.android.synthetic.main.fragment_manage_password.view.tietPasswordNameField
+import kotlinx.android.synthetic.main.fragment_manage_password.view.tilPasswordContentLayout
+import kotlinx.android.synthetic.main.fragment_manage_password.view.tilPasswordNameLayout
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPresenter<*>>
-    : BasePasswordsModuleFragment<ManagePresenter>(), IBaseManagePasswordView {
+abstract class BaseManagePasswordFragment<ManageVM : BaseManagePasswordViewModel>
+    : BasePasswordsModuleFragment<ManageVM>() {
 
     @Inject
     lateinit var mGalleryManager: IPSGalleryManager
 
     private lateinit var mAvatarChooserDialog: PhotoChooserBottomSheetDialog
-
-    protected abstract fun getPresenter(): ManagePresenter
 
     override fun getFragmentLayoutResId() = R.layout.fragment_manage_password
 
@@ -50,12 +56,12 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
         setHasOptionsMenu(true)
     }
 
-    override fun initViewBeforePresenterAttach() {
-        super.initViewBeforePresenterAttach()
+    override fun initView(fragmentView: View) {
+        super.initView(fragmentView)
         initGalleryManager()
         initToolbar()
 
-        tietPasswordContentField.setOnEditorActionListener { _, actionId, _ ->
+        fragmentView.tietPasswordContentField.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_DONE) {
                 managePasswordAction()
                 true
@@ -63,11 +69,11 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
                 false
             }
         }
-        tietPasswordContentField.filters = arrayOf(
+        fragmentView.tietPasswordContentField.filters = arrayOf(
             InputFilter.LengthFilter(AppConstants.PASSWORD_CONTENT_MAX_LENGTH)
         )
 
-        ivPasswordAvatarChooser.setSafeClickListener {
+        fragmentView.ivPasswordAvatarChooser.setSafeClickListener {
             GlobalScope.launch {
 
                 val permissionResult = PermissionManager.requestPermissions(
@@ -110,7 +116,7 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
             }
         }
 
-        tietPasswordNameField.addTextChangedListener(object : TextWatcher {
+        fragmentView.tietPasswordNameField.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
 
             }
@@ -120,16 +126,42 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                getPresenter().onPasswordNameTextChanged(s.toString())
+                viewModel.onPasswordNameTextChanged(s.toString())
             }
         })
-        tietPasswordNameField.filters = arrayOf(
+        fragmentView.tietPasswordNameField.filters = arrayOf(
             InputFilter.LengthFilter(AppConstants.PASSWORD_NAME_MAX_LENGTH)
         )
 
-        btnManagePasswordAction.setSafeClickListener {
+        fragmentView.btnManagePasswordAction.setSafeClickListener {
             managePasswordAction()
         }
+
+        // Theme
+        addThemedView(fragmentView.tilPasswordNameLayout)
+        addThemedView(fragmentView.tilPasswordContentLayout)
+    }
+
+    override fun subscriberToViewModel(viewModel: ManageVM) {
+        super.subscriberToViewModel(viewModel)
+        viewModel.subscribeToSuccessPasswordManage().observe(viewLifecycleOwner) {
+            navController.popBackStack()
+        }
+        viewModel.subscribeToNameInputError().observe(viewLifecycleOwner) { errorMessage ->
+            fragmentView.tilPasswordNameLayout.error = errorMessage
+        }
+        viewModel.subscribeToContentInputError().observe(viewLifecycleOwner) { errorMessage ->
+            fragmentView.tilPasswordContentLayout.error = errorMessage
+        }
+        viewModel.subscribeToAvatarText().observe(viewLifecycleOwner, this::drawTextForPasswordAvatar)
+        viewModel.subscribeToAvatarChooserImage().observe(viewLifecycleOwner) { image ->
+            if (image != null) {
+                displayPasswordAvatarChooserImage(image)
+            } else {
+                deletePasswordAvatarChooserImage()
+            }
+        }
+
     }
 
     override fun onPause() {
@@ -150,54 +182,49 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
             super.onOptionsItemSelected(item)
         }
 
-    override fun displaySuccessPasswordManageAction() {
-        navController.popBackStack()
+    override fun applyTheme(theme: CustomTheme) {
+        super.applyTheme(theme)
+        drawTextForPasswordAvatar(viewModel.subscribeToAvatarText().value ?: "", theme)
     }
 
-    override fun displayPasswordNameInputError(errorMessage: String) {
-        tilPasswordNameLayout.error = errorMessage
-    }
-
-    override fun hidePasswordNameInputError() {
-        tilPasswordNameLayout.error = null
-    }
-
-    override fun displayPasswordContentInputError(errorMessage: String) {
-        tilPasswordContentLayout.error = errorMessage
-    }
-
-    override fun hidePasswordContentInputError() {
-        tilPasswordContentLayout.error = null
-    }
-
-    override fun drawTextForPasswordAvatar(text: String) {
+    private fun drawTextForPasswordAvatar(text: String, theme: CustomTheme = CustomThemeManager.getInstance().getAppliedTheme()) {
         val isTextDrawNeeds = text.isNotEmpty()
-        val fillColor = getColorCompat(R.color.colorPrimary)
-        val textColor = getColorCompat(R.color.colorWhite)
+        val fillColor = theme.getColor(R.attr.themedPrimaryLightColor)
+        val textColor = theme.getColor(R.attr.staticColorWhite)
         val textSizeInPx = resources.getDimensionPixelSize(R.dimen.add_avatar_inner_text_size)
 
-        ivPasswordAvatarChooser.drawTextInner(fillColor, textColor, textSizeInPx, text)
-        lvAvatarChooserImageDesc.setVisibility(!isTextDrawNeeds)
+        fragmentView.ivPasswordAvatarChooser.applyForLaidOut {
+            drawTextInner(
+                requireContext(),
+                fillColor,
+                textColor,
+                textSizeInPx,
+                text
+            )
+            borderColor = theme.getColor(R.attr.themedPrimaryColor)
+        }
+
+        fragmentView.lvAvatarChooserImageDesc.applyForLaidOut { setVisibility(!isTextDrawNeeds) }
     }
 
-    override fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap?) {
-        getPresenter().onAvatarDisplayStateChanged(true)
-        ivPasswordAvatarChooser.setImageBitmap(bitmapImage)
-        lvAvatarChooserImageDesc.visibility = View.GONE
+    private fun displayPasswordAvatarChooserImage(bitmapImage: Bitmap?) {
+        viewModel.onAvatarDisplayStateChanged(true)
+        fragmentView.ivPasswordAvatarChooser.setImageBitmap(bitmapImage)
+        fragmentView.lvAvatarChooserImageDesc.visibility = View.GONE
     }
 
-    override fun deletePasswordAvatarChooserImage() {
-        getPresenter().onAvatarDisplayStateChanged(false)
-        getPresenter().onPasswordNameTextChanged(tietPasswordNameField.text.toString())
+    private fun deletePasswordAvatarChooserImage() {
+        viewModel.onAvatarDisplayStateChanged(false)
+        viewModel.onPasswordNameTextChanged(tietPasswordNameField.text.toString())
     }
 
-    override fun dismissPasswordAvatarChooserDialog() {
+    private fun dismissPasswordAvatarChooserDialog() {
         if (this::mAvatarChooserDialog.isInitialized) {
             mAvatarChooserDialog.dismiss()
         }
     }
 
-    override fun openGalleryForImagePick() {
+    private fun openGalleryForImagePick() {
         if (this::mGalleryManager.isInitialized) {
             activity?.let {
                 mGalleryManager.openGalleryForImagePick(it, this)
@@ -205,25 +232,22 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
         }
     }
 
-    override fun openCameraForImagePick() {
+    private fun openCameraForImagePick() {
         activity?.let {
             CameraPickImageActivity.startCameraPickActivityForResult(it, this)
         }
     }
 
     private fun initGalleryManager() {
-        mGalleryManager.setOnImagePickedListener(getPresenter()::onGalleryAvatarSelected)
+        mGalleryManager.setOnImagePickedListener(viewModel::onGalleryAvatarSelected)
     }
 
     private fun initToolbar() {
-        if (activity != null && activity is AppCompatActivity) {
-            (activity as AppCompatActivity).apply {
-                setSupportActionBar(tbManagePasswordBar)
-                supportActionBar?.title = getToolbarTitleText()
-                tbManagePasswordBar.setNavigationOnClickListener {
-                    hideKeyboard()
-                    navController.popBackStack()
-                }
+        applyForToolbarController {
+            setToolbarTitle(getToolbarTitleText())
+            setupBackAction(R.drawable.ic_back_action) {
+                hideKeyboard()
+                navController.popBackStack()
             }
         }
     }
@@ -232,11 +256,9 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
 
     private fun managePasswordAction() {
         hideKeyboard()
-        hidePasswordNameInputError()
-        hidePasswordContentInputError()
-        getPresenter().onManagePasswordAction(
-            tietPasswordNameField.text.toString(),
-            tietPasswordContentField.text.toString()
+        viewModel.onManagePasswordAction(
+            fragmentView.tietPasswordNameField.text.toString(),
+            fragmentView.tietPasswordContentField.text.toString()
         )
     }
 
@@ -251,7 +273,7 @@ abstract class BaseManagePasswordFragment<ManagePresenter : BaseManagePasswordPr
             && data.hasExtra(CameraPickImageActivity.PICKED_IMAGE_PATH_KEY_EXTRA)
         ) {
             data.getStringExtra(CameraPickImageActivity.PICKED_IMAGE_PATH_KEY_EXTRA)?.let {
-                getPresenter().onCameraImageSelected(it)
+                viewModel.onCameraImageSelected(it)
             }
         }
     }

@@ -10,10 +10,10 @@ import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ak.feature_security_impl.R
-import kotlinx.android.synthetic.main.layout_input_pincode_value_view.view.*
+import kotlinx.android.synthetic.main.layout_input_pincode_value_view.view.ivInputPincodeSecretImage
+import kotlinx.android.synthetic.main.layout_input_pincode_value_view.view.tvInputPincodeValueText
 
-class InputPincodeValueView(context: Context?, attrs: AttributeSet?) :
-    ConstraintLayout(context, attrs) {
+class InputPincodeValueView(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
 
     companion object {
         private const val SHOW_HIDE_ANIMATION_DURATION = 150L

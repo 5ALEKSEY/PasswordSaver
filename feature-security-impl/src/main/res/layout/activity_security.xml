@@ -2,20 +2,21 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/clSecurityRoot"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/security_background_color"
+        android:background="?themedPrimaryColor"
         tools:context="com.ak.feature_security_impl.auth.SecurityActivity">
 
     <ImageView
             android:id="@+id/ivSecurityInputTypeChangeAction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
             android:layout_margin="8dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             android:padding="8dp"
-            android:tint="@color/iconsAndText"
             android:src="@drawable/ic_pattern_input_type"
+            app:tint="?themedToolbarIconsAndTextColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,21 +34,21 @@
             android:id="@+id/tvSecurityMessageText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/iconsAndText"
-            android:textSize="16sp"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:gravity="center"
-            android:minLines="2"
-            android:maxLines="2"
-            android:ellipsize="end"
-            tools:visibility="visible"
-            android:visibility="invisible"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:minLines="2"
+            android:textColor="?themedToolbarIconsAndTextColor"
+            android:textSize="16sp"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivSecurityScreenLogo"
-            tools:text="@string/incorrect_security_input_message" />
+            tools:text="@string/incorrect_security_input_message"
+            tools:visibility="visible" />
 
     <RelativeLayout
             android:id="@+id/vAuthContainer"
@@ -63,9 +64,9 @@
         <com.ak.feature_security_impl.auth.security.pincode.PincodeAuthView
                 android:id="@+id/vPincodeAuthView"
                 android:layout_width="match_parent"
-                android:layout_centerInParent="true"
                 android:layout_height="wrap_content"
-                tools:background="@color/colorAccent"
+                android:background="?themedPrimaryColor"
+                android:layout_centerInParent="true"
                 tools:visibility="gone" />
 
         <com.ak.feature_security_impl.auth.security.patterncode.PatternAuthView
@@ -73,10 +74,10 @@
                 android:layout_width="256dp"
                 android:layout_height="256dp"
                 android:layout_centerInParent="true"
+                android:background="?themedPrimaryColor"
                 app:nodesNumber="nine"
                 app:patternLineWidth="12"
                 app:vibration="true"
-                tools:background="@color/colorAccent"
                 tools:visibility="visible" />
 
     </RelativeLayout>

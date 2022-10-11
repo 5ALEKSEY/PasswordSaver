@@ -1,0 +1,30 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeCloseDrawable">@drawable/ic_close</item>
+        <item name="android:fontFamily">@font/app_font_family</item>
+    </style>
+
+    <style name="BaseActionModeStyle" parent="@style/Widget.AppCompat.ActionMode">
+        <item name="titleTextStyle">@style/BaseActionModeTitleTextStyle</item>
+    </style>
+
+    <style name="BaseActionModeTitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionMode.Title">
+        <item name="android:textColor">@color/staticColorWhite</item>
+    </style>
+
+    <style name="Toolbar.TitleText" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">17sp</item>
+    </style>
+
+    <style name="CustomTheme" parent="@style/AppTheme">
+        <!-- STATIC COLORS -->
+        <item name="staticColorTransparent">#00FFFFFF</item>
+        <item name="staticColorBlack">#000000</item>
+        <item name="staticColorWhite">#FFFFFF</item>
+    </style>
+
+</resources>

@@ -7,23 +7,29 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
+import com.ak.app_theme.theme.uicomponents.BaseThemeActivity
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.getColorCompat
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibility
 import com.ak.base.extensions.setVisibilityInvisible
 import com.ak.base.extensions.showToastMessage
-import com.ak.base.extensions.vibrate
+import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_tabpasswords_impl.R
-import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
+import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponentInitializer
+import com.ak.feature_tabpasswords_impl.di.modules.TabPasswordsViewModelsModule
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.camera.manager.IPSCameraManager
-import kotlinx.android.synthetic.main.activity_camera_pick_image.*
-import moxy.MvpAppCompatActivity
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
+import javax.inject.Named
+import kotlinx.android.synthetic.main.activity_camera_pick_image.btnTakeImageAction
+import kotlinx.android.synthetic.main.activity_camera_pick_image.ivCameraPickImageCancelAction
+import kotlinx.android.synthetic.main.activity_camera_pick_image.ivChooseImagePanelAction
+import kotlinx.android.synthetic.main.activity_camera_pick_image.ivPreviewImage
+import kotlinx.android.synthetic.main.activity_camera_pick_image.ivRemovePickedImagePanelAction
+import kotlinx.android.synthetic.main.activity_camera_pick_image.texvCameraPickImagePreview
 
-class CameraPickImageActivity : MvpAppCompatActivity(), ICameraPickImageView {
+class CameraPickImageActivity : BaseThemeActivity() {
 
     companion object {
         const val PICKED_IMAGE_PATH_KEY_EXTRA = "picked_image_path"
@@ -47,41 +53,34 @@ class CameraPickImageActivity : MvpAppCompatActivity(), ICameraPickImageView {
     }
 
     @Inject
-    lateinit var daggerPresenter: CameraPickImagePresenter
-
-    @InjectPresenter
-    lateinit var cameraPickImagePresenter: CameraPickImagePresenter
-
-    @ProvidePresenter
-    fun providePresenter(): CameraPickImagePresenter = daggerPresenter
+    @field:Named(TabPasswordsViewModelsModule.PASSWORDS_VIEW_MODELS_FACTORY_KEY)
+    protected lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
-    lateinit var cameraManager: IPSCameraManager
+    protected lateinit var cameraManager: IPSCameraManager
+
+    private lateinit var viewModel: CameraPickImageViewModel
 
     override fun onBackPressed() {
         sendCancelResult()
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        mvpDelegate.onAttach()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        FeatureTabPasswordsComponent.get().inject(this)
+        (applicationContext as? FeatureTabPasswordsComponentInitializer)?.initializeTabPasswordsComponent()?.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera_pick_image)
-        initViewBeforePresenterAttach()
-        mvpDelegate.onAttach()
+        viewModel = injectViewModel(viewModelFactory)
+        initView()
+        subscribeToViewModel(viewModel)
     }
 
-    private fun initViewBeforePresenterAttach() {
+    private fun initView() {
         initWindow()
         cameraManager.initCameraManager(false, texvCameraPickImagePreview)
 
         btnTakeImageAction.setSafeClickListener {
             cameraManager.takeImage {
-                runOnUiThread { cameraPickImagePresenter.onImagePicked(it) }
+                runOnUiThread { viewModel.onImagePicked(it) }
             }
         }
 
@@ -92,17 +91,28 @@ class CameraPickImageActivity : MvpAppCompatActivity(), ICameraPickImageView {
         displayTakeImageStrategy()
 
         ivRemovePickedImagePanelAction.setSafeClickListener {
-            cameraPickImagePresenter.onPickedImageRemoved()
+            viewModel.onPickedImageRemoved()
         }
         ivChooseImagePanelAction.setSafeClickListener {
-            cameraPickImagePresenter.savePickedImageAndFinish()
+            viewModel.savePickedImageAndFinish()
         }
+    }
+
+    private fun subscribeToViewModel(viewModel: CameraPickImageViewModel) {
+        viewModel.subscribeToShortTimeMessageLiveData().observe(this) {
+            showToastMessage(it)
+        }
+        viewModel.subscribeToPreviewImageLiveData().observe(this, this::displayPreviewImageStrategy)
+        viewModel.subscribeToTakeImageLiveData().observe(this) {
+            displayTakeImageStrategy()
+        }
+        viewModel.subscribeToImagePickedResultPathLiveData().observe(this, this::sendSuccessImagePickResult)
     }
 
     private fun initWindow() {
         window?.apply {
             addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)  // hide status bar
-            navigationBarColor = getColorCompat(R.color.colorBlack)
+            navigationBarColor = getColorCompat(R.color.staticColorBlack)
         }
     }
 
@@ -116,7 +126,7 @@ class CameraPickImageActivity : MvpAppCompatActivity(), ICameraPickImageView {
         cameraManager.closeCamera()
     }
 
-    override fun displayPreviewImageStrategy(previewBitmap: Bitmap) {
+    private fun displayPreviewImageStrategy(previewBitmap: Bitmap) {
         btnTakeImageAction.setVisibilityInvisible(false)
         ivPreviewImage.setVisibility(true)
         ivPreviewImage.setImageBitmap(previewBitmap)
@@ -125,7 +135,7 @@ class CameraPickImageActivity : MvpAppCompatActivity(), ICameraPickImageView {
         cameraManager.closeCamera()
     }
 
-    override fun displayTakeImageStrategy() {
+    private fun displayTakeImageStrategy() {
         btnTakeImageAction.setVisibility(true)
         ivPreviewImage.setVisibility(false)
         ivPreviewImage.setImageBitmap(null)
@@ -134,23 +144,15 @@ class CameraPickImageActivity : MvpAppCompatActivity(), ICameraPickImageView {
         cameraManager.openCamera()
     }
 
-    override fun sendSuccessImagePickResult(filePath: String) {
+    private fun sendSuccessImagePickResult(filePath: String) {
         val resultIntent = Intent()
         resultIntent.putExtra(PICKED_IMAGE_PATH_KEY_EXTRA, filePath)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
 
-    override fun sendCancelResult() {
+    private fun sendCancelResult() {
         setResult(Activity.RESULT_CANCELED)
         finish()
-    }
-
-    override fun showShortTimeMessage(message: String) {
-        showToastMessage(message)
-    }
-
-    override fun invokeVibration(vibrateDuration: Long) {
-        vibrate(vibrateDuration)
     }
 }

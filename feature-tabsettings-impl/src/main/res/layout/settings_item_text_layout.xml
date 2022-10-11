@@ -4,7 +4,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:attr/selectableItemBackground">
+        android:background="?android:attr/selectableItemBackground"
+        tools:background="?themedPrimaryBackgroundColor">
 
     <TextView
             android:id="@+id/tvSettingName"
@@ -12,8 +13,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="12dp"
             android:ellipsize="end"
-            android:maxLines="1"
-            android:textColor="@color/primaryText"
+            android:maxLines="2"
+            android:tag="@string/skipThemeInterceptor"
+            android:textColor="?themedPrimaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -30,15 +32,17 @@
             android:layout_gravity="top|center_horizontal"
             android:layout_marginStart="4dp"
             android:background="@drawable/bg_badge_notification"
+            android:backgroundTint="?themedAccentColor"
             android:gravity="center"
             android:padding="3dp"
-            android:textColor="@color/colorWhite"
-            android:visibility="gone"
-            tools:visibility="visible"
+            android:tag="@string/skipThemeInterceptor"
+            android:text="@string/new_feature_badge"
+            android:textColor="?staticColorWhite"
             android:textSize="10sp"
-            app:layout_constraintTop_toTopOf="@id/tvSettingName"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tvSettingName"
             app:layout_constraintStart_toEndOf="@id/tvSettingName"
-            android:text="@string/new_feature_badge" />
+            app:layout_constraintTop_toTopOf="@id/tvSettingName"
+            tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

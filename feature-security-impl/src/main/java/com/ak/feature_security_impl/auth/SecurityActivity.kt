@@ -12,19 +12,24 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.ViewModelProvider
+import com.ak.app_theme.theme.CustomTheme
+import com.ak.app_theme.theme.uicomponents.BaseThemeActivity
 import com.ak.base.extensions.setSafeClickListener
-import com.ak.base.extensions.showToastMessage
 import com.ak.base.extensions.vibrate
+import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_security_impl.R
 import com.ak.feature_security_impl.di.FeatureSecurityComponent
-import kotlinx.android.synthetic.main.activity_security.*
-import moxy.MvpAppCompatActivity
-import moxy.presenter.InjectPresenter
-import moxy.presenter.ProvidePresenter
+import com.ak.feature_security_impl.di.modules.SecurityViewModelsModule
 import javax.inject.Inject
+import javax.inject.Named
+import kotlinx.android.synthetic.main.activity_security.ivSecurityInputTypeChangeAction
+import kotlinx.android.synthetic.main.activity_security.tvSecurityMessageText
+import kotlinx.android.synthetic.main.activity_security.vPatternAuthView
+import kotlinx.android.synthetic.main.activity_security.vPincodeAuthView
 
-class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
+class SecurityActivity : BaseThemeActivity() {
 
     companion object {
         private const val IS_AUTH_ACTION_KEY_EXTRA = "is_auth_action"
@@ -59,43 +64,85 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
         }
     }
 
-    @InjectPresenter
-    lateinit var securityPresenter: SecurityPresenter
-
     @Inject
-    lateinit var daggerPresenter: SecurityPresenter
+    @field:Named(SecurityViewModelsModule.SECURITY_VIEW_MODELS_FACTORY_KEY)
+    protected lateinit var viewModelsFactory: ViewModelProvider.Factory
 
-    @ProvidePresenter
-    fun providePresenter(): SecurityPresenter = daggerPresenter
+    private lateinit var viewModel: SecurityViewModel
 
     override fun onBackPressed() {
         sendAuthActionResult(false)
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
-        mvpDelegate.onAttach()
+    override fun getNavigationBarColorResource(): Int {
+        return R.attr.themedPrimaryColor
+    }
+
+    override fun isAppearanceLightNavigationBars(theme: CustomTheme): Boolean {
+        return false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         FeatureSecurityComponent.get().inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_security)
-        initViewBeforePresenterAttach()
-        mvpDelegate.onAttach()
+        initViewModel()
+        initView()
+        subscribeToViewModel(viewModel)
+    }
+
+    private fun initViewModel() {
+        viewModel = injectViewModel(viewModelsFactory)
+        intent?.let {
+            viewModel.authActionType = it.getIntExtra(
+                IS_AUTH_ACTION_KEY_EXTRA,
+                IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE
+            )
+        }
+        viewModel.initSecurityAuthState()
+    }
+
+    private fun subscribeToViewModel(viewModel: SecurityViewModel) {
+        viewModel.subscribeToSwitchAuthMethodLiveData().observe(this) {
+            switchAuthMethod(it.first, it.second)
+        }
+        viewModel.subscribeToShowSecurityMessageLiveData().observe(this) {
+            showSecurityMessage(it.first, it.second)
+        }
+        viewModel.subscribeToHideSecurityMessageLiveData().observe(this) {
+            hideSecurityMessage()
+        }
+        viewModel.subscribeToFailedPincodeAuthActionLiveData().observe(this) {
+            showFailedPincodeAuthAction()
+        }
+        viewModel.subscribeToFailedPatternAuthActionLiveData().observe(this) {
+            showFailedPatternAuthAction()
+        }
+        viewModel.subscribeToSecurityInputLockStateLiveData().observe(this) { isLocked ->
+            if (isLocked) lockSecurityInputViews() else unlockSecurityInputViews()
+        }
+        viewModel.subscribeToSwitchAuthMethodLockStateLiveData().observe(this) { isLocked ->
+            if (isLocked) lockSwitchAuthMethod() else unlockSwitchAuthMethod()
+        }
+        viewModel.subscribeToBiometricAuthVisibilityStateLiveData().observe(this, this::setBiometricAuthVisibility)
+        viewModel.subscribeToBiometricAuthLockStateLiveData().observe(this, this::setBiometricAuthLockState)
+        viewModel.subscribeToBiometricAuthFailedAttemptLiveData().observe(this) {
+            showBiometricFailedAttempt()
+        }
+        viewModel.subscribeToAuthActionResultLiveData().observe(this, this::sendAuthActionResult)
     }
 
     override fun onResume() {
         super.onResume()
-        securityPresenter.startBiometricAuth()
+        viewModel.startBiometricAuth()
     }
 
     override fun onPause() {
         super.onPause()
-        securityPresenter.stopBiometricAuth()
+        viewModel.stopBiometricAuth()
     }
 
-    override fun showSecurityMessage(message: String, withAnimation: Boolean) {
+    private fun showSecurityMessage(message: String, withAnimation: Boolean) {
         tvSecurityMessageText.visibility = View.VISIBLE
         tvSecurityMessageText.text = message
         if (withAnimation) {
@@ -104,50 +151,50 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
         }
     }
 
-    override fun hideSecurityMessage() {
+    private fun hideSecurityMessage() {
         tvSecurityMessageText.visibility = View.INVISIBLE
     }
 
-    override fun showFailedPincodeAuthAction() {
+    private fun showFailedPincodeAuthAction() {
         vPincodeAuthView.setFailedAuthViewState()
     }
 
-    override fun showFailedPatternAuthAction() {
+    private fun showFailedPatternAuthAction() {
         vPatternAuthView.setFailedAuthViewState()
     }
 
-    override fun lockSecurityInputViews() {
-        invokeVibration(LOCK_VIBRATION_DELAY)
+    private fun lockSecurityInputViews() {
+        vibrate(LOCK_VIBRATION_DELAY)
         vPincodeAuthView.setPincodeInputLockedState(true)
         vPatternAuthView.setAuthViewInputLockState(true)
     }
 
-    override fun unlockSecurityInputViews() {
+    private fun unlockSecurityInputViews() {
         vPincodeAuthView.setPincodeInputLockedState(false)
         vPatternAuthView.setAuthViewInputLockState(false)
-        securityPresenter.startBiometricAuth()
+        viewModel.startBiometricAuth()
     }
 
-    override fun setBiometricAuthVisibility(isBiometricVisible: Boolean) {
+    private fun setBiometricAuthVisibility(isBiometricVisible: Boolean) {
         vPincodeAuthView.setBiometricAuthMarkVisibility(isBiometricVisible)
     }
 
-    override fun showBiometricFailedAttempt() {
+    private fun showBiometricFailedAttempt() {
         vPincodeAuthView.showBiometricMarkFailedAttempt()
     }
 
-    override fun setBiometricAuthLockState(isLocked: Boolean) {
+    private fun setBiometricAuthLockState(isLocked: Boolean) {
         
     }
 
-    override fun sendAuthActionResult(isSuccessfully: Boolean) {
+    private fun sendAuthActionResult(isSuccessfully: Boolean) {
         val result = if (isSuccessfully) Activity.RESULT_OK else Activity.RESULT_CANCELED
         setResult(result)
         finish()
         applyFinishSecurityAnim(this)
     }
 
-    override fun switchAuthMethod(isPincode: Boolean, withAnimation: Boolean) {
+    private fun switchAuthMethod(isPincode: Boolean, withAnimation: Boolean) {
         val switchDuration = if (withAnimation) SWITCH_AUTH_METHOD_DURATION else 0L
 
         val appearView = if (isPincode) vPincodeAuthView else vPatternAuthView
@@ -164,39 +211,22 @@ class SecurityActivity : MvpAppCompatActivity(), ISecurityView {
         setSecurityInputTypeIcon(isPincode)
     }
 
-    override fun lockSwitchAuthMethod() {
+    private fun lockSwitchAuthMethod() {
         ivSecurityInputTypeChangeAction.visibility = View.GONE
     }
 
-    override fun unlockSwitchAuthMethod() {
+    private fun unlockSwitchAuthMethod() {
         ivSecurityInputTypeChangeAction.visibility = View.VISIBLE
     }
 
-    override fun showShortTimeMessage(message: String) {
-        showToastMessage(message)
-    }
-
-    override fun invokeVibration(vibrateDuration: Long) {
-        vibrate(vibrateDuration)
-    }
-
-    private fun initViewBeforePresenterAttach() {
-        intent?.let { initAuthState(it) }
-
-        vPatternAuthView.mOnFinishedAction = securityPresenter::onUserAuthFinished
-        vPincodeAuthView.onFinishedAction = securityPresenter::onUserAuthFinished
+    private fun initView() {
+        vPatternAuthView.mOnFinishedAction = viewModel::onUserAuthFinished
+        vPincodeAuthView.onFinishedAction = viewModel::onUserAuthFinished
         vPincodeAuthView.setPincodeValuesCount(PINCODE_INPUT_VALUES_COUNT)
 
         ivSecurityInputTypeChangeAction.setSafeClickListener(CHANGE_AUTH_INPUT_METHOD_CLICK_DELAY) {
-            securityPresenter.onSecurityInputTypeChangeClicked()
+            viewModel.onSecurityInputTypeChangeClicked()
         }
-    }
-
-    private fun initAuthState(intent: Intent) {
-        securityPresenter.authActionType = intent.getIntExtra(
-            IS_AUTH_ACTION_KEY_EXTRA,
-            IAuthCheckerStarter.AUTH_SECURITY_ACTION_TYPE
-        )
     }
 
     private fun setSecurityInputTypeIcon(isPincode: Boolean) {
