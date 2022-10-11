@@ -70,7 +70,7 @@ class PSDialog private constructor() : BaseThemeDialogFragment() {
         }
 
         // Default values
-        private val DEFAULT_TITLE_STRING_ID = R.string.application_name
+        private val DEFAULT_TITLE_STRING_ID = R.string.app_name
         private val DEFAULT_POS_BTN_STRING_ID = R.string.ok_action_text
         private val DEFAULT_NEG_BTN_STRING_ID = R.string.cancel_action_text
         private const val DEFAULT_CANCELABLE = true
