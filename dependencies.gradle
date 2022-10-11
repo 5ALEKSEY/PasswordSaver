@@ -13,7 +13,6 @@ def rxAndroid_version = '3.0.0'
 def stetho_version = '1.5.0'
 def easyCrypt_version = '1.3.3'
 def coroutinesPermission_version = '2.0.0'
-def kotlinCoroutines_version = '1.6.0'
 def lifecycle_version = '2.4.1'
 def gson_version = '2.9.0'
 def lottie_version = '5.0.3'
@@ -21,7 +20,8 @@ def biometric_version = '1.1.0'
 def nav_version = '2.4.1'
 def view_pump_version = '2.0.3'
 def gif_drawable_version = '1.2.25'
-def coroutines_version = '1.3.9'
+def coroutines_version = '1.6.4'
+def coroutines_vm_version = '2.6.0-alpha02'
 
 ext.deps = [
         kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
@@ -43,7 +43,6 @@ ext.deps = [
         stethoDebugImpl     : "com.facebook.stetho:stetho:$stetho_version",
         easycrypt           : "com.pvryan.easycrypt:easycrypt:$easyCrypt_version",
         coroutinesPermission: "com.sagar:coroutinespermission:$coroutinesPermission_version",
-        kotlinCoroutines    : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutines_version",
         lifecycle           : ["androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version", "androidx.lifecycle:lifecycle-process:$lifecycle_version"],
         gson                : "com.google.code.gson:gson:$gson_version",
         lottieAnim          : "com.airbnb.android:lottie:$lottie_version",
@@ -51,5 +50,6 @@ ext.deps = [
         navComponent        : ["androidx.navigation:navigation-fragment-ktx:$nav_version", "androidx.navigation:navigation-ui-ktx:$nav_version"],
         viewPump            : "io.github.inflationx:viewpump:$view_pump_version",
         gifDrawable         : "pl.droidsonroids.gif:android-gif-drawable:$gif_drawable_version",
-        coroutines          : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version",
+        coroutines          : ["org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version", "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"],
+        coroutinesVM        : "androidx.lifecycle:lifecycle-viewmodel-ktx:$coroutines_vm_version",
 ]
