@@ -30,7 +30,9 @@
         <item name="themedSwitchTrackUncheckedColor">@color/color_switch_track_unchecked_purple</item>
         <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_purple</item>
 
-        <item name="themedSelectedItemBackgroundDrawable">@drawable/a_loading_purple</item>
+        <item name="themedSelectedGradientStartColor">@color/color_loading_gradient_start_purple</item>
+        <item name="themedSelectedGradientCenterColor">@color/color_loading_gradient_center_purple</item>
+        <item name="themedSelectedGradientEndColor">@color/color_loading_gradient_end_purple</item>
     </style>
 
 </resources>

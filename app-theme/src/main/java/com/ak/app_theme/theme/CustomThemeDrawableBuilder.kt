@@ -2,6 +2,9 @@ package com.ak.app_theme.theme
 
 import android.content.Context
 import android.graphics.Rect
+import android.graphics.drawable.AnimatedImageDrawable
+import android.graphics.drawable.AnimatedStateListDrawable
+import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
@@ -16,6 +19,10 @@ class CustomThemeDrawableBuilder @JvmOverloads constructor(
 
     private var targetShape: Int = GradientDrawable.RECTANGLE
     private var solidColor = 0
+
+    private var gradientColors = mutableListOf<Int>()
+    private var typeOfGradient = GradientDrawable.LINEAR_GRADIENT
+    private var gradientOrientation = GradientDrawable.Orientation.RIGHT_LEFT
 
     private var strokeWidth = 0
     private var strokeColor = 0
@@ -40,6 +47,24 @@ class CustomThemeDrawableBuilder @JvmOverloads constructor(
 
     fun solidColor(@ColorInt color: Int) = apply { solidColor = color }
     fun solidColorAttr(@AttrRes colorAttr: Int) = solidColor(theme?.getColor(colorAttr) ?: solidColor)
+
+    fun gradientColors(@ColorInt start: Int, @ColorInt center: Int, @ColorInt end: Int) = apply {
+        gradientColors.apply {
+            clear()
+            addAll(listOf(start, center, end))
+        }
+    }
+    fun gradientColorsAttr(@AttrRes startAttr: Int, @AttrRes centerAttr: Int, @AttrRes endAttr: Int) = gradientColors(
+        theme?.getColor(startAttr) ?: 0,
+        theme?.getColor(centerAttr) ?: 0,
+        theme?.getColor(endAttr) ?: 0,
+    )
+    fun linearGradientType() = apply { typeOfGradient = GradientDrawable.LINEAR_GRADIENT }
+    fun radialGradientType() = apply { typeOfGradient = GradientDrawable.RADIAL_GRADIENT }
+    fun sweepGradientType() = apply { typeOfGradient = GradientDrawable.SWEEP_GRADIENT }
+    fun gradientOrientation(orientation: GradientDrawable.Orientation) = apply {
+        gradientOrientation = orientation
+    }
 
     fun strokeWidth(value: Int) = apply { strokeWidth = value }
     fun strokeWidthDp(value: Float) = apply { strokeWidth = value.dpToPx(context) }
@@ -118,7 +143,13 @@ class CustomThemeDrawableBuilder @JvmOverloads constructor(
     fun build(): Drawable {
         var drawable: Drawable = GradientDrawable().apply {
             shape = targetShape
-            setColor(solidColor)
+            if (gradientColors.isNotEmpty()) {
+                colors = gradientColors.toIntArray()
+                gradientType = typeOfGradient
+                orientation = gradientOrientation
+            } else {
+                setColor(solidColor)
+            }
             if (strokeWidth > 0) {
                 setStroke(strokeWidth, strokeColor)
             }

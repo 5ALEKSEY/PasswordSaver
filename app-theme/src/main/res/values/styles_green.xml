@@ -30,7 +30,9 @@
         <item name="themedSwitchTrackUncheckedColor">@color/color_switch_track_unchecked_green</item>
         <item name="themedSwitchTrackCheckedColor">@color/color_switch_track_checked_green</item>
 
-        <item name="themedSelectedItemBackgroundDrawable">@drawable/a_loading_green</item>
+        <item name="themedSelectedGradientStartColor">@color/color_loading_gradient_start_green</item>
+        <item name="themedSelectedGradientCenterColor">@color/color_loading_gradient_center_green</item>
+        <item name="themedSelectedGradientEndColor">@color/color_loading_gradient_end_green</item>
     </style>
 
 </resources>

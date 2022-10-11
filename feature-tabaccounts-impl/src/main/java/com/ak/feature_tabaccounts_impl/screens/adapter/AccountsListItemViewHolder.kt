@@ -2,6 +2,7 @@ package com.ak.feature_tabaccounts_impl.screens.adapter
 
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.view.View
 import androidx.core.view.isVisible
 import com.ak.app_theme.theme.CustomTheme
@@ -212,16 +213,57 @@ class AccountsListItemViewHolder(
     }
 
     private fun setRootItemBackground(accountItemModel: AccountItemModel, rootView: View, theme: CustomTheme) {
-        val bgResId = when {
-            accountItemModel.isLoadingModel -> theme.getDrawable(R.attr.themedSelectedItemBackgroundDrawable)
-            else -> 0
+        if (accountItemModel.isLoadingModel) {
+            rootView.background = createLoadingModelDrawable(theme)
+        } else {
+            rootView.setBackgroundResource(0)
         }
-        rootView.setBackgroundResource(bgResId)
 
-        (rootView.background as? AnimationDrawable)?.apply {
+        (rootView.background as? AnimationDrawable)?.start()
+    }
+
+    // TODO: Move to utils or smth like that
+    private fun createLoadingModelDrawable(theme: CustomTheme): Drawable {
+        val startGradientDrawable = CustomThemeDrawableBuilder(theme, itemView.context)
+            .rectangle()
+            .gradientOrientation(GradientDrawable.Orientation.RIGHT_LEFT)
+            .linearGradientType()
+            .gradientColorsAttr(
+                R.attr.themedSelectedGradientStartColor,
+                R.attr.themedSelectedGradientCenterColor,
+                R.attr.themedSelectedGradientEndColor,
+            )
+            .build()
+
+        val centerGradientDrawable = CustomThemeDrawableBuilder(theme, itemView.context)
+            .rectangle()
+            .gradientOrientation(GradientDrawable.Orientation.RIGHT_LEFT)
+            .linearGradientType()
+            .gradientColorsAttr(
+                R.attr.themedSelectedGradientEndColor,
+                R.attr.themedSelectedGradientStartColor,
+                R.attr.themedSelectedGradientCenterColor,
+            )
+            .build()
+
+        val endGradientDrawable = CustomThemeDrawableBuilder(theme, itemView.context)
+            .rectangle()
+            .gradientOrientation(GradientDrawable.Orientation.RIGHT_LEFT)
+            .linearGradientType()
+            .gradientColorsAttr(
+                R.attr.themedSelectedGradientCenterColor,
+                R.attr.themedSelectedGradientEndColor,
+                R.attr.themedSelectedGradientStartColor,
+            )
+            .build()
+
+        return AnimationDrawable().apply {
+            addFrame(startGradientDrawable, 500)
+            addFrame(centerGradientDrawable, 500)
+            addFrame(endGradientDrawable, 500)
+
             setEnterFadeDuration(0)
             setExitFadeDuration(500)
-            start()
         }
     }
 

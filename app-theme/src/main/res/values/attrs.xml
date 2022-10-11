@@ -197,7 +197,9 @@
         <attr name="themedSwitchTrackUncheckedColor" format="color" />
         <attr name="themedSwitchTrackCheckedColor" format="color" />
 
-        <attr name="themedSelectedItemBackgroundDrawable" format="reference" />
+        <attr name="themedSelectedGradientStartColor" format="color" />
+        <attr name="themedSelectedGradientCenterColor" format="color" />
+        <attr name="themedSelectedGradientEndColor" format="color" />
 
     </declare-styleable>
 
