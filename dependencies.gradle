@@ -21,6 +21,7 @@ def biometric_version = '1.1.0'
 def nav_version = '2.4.1'
 def view_pump_version = '2.0.3'
 def gif_drawable_version = '1.2.25'
+def coroutines_version = '1.3.9'
 
 ext.deps = [
         kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
@@ -50,4 +51,5 @@ ext.deps = [
         navComponent        : ["androidx.navigation:navigation-fragment-ktx:$nav_version", "androidx.navigation:navigation-ui-ktx:$nav_version"],
         viewPump            : "io.github.inflationx:viewpump:$view_pump_version",
         gifDrawable         : "pl.droidsonroids.gif:android-gif-drawable:$gif_drawable_version",
+        coroutines          : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version",
 ]
