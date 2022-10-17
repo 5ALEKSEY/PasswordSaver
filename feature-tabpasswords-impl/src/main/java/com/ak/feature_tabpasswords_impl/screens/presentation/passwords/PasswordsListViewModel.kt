@@ -1,15 +1,14 @@
 package com.ak.feature_tabpasswords_impl.screens.presentation.passwords
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.ak.base.constants.AppConstants
 import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.core_repo_api.intefaces.IDateAndTimeManager
 import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
 import com.ak.core_repo_api.intefaces.IResourceManager
-import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity
 import com.ak.feature_tabpasswords_impl.R
@@ -17,6 +16,10 @@ import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordItemModel
 import com.ak.feature_tabpasswords_impl.screens.logic.IDataBufferManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PasswordsListViewModel @Inject constructor(
     private val passwordsInteractor: IPasswordsInteractor,
@@ -38,30 +41,30 @@ class PasswordsListViewModel @Inject constructor(
     fun subscribeToToolbarScrollingState(): LiveData<Boolean> = toolbarScrollingStateLD
     fun subscribeToPasswordsList(): LiveData<List<PasswordItemModel>> = passwordsListLD
 
+    private var loadPasswordsJob: Job? = null
+
     fun loadPasswords() {
-        passwordsInteractor.getAllPasswords()
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                loadingStateLD.value = true
-                emptyPasswordsStateLD.value = false
-            }
-            .subscribe(
-                { list ->
-                    val listForDisplay = convertFeatureEntitiesList(list)
+        loadingStateLD.value = true
+        emptyPasswordsStateLD.value = false
+
+        loadPasswordsJob?.cancel()
+        loadPasswordsJob = viewModelScope.launch(Dispatchers.IO) {
+            passwordsInteractor.getAllPasswords().collect {
+                val listForDisplay = convertFeatureEntitiesList(it)
+                withContext(Dispatchers.Main) {
                     loadingStateLD.value = false
                     passwordsListLD.value = listForDisplay
-                    emptyPasswordsStateLD.value = list.isEmpty()
+                    emptyPasswordsStateLD.value = listForDisplay.isEmpty()
                     handleListForDisplay(listForDisplay)
-                },
-                { throwable ->
-                    Log.d("de", "dede")
-                })
-            .let(this::bindDisposable)
+                }
+            }
+        }
     }
 
     fun onCopyPasswordAction(passwordId: Long) {
-        getPasswordDataAndStartAction(passwordId) {
-            dataBufferManager.copyStringData(it.getPasswordContent())
+        viewModelScope.launch {
+            val passwordEntity = passwordsInteractor.getPasswordById(passwordId)
+            dataBufferManager.copyStringData(passwordEntity.getPasswordContent())
             shortTimeMessageLiveData.value = resourceManager.getString(R.string.copied_to_clipboard_message)
         }
     }
@@ -71,52 +74,21 @@ class PasswordsListViewModel @Inject constructor(
     }
 
     fun onDeletePasswordAction(passwordId: Long) {
-        passwordsInteractor.deletePasswordById(passwordId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                },
-                { throwable ->
-                    shortTimeMessageLiveData.value = throwable.message ?: "unknown"
-                })
-            .let(this::bindDisposable)
+        viewModelScope.launch {
+            passwordsInteractor.deletePasswordById(passwordId)
+        }
     }
 
     fun pinPassword(passwordId: Long) {
-        passwordsInteractor.pinPassword(passwordId, dateAndTimeManager.getCurrentTimeInMillis())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                },
-                { throwable ->
-                    shortTimeMessageLiveData.value = throwable.message ?: "unknown"
-                })
-            .let(this::bindDisposable)
+        viewModelScope.launch {
+            passwordsInteractor.pinPassword(passwordId, dateAndTimeManager.getCurrentTimeInMillis())
+        }
     }
 
     fun unpinPassword(passwordId: Long) {
-        passwordsInteractor.unpinPassword(passwordId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                },
-                { throwable ->
-                    shortTimeMessageLiveData.value = throwable.message ?: "unknown"
-                })
-            .let(this::bindDisposable)
-    }
-
-    private inline fun getPasswordDataAndStartAction(passwordsId: Long, crossinline action: (entity: PasswordFeatureEntity) -> Unit) {
-        passwordsInteractor.getPasswordById(passwordsId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { entity ->
-                    action(entity)
-                },
-                { throwable ->
-                    Log.d("dddd", "dddd")
-                })
-            .let(this::bindDisposable)
+        viewModelScope.launch {
+            passwordsInteractor.unpinPassword(passwordId)
+        }
     }
 
     private fun handleListForDisplay(listForDisplay: List<PasswordItemModel>) {

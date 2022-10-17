@@ -3,6 +3,7 @@ package com.ak.feature_tabsettings_impl.debug
 import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.core_repo_api.intefaces.AccountRepoEntity
@@ -20,6 +21,9 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 import kotlin.random.Random
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DebugSettingsViewModel @Inject constructor(
     private val featuresUpdateManager: IFeaturesUpdateManager,
@@ -71,11 +75,10 @@ class DebugSettingsViewModel @Inject constructor(
                     .let(this::bindDisposable)
             }
             ADD_RANDOM_PASSWORD_SETTING_ID -> {
-                passwordsRepository.addNewPasswords(listOf(generateRandomPassword()))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doAfterSuccess { loadDebugSettings() }
-                    .subscribe()
-                    .let(this::bindDisposable)
+                viewModelScope.launch {
+                    passwordsRepository.addNewPasswords(listOf(generateRandomPassword()))
+                    loadDebugSettings()
+                }
             }
             ADD_RANDOM_ACCOUNT_SETTING_ID -> {
                 accountsRepository.addNewAccounts(listOf(generateRandomAccount()))

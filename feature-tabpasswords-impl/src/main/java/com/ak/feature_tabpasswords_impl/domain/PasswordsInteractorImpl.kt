@@ -1,123 +1,110 @@
 package com.ak.feature_tabpasswords_impl.domain
 
-import com.ak.base.extensions.onErrorSafe
-import com.ak.base.extensions.onSuccessSafe
 import com.ak.core_repo_api.intefaces.IPasswordsRepository
-import com.ak.core_repo_api.intefaces.PasswordRepoEntity
 import com.ak.feature_encryption_api.interfaces.IEncryptionManager
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity
 import com.ak.feature_tabpasswords_impl.domain.entity.PasswordDomainEntity
 import com.ak.feature_tabpasswords_impl.domain.entity.mapFeatureToDomainEntitiesList
 import com.ak.feature_tabpasswords_impl.domain.entity.mapRepoToDomainEntitiesList
+import com.ak.feature_tabpasswords_impl.domain.entity.mapToDomainEntity
 import com.ak.feature_tabpasswords_impl.domain.usecase.PasswordDataCheckUseCase
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class PasswordsInteractorImpl @Inject constructor(
     private val passwordsRepository: IPasswordsRepository,
-    private val encryptionManager: IEncryptionManager
+    private val encryptionManager: IEncryptionManager,
 ) : IPasswordsInteractor {
 
     private val passwordDataCheckUseCase: PasswordDataCheckUseCase = PasswordDataCheckUseCase()
 
-    override fun getAllPasswords(): Flowable<List<PasswordFeatureEntity>> =
-        passwordsRepository.getAllPasswords()
-            .flatMapSingle(this::getInvokedDecryptionUseCase)
+    override fun getAllPasswords(): Flow<List<PasswordFeatureEntity>> {
+        return passwordsRepository.getAllPasswords().map {
+            decryptPasswordEntities(it.mapRepoToDomainEntitiesList())
+        }
+    }
 
-    override fun getPasswordById(passwordId: Long): Single<PasswordFeatureEntity> =
+    override suspend fun getPasswordById(passwordId: Long) = withContext(Dispatchers.IO) {
         passwordsRepository.getPasswordById(passwordId)
-            .flatMap { entity -> getInvokedDecryptionUseCase(listOf(entity)) }
-            .map { it[0] }
+            .mapToDomainEntity()
+            .apply { passwordContentValue = encryptionManager.decrypt(passwordContentValue) }
+    }
 
-    override fun deletePasswordById(passwordId: Long): Single<Boolean> =
+    override suspend fun deletePasswordById(passwordId: Long) = withContext(Dispatchers.IO) {
         deletePasswordsByIds(listOf(passwordId))
+    }
 
-    override fun deletePasswordsByIds(passwordIds: List<Long>): Single<Boolean> =
+    override suspend fun deletePasswordsByIds(passwordIds: List<Long>) = withContext(Dispatchers.IO) {
         passwordsRepository.deletePasswordsByIds(passwordIds)
+    }
 
-    override fun addNewPassword(passwordFeatureEntity: PasswordFeatureEntity): Single<Boolean> =
+    override suspend fun addNewPassword(passwordFeatureEntity: PasswordFeatureEntity) = withContext(Dispatchers.IO) {
         addNewPasswords(listOf(passwordFeatureEntity))
-
-    override fun addNewPasswords(passwordFeatureEntities: List<PasswordFeatureEntity>): Single<Boolean> {
-        val domainEntitiesList = passwordFeatureEntities.mapFeatureToDomainEntitiesList()
-        return getInvokedPasswordsDataCheckUseCase(domainEntitiesList)
-            .flatMap { getInvokedEncryptionUseCase(domainEntitiesList) }
-            .flatMap { encryptedPasswords -> passwordsRepository.addNewPasswords(encryptedPasswords) }
     }
 
-    override fun updatePassword(passwordFeatureEntity: PasswordFeatureEntity): Single<Boolean> =
+    override suspend fun addNewPasswords(passwordFeatureEntities: List<PasswordFeatureEntity>) = withContext(Dispatchers.IO) {
+        val domainEntities = passwordFeatureEntities.mapFeatureToDomainEntitiesList()
+
+        // verify password entities
+        domainEntities.forEach {
+            passwordDataCheckUseCase.verifyPasswordData(it.passwordNameValue, it.passwordContentValue)
+        }
+
+        val domainEntitiesEncrypted = encryptPasswordEntities(domainEntities)
+        return@withContext passwordsRepository.addNewPasswords(domainEntitiesEncrypted)
+    }
+
+    override suspend fun updatePassword(passwordFeatureEntity: PasswordFeatureEntity) = withContext(Dispatchers.IO) {
         updatePasswords(listOf(passwordFeatureEntity))
-
-    override fun updatePasswords(passwordFeatureEntities: List<PasswordFeatureEntity>): Single<Boolean> =
-        getInvokedEncryptionUseCase(passwordFeatureEntities.mapFeatureToDomainEntitiesList())
-            .flatMap { encryptedEntities -> passwordsRepository.updatePasswords(encryptedEntities) }
-
-    override fun pinPassword(passwordId: Long, pinnedTimestamp: Long): Single<Boolean> {
-        return passwordsRepository.pinPassword(passwordId, pinnedTimestamp)
     }
 
-    override fun unpinPassword(passwordId: Long): Single<Boolean> {
-        return passwordsRepository.unpinPassword(passwordId)
+    override suspend fun updatePasswords(passwordFeatureEntities: List<PasswordFeatureEntity>) = withContext(Dispatchers.IO) {
+        val domainEntities = passwordFeatureEntities.mapFeatureToDomainEntitiesList()
+
+        // verify password entities
+        domainEntities.forEach {
+            passwordDataCheckUseCase.verifyPasswordData(it.passwordNameValue, it.passwordContentValue)
+        }
+
+        val domainEntitiesEncrypted = encryptPasswordEntities(domainEntities)
+        return@withContext passwordsRepository.updatePasswords(domainEntitiesEncrypted)
     }
 
-    private fun getInvokedDecryptionUseCase(passwordRepoEntities: List<PasswordRepoEntity>) =
-        Observable.fromIterable(passwordRepoEntities.mapRepoToDomainEntitiesList())
-            .concatMap { entity ->
-                decryptPasswordContent(entity.getPasswordContent()).map { decryptedPasswordContent ->
-                    entity.passwordContentValue = decryptedPasswordContent
-                    return@map entity
-                }
-            }
-            .toList()
+    override suspend fun pinPassword(passwordId: Long, pinnedTimestamp: Long) = withContext(Dispatchers.IO) {
+        passwordsRepository.pinPassword(passwordId, pinnedTimestamp)
+    }
 
-    private fun decryptPasswordContent(encryptedPasswordContent: String) =
-        Single.create<String> { emitter ->
-            encryptionManager.decrypt(
-                    encryptedPasswordContent,
-                    { decryptedContent -> emitter.onSuccessSafe(decryptedContent) },
-                    { throwable -> emitter.onErrorSafe(throwable) }
-            )
-        }.toObservable()
+    override suspend fun unpinPassword(passwordId: Long) = withContext(Dispatchers.IO) {
+        passwordsRepository.unpinPassword(passwordId)
+    }
 
-    private fun getInvokedPasswordsDataCheckUseCase(passwordDomainEntities: List<PasswordDomainEntity>) =
-        Observable.fromIterable(passwordDomainEntities)
-            .concatMap { entity ->
-                checkPasswordData(
-                        entity.getPasswordName(),
-                        entity.getPasswordContent()
-                )
-            }
-            .singleOrError()
+    private suspend fun decryptPasswordEntities(
+        entities: List<PasswordDomainEntity>,
+    ) = withContext(Dispatchers.IO) {
+        entities.mapToDecryptionCoroutines().awaitAll()
+    }
 
-    private fun checkPasswordData(passwordName: String, passwordContent: String) =
-        Single.create<Boolean> { emitter ->
-            try {
-                passwordDataCheckUseCase.verifyPasswordData(passwordName, passwordContent)
-                emitter.onSuccessSafe(true)
-            } catch (e: Exception) {
-                emitter.onErrorSafe(e)
-            }
-        }.toObservable()
+    private suspend fun encryptPasswordEntities(
+        entities: List<PasswordDomainEntity>,
+    ) = withContext(Dispatchers.IO) {
+        entities.mapToEncryptionCoroutines().awaitAll()
+    }
 
-    private fun getInvokedEncryptionUseCase(passwordDomainEntities: List<PasswordDomainEntity>) =
-        Observable.fromIterable(passwordDomainEntities)
-            .concatMap { entity ->
-                encryptPasswordContent(entity.getPasswordContent()).map { encryptedPassword ->
-                    entity.passwordContentValue = encryptedPassword
-                    return@map entity
-                }
-            }
-            .toList()
+    private suspend fun List<PasswordDomainEntity>.mapToDecryptionCoroutines() = withContext(Dispatchers.IO) {
+        map {
+            async { it.apply { passwordContentValue = encryptionManager.decrypt(passwordContentValue) } }
+        }
+    }
 
-    private fun encryptPasswordContent(passwordContent: String) =
-        Single.create<String> { emitter ->
-            encryptionManager.encrypt(
-                    passwordContent,
-                    { encryptedContent -> emitter.onSuccessSafe(encryptedContent) },
-                    { throwable -> emitter.onErrorSafe(throwable) }
-            )
-        }.toObservable()
+    private suspend fun List<PasswordDomainEntity>.mapToEncryptionCoroutines() = withContext(Dispatchers.IO) {
+        map {
+            async { it.apply { passwordContentValue = encryptionManager.encrypt(passwordContentValue) } }
+        }
+    }
 }

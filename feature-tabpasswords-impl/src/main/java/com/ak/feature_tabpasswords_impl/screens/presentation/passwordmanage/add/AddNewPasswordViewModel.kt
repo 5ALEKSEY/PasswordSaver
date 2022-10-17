@@ -1,13 +1,16 @@
 package com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.add
 
+import androidx.lifecycle.viewModelScope
 import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_impl.domain.entity.PasswordDomainEntity
 import com.ak.feature_tabpasswords_impl.screens.logic.IBitmapDecoderManager
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.BaseManagePasswordViewModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AddNewPasswordViewModel @Inject constructor(
     private val passwordsInteractor: IPasswordsInteractor,
@@ -22,23 +25,18 @@ class AddNewPasswordViewModel @Inject constructor(
 
     override fun onManagePasswordAction(name: String, content: String) {
         super.onManagePasswordAction(name, content)
-        passwordsInteractor.addNewPassword(
-            PasswordDomainEntity(
-                name,
-                selectedAvatarPath,
-                content
+        viewModelScope.launch {
+            val passwordToAdd = PasswordDomainEntity(
+                name = name,
+                avatarPath = selectedAvatarPath,
+                content = content,
             )
-        )
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { isSuccess ->
-                    if (isSuccess) {
-                        successManageLiveData.call()
-                    }
-                },
-                { throwable ->
-                    handleError(throwable)
-                })
-            .let(this::bindDisposable)
+            try {
+                passwordsInteractor.addNewPassword(passwordToAdd)
+                successManageLiveData.call()
+            } catch (error: Throwable) {
+                handleError(error)
+            }
+        }
     }
 }

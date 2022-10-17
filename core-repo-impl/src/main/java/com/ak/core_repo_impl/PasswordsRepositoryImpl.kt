@@ -10,47 +10,36 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.withContext
 
 class PasswordsRepositoryImpl @Inject constructor(
     private val passwordsLocalStore: PSDatabase,
 ) : IPasswordsRepository {
 
-    override fun getAllPasswords(): Flowable<List<PasswordRepoEntity>> =
-        passwordsLocalStore.getPasswordsDao()
-            .getAllPasswords()
-            .subscribeOn(Schedulers.io())
-            .map { it }
+    override fun getAllPasswords(): Flow<List<PasswordRepoEntity>> {
+        return passwordsLocalStore.getPasswordsDao().getAllPasswords()
+    }
 
-    override fun getPasswordById(passwordId: Long): Single<PasswordRepoEntity> =
-        passwordsLocalStore.getPasswordsDao().getPasswordById(passwordId).subscribeOn(Schedulers.io()).cast(PasswordRepoEntity::class.java)
+    override suspend fun getPasswordById(passwordId: Long) = withContext(Dispatchers.IO) {
+        passwordsLocalStore.getPasswordsDao().getPasswordById(passwordId)
+    }
 
-    override fun deletePasswordsByIds(passwordIds: List<Long>): Single<Boolean> =
-        Observable.fromIterable(passwordIds)
-            .map { passwordId ->
-                PasswordDBEntity(passwordId)
-            }
-            .toList()
-            .flatMap {
-                Single.fromCallable {
-                    val deletedRows = passwordsLocalStore.getPasswordsDao().deletePasswords(*it.toTypedArray())
-                    return@fromCallable deletedRows > 0
-                }
-            }
-            .subscribeOn(Schedulers.io())
+    override suspend fun deletePasswordsByIds(passwordIds: List<Long>) = withContext(Dispatchers.IO) {
+        val entitiesToDelete = passwordIds.map { PasswordDBEntity(it) }.toTypedArray()
+        return@withContext passwordsLocalStore.getPasswordsDao().deletePasswords(*entitiesToDelete) >= 0
+    }
 
-    override fun addNewPasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean> =
-        Single.fromCallable {
-            passwordsLocalStore.getPasswordsDao().insertNewPassword(*passwordRepoEntities.mapToPasswordDbEntitiesList().toTypedArray())
-        }
-            .map { it.size >= 0 }
-            .subscribeOn(Schedulers.io())
+    override suspend fun addNewPasswords(passwordRepoEntities: List<PasswordRepoEntity>) = withContext(Dispatchers.IO) {
+        val entitiesToAdd = passwordRepoEntities.mapToPasswordDbEntitiesList().toTypedArray()
+        return@withContext passwordsLocalStore.getPasswordsDao().insertNewPassword(*entitiesToAdd).isNotEmpty()
+    }
 
-    override fun updatePasswords(passwordRepoEntities: List<PasswordRepoEntity>): Single<Boolean> =
-        Single.fromCallable {
-            passwordsLocalStore.getPasswordsDao().updatePasswords(*passwordRepoEntities.mapToPasswordDbEntitiesList().toTypedArray())
-        }
-            .map { updatedRows -> updatedRows >= 0 }
-            .subscribeOn(Schedulers.io())
+    override suspend fun updatePasswords(passwordRepoEntities: List<PasswordRepoEntity>) = withContext(Dispatchers.IO) {
+        val entitiesToUpdate = passwordRepoEntities.mapToPasswordDbEntitiesList().toTypedArray()
+        return@withContext passwordsLocalStore.getPasswordsDao().updatePasswords(*entitiesToUpdate) >= 0
+    }
 
     override fun clearAll(): Single<Boolean> =
         Single.fromCallable {
@@ -60,19 +49,11 @@ class PasswordsRepositoryImpl @Inject constructor(
 
     override fun getPasswordsCount() = passwordsLocalStore.getPasswordsDao().getPasswordsCount()
 
-    override fun pinPassword(passwordId: Long, pinnedTimestamp: Long): Single<Boolean> =
-        Single.fromCallable {
-            passwordsLocalStore.getPasswordsDao()
-                .markPasswordAsPinned(passwordId, pinnedTimestamp)
-        }
-            .map { updatedRows -> updatedRows >= 0 }
-            .subscribeOn(Schedulers.io())
+    override suspend fun pinPassword(passwordId: Long, pinnedTimestamp: Long) = withContext(Dispatchers.IO) {
+        passwordsLocalStore.getPasswordsDao().markPasswordAsPinned(passwordId, pinnedTimestamp) >= 0
+    }
 
-    override fun unpinPassword(passwordId: Long): Single<Boolean> =
-        Single.fromCallable {
-            passwordsLocalStore.getPasswordsDao()
-                .markPasswordAsUnpinned(passwordId)
-        }
-            .map { updatedRows -> updatedRows >= 0 }
-            .subscribeOn(Schedulers.io())
+    override suspend fun unpinPassword(passwordId: Long) = withContext(Dispatchers.IO) {
+        passwordsLocalStore.getPasswordsDao().markPasswordAsUnpinned(passwordId) >= 0
+    }
 }

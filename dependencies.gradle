@@ -21,7 +21,7 @@ def nav_version = '2.4.1'
 def view_pump_version = '2.0.3'
 def gif_drawable_version = '1.2.25'
 def coroutines_version = '1.6.4'
-def coroutines_vm_version = '2.6.0-alpha02'
+def coroutines_vm_version = '2.5.1'
 
 ext.deps = [
         kotlin              : "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
@@ -31,7 +31,7 @@ ext.deps = [
         constraint          : "androidx.constraintlayout:constraintlayout:$constraint_version",
         dagger              : ["com.google.dagger:dagger:$dagger_version", "com.google.dagger:dagger-android-support:$dagger_version"],
         daggerKapt          : ["com.google.dagger:dagger-compiler:$dagger_version", "com.google.dagger:dagger-android-processor:$dagger_version"],
-        room                : ["androidx.room:room-runtime:$room_version", "androidx.room:room-rxjava3:$room_version"],
+        room                : ["androidx.room:room-runtime:$room_version", "androidx.room:room-rxjava3:$room_version", "androidx.room:room-ktx:$room_version"],
         roomKapt            : "androidx.room:room-compiler:$room_version",
         circleImageView     : "de.hdodenhof:circleimageview:$circleImageView_version",
         glide               : "com.github.bumptech.glide:glide:$glide_version",

@@ -64,5 +64,7 @@ dependencies {
     implementation deps.room
     kapt deps.roomKapt
 
+    implementation deps.coroutines
+
     implementation deps.rx
 }

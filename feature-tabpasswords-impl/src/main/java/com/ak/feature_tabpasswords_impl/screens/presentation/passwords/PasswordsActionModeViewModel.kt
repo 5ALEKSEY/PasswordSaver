@@ -2,10 +2,14 @@ package com.ak.feature_tabpasswords_impl.screens.presentation.passwords
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PasswordsActionModeViewModel @Inject constructor(
     private val passwordsInteractor: IPasswordsInteractor
@@ -62,16 +66,10 @@ class PasswordsActionModeViewModel @Inject constructor(
 
     fun onDeleteSelectedInActionMode() {
         if (selectedPasswordsIdsList.isNotEmpty()) {
-            passwordsInteractor.deletePasswordsByIds(selectedPasswordsIdsList)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        selectedModeStateLD.value = false
-                    },
-                    { throwable ->
-                        shortTimeMessageLiveData.value = throwable.message ?: "unknown"
-                    })
-                .let(this::bindDisposable)
+            viewModelScope.launch {
+                passwordsInteractor.deletePasswordsByIds(selectedPasswordsIdsList)
+                selectedModeStateLD.value = false
+            }
         }
     }
 

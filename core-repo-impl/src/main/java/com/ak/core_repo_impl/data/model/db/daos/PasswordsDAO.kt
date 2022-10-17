@@ -7,8 +7,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.ak.core_repo_impl.data.model.db.entities.PasswordDBEntity
-import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Single
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PasswordsDAO {
@@ -17,11 +17,11 @@ interface PasswordsDAO {
                "ORDER BY " +
                "${PasswordDBEntity.COLUMN_PASSWORD_PIN_TIMESTAMP} DESC, " +
                "${PasswordDBEntity.COLUMN_PASSWORD_ID} DESC")
-    fun getAllPasswords(): Flowable<List<PasswordDBEntity>>
+    fun getAllPasswords(): Flow<List<PasswordDBEntity>>
 
     @Query("SELECT * FROM ${PasswordDBEntity.TABLE_NAME} " +
                "WHERE ${PasswordDBEntity.COLUMN_PASSWORD_ID} = :passwordId LIMIT 1")
-    fun getPasswordById(passwordId: Long): Single<PasswordDBEntity>
+    suspend fun getPasswordById(passwordId: Long): PasswordDBEntity
 
     @Query("DELETE FROM ${PasswordDBEntity.TABLE_NAME}")
     fun clearPasswords()
@@ -32,19 +32,19 @@ interface PasswordsDAO {
     @Query("UPDATE ${PasswordDBEntity.TABLE_NAME} " +
                "SET ${PasswordDBEntity.COLUMN_PASSWORD_PIN_TIMESTAMP} = :pinnedTimestamp " +
                "WHERE ${PasswordDBEntity.COLUMN_PASSWORD_ID} = :passwordId")
-    fun markPasswordAsPinned(passwordId: Long, pinnedTimestamp: Long): Int
+    suspend fun markPasswordAsPinned(passwordId: Long, pinnedTimestamp: Long): Int
 
     @Query("UPDATE ${PasswordDBEntity.TABLE_NAME} " +
                "SET ${PasswordDBEntity.COLUMN_PASSWORD_PIN_TIMESTAMP} = NULL " +
                "WHERE ${PasswordDBEntity.COLUMN_PASSWORD_ID} = :passwordId")
-    fun markPasswordAsUnpinned(passwordId: Long): Int
+    suspend fun markPasswordAsUnpinned(passwordId: Long): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNewPassword(vararg passwordDBEntity: PasswordDBEntity): List<Long>
+    suspend fun insertNewPassword(vararg passwordDBEntity: PasswordDBEntity): List<Long>
 
     @Delete
-    fun deletePasswords(vararg passwordDBEntities: PasswordDBEntity): Int
+    suspend fun deletePasswords(vararg passwordDBEntities: PasswordDBEntity): Int
 
     @Update
-    fun updatePasswords(vararg passwordDBEntities: PasswordDBEntity): Int
+    suspend fun updatePasswords(vararg passwordDBEntities: PasswordDBEntity): Int
 }

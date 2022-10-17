@@ -1,17 +1,16 @@
 package com.ak.feature_tabpasswords_api.interfaces
 
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Single
+import kotlinx.coroutines.flow.Flow
 
 interface IPasswordsInteractor {
-    fun getAllPasswords(): Flowable<List<PasswordFeatureEntity>>
-    fun getPasswordById(passwordId: Long): Single<PasswordFeatureEntity>
-    fun deletePasswordById(passwordId: Long): Single<Boolean>
-    fun deletePasswordsByIds(passwordIds: List<Long>): Single<Boolean>
-    fun addNewPassword(passwordFeatureEntity: PasswordFeatureEntity): Single<Boolean>
-    fun addNewPasswords(passwordFeatureEntities: List<PasswordFeatureEntity>): Single<Boolean>
-    fun updatePassword(passwordFeatureEntity: PasswordFeatureEntity): Single<Boolean>
-    fun updatePasswords(passwordFeatureEntities: List<PasswordFeatureEntity>): Single<Boolean>
-    fun pinPassword(passwordId: Long, pinnedTimestamp: Long): Single<Boolean>
-    fun unpinPassword(passwordId: Long): Single<Boolean>
+    fun getAllPasswords(): Flow<List<PasswordFeatureEntity>>
+    suspend fun getPasswordById(passwordId: Long): PasswordFeatureEntity
+    suspend fun deletePasswordById(passwordId: Long): Boolean
+    suspend fun deletePasswordsByIds(passwordIds: List<Long>): Boolean
+    suspend fun addNewPassword(passwordFeatureEntity: PasswordFeatureEntity): Boolean
+    suspend fun addNewPasswords(passwordFeatureEntities: List<PasswordFeatureEntity>): Boolean
+    suspend fun updatePassword(passwordFeatureEntity: PasswordFeatureEntity): Boolean
+    suspend fun updatePasswords(passwordFeatureEntities: List<PasswordFeatureEntity>): Boolean
+    suspend fun pinPassword(passwordId: Long, pinnedTimestamp: Long): Boolean
+    suspend fun unpinPassword(passwordId: Long): Boolean
 }
