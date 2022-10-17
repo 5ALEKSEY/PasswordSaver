@@ -66,6 +66,9 @@ dependencies {
     implementation deps.recyclerView
     implementation deps.cardView
 
+    implementation deps.coroutines
+    implementation deps.coroutinesVM
+
     implementation deps.circleImageView
     implementation deps.navComponent
     implementation deps.lottieAnim

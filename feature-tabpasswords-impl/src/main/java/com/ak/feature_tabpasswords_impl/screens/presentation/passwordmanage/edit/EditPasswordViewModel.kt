@@ -54,11 +54,11 @@ class EditPasswordViewModel @Inject constructor(
             return
         }
 
-        val updatedPassword = passwordEntityForEdit!!.also {
+        val updatedPassword = passwordEntityForEdit?.also {
             it.passwordNameValue = name
             it.passwordContentValue = content
             it.passwordAvatarPathValue = selectedAvatarPath ?: ""
-        }
+        } ?: return
 
         viewModelScope.launch {
             try {

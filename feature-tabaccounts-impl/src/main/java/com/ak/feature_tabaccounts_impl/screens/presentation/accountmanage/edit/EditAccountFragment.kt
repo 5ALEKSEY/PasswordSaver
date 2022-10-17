@@ -29,7 +29,7 @@ class EditAccountFragment : BaseManageAccountFragment<EditAccountViewModel>() {
         super.onCreate(savedInstanceState)
 
         if (arguments?.containsKey(ACCOUNT_ID_FOR_EDIT_EXTRA_KEY) == true) {
-            viewModel.loadPasswordData(
+            viewModel.loadAccountData(
                 requireArguments().getLong(ACCOUNT_ID_FOR_EDIT_EXTRA_KEY, 0L)
             )
         } else {

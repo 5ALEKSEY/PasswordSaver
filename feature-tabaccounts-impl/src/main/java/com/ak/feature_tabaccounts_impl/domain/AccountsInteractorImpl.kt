@@ -1,8 +1,5 @@
 package com.ak.feature_tabaccounts_impl.domain
 
-import com.ak.base.extensions.onErrorSafe
-import com.ak.base.extensions.onSuccessSafe
-import com.ak.core_repo_api.intefaces.AccountRepoEntity
 import com.ak.core_repo_api.intefaces.IAccountsRepository
 import com.ak.feature_encryption_api.interfaces.IEncryptionManager
 import com.ak.feature_tabaccounts_api.interfaces.AccountFeatureEntity
@@ -10,11 +7,15 @@ import com.ak.feature_tabaccounts_api.interfaces.IAccountsInteractor
 import com.ak.feature_tabaccounts_impl.domain.entity.AccountDomainEntity
 import com.ak.feature_tabaccounts_impl.domain.entity.mapFeatureToDomainEntitiesList
 import com.ak.feature_tabaccounts_impl.domain.entity.mapRepoToDomainEntitiesList
+import com.ak.feature_tabaccounts_impl.domain.entity.mapToDomainEntity
 import com.ak.feature_tabaccounts_impl.domain.usecase.AccountDataCheckUseCase
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 
 class AccountsInteractorImpl @Inject constructor(
     private val accountsRepository: IAccountsRepository,
@@ -23,118 +24,108 @@ class AccountsInteractorImpl @Inject constructor(
 
     private val accountDataCheckUseCase: AccountDataCheckUseCase = AccountDataCheckUseCase()
 
-    override fun getAllAccounts(): Flowable<List<AccountFeatureEntity>> =
-        accountsRepository.getAllAccounts()
-            .flatMapSingle(this::getInvokedDecryptionUseCase)
+    override fun getAllAccounts(): Flow<List<AccountFeatureEntity>> {
+        return accountsRepository.getAllAccounts().map {
+            decryptAccountEntities(it.mapRepoToDomainEntitiesList())
+        }
+    }
 
-    override fun getAccountById(accountId: Long): Single<AccountFeatureEntity> =
+    override suspend fun getAccountById(accountId: Long) = withContext(Dispatchers.IO) {
         accountsRepository.getAccountById(accountId)
-            .flatMap { entity -> getInvokedDecryptionUseCase(listOf(entity)) }
-            .map { it[0] }
+            .mapToDomainEntity()
+            .apply {
+                accountPasswordValue = encryptionManager.decrypt(accountPasswordValue)
+                accountLoginValue = encryptionManager.decrypt(accountLoginValue)
+            }
+    }
 
-    override fun deleteAccountById(accountId: Long): Single<Boolean> =
+    override suspend fun deleteAccountById(accountId: Long) = withContext(Dispatchers.IO) {
         deleteAccountsByIds(listOf(accountId))
+    }
 
-    override fun deleteAccountsByIds(accountIds: List<Long>): Single<Boolean> =
+    override suspend fun deleteAccountsByIds(accountIds: List<Long>) = withContext(Dispatchers.IO) {
         accountsRepository.deleteAccountsByIds(accountIds)
+    }
 
-    override fun addNewAccount(accountFeatureEntity: AccountFeatureEntity): Single<Boolean> =
+    override suspend fun addNewAccount(accountFeatureEntity: AccountFeatureEntity) = withContext(Dispatchers.IO) {
         addNewAccounts(listOf(accountFeatureEntity))
-
-    override fun addNewAccounts(accountFeatureEntities: List<AccountFeatureEntity>): Single<Boolean> {
-        val domainEntitiesList = accountFeatureEntities.mapFeatureToDomainEntitiesList()
-        return getInvokedAccountsDataCheckUseCase(domainEntitiesList)
-            .flatMap { getInvokedEncryptionUseCase(domainEntitiesList) }
-            .flatMap { encryptedAccounts -> accountsRepository.addNewAccounts(encryptedAccounts) }
     }
 
-    override fun updateAccount(accountFeatureEntity: AccountFeatureEntity): Single<Boolean> =
+    override suspend fun addNewAccounts(accountFeatureEntities: List<AccountFeatureEntity>) = withContext(Dispatchers.IO) {
+        val domainEntities = accountFeatureEntities.mapFeatureToDomainEntitiesList()
+
+        // verify account entities
+        domainEntities.forEach {
+            accountDataCheckUseCase.verifyAccountData(
+                accountName = it.accountNameValue,
+                accountLogin = it.accountLoginValue,
+                accountPassword = it.accountPasswordValue,
+            )
+        }
+
+        val domainEntitiesEncrypted = encryptAccountEntities(domainEntities)
+        return@withContext accountsRepository.addNewAccounts(domainEntitiesEncrypted)
+    }
+
+    override suspend fun updateAccount(accountFeatureEntity: AccountFeatureEntity) = withContext(Dispatchers.IO) {
         updateAccounts(listOf(accountFeatureEntity))
-
-    override fun updateAccounts(accountFeatureEntities: List<AccountFeatureEntity>): Single<Boolean> =
-        getInvokedEncryptionUseCase(accountFeatureEntities.mapFeatureToDomainEntitiesList())
-            .flatMap { encryptedEntities -> accountsRepository.updateAccounts(encryptedEntities) }
-
-    override fun pinAccount(accountId: Long, pinnedTimestamp: Long): Single<Boolean> {
-        return accountsRepository.pinAccount(accountId, pinnedTimestamp)
     }
 
-    override fun unpinAccount(accountId: Long): Single<Boolean> {
-        return accountsRepository.unpinAccount(accountId)
+    override suspend fun updateAccounts(accountFeatureEntities: List<AccountFeatureEntity>) = withContext(Dispatchers.IO) {
+        val domainEntities = accountFeatureEntities.mapFeatureToDomainEntitiesList()
+
+        // verify account entities
+        domainEntities.forEach {
+            accountDataCheckUseCase.verifyAccountData(
+                accountName = it.accountNameValue,
+                accountLogin = it.accountLoginValue,
+                accountPassword = it.accountPasswordValue,
+            )
+        }
+
+        val domainEntitiesEncrypted = encryptAccountEntities(domainEntities)
+        return@withContext accountsRepository.updateAccounts(domainEntitiesEncrypted)
     }
 
-    private fun getInvokedDecryptionUseCase(accountRepoEntities: List<AccountRepoEntity>) =
-        Observable.fromIterable(accountRepoEntities.mapRepoToDomainEntitiesList())
-            .concatMap { entity ->
-                // decrypt account login
-                decryptAccountData(entity.getAccountLogin()).map { decryptedAccountLogin ->
-                    entity.accountLoginValue = decryptedAccountLogin
-                    return@map entity
+    override suspend fun pinAccount(accountId: Long, pinnedTimestamp: Long) = withContext(Dispatchers.IO) {
+        accountsRepository.pinAccount(accountId, pinnedTimestamp)
+    }
+
+    override suspend fun unpinAccount(accountId: Long) = withContext(Dispatchers.IO) {
+        accountsRepository.unpinAccount(accountId)
+    }
+
+    private suspend fun decryptAccountEntities(
+        entities: List<AccountDomainEntity>,
+    ) = withContext(Dispatchers.IO) {
+        entities.mapToDecryptionCoroutines().awaitAll()
+    }
+
+    private suspend fun encryptAccountEntities(
+        entities: List<AccountDomainEntity>,
+    ) = withContext(Dispatchers.IO) {
+        entities.mapToEncryptionCoroutines().awaitAll()
+    }
+
+    private suspend fun List<AccountDomainEntity>.mapToDecryptionCoroutines() = withContext(Dispatchers.IO) {
+        map {
+            async {
+                it.apply {
+                    accountPasswordValue = encryptionManager.decrypt(accountPasswordValue)
+                    accountLoginValue = encryptionManager.decrypt(accountLoginValue)
                 }
             }
-            .concatMap { entity ->
-                // decrypt account password
-                decryptAccountData(entity.getAccountPassword()).map { decryptedAccountPassword ->
-                    entity.accountPasswordValue = decryptedAccountPassword
-                    return@map entity
+        }
+    }
+
+    private suspend fun List<AccountDomainEntity>.mapToEncryptionCoroutines() = withContext(Dispatchers.IO) {
+        map {
+            async {
+                it.apply {
+                    accountPasswordValue = encryptionManager.encrypt(accountPasswordValue)
+                    accountLoginValue = encryptionManager.encrypt(accountLoginValue)
                 }
             }
-            .toList()
-
-    private fun decryptAccountData(encryptedData: String) =
-        Single.create<String> { emitter ->
-            encryptionManager.decrypt(
-                    encryptedData,
-                    { decryptedContent -> emitter.onSuccessSafe(decryptedContent) },
-                    { throwable -> emitter.onErrorSafe(throwable) }
-            )
-        }.toObservable()
-
-    private fun getInvokedAccountsDataCheckUseCase(accountDomainEntities: List<AccountDomainEntity>) =
-        Observable.fromIterable(accountDomainEntities)
-            .concatMap { entity ->
-                checkAccountData(
-                        entity.getAccountName(),
-                        entity.getAccountLogin(),
-                        entity.getAccountPassword()
-                )
-            }
-            .singleOrError()
-
-    private fun checkAccountData(accountName: String, accountLogin: String, accountPassword: String) =
-        Single.create<Boolean> { emitter ->
-            try {
-                accountDataCheckUseCase.verifyAccountData(accountName, accountLogin, accountPassword)
-                emitter.onSuccessSafe(true)
-            } catch (e: Exception) {
-                emitter.onErrorSafe(e)
-            }
-        }.toObservable()
-
-    private fun getInvokedEncryptionUseCase(accountDomainEntities: List<AccountDomainEntity>) =
-        Observable.fromIterable(accountDomainEntities)
-            .concatMap { entity ->
-                // encrypt account login
-                encryptAccountData(entity.getAccountLogin()).map { encryptedLogin ->
-                    entity.accountLoginValue = encryptedLogin
-                    return@map entity
-                }
-            }
-            .concatMap { entity ->
-                // encrypt account password
-                encryptAccountData(entity.getAccountPassword()).map { encryptedPassword ->
-                    entity.accountPasswordValue = encryptedPassword
-                    return@map entity
-                }
-            }
-            .toList()
-
-    private fun encryptAccountData(dataForEncrypt: String) =
-        Single.create<String> { emitter ->
-            encryptionManager.encrypt(
-                    dataForEncrypt,
-                    { encryptedContent -> emitter.onSuccessSafe(encryptedContent) },
-                    { throwable -> emitter.onErrorSafe(throwable) }
-            )
-        }.toObservable()
+        }
+    }
 }

@@ -1,8 +1,8 @@
 package com.ak.feature_tabaccounts_impl.screens.presentation.accounts
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.ak.base.constants.AppConstants
 import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
@@ -13,8 +13,11 @@ import com.ak.feature_tabaccounts_api.interfaces.IAccountsInteractor
 import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.screens.adapter.AccountItemModel
 import com.ak.feature_tabaccounts_impl.screens.logic.IDataBufferManager
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AccountsListViewModel @Inject constructor(
     private val accountsInteractor: IAccountsInteractor,
@@ -35,38 +38,39 @@ class AccountsListViewModel @Inject constructor(
     fun subscribeToToolbarScrollingState(): LiveData<Boolean> = toolbarScrollingStateLD
     fun subscribeToAccountsList(): LiveData<List<AccountItemModel>> = accountsListLD
 
+    private var loadAccountsJob: Job? = null
+
     fun loadPasswords() {
-        accountsInteractor.getAllAccounts()
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe {
-                loadingStateLD.value = true
-                emptyAccountsStateLD.value = false
-            }
-            .subscribe(
-                { list ->
-                    val listForDisplay = convertFeatureEntitiesList(list)
+        loadingStateLD.value = true
+        emptyAccountsStateLD.value = false
+
+        loadAccountsJob?.cancel()
+        loadAccountsJob = viewModelScope.launch(Dispatchers.IO) {
+            accountsInteractor.getAllAccounts().collect { list ->
+                val listForDisplay = convertFeatureEntitiesList(list)
+                withContext(Dispatchers.Main) {
                     loadingStateLD.value = false
                     accountsListLD.value = listForDisplay
                     emptyAccountsStateLD.value = list.isEmpty()
                     handleListForDisplay(listForDisplay)
-                },
-                { throwable ->
-                    Log.d("de", "dede")
-                })
-            .let(this::bindDisposable)
+                }
+            }
+        }
     }
 
     // from actions bottom sheet dialog
     fun onCopyAccountLoginAction(accountId: Long) {
-        getAccountDataAndStartAction(accountId) {
-            dataBufferManager.copyStringData(it.getAccountLogin())
+        viewModelScope.launch {
+            val accountEntity = accountsInteractor.getAccountById(accountId)
+            dataBufferManager.copyStringData(accountEntity.getAccountLogin())
             shortTimeMessageLiveData.value = resourceManager.getString(R.string.copied_to_clipboard_message)
         }
     }
 
     fun onCopyAccountPasswordAction(accountId: Long) {
-        getAccountDataAndStartAction(accountId) {
-            dataBufferManager.copyStringData(it.getAccountPassword())
+        viewModelScope.launch {
+            val accountEntity = accountsInteractor.getAccountById(accountId)
+            dataBufferManager.copyStringData(accountEntity.getAccountPassword())
             shortTimeMessageLiveData.value = resourceManager.getString(R.string.copied_to_clipboard_message)
         }
     }
@@ -76,52 +80,21 @@ class AccountsListViewModel @Inject constructor(
     }
 
     fun onDeleteAccountAction(accountId: Long) {
-        accountsInteractor.deleteAccountById(accountId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                },
-                { throwable ->
-                    shortTimeMessageLiveData.value = throwable.message ?: "unknown"
-                })
-            .let(this::bindDisposable)
+        viewModelScope.launch {
+            accountsInteractor.deleteAccountById(accountId)
+        }
     }
 
     fun pinAccount(accountId: Long) {
-        accountsInteractor.pinAccount(accountId, dateAndTimeManager.getCurrentTimeInMillis())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                },
-                { throwable ->
-                    shortTimeMessageLiveData.value = throwable.message ?: "unknown"
-                })
-            .let(this::bindDisposable)
+        viewModelScope.launch {
+            accountsInteractor.pinAccount(accountId, dateAndTimeManager.getCurrentTimeInMillis())
+        }
     }
 
     fun unpinAccount(accountId: Long) {
-        accountsInteractor.unpinAccount(accountId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                },
-                { throwable ->
-                    shortTimeMessageLiveData.value = throwable.message ?: "unknown"
-                })
-            .let(this::bindDisposable)
-    }
-
-    private inline fun getAccountDataAndStartAction(accountId: Long, crossinline action: (entity: AccountFeatureEntity) -> Unit) {
-        accountsInteractor.getAccountById(accountId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                { entity ->
-                    action(entity)
-                },
-                { throwable ->
-                    Log.d("dddd", "dddd")
-                })
-            .let(this::bindDisposable)
+        viewModelScope.launch {
+            accountsInteractor.unpinAccount(accountId)
+        }
     }
 
     private fun handleListForDisplay(listForDisplay: List<AccountItemModel>) {

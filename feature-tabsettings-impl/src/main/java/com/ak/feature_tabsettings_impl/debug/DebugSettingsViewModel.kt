@@ -21,9 +21,7 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 import kotlin.random.Random
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class DebugSettingsViewModel @Inject constructor(
     private val featuresUpdateManager: IFeaturesUpdateManager,
@@ -81,11 +79,10 @@ class DebugSettingsViewModel @Inject constructor(
                 }
             }
             ADD_RANDOM_ACCOUNT_SETTING_ID -> {
-                accountsRepository.addNewAccounts(listOf(generateRandomAccount()))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doAfterSuccess { loadDebugSettings() }
-                    .subscribe()
-                    .let(this::bindDisposable)
+                viewModelScope.launch {
+                    accountsRepository.addNewAccounts(listOf(generateRandomAccount()))
+                    loadDebugSettings()
+                }
             }
             else -> {
                 // no op
