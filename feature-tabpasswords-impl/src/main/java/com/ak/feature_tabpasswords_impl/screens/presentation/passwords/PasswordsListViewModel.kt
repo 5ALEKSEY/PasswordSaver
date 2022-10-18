@@ -14,7 +14,6 @@ import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity
 import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordItemModel
 import com.ak.feature_tabpasswords_impl.screens.logic.IDataBufferManager
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -29,13 +28,15 @@ class PasswordsListViewModel @Inject constructor(
     private val dateAndTimeManager: IDateAndTimeManager,
 ) : BasePSViewModel() {
 
-    private val loadingStateLD = MutableLiveData<Boolean>()
+    private val primaryLoadingStateLD = MutableLiveData<Boolean>()
+    private val secondaryLoadingStateLD = MutableLiveData<Boolean>()
     private val emptyPasswordsStateLD = MutableLiveData<Boolean>()
     private val showEditPasswordScreenLD = SingleEventLiveData<Long>()
     private val toolbarScrollingStateLD = MutableLiveData<Boolean>()
     private val passwordsListLD = MutableLiveData<List<PasswordItemModel>>()
 
-    fun subscribeToLoadingState(): LiveData<Boolean> = loadingStateLD
+    fun subscribeToPrimaryLoadingState(): LiveData<Boolean> = primaryLoadingStateLD
+    fun subscribeToSecondaryLoadingState(): LiveData<Boolean> = secondaryLoadingStateLD
     fun subscribeEmptyPasswordState(): LiveData<Boolean> = emptyPasswordsStateLD
     fun subscribeToShowEditPasswordScreen(): LiveData<Long> = showEditPasswordScreenLD
     fun subscribeToToolbarScrollingState(): LiveData<Boolean> = toolbarScrollingStateLD
@@ -44,7 +45,8 @@ class PasswordsListViewModel @Inject constructor(
     private var loadPasswordsJob: Job? = null
 
     fun loadPasswords() {
-        loadingStateLD.value = true
+        primaryLoadingStateLD.value = passwordsListLD.value == null
+        secondaryLoadingStateLD.value = passwordsListLD.value != null
         emptyPasswordsStateLD.value = false
 
         loadPasswordsJob?.cancel()
@@ -52,7 +54,8 @@ class PasswordsListViewModel @Inject constructor(
             passwordsInteractor.getAllPasswords().collect {
                 val listForDisplay = convertFeatureEntitiesList(it)
                 withContext(Dispatchers.Main) {
-                    loadingStateLD.value = false
+                    primaryLoadingStateLD.value = false
+                    secondaryLoadingStateLD.value = false
                     passwordsListLD.value = listForDisplay
                     emptyPasswordsStateLD.value = listForDisplay.isEmpty()
                     handleListForDisplay(listForDisplay)

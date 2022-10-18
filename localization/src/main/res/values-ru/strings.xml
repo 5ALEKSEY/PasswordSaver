@@ -126,4 +126,6 @@
     <string name="change_theme_use_native_setting_name">"Нативная тема"</string>
     <string name="change_theme_use_native_setting_desc">Theme will be changed according to your device settings</string>
     <string name="change_theme_change_native_config_setting_name">Change \'Native\' theme configuration</string>
+
+    <string name="toolbar_title_loading_updating_text">"Обновление"</string>
 </resources>

@@ -13,4 +13,10 @@ interface IToolbarController {
     fun setupBackAction(@DrawableRes backIconResId: Int, action: () -> Unit)
     @MainThread
     fun clearBackAction()
+    @MainThread
+    fun startToolbarTitleLoading(@StringRes loadingTextResIs: Int)
+    @MainThread
+    fun startToolbarTitleLoading(loadingText: String)
+    @MainThread
+    fun stopToolbarTitleLoading()
 }

@@ -26,13 +26,15 @@ class AccountsListViewModel @Inject constructor(
     private val dateAndTimeManager: IDateAndTimeManager,
 ) : BasePSViewModel() {
 
-    private val loadingStateLD = MutableLiveData<Boolean>()
+    private val primaryLoadingStateLD = MutableLiveData<Boolean>()
+    private val secondaryLoadingStateLD = MutableLiveData<Boolean>()
     private val emptyAccountsStateLD = MutableLiveData<Boolean>()
     private val showEditAccountScreenLD = SingleEventLiveData<Long>()
     private val toolbarScrollingStateLD = MutableLiveData<Boolean>()
     private val accountsListLD = MutableLiveData<List<AccountItemModel>>()
 
-    fun subscribeToLoadingState(): LiveData<Boolean> = loadingStateLD
+    fun subscribeToPrimaryLoadingState(): LiveData<Boolean> = primaryLoadingStateLD
+    fun subscribeToSecondaryLoadingState(): LiveData<Boolean> = secondaryLoadingStateLD
     fun subscribeEmptyAccountsState(): LiveData<Boolean> = emptyAccountsStateLD
     fun subscribeToShowEditPasswordScreen(): LiveData<Long> = showEditAccountScreenLD
     fun subscribeToToolbarScrollingState(): LiveData<Boolean> = toolbarScrollingStateLD
@@ -41,7 +43,8 @@ class AccountsListViewModel @Inject constructor(
     private var loadAccountsJob: Job? = null
 
     fun loadPasswords() {
-        loadingStateLD.value = true
+        primaryLoadingStateLD.value = accountsListLD.value == null
+        secondaryLoadingStateLD.value = accountsListLD.value != null
         emptyAccountsStateLD.value = false
 
         loadAccountsJob?.cancel()
@@ -49,7 +52,8 @@ class AccountsListViewModel @Inject constructor(
             accountsInteractor.getAllAccounts().collect { list ->
                 val listForDisplay = convertFeatureEntitiesList(list)
                 withContext(Dispatchers.Main) {
-                    loadingStateLD.value = false
+                    primaryLoadingStateLD.value = false
+                    secondaryLoadingStateLD.value = false
                     accountsListLD.value = listForDisplay
                     emptyAccountsStateLD.value = list.isEmpty()
                     handleListForDisplay(listForDisplay)
