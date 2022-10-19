@@ -5,10 +5,6 @@ import com.ak.core_repo_api.intefaces.PasswordRepoEntity
 import com.ak.core_repo_impl.data.model.db.PSDatabase
 import com.ak.core_repo_impl.data.model.db.entities.PasswordDBEntity
 import com.ak.core_repo_impl.data.model.mapper.mapToPasswordDbEntitiesList
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -41,13 +37,13 @@ class PasswordsRepositoryImpl @Inject constructor(
         return@withContext passwordsLocalStore.getPasswordsDao().updatePasswords(*entitiesToUpdate) >= 0
     }
 
-    override fun clearAll(): Single<Boolean> =
-        Single.fromCallable {
-            passwordsLocalStore.getPasswordsDao().clearPasswords()
-            return@fromCallable true
-        }.subscribeOn(Schedulers.io())
+    override suspend fun clearAll() = withContext(Dispatchers.IO) {
+        passwordsLocalStore.getPasswordsDao().clearPasswords()
+    }
 
-    override fun getPasswordsCount() = passwordsLocalStore.getPasswordsDao().getPasswordsCount()
+    override suspend fun getPasswordsCount() = withContext(Dispatchers.IO) {
+        passwordsLocalStore.getPasswordsDao().getPasswordsCount()
+    }
 
     override suspend fun pinPassword(passwordId: Long, pinnedTimestamp: Long) = withContext(Dispatchers.IO) {
         passwordsLocalStore.getPasswordsDao().markPasswordAsPinned(passwordId, pinnedTimestamp) >= 0

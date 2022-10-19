@@ -5,8 +5,6 @@ import com.ak.core_repo_api.intefaces.IAccountsRepository
 import com.ak.core_repo_impl.data.model.db.PSDatabase
 import com.ak.core_repo_impl.data.model.db.entities.AccountDBEntity
 import com.ak.core_repo_impl.data.model.mapper.mapToAccountDbEntitiesList
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -39,13 +37,13 @@ class AccountsRepositoryImpl @Inject constructor(
         return@withContext accountsLocalStore.getAccountsDao().updateAccounts(*entitiesToUpdate) >= 0
     }
 
-    override fun clearAll(): Single<Boolean> =
-        Single.fromCallable {
-            accountsLocalStore.getAccountsDao().clearAccounts()
-            return@fromCallable true
-        }.subscribeOn(Schedulers.io())
+    override suspend fun clearAll() = withContext(Dispatchers.IO) {
+        accountsLocalStore.getAccountsDao().clearAccounts()
+    }
 
-    override fun getAccountsCount() = accountsLocalStore.getAccountsDao().getAccountsCount()
+    override suspend fun getAccountsCount() = withContext(Dispatchers.IO) {
+        accountsLocalStore.getAccountsDao().getAccountsCount()
+    }
 
     override suspend fun pinAccount(accountIds: Long, pinnedTimestamp: Long) = withContext(Dispatchers.IO) {
         accountsLocalStore.getAccountsDao().markAccountAsPinned(accountIds, pinnedTimestamp) >= 0

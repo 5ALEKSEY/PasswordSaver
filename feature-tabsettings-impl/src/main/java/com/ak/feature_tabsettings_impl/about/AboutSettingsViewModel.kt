@@ -5,11 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.feature_tabsettings_impl.BuildConfig
-import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
-import com.ak.feature_tabsettings_impl.adapter.items.sections.SectionSettingsListItemModel
-import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchSettingsListItemModel
-import com.ak.feature_tabsettings_impl.adapter.items.texts.TextSettingsListItemModel
 import javax.inject.Inject
 
 class AboutSettingsViewModel @Inject constructor() : BasePSViewModel() {

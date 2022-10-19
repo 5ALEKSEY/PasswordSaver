@@ -1,7 +1,6 @@
 package com.ak.base.viewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ak.base.livedata.SingleEventLiveData
 import io.reactivex.rxjava3.disposables.CompositeDisposable

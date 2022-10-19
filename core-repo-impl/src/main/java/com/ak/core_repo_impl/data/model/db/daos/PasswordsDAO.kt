@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.ak.core_repo_impl.data.model.db.entities.PasswordDBEntity
-import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,10 +23,10 @@ interface PasswordsDAO {
     suspend fun getPasswordById(passwordId: Long): PasswordDBEntity
 
     @Query("DELETE FROM ${PasswordDBEntity.TABLE_NAME}")
-    fun clearPasswords()
+    suspend fun clearPasswords()
 
     @Query("SELECT COUNT(*) FROM ${PasswordDBEntity.TABLE_NAME}")
-    fun getPasswordsCount(): Int
+    suspend fun getPasswordsCount(): Int
 
     @Query("UPDATE ${PasswordDBEntity.TABLE_NAME} " +
                "SET ${PasswordDBEntity.COLUMN_PASSWORD_PIN_TIMESTAMP} = :pinnedTimestamp " +

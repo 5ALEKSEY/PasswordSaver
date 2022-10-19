@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.ak.core_repo_impl.data.model.db.entities.AccountDBEntity
-import io.reactivex.rxjava3.core.Single
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -23,10 +22,10 @@ interface AccountsDao {
     suspend fun getAccountById(accountId: Long): AccountDBEntity
 
     @Query("DELETE FROM ${AccountDBEntity.TABLE_NAME}")
-    fun clearAccounts()
+    suspend fun clearAccounts()
 
     @Query("SELECT COUNT(*) FROM ${AccountDBEntity.TABLE_NAME}")
-    fun getAccountsCount(): Int
+    suspend fun getAccountsCount(): Int
 
     @Query("UPDATE ${AccountDBEntity.TABLE_NAME} " +
                "SET ${AccountDBEntity.COLUMN_ACCOUNT_PIN_TIMESTAMP} = :pinnedTimestamp " +
