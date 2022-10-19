@@ -99,6 +99,7 @@ abstract class BasePSFragment<VM : BasePSViewModel> : BaseThemeFragment() {
     protected fun applyForToolbarController(fromZero: Boolean = true, block: IToolbarController.() -> Unit) {
         (activity as? IToolbarController)?.apply {
             if (fromZero) {
+                stopToolbarTitleLoading()
                 clearBackAction()
             }
 
