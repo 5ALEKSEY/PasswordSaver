@@ -113,7 +113,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
         viewModel.subscribeEmptyPasswordState().observe(viewLifecycleOwner) {
             fragmentView.incEmptyView.setVisibility(it)
         }
-        viewModel.subscribeToLoadingState().observe(viewLifecycleOwner) { isLoading ->
+        viewModel.subscribeToPrimaryLoadingState().observe(viewLifecycleOwner) { isLoading ->
             fragmentView.passwordsLoadingContainer.setVisibility(isLoading)
             if (isLoading) {
                 fragmentView.loadingAnimation.playAnimation()
@@ -121,6 +121,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
                 fragmentView.loadingAnimation.pauseAnimation()
             }
         }
+        viewModel.subscribeToSecondaryLoadingState().observe(viewLifecycleOwner, this::setSecondaryLoadingState)
         viewModel.subscribeToShowEditPasswordScreen().observe(viewLifecycleOwner) { passwordId ->
             navigator.navigateToEditPassword(passwordId)
         }
@@ -182,6 +183,17 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
             })
 
             (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        }
+    }
+
+    private fun setSecondaryLoadingState(isLoading: Boolean) {
+        applyForToolbarController {
+            if (isLoading) {
+                startToolbarTitleLoading(R.string.toolbar_title_loading_updating_text)
+            } else {
+                stopToolbarTitleLoading()
+                initToolbar()
+            }
         }
     }
 

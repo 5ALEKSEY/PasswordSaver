@@ -36,5 +36,7 @@ dependencies {
     implementation deps.kotlin
     implementation deps.androidX
 
+    implementation deps.coroutines
+
     implementation deps.rx
 }

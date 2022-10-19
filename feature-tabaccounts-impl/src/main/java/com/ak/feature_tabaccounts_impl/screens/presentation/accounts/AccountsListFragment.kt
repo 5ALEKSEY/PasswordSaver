@@ -7,6 +7,8 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -27,6 +29,9 @@ import kotlinx.android.synthetic.main.fragment_accounts_list.view.fabAddNewAccou
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.incAccountsEmptyView
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.loadingAnimation
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.rvAccountsList
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>() {
 
@@ -113,7 +118,8 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
 
     override fun subscriberToViewModel(viewModel: AccountsListViewModel) {
         super.subscriberToViewModel(viewModel)
-        viewModel.subscribeToLoadingState().observe(viewLifecycleOwner, this::setLoadingState)
+        viewModel.subscribeToPrimaryLoadingState().observe(viewLifecycleOwner, this::setPrimaryLoadingState)
+        viewModel.subscribeToSecondaryLoadingState().observe(viewLifecycleOwner, this::setSecondaryLoadingState)
         viewModel.subscribeEmptyAccountsState().observe(viewLifecycleOwner, this::setEmptyAccountsState)
         viewModel.subscribeToAccountsList().observe(viewLifecycleOwner, this::displayAccounts)
         viewModel.subscribeToToolbarScrollingState().observe(viewLifecycleOwner) { isEnabled ->
@@ -137,7 +143,7 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
         accountsAdapter.insertData(accountModelsList)
     }
 
-    private fun setLoadingState(isLoading: Boolean) {
+    private fun setPrimaryLoadingState(isLoading: Boolean) {
         fragmentView.accountLoadingContainer.setVisibility(isLoading)
         if (isLoading) {
             fragmentView.loadingAnimation.playAnimation()
@@ -146,8 +152,19 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
         }
     }
 
+    private fun setSecondaryLoadingState(isLoading: Boolean) {
+        applyForToolbarController {
+            if (isLoading) {
+                startToolbarTitleLoading(R.string.toolbar_title_loading_updating_text)
+            } else {
+                stopToolbarTitleLoading()
+                initToolbar()
+            }
+        }
+    }
+
     private fun setEmptyAccountsState(isEmptyViewVisible: Boolean) {
-        fragmentView.incAccountsEmptyView.setVisibility(isEmptyViewVisible)
+        fragmentView.incAccountsEmptyView.isVisible = isEmptyViewVisible
     }
 
     private fun showEditAccountScreen(accountId: Long) {

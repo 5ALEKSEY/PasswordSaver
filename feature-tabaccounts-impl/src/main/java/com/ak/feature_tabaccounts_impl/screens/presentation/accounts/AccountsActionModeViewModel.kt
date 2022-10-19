@@ -2,10 +2,11 @@ package com.ak.feature_tabaccounts_impl.screens.presentation.accounts
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.feature_tabaccounts_api.interfaces.IAccountsInteractor
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 
 class AccountsActionModeViewModel @Inject constructor(
     private val passwordsInteractor: IAccountsInteractor
@@ -62,16 +63,10 @@ class AccountsActionModeViewModel @Inject constructor(
 
     fun onDeleteSelectedInActionMode() {
         if (selectedAccountsIdsList.isNotEmpty()) {
-            passwordsInteractor.deleteAccountsByIds(selectedAccountsIdsList)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    {
-                        selectedModeStateLD.value = false
-                    },
-                    { throwable ->
-                        shortTimeMessageLiveData.value = throwable.message ?: "unknown"
-                    })
-                .let(this::bindDisposable)
+            viewModelScope.launch {
+                passwordsInteractor.deleteAccountsByIds(selectedAccountsIdsList)
+                selectedModeStateLD.value = false
+            }
         }
     }
 }

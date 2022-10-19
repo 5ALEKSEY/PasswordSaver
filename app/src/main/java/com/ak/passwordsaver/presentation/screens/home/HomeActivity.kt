@@ -5,8 +5,10 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph
 import androidx.navigation.Navigation
@@ -27,6 +29,9 @@ import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import javax.inject.Inject
 import javax.inject.Named
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 typealias ToolbarAction = Toolbar.() -> Unit
 
@@ -34,6 +39,7 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
 
     companion object {
         private const val MENU_CHANGE_DELAY = 200L
+        private const val TOOLBAR_TITLE_LOADING_DOTS_THRESHOLD = 400L
     }
 
     @Inject
@@ -72,6 +78,8 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
     private val themeStubView by lazy {
         findViewById<ImageView>(R.id.ivHomeThemeStubView)
     }
+
+    private var toolbarLoadingJob: Job? = null
 
     private val destChangeListener = NavController.OnDestinationChangedListener { _, destAction, _ ->
         if (destAction !is NavGraph) {
@@ -131,6 +139,11 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
         super.onStart()
     }
 
+    override fun onPause() {
+        super.onPause()
+        stopToolbarTitleLoading()
+    }
+
     override fun onStop() {
         homeNavController.removeOnDestinationChangedListener(destChangeListener)
         super.onStop()
@@ -179,7 +192,7 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
         }
     }
 
-    override fun setToolbarTitle(titleResIs: Int) {
+    override fun setToolbarTitle(@StringRes titleResIs: Int) {
         setToolbarTitle(getString(titleResIs))
     }
 
@@ -199,6 +212,28 @@ class HomeActivity : BasePSFragmentActivity<HomeViewModel>(), IToolbarController
             navigationIcon = null
             setNavigationOnClickListener(null)
         }
+    }
+
+    override fun startToolbarTitleLoading(@StringRes loadingTextResIs: Int) {
+        startToolbarTitleLoading(getString(loadingTextResIs))
+    }
+
+    override fun startToolbarTitleLoading(loadingText: String) {
+        stopToolbarTitleLoading()
+        toolbarLoadingJob = lifecycleScope.launch {
+            while (true) {
+                setToolbarTitle("$loadingText.")
+                delay(TOOLBAR_TITLE_LOADING_DOTS_THRESHOLD)
+                setToolbarTitle("$loadingText..")
+                delay(TOOLBAR_TITLE_LOADING_DOTS_THRESHOLD)
+                setToolbarTitle("$loadingText...")
+                delay(TOOLBAR_TITLE_LOADING_DOTS_THRESHOLD)
+            }
+        }
+    }
+
+    override fun stopToolbarTitleLoading() {
+        toolbarLoadingJob?.cancel()
     }
 
     private fun initToolbar() {

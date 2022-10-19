@@ -1,8 +1,8 @@
 package com.ak.feature_tabsettings_impl.debug
 
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.core_repo_api.intefaces.AccountRepoEntity
@@ -15,11 +15,11 @@ import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.switches.SwitchSettingsListItemModel
 import com.ak.feature_tabsettings_impl.adapter.items.texts.TextSettingsListItemModel
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
 import javax.inject.Inject
 import kotlin.random.Random
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DebugSettingsViewModel @Inject constructor(
     private val featuresUpdateManager: IFeaturesUpdateManager,
@@ -57,32 +57,28 @@ class DebugSettingsViewModel @Inject constructor(
                 featuresUpdateManager.resetAppThemeFeatureViewedState()
             }
             RESET_PASSWORDS_STORAGE_SETTING_ID -> {
-                passwordsRepository.clearAll()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doAfterSuccess { loadDebugSettings() }
-                    .subscribe()
-                    .let(this::bindDisposable)
+                viewModelScope.launch {
+                    passwordsRepository.clearAll()
+                    loadDebugSettings()
+                }
             }
             RESET_ACCOUNTS_STORAGE_SETTING_ID -> {
-                accountsRepository.clearAll()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doAfterSuccess { loadDebugSettings() }
-                    .subscribe()
-                    .let(this::bindDisposable)
+                viewModelScope.launch {
+                    accountsRepository.clearAll()
+                    loadDebugSettings()
+                }
             }
             ADD_RANDOM_PASSWORD_SETTING_ID -> {
-                passwordsRepository.addNewPasswords(listOf(generateRandomPassword()))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doAfterSuccess { loadDebugSettings() }
-                    .subscribe()
-                    .let(this::bindDisposable)
+                viewModelScope.launch {
+                    passwordsRepository.addNewPasswords(listOf(generateRandomPassword()))
+                    loadDebugSettings()
+                }
             }
             ADD_RANDOM_ACCOUNT_SETTING_ID -> {
-                accountsRepository.addNewAccounts(listOf(generateRandomAccount()))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doAfterSuccess { loadDebugSettings() }
-                    .subscribe()
-                    .let(this::bindDisposable)
+                viewModelScope.launch {
+                    accountsRepository.addNewAccounts(listOf(generateRandomAccount()))
+                    loadDebugSettings()
+                }
             }
             else -> {
                 // no op
@@ -91,78 +87,73 @@ class DebugSettingsViewModel @Inject constructor(
     }
 
     fun loadDebugSettings() {
-        getDebugSettingsList()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe { list -> debugSettingsListLiveData.value = list }
-            .let(this::bindDisposable)
+        viewModelScope.launch {
+            debugSettingsListLiveData.value = getDebugSettingsList()
+        }
     }
 
-    @WorkerThread
-    private fun getDebugSettingsList(): Single<List<SettingsListItemModel>> {
-        return Single.fromCallable {
-            val switchThemePeriodically = SwitchSettingsListItemModel(
-                SWITCH_THEME_PERIODICALLY_SETTING_ID,
-                resourceManager.getString(R.string.debug_periodic_theme_switch_setting_name),
-                resourceManager.getString(
-                    R.string.debug_periodic_theme_switch_setting_desc,
-                    DebugNextThemeSwitcher.NEXT_THEME_SWITCH_PERIOD_IN_SECONDS,
-                ),
-                DebugNextThemeSwitcher.isThemeSwitchingEnabled(),
-            )
+    private suspend fun getDebugSettingsList() = withContext(Dispatchers.IO) {
+        val switchThemePeriodically = SwitchSettingsListItemModel(
+            SWITCH_THEME_PERIODICALLY_SETTING_ID,
+            resourceManager.getString(R.string.debug_periodic_theme_switch_setting_name),
+            resourceManager.getString(
+                R.string.debug_periodic_theme_switch_setting_desc,
+                DebugNextThemeSwitcher.NEXT_THEME_SWITCH_PERIOD_IN_SECONDS,
+            ),
+            DebugNextThemeSwitcher.isThemeSwitchingEnabled(),
+        )
 
-            val resetAccountsFeatureNewBadge = TextSettingsListItemModel(
-                RESET_ACCOUNTS_FEATURE_NEW_BADGE_SETTING_ID,
-                resourceManager.getString(R.string.debug_reset_accounts_new_badge_setting_name),
-            )
+        val resetAccountsFeatureNewBadge = TextSettingsListItemModel(
+            RESET_ACCOUNTS_FEATURE_NEW_BADGE_SETTING_ID,
+            resourceManager.getString(R.string.debug_reset_accounts_new_badge_setting_name),
+        )
 
-            val resetFingerprintFeatureNewBadge = TextSettingsListItemModel(
-                RESET_FINGERPRINT_FEATURE_NEW_BADGE_SETTING_ID,
-                resourceManager.getString(R.string.debug_reset_fingerprint_new_badge_setting_name),
-            )
+        val resetFingerprintFeatureNewBadge = TextSettingsListItemModel(
+            RESET_FINGERPRINT_FEATURE_NEW_BADGE_SETTING_ID,
+            resourceManager.getString(R.string.debug_reset_fingerprint_new_badge_setting_name),
+        )
 
-            val resetAppThemeFeatureNewBadge = TextSettingsListItemModel(
-                RESET_APP_THEME_FEATURE_NEW_BADGE_SETTING_ID,
-                resourceManager.getString(R.string.debug_reset_app_theme_new_badge_setting_name),
-            )
+        val resetAppThemeFeatureNewBadge = TextSettingsListItemModel(
+            RESET_APP_THEME_FEATURE_NEW_BADGE_SETTING_ID,
+            resourceManager.getString(R.string.debug_reset_app_theme_new_badge_setting_name),
+        )
 
-            val resetPasswordsStorage = TextSettingsListItemModel(
-                RESET_PASSWORDS_STORAGE_SETTING_ID,
-                resourceManager.getString(R.string.debug_reset_passwords_storage_setting_name),
-            )
+        val resetPasswordsStorage = TextSettingsListItemModel(
+            RESET_PASSWORDS_STORAGE_SETTING_ID,
+            resourceManager.getString(R.string.debug_reset_passwords_storage_setting_name),
+        )
 
-            val resetAccountsStorage = TextSettingsListItemModel(
-                RESET_ACCOUNTS_STORAGE_SETTING_ID,
-                resourceManager.getString(R.string.debug_reset_accounts_storage_setting_name),
-            )
+        val resetAccountsStorage = TextSettingsListItemModel(
+            RESET_ACCOUNTS_STORAGE_SETTING_ID,
+            resourceManager.getString(R.string.debug_reset_accounts_storage_setting_name),
+        )
 
-            val addRandomPassword = TextSettingsListItemModel(
-                ADD_RANDOM_PASSWORD_SETTING_ID,
-                resourceManager.getString(
-                    R.string.debug_add_random_password_setting_name,
-                    passwordsRepository.getPasswordsCount(),
-                )
+        val addRandomPassword = TextSettingsListItemModel(
+            ADD_RANDOM_PASSWORD_SETTING_ID,
+            resourceManager.getString(
+                R.string.debug_add_random_password_setting_name,
+                passwordsRepository.getPasswordsCount(),
             )
+        )
 
-            val addRandomAccount = TextSettingsListItemModel(
-                ADD_RANDOM_ACCOUNT_SETTING_ID,
-                resourceManager.getString(
-                    R.string.debug_add_random_account_setting_name,
-                    accountsRepository.getAccountsCount(),
-                )
+        val addRandomAccount = TextSettingsListItemModel(
+            ADD_RANDOM_ACCOUNT_SETTING_ID,
+            resourceManager.getString(
+                R.string.debug_add_random_account_setting_name,
+                accountsRepository.getAccountsCount(),
             )
+        )
 
-            return@fromCallable listOfNotNull(
-                switchThemePeriodically,
-                resetAccountsFeatureNewBadge,
-                resetFingerprintFeatureNewBadge,
-                resetAppThemeFeatureNewBadge,
-                resetPasswordsStorage,
-                resetAccountsStorage,
-                addRandomPassword,
-                addRandomAccount,
-            )
-        }
+        return@withContext listOfNotNull(
+            switchThemePeriodically,
+            resetAccountsFeatureNewBadge,
+            resetFingerprintFeatureNewBadge,
+            resetAppThemeFeatureNewBadge,
+            resetPasswordsStorage,
+            resetAccountsStorage,
+            addRandomPassword,
+            addRandomAccount,
+        )
     }
 
     private companion object {
