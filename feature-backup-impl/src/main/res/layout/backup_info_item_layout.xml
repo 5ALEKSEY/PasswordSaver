@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <TextView
+            android:id="@+id/tvBackInfoItemName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:tag="@string/skipThemeInterceptor"
+            android:text="@string/backup_list_info_title"
+            android:textColor="?themedPrimaryTextColor"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/civShareDumpBtn"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/tvBackInfoItemDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginBottom="10dp"
+            android:tag="@string/skipThemeInterceptor"
+            android:textColor="?themedSecondaryTextColor"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/civRefreshDumpBtn"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvBackInfoItemName"
+            tools:text="Passwords: 3\nAccounts: 2\nUpdate time: 232\nSize: 23 Mb" />
+
+    <ImageView
+            android:id="@+id/civShareDumpBtn"
+            android:layout_width="@dimen/backup_info_buttons_size"
+            android:layout_height="@dimen/backup_info_buttons_size"
+            android:layout_marginEnd="12dp"
+            android:background="?themedAccentColor"
+            android:padding="4dp"
+            android:src="@drawable/ic_share"
+            android:tag="@string/skipThemeInterceptor"
+            app:layout_constraintBottom_toTopOf="@+id/civRefreshDumpBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+            android:id="@+id/civRefreshDumpBtn"
+            android:layout_width="@dimen/backup_info_buttons_size"
+            android:layout_height="@dimen/backup_info_buttons_size"
+            android:layout_marginEnd="12dp"
+            android:background="?themedAccentColor"
+            android:padding="4dp"
+            android:src="@drawable/ic_refresh"
+            android:tag="@string/skipThemeInterceptor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/civShareDumpBtn" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

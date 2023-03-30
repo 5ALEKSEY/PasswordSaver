@@ -9,12 +9,13 @@ import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.annotation.CallSuper
 import androidx.annotation.LayoutRes
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.ak.app_theme.theme.uicomponents.BaseThemeFragment
 import com.ak.base.extensions.showToastMessage
 import com.ak.base.extensions.vibrate
+import com.ak.base.navigation.NavDeepLinkDestination
+import com.ak.base.navigation.NavDeepLinkManager
 import com.ak.base.ui.toolbar.IToolbarController
 import com.ak.base.utils.LifecyclePostponedEventsManager
 import com.ak.base.viewmodel.BasePSViewModel
@@ -23,6 +24,7 @@ abstract class BasePSFragment<VM : BasePSViewModel> : BaseThemeFragment() {
 
     protected lateinit var postponedEventManager: LifecyclePostponedEventsManager
     protected lateinit var navController: NavController
+    protected lateinit var navDeepLinkManager: NavDeepLinkManager
     protected lateinit var fragmentView: View
 
     protected lateinit var viewModel: VM
@@ -57,12 +59,12 @@ abstract class BasePSFragment<VM : BasePSViewModel> : BaseThemeFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         fragmentView = inflater.inflate(
-                getFragmentLayoutResId(),
-                container,
-                false
+            getFragmentLayoutResId(),
+            container,
+            false,
         )
 
         postponedEventManager = LifecyclePostponedEventsManager(viewLifecycleOwner.lifecycle)
@@ -74,6 +76,9 @@ abstract class BasePSFragment<VM : BasePSViewModel> : BaseThemeFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (context?.applicationContext as? NavDeepLinkManager.Provider)?.let {
+            navDeepLinkManager = it.provideNavDeepLinkManager()
+        }
         navController = Navigation.findNavController(view)
     }
 
@@ -105,5 +110,13 @@ abstract class BasePSFragment<VM : BasePSViewModel> : BaseThemeFragment() {
 
             block(this)
         }
+    }
+
+    protected fun navigate(destination: NavDeepLinkDestination, shouldAnimate: Boolean = true) {
+        navDeepLinkManager.navigate(
+            navController = navController,
+            destination = destination,
+            shouldAnimate = shouldAnimate,
+        )
     }
 }

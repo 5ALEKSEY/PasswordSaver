@@ -5,6 +5,7 @@ import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ak.base.extensions.showToastMessage
+import com.ak.base.navigation.NavDeepLinkDestination
 import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
 import com.ak.base.ui.recycler.decorator.PsDividerItemDecorationSettings
 import com.ak.base.viewmodel.injectViewModel
@@ -51,6 +52,9 @@ class SettingsFragment : BaseSettingsModuleFragment<SettingsViewModel>() {
         viewModel.subscribeToOpenDebugSettingsLiveData().observe(viewLifecycleOwner) { showDebugScreen() }
         viewModel.subscribeToOpenAuthForPrivacySettingsLiveData().observe(viewLifecycleOwner) { startAuthAndOpenPrivacySettings() }
         viewModel.subscribeToAppSettingsListLiveData().observe(viewLifecycleOwner, this::displayAppSettings)
+        viewModel.subscribeToOpenBackupInfoLiveData().observe(viewLifecycleOwner) {
+            navigate(NavDeepLinkDestination.BackupInfo)
+        }
     }
 
     override fun onResume() {

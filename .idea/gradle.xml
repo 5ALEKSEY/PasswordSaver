@@ -18,6 +18,8 @@
             <option value="$PROJECT_DIR$/core-repo-impl" />
             <option value="$PROJECT_DIR$/feature-appupdate-api" />
             <option value="$PROJECT_DIR$/feature-appupdate-impl" />
+            <option value="$PROJECT_DIR$/feature-backup-api" />
+            <option value="$PROJECT_DIR$/feature-backup-impl" />
             <option value="$PROJECT_DIR$/feature-encryption-api" />
             <option value="$PROJECT_DIR$/feature-encryption-impl" />
             <option value="$PROJECT_DIR$/feature-security-api" />

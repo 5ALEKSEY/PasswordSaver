@@ -1,5 +1,6 @@
 package com.ak.feature_tabsettings_impl.di
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.ak.base.viewmodel.BaseViewModelFactory
 import com.ak.base.viewmodel.IViewModelAssistedFactory
@@ -41,6 +42,7 @@ class AboutSettingsViewModelAssistedFactory @Inject constructor() : IViewModelAs
 }
 
 class DebugSettingsViewModelAssistedFactory @Inject constructor(
+    private val appContext: Context,
     private val featuresUpdateManager: IFeaturesUpdateManager,
     private val resourceManager: IResourceManager,
     private val passwordsRepository: IPasswordsRepository,
@@ -48,6 +50,7 @@ class DebugSettingsViewModelAssistedFactory @Inject constructor(
 ) : IViewModelAssistedFactory<DebugSettingsViewModel> {
     override fun create(): DebugSettingsViewModel {
         return DebugSettingsViewModel(
+            appContext = appContext,
             featuresUpdateManager = featuresUpdateManager,
             resourceManager = resourceManager,
             passwordsRepository = passwordsRepository,

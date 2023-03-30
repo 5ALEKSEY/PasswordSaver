@@ -7,6 +7,7 @@ import com.ak.feature_tabpasswords_impl.screens.navigation.cross.IPasswordsTabCr
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.edit.EditPasswordFragment
 import javax.inject.Inject
 
+// TODO: remove this shit
 internal class PasswordsTabNavigatorImpl @Inject constructor() : IPasswordsTabNavigator {
 
     private lateinit var crossModuleNavigator: IPasswordsTabCrossModuleNavigator

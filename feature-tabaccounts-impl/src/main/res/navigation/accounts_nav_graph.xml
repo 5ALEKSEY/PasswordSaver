@@ -36,6 +36,10 @@
             android:id="@+id/addNewAccountFragment"
             android:name="com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.add.AddNewAccountFragment"
             android:label="AddNewPasswordFragment"
-            tools:layout="@layout/fragment_manage_account" />
+            tools:layout="@layout/fragment_manage_account">
+
+        <deepLink app:uri="ps://navigate/add_new_account" />
+
+    </fragment>
 
 </navigation>

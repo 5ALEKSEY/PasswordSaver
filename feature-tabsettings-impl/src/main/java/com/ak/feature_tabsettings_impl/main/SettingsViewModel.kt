@@ -23,13 +23,15 @@ class SettingsViewModel @Inject constructor(
         const val DEBUG_SECTION_SETTING_ID = 0
         const val DESIGN_SECTION_SETTING_ID = 1
         const val PRIVACY_SECTION_SETTING_ID = 2
-        const val ABOUT_SECTION_SETTING_ID = 3
+        const val BACKUP_SECTION_SETTING_ID = 3
+        const val ABOUT_SECTION_SETTING_ID = 4
     }
 
     private val appSettingsListLiveData = MutableLiveData<List<SettingsListItemModel>>()
     private val showDesignSettingsLiveData = SingleEventLiveData<Unit?>()
     private val showAuthForPrivacySettingsLiveData = SingleEventLiveData<Unit?>()
     private val showPrivacySettingsLiveData = SingleEventLiveData<Unit?>()
+    private val showBackupInfoLiveData = SingleEventLiveData<Unit?>()
     private val showAboutSettingsLiveData = SingleEventLiveData<Unit?>()
     private val showDebugSettingsLiveData = SingleEventLiveData<Unit?>()
 
@@ -37,6 +39,7 @@ class SettingsViewModel @Inject constructor(
     fun subscribeToOpenDesignSettingsLiveData(): LiveData<Unit?> = showDesignSettingsLiveData
     fun subscribeToOpenAuthForPrivacySettingsLiveData(): LiveData<Unit?> = showAuthForPrivacySettingsLiveData
     fun subscribeToOpenPrivacySettingsLiveData(): LiveData<Unit?> = showPrivacySettingsLiveData
+    fun subscribeToOpenBackupInfoLiveData(): LiveData<Unit?> = showBackupInfoLiveData
     fun subscribeToOpenAboutSettingsLiveData(): LiveData<Unit?> = showAboutSettingsLiveData
     fun subscribeToOpenDebugSettingsLiveData(): LiveData<Unit?> = showDebugSettingsLiveData
 
@@ -52,6 +55,12 @@ class SettingsViewModel @Inject constructor(
             resourceManager.getString(R.string.privacy_setting_name),
             R.drawable.ic_privacy_section_action,
             isPrivacySectionHasNewBadge()
+        )
+        val backupInfoSectionItemModel = SectionSettingsListItemModel(
+            BACKUP_SECTION_SETTING_ID,
+            resourceManager.getString(R.string.backup_info_name),
+            R.drawable.ic_backup_info_section_action,
+            true,
         )
         val aboutSectionItemModel = SectionSettingsListItemModel(
             ABOUT_SECTION_SETTING_ID,
@@ -70,13 +79,13 @@ class SettingsViewModel @Inject constructor(
             null
         }
 
-        val sections = listOfNotNull(
+        appSettingsListLiveData.value = listOfNotNull(
             designSectionItemModel,
             privacySectionItemModel,
+            backupInfoSectionItemModel,
             aboutSectionItemModel,
             debugSectionItemModel,
         )
-        appSettingsListLiveData.value = sections
     }
 
     fun onSectionClicked(settingId: Int) {
@@ -90,6 +99,7 @@ class SettingsViewModel @Inject constructor(
                     showPrivacySettingsLiveData.call()
                 }
             }
+            BACKUP_SECTION_SETTING_ID -> showBackupInfoLiveData.call()
             ABOUT_SECTION_SETTING_ID -> showAboutSettingsLiveData.call()
             DEBUG_SECTION_SETTING_ID -> showDebugSettingsLiveData.call()
         }

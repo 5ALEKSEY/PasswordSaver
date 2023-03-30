@@ -158,13 +158,13 @@ class DebugSettingsViewModel @Inject constructor(
 
     private companion object {
         const val SWITCH_THEME_PERIODICALLY_SETTING_ID = 0
-        const val RESET_ACCOUNTS_FEATURE_NEW_BADGE_SETTING_ID = 1
-        const val RESET_FINGERPRINT_FEATURE_NEW_BADGE_SETTING_ID = 2
-        const val RESET_APP_THEME_FEATURE_NEW_BADGE_SETTING_ID = 3
-        const val RESET_PASSWORDS_STORAGE_SETTING_ID = 4
-        const val RESET_ACCOUNTS_STORAGE_SETTING_ID = 5
-        const val ADD_RANDOM_PASSWORD_SETTING_ID = 6
-        const val ADD_RANDOM_ACCOUNT_SETTING_ID = 7
+        const val RESET_ACCOUNTS_FEATURE_NEW_BADGE_SETTING_ID = SWITCH_THEME_PERIODICALLY_SETTING_ID + 1
+        const val RESET_FINGERPRINT_FEATURE_NEW_BADGE_SETTING_ID = RESET_ACCOUNTS_FEATURE_NEW_BADGE_SETTING_ID + 1
+        const val RESET_APP_THEME_FEATURE_NEW_BADGE_SETTING_ID = RESET_FINGERPRINT_FEATURE_NEW_BADGE_SETTING_ID + 1
+        const val RESET_PASSWORDS_STORAGE_SETTING_ID = RESET_APP_THEME_FEATURE_NEW_BADGE_SETTING_ID + 1
+        const val RESET_ACCOUNTS_STORAGE_SETTING_ID = RESET_PASSWORDS_STORAGE_SETTING_ID + 1
+        const val ADD_RANDOM_PASSWORD_SETTING_ID = RESET_ACCOUNTS_STORAGE_SETTING_ID + 1
+        const val ADD_RANDOM_ACCOUNT_SETTING_ID = ADD_RANDOM_PASSWORD_SETTING_ID + 1
 
         val encryptedStrings = listOf(
             "_jU5NI2RAYuR6sQhjyUEOt6aYIs_dh-MWENtTMtVzGufyeGVU96TdzOUBBRYrj08G8YGARMxVEmN xyY8elsETdgJ4-Nk5hl4GUbscJgzz-Y=",
@@ -182,7 +182,7 @@ class DebugSettingsViewModel @Inject constructor(
                 override fun getPasswordAvatarPath() = ""
                 override fun getPasswordName() = "Password_${randomInt()}"
                 override fun getPasswordContent() = encryptedStrings.random()
-                override fun getPasswordPinTimestamp(): Long?  = null
+                override fun getPasswordPinTimestamp(): Long? = null
             }
         }
 

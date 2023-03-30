@@ -8,7 +8,6 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -29,9 +28,6 @@ import kotlinx.android.synthetic.main.fragment_accounts_list.view.fabAddNewAccou
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.incAccountsEmptyView
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.loadingAnimation
 import kotlinx.android.synthetic.main.fragment_accounts_list.view.rvAccountsList
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>() {
 
@@ -268,7 +264,7 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
         deleteAccountDialog?.dismissAllowingStateLoss()
         val deleteItemString = getString(R.string.delete_dialog_account_item)
         deleteAccountDialog = PSDialogBuilder(childFragmentManager)
-            .title(getString(R.string.delete_data_dialog_title))
+            .title(getString(R.string.dialog_attention_title))
             .description(getString(R.string.delete_data_dialog_desc, deleteItemString))
             .positive(getString(R.string.delete_dialog_pst_text)) {
                 deleteAccountDialog?.dismissAllowingStateLoss()

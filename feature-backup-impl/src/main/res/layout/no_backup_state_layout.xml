@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+            android:id="@+id/tvNoBackupInfoText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="@string/no_backup_info_text"
+            android:textAlignment="center"
+            android:textColor="?themedSecondaryTextColor"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/btnCreateBackupAction"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+    <Button
+            android:id="@+id/btnCreateBackupAction"
+            style="@style/PSButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:backgroundTint="?themedPrimaryLightColor"
+            android:minWidth="160dp"
+            android:text="@string/no_backup_info_create_backup"
+            android:textColor="?staticColorWhite"
+            app:layout_constraintBottom_toTopOf="@+id/btnNoBackupImportFile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvNoBackupInfoText" />
+
+    <Button
+            android:id="@+id/btnNoBackupImportFile"
+            style="@style/PSButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:backgroundTint="?themedPrimaryLightColor"
+            android:minWidth="160dp"
+            android:text="@string/user_has_backup_file_text"
+            android:textColor="?staticColorWhite"
+            app:layout_constraintBottom_toTopOf="@+id/btnNoBackupImportWithGAccount"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnCreateBackupAction" />
+
+    <Button
+            android:id="@+id/btnNoBackupImportWithGAccount"
+            style="@style/PSButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:backgroundTint="?themedPrimaryLightColor"
+            android:enabled="false"
+            android:minWidth="160dp"
+            android:text="@string/user_has_backup_g_account_text"
+            android:textColor="?staticColorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnNoBackupImportFile" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

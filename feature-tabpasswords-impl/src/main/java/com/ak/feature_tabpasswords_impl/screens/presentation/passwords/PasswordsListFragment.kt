@@ -250,7 +250,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
         deletePasswordDialog?.dismissAllowingStateLoss()
         val deleteItemString = getString(R.string.delete_dialog_password_item)
         deletePasswordDialog = PSDialogBuilder(childFragmentManager)
-            .title(getString(R.string.delete_data_dialog_title))
+            .title(getString(R.string.dialog_attention_title))
             .description(getString(R.string.delete_data_dialog_desc, deleteItemString))
             .positive(getString(R.string.delete_dialog_pst_text)) {
                 deletePasswordDialog?.dismissAllowingStateLoss()

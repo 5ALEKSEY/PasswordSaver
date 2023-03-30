@@ -1,0 +1,86 @@
+plugins {
+    id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlin_version"
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
+
+def rootExtConfiguration = rootProject.extensions.getByName("ext")
+
+String VERSION_NAME = rootExtConfiguration["appVersionName"]
+int VERSION_CODE = rootExtConfiguration["appVersionCode"]
+
+int COMPILE_SDK_VERSION = rootExtConfiguration["compileSdkVersion"]
+int MIN_SDK_VERSION = rootExtConfiguration["minSdkVersion"]
+int TARGET_SDK_VERSION = rootExtConfiguration["targetSdkVersion"]
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION
+    defaultConfig {
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "FULL_VERSION_NAME", "\"v. " + VERSION_NAME + "\""
+            buildConfigField "String", "DB_BACKUP_DIR_NAME", "\"db_backups\""
+            buildConfigField "String", "DB_BACKUP_FILE_NAME", "\"ps_backup_file\""
+            buildConfigField "int", "DATA_BASE_VERSION", DATA_BASE_VERSION
+            buildConfigField "int", "BACKUP_VERSION", BACKUP_VERSION
+        }
+        debug {
+            minifyEnabled false
+
+            buildConfigField "String", "FULL_VERSION_NAME", "\"v. " + VERSION_NAME + "-debug\""
+            buildConfigField "String", "DB_BACKUP_DIR_NAME", "\"db_backups\""
+            buildConfigField "String", "DB_BACKUP_FILE_NAME", "\"ps_backup_debug_file\""
+            buildConfigField "int", "DATA_BASE_VERSION", DATA_BASE_VERSION
+            buildConfigField "int", "BACKUP_VERSION", BACKUP_VERSION
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':feature-backup-api')
+
+    implementation project(':base')
+    implementation project(':core-repo-api')
+
+    implementation deps.kotlin
+    implementation deps.appCompat
+    implementation deps.androidX
+    implementation deps.androidMaterial
+    implementation deps.constraint
+
+    implementation deps.dagger
+    kapt deps.daggerKapt
+
+    implementation deps.rx
+    implementation deps.rxAndroid
+
+    implementation deps.recyclerView
+    implementation deps.navComponent
+
+    implementation deps.gifDrawable
+    implementation deps.circleImageView
+
+    implementation deps.kotlinSrzJson
+}

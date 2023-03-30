@@ -27,13 +27,18 @@ import com.ak.passwordsaver.R
 import com.ak.passwordsaver.di.AppComponent
 import com.ak.passwordsaver.di.DaggerAppComponent_AppComponentDependenciesComponent
 import com.ak.passwordsaver.di.FeatureAppComponentInitializer
+import com.example.feature_backup_impl.di.DaggerFeatureBackupComponent_FeatureBackupDependenciesComponent
+import com.example.feature_backup_impl.di.FeatureBackupComponent
+import com.example.feature_backup_impl.di.FeatureBackupComponentInitializer
+import com.example.feature_backup_impl.di.FeatureBackupDependencies
 
 interface ApplicationComponentsManager :
     ClearComponentsByDestinationChangeManager,
     FeatureAppComponentInitializer,
     FeatureTabPasswordsComponentInitializer,
     FeatureTabAccountsComponentInitializer,
-    FeatureTabSettingsComponentInitializer
+    FeatureTabSettingsComponentInitializer,
+    FeatureBackupComponentInitializer
 
 interface ClearComponentsByDestinationChangeManager {
     fun onDestinationIdChanged(destinationId: Int)
@@ -85,6 +90,10 @@ class ApplicationComponentsManagerImpl : ApplicationComponentsManager {
         return FeatureTabSettingsComponent.initializeAndGet(initTabSettingsDependencies(), applicationContext)
     }
 
+    override fun initializeFeatureBackupComponent(): FeatureBackupComponent {
+        return FeatureBackupComponent.initializeAndGet(initFeatureBackupDependencies(), applicationContext)
+    }
+
     private fun clearTabPasswordsFeature() {
         FeatureTabPasswordsComponent.clear()
     }
@@ -116,6 +125,12 @@ class ApplicationComponentsManagerImpl : ApplicationComponentsManager {
             .coreRepositoryApi(initCoreRepo())
             .featureSecurityApi(initSecurityComponent())
             .featureAppUpdateApi(initFeatureAppUpdate())
+            .build()
+    }
+
+    private fun initFeatureBackupDependencies(): FeatureBackupDependencies {
+        return DaggerFeatureBackupComponent_FeatureBackupDependenciesComponent.builder()
+            .coreRepositoryApi(initCoreRepo())
             .build()
     }
 

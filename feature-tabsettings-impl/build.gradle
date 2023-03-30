@@ -1,10 +1,9 @@
-apply plugin: 'com.android.library'
-
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
-
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
 
 def rootExtConfiguration = rootProject.extensions.getByName("ext")
 
@@ -40,11 +39,13 @@ android {
 
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField "String", "FULL_VERSION_NAME", "\"v. " + VERSION_NAME + "\""
+            buildConfigField "int", "DATA_BASE_VERSION", DATA_BASE_VERSION
         }
         debug {
             minifyEnabled false
 
             buildConfigField "String", "FULL_VERSION_NAME", "\"v. " + VERSION_NAME + "-debug\""
+            buildConfigField "int", "DATA_BASE_VERSION", DATA_BASE_VERSION
         }
     }
 }

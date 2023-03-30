@@ -10,4 +10,6 @@
 
     <include app:graph="@navigation/settings_nav_graph" />
 
+    <include app:graph="@navigation/backup_nav_graph" />
+
 </navigation>

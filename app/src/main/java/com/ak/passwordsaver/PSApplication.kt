@@ -8,6 +8,7 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.ak.app_theme.theme.CustomThemeInterceptor
 import com.ak.app_theme.theme.CustomThemeManager
+import com.ak.base.navigation.NavDeepLinkManager
 import com.ak.feature_security_api.interfaces.IPSAuthManager
 import com.ak.feature_tabpasswords_impl.screens.navigation.cross.PasswordsTabCrossModuleNavigatorProvider
 import com.ak.passwordsaver.appnavigator.IAppNavigator
@@ -18,6 +19,7 @@ import javax.inject.Inject
 
 open class PSApplication : Application(), LifecycleObserver,
     PasswordsTabCrossModuleNavigatorProvider,
+    NavDeepLinkManager.Provider,
     ApplicationComponentsManager by ApplicationComponentsManagerImpl() {
 
     companion object {
@@ -28,6 +30,8 @@ open class PSApplication : Application(), LifecycleObserver,
     internal lateinit var mAuthManager: IPSAuthManager
     @Inject
     internal lateinit var appNavigator: IAppNavigator
+    @Inject
+    internal lateinit var navDeepLinkManager: NavDeepLinkManager
 
     private val lifecycleEventObserver = LifecycleEventObserver { _, event ->
         when (event) {
@@ -40,6 +44,9 @@ open class PSApplication : Application(), LifecycleObserver,
                 if (mAuthManager.isLockAppSetAllowable()) {
                     mAuthManager.setAppLockState(false)
                 }
+            }
+            else -> {
+                // np
             }
         }
     }
@@ -65,4 +72,6 @@ open class PSApplication : Application(), LifecycleObserver,
     }
 
     override fun provideCrossNavigatorForPasswordsModule() = appNavigator
+
+    override fun provideNavDeepLinkManager() = navDeepLinkManager
 }
