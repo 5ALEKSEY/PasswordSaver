@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffXfermode
@@ -12,12 +13,12 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import com.ak.base.R
 import com.ak.base.constants.AppConstants
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.util.Calendar
-import kotlinx.android.synthetic.main.layout_notification_badge.view.tvBadgeText
 
 fun <T : View> T.applyForLaidOut(block: T.() -> Unit) {
     if (isLaidOut) {
@@ -50,7 +51,7 @@ fun ImageView.drawTextInner(
     fillColor: Int,
     textColor: Int,
     textSizeInPx: Int,
-    textToDraw: String
+    textToDraw: String,
 ) {
     val bitmap = Bitmap.createBitmap(imageSizeInPx, imageSizeInPx, Bitmap.Config.ARGB_8888)
     val canvas = Canvas(bitmap)
@@ -75,7 +76,7 @@ fun ImageView.drawTextInner(
     fillColor: Int,
     textColor: Int,
     textSizeInPx: Int,
-    textToDraw: String
+    textToDraw: String,
 ) {
     drawTextInner(context, width, fillColor, textColor, textSizeInPx, textToDraw)
 }
@@ -100,8 +101,9 @@ fun View.setVisibilityInvisible(isVisible: Boolean) {
 fun BottomNavigationView.setTextBadgeByMenuId(menuId: Int, badgeContent: String) {
     getBottomNavViewMenuItem(this, menuId)?.apply {
         val badgeView = LayoutInflater.from(this.context).inflate(R.layout.layout_notification_badge, this, true)
-        badgeView.tvBadgeText.text = badgeContent
-        setTag(R.id.TAG_BADGE_VIEW, badgeView.tvBadgeText)
+        val tvBadgeText = badgeView.findViewById<TextView>(R.id.tvBadgeText)
+        tvBadgeText.text = badgeContent
+        setTag(R.id.TAG_BADGE_VIEW, tvBadgeText)
     }
 }
 
@@ -115,7 +117,7 @@ fun BottomNavigationView.removeTextBadgeByMenuId(menuId: Int) {
 
 inline fun View.setSafeClickListener(
     allowedClickDelayInMillis: Long = AppConstants.VIEW_SAFE_CLICK_DELAY_IN_MILLIS,
-    crossinline listener: (view: View?) -> Unit
+    crossinline listener: (view: View?) -> Unit,
 ) {
     setOnClickListener(object : View.OnClickListener {
         private var lastClickTime = 0L
@@ -148,3 +150,7 @@ private fun getBottomNavViewMenuItem(bottomNavigationView: BottomNavigationView,
         menuItemView
     }
 }
+
+fun Int.intToHexColor() = String.format("#%06X", 0xFFFFFF and this)
+
+fun String.hexToIntColor() = Color.parseColor(this)

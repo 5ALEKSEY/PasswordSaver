@@ -84,6 +84,11 @@ abstract class BasePSFragment<VM : BasePSViewModel> : BaseThemeFragment() {
 
     @CallSuper
     protected open fun initView(fragmentView: View) {
+        findViews(fragmentView)
+    }
+
+    @CallSuper
+    protected open fun findViews(fragmentView: View) {
 
     }
 

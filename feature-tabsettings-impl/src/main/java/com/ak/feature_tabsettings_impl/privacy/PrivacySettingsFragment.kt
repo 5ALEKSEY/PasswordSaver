@@ -4,6 +4,7 @@ import android.content.Intent
 import android.provider.Settings
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ak.base.ui.dialog.PSDialog
 import com.ak.base.ui.dialog.PSDialogBuilder
 import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
@@ -16,7 +17,6 @@ import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.fragment_privacy_settings.view.rvPrivacySettingsItemsList
 
 class PrivacySettingsFragment : BaseSettingsModuleFragment<PrivacySettingsViewModel>() {
 
@@ -100,7 +100,7 @@ class PrivacySettingsFragment : BaseSettingsModuleFragment<PrivacySettingsViewMo
             onSpinnerSettingsChanged = viewModel::onSpinnerItemChanged,
             onTextSettingsClicked = viewModel::onTextSettingsItemClicked
         )
-        fragmentView.rvPrivacySettingsItemsList.apply {
+        fragmentView.findViewById<RecyclerView>(R.id.rvPrivacySettingsItemsList).apply {
             adapter = settingsRecyclerAdapter
             val linLayoutManager = LinearLayoutManager(
                 context,

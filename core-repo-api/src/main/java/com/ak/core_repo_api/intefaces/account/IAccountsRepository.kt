@@ -1,4 +1,4 @@
-package com.ak.core_repo_api.intefaces
+package com.ak.core_repo_api.intefaces.account
 
 import kotlinx.coroutines.flow.Flow
 

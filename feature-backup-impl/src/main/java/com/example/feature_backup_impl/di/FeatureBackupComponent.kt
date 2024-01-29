@@ -3,6 +3,7 @@ package com.example.feature_backup_impl.di
 import android.content.Context
 import com.ak.base.scopes.FeatureScope
 import com.ak.core_repo_api.api.CoreRepositoryApi
+import com.ak.feature_appupdate_api.api.FeatureAppUpdateApi
 import com.example.feature_backup_api.FeatureBackupApi
 import com.example.feature_backup_impl.backupinfo.BackupInfoFragment
 import com.example.feature_backup_impl.di.repo.BackupInfoModule
@@ -51,7 +52,7 @@ abstract class FeatureBackupComponent : FeatureBackupApi {
 
     abstract fun inject(fragment: BackupInfoFragment)
 
-    @Component(dependencies = [CoreRepositoryApi::class])
+    @Component(dependencies = [CoreRepositoryApi::class, FeatureAppUpdateApi::class])
     @FeatureScope
     interface FeatureBackupDependenciesComponent : FeatureBackupDependencies
 }

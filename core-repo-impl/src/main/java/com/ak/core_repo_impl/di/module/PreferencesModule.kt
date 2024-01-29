@@ -13,6 +13,7 @@ class PreferencesModule {
     companion object {
         const val AUTH_PREFERENCES = "auth_preferences"
         const val SETTINGS_PREFERENCES = "settings_preferences"
+        const val CUSTOM_THEME_PREFERENCES = "custom_theme_preferences"
     }
 
     @Provides
@@ -26,4 +27,10 @@ class PreferencesModule {
     @Named(AUTH_PREFERENCES)
     fun provideAuthPreferences(context: Context): SharedPreferences =
         context.getSharedPreferences(AUTH_PREFERENCES, Context.MODE_PRIVATE)
+
+    @Provides
+    @Singleton
+    @Named(CUSTOM_THEME_PREFERENCES)
+    fun provideCustomThemePreferences(context: Context): SharedPreferences =
+        context.getSharedPreferences(CUSTOM_THEME_PREFERENCES, Context.MODE_PRIVATE)
 }

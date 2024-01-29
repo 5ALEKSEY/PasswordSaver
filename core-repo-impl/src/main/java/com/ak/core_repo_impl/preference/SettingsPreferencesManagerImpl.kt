@@ -1,10 +1,10 @@
-package com.ak.core_repo_impl
+package com.ak.core_repo_impl.preference
 
 import android.content.Context
 import android.content.SharedPreferences
 import com.ak.core_repo_api.intefaces.AppLockState
 import com.ak.core_repo_api.intefaces.AppLockStateHelper
-import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.core_repo_api.intefaces.preference.ISettingsPreferencesManager
 import com.ak.core_repo_impl.di.module.PreferencesModule
 import javax.inject.Inject
 import javax.inject.Named

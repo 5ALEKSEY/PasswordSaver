@@ -1,7 +1,7 @@
 package com.example.feature_backup_impl.model
 
-import com.ak.core_repo_api.intefaces.AccountRepoEntity
-import com.ak.core_repo_api.intefaces.PasswordRepoEntity
+import com.ak.core_repo_api.intefaces.account.AccountRepoEntity
+import com.ak.core_repo_api.intefaces.password.PasswordRepoEntity
 
 fun PasswordRepoEntity.toBackupData() = PasswordBackupData(
     id = getPasswordId() ?: 0,

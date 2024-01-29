@@ -20,7 +20,7 @@ import com.ak.app_theme.R
 class CustomTheme private constructor(
     val context: Context,
     val id: Int,
-    val nameResId: Int,
+    val name: Name,
     @StyleRes val themeStyle: Int,
     val isLight: Boolean,
     val overriddenColors: SparseIntArray = SparseIntArray(),
@@ -71,7 +71,7 @@ class CustomTheme private constructor(
                                 "unsupported resource type: ${context.resources.getResourceTypeName(
                                     resId
                                 )}, " +
-                                    "for attribute: ${getResourceName(attributeId)} in theme: ${getThemeName()}"
+                                    "for attribute: ${getResourceName(attributeId)} in theme: ${getThemeNameForLogs()}"
                             )
                         }
                     } else {
@@ -95,13 +95,13 @@ class CustomTheme private constructor(
                                         TAG,
                                         "can not resolve value for attribute: ${getResourceName(
                                             attributeId
-                                        )} in theme: ${getThemeName()}"
+                                        )} in theme: ${getThemeNameForLogs()}"
                                     )
                                 }
                             } else {
                                 Log.e(
                                     TAG, "unsupported value type: ${value.type}, " +
-                                    "for attribute: ${getResourceName(attributeId)} in theme: ${getThemeName()}"
+                                    "for attribute: ${getResourceName(attributeId)} in theme: ${getThemeNameForLogs()}"
                                 )
                             }
                         }
@@ -113,7 +113,10 @@ class CustomTheme private constructor(
 
 
 
-    private fun getThemeName() = context.getString(nameResId)
+    private fun getThemeNameForLogs() = when (name) {
+        is Name.ResourceName -> context.getString(name.resId)
+        is Name.StringName -> name.value
+    }
 
     private fun parseTypedValue(attributeId: Int, value: TypedValue): Boolean {
         when (value.type) {
@@ -148,7 +151,7 @@ class CustomTheme private constructor(
     @Throws(Resources.NotFoundException::class)
     fun getColor(@AttrRes attribute: Int, @FloatRange(from = 0.0, to = 1.0) alpha: Float): Int {
         if (!isColor(attribute)) {
-            throw Resources.NotFoundException("color ${getResourceName(attribute)} not found in theme: ${getThemeName()}")
+            throw Resources.NotFoundException("color ${getResourceName(attribute)} not found in theme: ${getThemeNameForLogs()}")
         }
 
         val color = colors.get(attribute)
@@ -163,7 +166,7 @@ class CustomTheme private constructor(
     @Throws(Resources.NotFoundException::class)
     fun getColor(@AttrRes attribute: Int): Int {
         if (!isColor(attribute)) {
-            throw Resources.NotFoundException("color ${getResourceName(attribute)} not found in theme: ${getThemeName()}")
+            throw Resources.NotFoundException("color ${getResourceName(attribute)} not found in theme: ${getThemeNameForLogs()}")
         }
 
         return colors.get(attribute)
@@ -190,25 +193,33 @@ class CustomTheme private constructor(
 
     data class Description(
         val id: Int,
-        val nameResId: Int,
         val isLight: Boolean,
+        val isCustom: Boolean,
         @ColorInt
         val impressColor1: Int,
         @ColorInt
         val impressColor2: Int,
         @ColorInt
         val impressColor3: Int,
-    )
+        private val name: Name,
+    ) {
+        fun getName(context: Context) = when (name) {
+            is Name.ResourceName -> context.getString(name.resId)
+            is Name.StringName -> name.value
+        }
+    }
 
     data class Builder(private val context: Context) {
         private var themeId = -1
-        private var themeNameResId = 0
+        private var themeName: Name = Name.UNDEFINED
         private var themeStyle = 0
         private var themeIsLight = true
         private val overriddenColors = SparseIntArray()
 
         fun id(id: Int) = apply { themeId = id }
-        fun name(@StringRes nameRes: Int) = apply { themeNameResId = nameRes }
+        fun name(name: Name) = apply { themeName = name }
+        fun name(nameResId: Int) = apply { themeName = Name.ResourceName(nameResId) }
+        fun name(nameValue: String) = apply { themeName = Name.StringName(nameValue) }
         fun themeStyle(@StyleRes style: Int) = apply { themeStyle = style }
         fun lightThemeFlag(isLight: Boolean) = apply { themeIsLight = isLight }
         fun overrideColorAttr(@AttrRes colorAttr: Int, @ColorInt newValue: Int) = apply {
@@ -217,19 +228,29 @@ class CustomTheme private constructor(
         fun build() = CustomTheme(
             context = context,
             id = themeId,
-            nameResId = themeNameResId,
+            name = themeName,
             themeStyle = themeStyle,
             isLight = themeIsLight,
             overriddenColors = overriddenColors,
         )
     }
+
+    sealed class Name {
+        data class ResourceName(@StringRes val resId: Int): Name()
+        data class StringName(val value: String): Name()
+
+        companion object {
+            val UNDEFINED = StringName("-")
+        }
+    }
 }
 
 fun CustomTheme.toDescription() = CustomTheme.Description(
-    id,
-    nameResId,
-    isLight,
-    if (isNative) 0 else getColor(R.attr.themedPrimaryColor),
-    if (isNative) 0 else getColor(R.attr.themedPrimaryDarkColor),
-    if (isNative) 0 else getColor(R.attr.themedPrimaryLightColor),
+    id = id,
+    name = name,
+    isLight = isLight,
+    isCustom = isCustom,
+    impressColor1 = if (isNative) 0 else getColor(R.attr.themedPrimaryColor),
+    impressColor2 = if (isNative) 0 else getColor(R.attr.themedPrimaryDarkColor),
+    impressColor3 = if (isNative) 0 else getColor(R.attr.themedPrimaryLightColor),
 )

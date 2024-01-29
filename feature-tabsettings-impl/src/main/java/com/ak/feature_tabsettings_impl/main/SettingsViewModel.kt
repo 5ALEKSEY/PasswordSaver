@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.core_repo_api.intefaces.IResourceManager
-import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.core_repo_api.intefaces.preference.ISettingsPreferencesManager
 import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.feature_tabsettings_impl.BuildConfig
 import com.ak.feature_tabsettings_impl.R
@@ -48,19 +48,19 @@ class SettingsViewModel @Inject constructor(
             DESIGN_SECTION_SETTING_ID,
             resourceManager.getString(R.string.design_setting_name),
             R.drawable.ic_design_section_action,
-            isDesignSectionHasNewBadge(),
+            !featuresUpdateManager.isAppThemeFeatureViewed(),
         )
         val privacySectionItemModel = SectionSettingsListItemModel(
             PRIVACY_SECTION_SETTING_ID,
             resourceManager.getString(R.string.privacy_setting_name),
             R.drawable.ic_privacy_section_action,
-            isPrivacySectionHasNewBadge()
+            !featuresUpdateManager.isFingerprintFeatureViewed(),
         )
         val backupInfoSectionItemModel = SectionSettingsListItemModel(
             BACKUP_SECTION_SETTING_ID,
             resourceManager.getString(R.string.backup_info_name),
             R.drawable.ic_backup_info_section_action,
-            true,
+            !featuresUpdateManager.isBackupFeatureViewed(),
         )
         val aboutSectionItemModel = SectionSettingsListItemModel(
             ABOUT_SECTION_SETTING_ID,
@@ -104,8 +104,4 @@ class SettingsViewModel @Inject constructor(
             DEBUG_SECTION_SETTING_ID -> showDebugSettingsLiveData.call()
         }
     }
-
-    private fun isDesignSectionHasNewBadge() = !featuresUpdateManager.isAppThemeFeatureViewed()
-
-    private fun isPrivacySectionHasNewBadge() = !featuresUpdateManager.isFingerprintFeatureViewed()
 }

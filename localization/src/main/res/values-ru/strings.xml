@@ -58,6 +58,7 @@
     <string name="settings_toolbar_title">"Настройки"</string>
     <string name="design_settings_toolbar_title">"Дизайн"</string>
     <string name="backup_info_toolbar_title">"Восстановление данных"</string>
+    <string name="manage_custom_theme_toolbar_title">"Своя тема"</string>
     <string name="dialog_attention_title">"Внимание"</string>
     <string name="delete_data_dialog_desc">"Вы уверены, что хотите удалить %s? Вы не сможете восстановить его."</string>
     <string name="delete_dialog_password_item">"пароль"</string>
@@ -96,7 +97,8 @@
     <string name="orange_theme_name">"Рыжик"</string>
     <string name="purple_theme_name">"Лунтик"</string>
     <string name="teal_theme_name">"Бирюза"</string>
-    <string name="change_theme_setting_name">"Тема приложения"</string>
+    <string name="app_themes_setting_name">"Темы приложения"</string>
+    <string name="user_custom_themes_setting_name">"Свои темы"</string>
     <string name="change_theme_with_animation_setting_name">"Анимация темы"</string>
     <string name="change_theme_with_animation_setting_desc">"Тема приложения будет изменяться с анимацией"</string>
 
@@ -125,6 +127,7 @@
     <string name="native_theme_config_attention_popup_desc">"To set \'Native\' theme you need create it\'s configuration and select \'light\' and \'dark\' variants. Do you want to continue?"</string>
     <string name="native_theme_config_attention_popup_positive">"Да"</string>
     <string name="native_theme_config_attention_popup_negative">"Нет"</string>
+    <string name="add_theme_setting_name">"Добавить тему"</string>
     <string name="change_theme_use_native_setting_name">"Нативная тема"</string>
     <string name="change_theme_use_native_setting_desc">Theme will be changed according to your device settings</string>
     <string name="change_theme_change_native_config_setting_name">Change \'Native\' theme configuration</string>

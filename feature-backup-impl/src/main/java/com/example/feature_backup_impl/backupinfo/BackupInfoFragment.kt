@@ -3,8 +3,10 @@ package com.example.feature_backup_impl.backupinfo
 import android.app.Activity
 import android.content.Intent
 import android.view.View
+import android.widget.Button
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ak.base.constants.AppConstants
 import com.ak.base.navigation.NavDeepLinkDestination
 import com.ak.base.ui.dialog.PSDialog
@@ -19,18 +21,19 @@ import com.example.feature_backup_impl.base.BaseBackupModuleFragment
 import com.example.feature_backup_impl.di.FeatureBackupComponent
 import com.example.feature_backup_impl.fileshare.IShareFileManager
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.fragment_backup_info.view.lNoBackupState
-import kotlinx.android.synthetic.main.fragment_backup_info.view.lNoDataToBackupState
-import kotlinx.android.synthetic.main.fragment_backup_info.view.rvBackupItemsList
-import kotlinx.android.synthetic.main.no_backup_state_layout.view.btnCreateBackupAction
-import kotlinx.android.synthetic.main.no_backup_state_layout.view.btnNoBackupImportFile
-import kotlinx.android.synthetic.main.no_backup_state_layout.view.btnNoBackupImportWithGAccount
-import kotlinx.android.synthetic.main.no_data_to_backup_state_layout.view.btnAddNewAccount
-import kotlinx.android.synthetic.main.no_data_to_backup_state_layout.view.btnAddNewPassword
-import kotlinx.android.synthetic.main.no_data_to_backup_state_layout.view.btnNoDataToBackupImportFile
-import kotlinx.android.synthetic.main.no_data_to_backup_state_layout.view.btnNoDataToBackupImportWithGAccount
 
 class BackupInfoFragment : BaseBackupModuleFragment<BackupInfoViewModel>() {
+
+    private var lNoBackupState: View? = null
+    private var lNoDataToBackupState: View? = null
+    private var rvBackupItemsList: RecyclerView? = null
+    private var btnCreateBackupAction: Button? = null
+    private var btnNoBackupImportFile: Button? = null
+    private var btnNoBackupImportWithGAccount: Button? = null
+    private var btnAddNewAccount: Button? = null
+    private var btnAddNewPassword: Button? = null
+    private var btnNoDataToBackupImportFile: Button? = null
+    private var btnNoDataToBackupImportWithGAccount: Button? = null
 
     private var backListItemsAdapter: BackupInfoRecyclerViewAdapter? = null
 
@@ -47,6 +50,22 @@ class BackupInfoFragment : BaseBackupModuleFragment<BackupInfoViewModel>() {
 
     override fun injectFragment(component: FeatureBackupComponent) {
         component.inject(this)
+    }
+
+    override fun findViews(fragmentView: View) {
+        super.findViews(fragmentView)
+        with(fragmentView) {
+            lNoBackupState = findViewById(R.id.lNoBackupState)
+            lNoDataToBackupState = findViewById(R.id.lNoDataToBackupState)
+            rvBackupItemsList = findViewById(R.id.rvBackupItemsList)
+            btnCreateBackupAction = findViewById(R.id.btnCreateBackupAction)
+            btnNoBackupImportFile = findViewById(R.id.btnNoBackupImportFile)
+            btnNoBackupImportWithGAccount = findViewById(R.id.btnNoBackupImportWithGAccount)
+            btnAddNewAccount = findViewById(R.id.btnAddNewAccount)
+            btnAddNewPassword = findViewById(R.id.btnAddNewPassword)
+            btnNoDataToBackupImportFile = findViewById(R.id.btnNoDataToBackupImportFile)
+            btnNoDataToBackupImportWithGAccount = findViewById(R.id.btnNoDataToBackupImportWithGAccount)
+        }
     }
 
     override fun initView(fragmentView: View) {
@@ -87,42 +106,48 @@ class BackupInfoFragment : BaseBackupModuleFragment<BackupInfoViewModel>() {
     }
 
     private fun initNoBackupState() = with(fragmentView) {
-        lNoBackupState.isVisible = true
-        rvBackupItemsList.isVisible = false
-        lNoDataToBackupState.isVisible = false
-        btnCreateBackupAction.setOnClickListener {
+        lNoBackupState?.isVisible = true
+        rvBackupItemsList?.isVisible = false
+        lNoDataToBackupState?.isVisible = false
+        btnCreateBackupAction?.setOnClickListener {
             viewModel.saveBackup()
         }
-        btnNoBackupImportFile.setOnClickListener {
+        btnNoBackupImportFile?.setOnClickListener {
             pickBackupFile()
         }
-        btnNoBackupImportWithGAccount.setOnClickListener {
+
+        // no support for now
+        btnNoBackupImportWithGAccount?.isVisible = false
+        btnNoBackupImportWithGAccount?.setOnClickListener {
 
         }
     }
 
     private fun initNoDataToBackupState() = with(fragmentView) {
-        lNoDataToBackupState.isVisible = true
-        lNoBackupState.isVisible = false
-        rvBackupItemsList.isVisible = false
-        btnAddNewPassword.setOnClickListener {
+        lNoDataToBackupState?.isVisible = true
+        lNoBackupState?.isVisible = false
+        rvBackupItemsList?.isVisible = false
+        btnAddNewPassword?.setOnClickListener {
             navigate(NavDeepLinkDestination.AddNewPassword)
         }
-        btnAddNewAccount.setOnClickListener {
-            navigate(NavDeepLinkDestination.AddNewPassword)
+        btnAddNewAccount?.setOnClickListener {
+            navigate(NavDeepLinkDestination.AddNewAccount)
         }
-        btnNoDataToBackupImportFile.setOnClickListener {
+        btnNoDataToBackupImportFile?.setOnClickListener {
             pickBackupFile()
         }
-        btnNoDataToBackupImportWithGAccount.setOnClickListener {
+
+        // no support for now
+        btnNoDataToBackupImportWithGAccount?.isVisible = false
+        btnNoDataToBackupImportWithGAccount?.setOnClickListener {
 
         }
     }
 
     private fun initBackupExistsState(items: List<BackupListItemModel>) = with(fragmentView) {
-        rvBackupItemsList.isVisible = true
-        lNoDataToBackupState.isVisible = false
-        lNoBackupState.isVisible = false
+        rvBackupItemsList?.isVisible = true
+        lNoDataToBackupState?.isVisible = false
+        lNoBackupState?.isVisible = false
         backListItemsAdapter?.submitNewItems(items)
     }
 
@@ -133,7 +158,7 @@ class BackupInfoFragment : BaseBackupModuleFragment<BackupInfoViewModel>() {
             viewModel::onSimpleBackupActionClicked,
         )
 
-        with(fragmentView.rvBackupItemsList) {
+        rvBackupItemsList?.apply {
             adapter = backListItemsAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(PsDividerItemDecoration(PsDividerItemDecorationSettings(context)))

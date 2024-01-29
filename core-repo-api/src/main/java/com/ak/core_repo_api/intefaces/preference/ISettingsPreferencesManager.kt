@@ -1,4 +1,6 @@
-package com.ak.core_repo_api.intefaces
+package com.ak.core_repo_api.intefaces.preference
+
+import com.ak.core_repo_api.intefaces.AppLockState
 
 interface ISettingsPreferencesManager {
     // Security

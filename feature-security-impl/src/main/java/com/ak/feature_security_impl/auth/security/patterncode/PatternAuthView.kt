@@ -164,12 +164,7 @@ class PatternAuthView(context: Context, attrs: AttributeSet?) : RelativeLayout(c
         return true
     }
 
-    override fun onDraw(canvas: Canvas?) {
-        if (canvas == null) {
-            super.onDraw(canvas)
-            return
-        }
-
+    override fun onDraw(canvas: Canvas) {
         canvas.save()
         mBackgroundColor?.let { mCanvas.drawColor(it) }
 

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.applier.ComplexViewsApplier
@@ -14,11 +15,13 @@ import com.ak.base.adapter.AdapterDelegate
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.BaseSettingsViewHolder
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
-import kotlinx.android.synthetic.main.settings_item_theme_change_layout.view.givChangeThemePicture
 
 class ThemeChangeAdapterDelegate(
     private val viewType: Int,
     private val onThemeChanged: (newThemeId: Int) -> Unit,
+    private val onAddTheme: (settingId: Int) -> Unit,
+    private val onEditTheme: (themeId: Int) -> Unit,
+    private val onDeleteTheme: (themeId: Int) -> Unit,
 ) : AdapterDelegate<SettingsListItemModel> {
 
     override fun isForViewType(item: SettingsListItemModel) = item is ThemeChangeSettingsListItemModel
@@ -28,7 +31,7 @@ class ThemeChangeAdapterDelegate(
     override fun onCreateViewHolder(parent: ViewGroup): CustomThemeRecyclerViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.settings_item_theme_change_layout, parent, false)
-        return ThemeChangeViewHolder(itemView, onThemeChanged)
+        return ThemeChangeViewHolder(itemView, onThemeChanged, onAddTheme, onEditTheme, onDeleteTheme)
     }
 
     override fun onBindViewHolder(
@@ -45,8 +48,12 @@ class ThemeChangeAdapterDelegate(
 class ThemeChangeViewHolder(
     itemView: View,
     private val onThemeChanged: (newThemeId: Int) -> Unit,
+    private val onAddTheme: (settingId: Int) -> Unit,
+    private val onEditTheme: (themeId: Int) -> Unit,
+    private val onDeleteTheme: (themeId: Int) -> Unit,
 ) : BaseSettingsViewHolder<ThemeChangeSettingsListItemModel>(itemView) {
 
+    // TODO: move change theme picture out of this VH
     private val changeThemePicture by lazy { itemView.findViewById<ImageView>(R.id.givChangeThemePicture) }
     private val themesDescriptionsList by lazy { itemView.findViewById<RecyclerView>(R.id.rvThemesDescriptionsList) }
 
@@ -62,7 +69,14 @@ class ThemeChangeViewHolder(
 
     override fun setViewHolderData(itemModel: ThemeChangeSettingsListItemModel) {
         if (themesDescriptionsList.adapter == null) {
-            themesDescriptionsList.adapter = ThemeChangeDescriptionsAdapter(itemModel.themes, onThemeChanged)
+            themesDescriptionsList.adapter = ThemeChangeDescriptionsAdapter(
+                itemModel.themes,
+                onThemeChanged,
+                { onAddTheme(itemModel.settingId) },
+                onEditTheme,
+                onDeleteTheme,
+            )
         }
+        changeThemePicture.isVisible = itemModel.shouldShowThemeExampleView
     }
 }

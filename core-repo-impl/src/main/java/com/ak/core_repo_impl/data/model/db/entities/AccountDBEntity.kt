@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.ak.core_repo_api.intefaces.AccountRepoEntity
+import com.ak.core_repo_api.intefaces.account.AccountRepoEntity
 
 @Entity(tableName = AccountDBEntity.TABLE_NAME)
 data class AccountDBEntity(

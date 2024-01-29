@@ -6,7 +6,7 @@ import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.core_repo_api.intefaces.AppLockStateHelper
 import com.ak.core_repo_api.intefaces.IResourceManager
-import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.core_repo_api.intefaces.preference.ISettingsPreferencesManager
 import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.feature_security_api.interfaces.IPSBiometricManager
 import com.ak.feature_tabsettings_impl.R

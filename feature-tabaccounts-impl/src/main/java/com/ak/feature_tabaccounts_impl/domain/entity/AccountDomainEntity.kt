@@ -1,6 +1,6 @@
 package com.ak.feature_tabaccounts_impl.domain.entity
 
-import com.ak.core_repo_api.intefaces.AccountRepoEntity
+import com.ak.core_repo_api.intefaces.account.AccountRepoEntity
 import com.ak.feature_tabaccounts_api.interfaces.AccountFeatureEntity
 
 class AccountDomainEntity(

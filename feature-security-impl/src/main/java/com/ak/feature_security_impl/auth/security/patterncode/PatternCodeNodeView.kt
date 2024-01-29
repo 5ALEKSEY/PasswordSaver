@@ -5,15 +5,17 @@ import android.graphics.PorterDuff
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.CustomThemeDrawableBuilder
 import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.feature_security_impl.R
-import kotlinx.android.synthetic.main.layout_pattern_code_node_view.view.ivNodePatternView
 
 // TODO: state must be implemented as sealed class
 class PatternCodeNodeView(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs), CustomTheme.Support {
+
+    private val ivNodePatternView by lazy { findViewById<ImageView>(R.id.ivNodePatternView) }
 
     private var failedColor: Int? = null
     private var isPatternNodeEnabled = false

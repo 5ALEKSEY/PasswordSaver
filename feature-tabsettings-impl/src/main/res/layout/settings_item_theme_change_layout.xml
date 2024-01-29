@@ -26,7 +26,7 @@
             android:layout_marginEnd="16dp"
             android:padding="4dp"
             android:tag="@string/skipThemeInterceptor"
-            android:text="@string/change_theme_setting_name"
+            android:text="@string/app_themes_setting_name"
             android:textColor="?themedPrimaryTextColor"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -69,6 +69,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvSettingName"
             tools:itemCount="5"
-            tools:listitem="@layout/settings_item_theme_change_description_layout" />
+            tools:listitem="@layout/settings_item_app_theme_description_layout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

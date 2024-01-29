@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.core_repo_api.intefaces.IResourceManager
+import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.feature_backup_impl.R
 import com.example.feature_backup_impl.backupinfo.adapter.BackupInfoListItemModel
 import com.example.feature_backup_impl.backupinfo.adapter.BackupListItemModel
@@ -27,6 +28,7 @@ class BackupInfoViewModel @Inject constructor(
     private val sizeBeautifier: ISizeBeautifier,
     private val timeBeautifier: ITimeBeautifier,
     private val backupImportManager: IBackupImportManager,
+    private val featuresUpdateManager: IFeaturesUpdateManager,
 ) : BasePSViewModel() {
 
     private val backupListStateLiveData = MutableLiveData<BackupListState>()
@@ -62,6 +64,7 @@ class BackupInfoViewModel @Inject constructor(
     }
 
     fun loadBackupListItems() {
+        featuresUpdateManager.markBackupFeatureAsViewed()
         viewModelScope.launch {
             val backupListState = obtainBackupListState(items = loadBackupListItemsInternal())
             backupListStateLiveData.value = backupListState

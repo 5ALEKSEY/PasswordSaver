@@ -5,6 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.TextView
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewHolder
@@ -12,8 +14,6 @@ import com.ak.base.adapter.AdapterDelegate
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.BaseSettingsViewHolder
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
-import kotlinx.android.synthetic.main.settings_item_spinner_layout.view.sSettingSpinnerChooser
-import kotlinx.android.synthetic.main.settings_item_spinner_layout.view.tvSettingDescription
 
 class SpinnerAdapterDelegate(
     private val viewType: Int,
@@ -49,12 +49,15 @@ class SettingsSpinnerHolder(
     private val onSpinnerSettingsChanged: (settingId: Int, newDataId: Int) -> Unit
 ) : BaseSettingsViewHolder<SpinnerSettingsListItemModel>(itemView) {
 
+    private val tvSettingDescription by lazy { itemView.findViewById<TextView>(R.id.tvSettingDescription) }
+    private val sSettingSpinnerChooser by lazy { itemView.findViewById<Spinner>(R.id.sSettingSpinnerChooser) }
+
     override fun applyTheme(theme: CustomTheme) {
         super.applyTheme(theme)
         CustomThemeApplier.applyTextColor(
             theme,
             R.attr.themedSecondaryTextColor,
-            itemView.tvSettingDescription,
+            tvSettingDescription,
         )
     }
 
@@ -62,10 +65,10 @@ class SettingsSpinnerHolder(
         val arrayAdapter = ArrayAdapter<String>(itemView.context, R.layout.default_spinner_item)
         val spinnerItems = itemModel.spinnerItems
         arrayAdapter.addAll(spinnerItems)
-        itemView.setOnClickListener { itemView.sSettingSpinnerChooser.performClick() }
-        itemView.sSettingSpinnerChooser.adapter = arrayAdapter
-        itemView.sSettingSpinnerChooser.setSelection(itemModel.selectedItemPosition)
-        itemView.sSettingSpinnerChooser.onItemSelectedListener =
+        itemView.setOnClickListener { sSettingSpinnerChooser.performClick() }
+        sSettingSpinnerChooser.adapter = arrayAdapter
+        sSettingSpinnerChooser.setSelection(itemModel.selectedItemPosition)
+        sSettingSpinnerChooser.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {
                 }
@@ -79,6 +82,6 @@ class SettingsSpinnerHolder(
                     onSpinnerSettingsChanged.invoke(adapterPosition, position)
                 }
             }
-        itemView.tvSettingDescription.text = itemModel.settingDescription
+        tvSettingDescription.text = itemModel.settingDescription
     }
 }

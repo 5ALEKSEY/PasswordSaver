@@ -2,7 +2,9 @@ package com.ak.feature_tabsettings_impl.design
 
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ak.app_theme.theme.CustomThemeManager
+import com.ak.base.navigation.NavDeepLinkDestination
 import com.ak.base.ui.dialog.PSDialog
 import com.ak.base.ui.dialog.PSDialogBuilder
 import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
@@ -13,7 +15,6 @@ import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.design.configurenative.ConfigureNativeThemeDialog
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_design_settings.view.rvDesignSettingsItemsList
 
 class DesignSettingsFragment : BaseSettingsModuleFragment<DesignSettingsViewModel>() {
 
@@ -56,6 +57,13 @@ class DesignSettingsFragment : BaseSettingsModuleFragment<DesignSettingsViewMode
             subscribeToOpenNativeThemeConfigDialogLiveData().observe(viewLifecycleOwner) {
                 showNativeThemeConfigDialog(it)
             }
+            subscribeToOpenManageCustomTheme().observe(viewLifecycleOwner) {
+                if (it != null) {
+                    navigate(NavDeepLinkDestination.EditCustomTheme(it))
+                } else {
+                    navigate(NavDeepLinkDestination.AddCustomTheme)
+                }
+            }
         }
     }
 
@@ -71,11 +79,14 @@ class DesignSettingsFragment : BaseSettingsModuleFragment<DesignSettingsViewMode
     private fun initRecyclerView() {
         settingsRecyclerAdapter = SettingsRecyclerViewAdapter(
             onThemeChanged = viewModel::onThemeChanged,
+            onAddTheme = viewModel::onAddTheme,
+            onDeleteTheme = viewModel::onDeleteTheme,
+            onEditTheme = viewModel::onEditTheme,
             onTextSettingsClicked = viewModel::onSettingTextItemClicked,
             onSwitchSettingsChanged = viewModel::onSwitchSettingsItemChanged,
         )
 
-        fragmentView.rvDesignSettingsItemsList.apply {
+        fragmentView.findViewById<RecyclerView>(R.id.rvDesignSettingsItemsList).apply {
             adapter = settingsRecyclerAdapter
             val linLayoutManager = LinearLayoutManager(
                 context,

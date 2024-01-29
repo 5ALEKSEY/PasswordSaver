@@ -4,14 +4,16 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.ak.base.extensions.vibrate
 import com.ak.feature_security_impl.R
-import kotlinx.android.synthetic.main.layout_pincode_number_view.view.tvPrimaryNumberText
-import kotlinx.android.synthetic.main.layout_pincode_number_view.view.tvSecondaryNumberText
 
 class PincodeNumberView(context: Context, attrs: AttributeSet?) :
     ConstraintLayout(context, attrs), View.OnClickListener {
+
+    private val tvPrimaryNumberText by lazy { findViewById<TextView>(R.id.tvPrimaryNumberText) }
+    private val tvSecondaryNumberText by lazy { findViewById<TextView>(R.id.tvSecondaryNumberText) }
 
     companion object {
         private const val NUMBER_CLICK_VIBRATION_DELAY_IN_MILLIS = 30L

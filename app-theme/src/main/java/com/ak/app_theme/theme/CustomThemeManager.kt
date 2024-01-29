@@ -43,14 +43,15 @@ class CustomThemeManager private constructor() {
     }
 
     private val changeThemePublishSubject = PublishSubject.create<CustomTheme>()
-    private val themes = mutableListOf<CustomTheme>()
+    private val themes = mutableSetOf<CustomTheme>()
     private lateinit var currentTheme: CustomTheme
+    private var userThemesProvider: ICustomUserThemesProvider? = null
 
     fun getSelectedTheme() = findThemeInternal(CustomThemePreferencesMng.getThemeId())
 
     fun getAppliedTheme() = currentTheme
 
-    fun getAvailableThemes() = themes.map { it.toDescription() }
+    fun getAvailableThemes() = themes
 
     fun getChangeThemeListener(): Observable<CustomTheme> = changeThemePublishSubject
 
@@ -72,13 +73,13 @@ class CustomThemeManager private constructor() {
             (currentThemePosition + 1) % themes.size
         }
 
-        val nextThemePosition = if (themes[nextThemePositionCandidate].isNative) {
+        val nextThemePosition = if (themes.elementAt(nextThemePositionCandidate).isNative) {
             nextThemePositionCandidate + 1
         } else {
             nextThemePositionCandidate
         }
 
-        setTheme(themes[nextThemePosition].id, context)
+        setTheme(themes.elementAt(nextThemePosition).id, context)
     }
 
     fun getColor(@AttrRes attrRes: Int) = currentTheme.getColor(attrRes)
@@ -100,13 +101,21 @@ class CustomThemeManager private constructor() {
     }
 
     private fun findThemeInternal(themeId: Int): CustomTheme {
-        return themes.find {
-            it.id == themeId
-        } ?: throw IllegalStateException("findTheme=> there is no theme with id = $themeId")
+        return themes.find { it.id == themeId }
+            ?: themes.find { it.id == DEFAULT_THEME_ID }
+            ?: throw IllegalStateException("can't find default theme id($DEFAULT_THEME_ID). themes=$themes")
     }
 
-    fun init(context: Context) {
+    fun init(context: Context, customUserThemesProvider: ICustomUserThemesProvider) {
         CustomThemePreferencesMng.initialize(context.applicationContext)
+        userThemesProvider = customUserThemesProvider
+
+        initThemesList(context)
+        refreshTheme(context)
+    }
+
+    fun initThemesList(context: Context) {
+        themes.clear()
 
         themes.add(
             CustomTheme.Builder(context)
@@ -160,6 +169,6 @@ class CustomThemeManager private constructor() {
                 .build()
         )
 
-        refreshTheme(context)
+        userThemesProvider?.let { themes.addAll(it.provideCustomUserThemes()) }
     }
 }

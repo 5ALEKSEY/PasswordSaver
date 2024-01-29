@@ -38,9 +38,7 @@ class PopupWindowMenu(contentView: View) : PopupWindow(
         clickedY: Float,
     ) {
         initMenuItemsList(menuItems, popupMenuItemClickListener)
-        val xOffset = (clickedView.x + clickedX).toInt()
-        val yOffset = (clickedView.y + clickedY).toInt()
-        showAtLocation(clickedView, Gravity.NO_GRAVITY, xOffset, yOffset)
+        showAtLocation(clickedView, Gravity.NO_GRAVITY, clickedX.toInt(), clickedY.toInt())
     }
 
     private fun initMenuItemsList(

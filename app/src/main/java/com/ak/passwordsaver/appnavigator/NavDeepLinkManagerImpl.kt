@@ -28,7 +28,16 @@ class NavDeepLinkManagerImpl @Inject constructor() : NavDeepLinkManager {
     }
 
     private fun navigateTo(destination: NavDeepLinkDestination): Uri {
-        return "$APP_HOST$APP_HOST_DIVIDER$NAVIGATE_ACTION$DEEP_LINK_SEPARATOR${destination.value}".toUri()
+        val navigateString = "$APP_HOST$APP_HOST_DIVIDER$NAVIGATE_ACTION$DEEP_LINK_SEPARATOR${destination.value}"
+        return if (destination.getArguments().isNotEmpty()) {
+            val arguments = mutableListOf<String>()
+            destination.getArguments().forEach {
+                arguments.add("${it.key}=${it.value}")
+            }
+            "$navigateString?${arguments.joinToString(separator = "&")}".toUri()
+        } else {
+            navigateString.toUri()
+        }
     }
 
     private companion object {

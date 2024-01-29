@@ -5,17 +5,19 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import com.ak.base.extensions.vibrate
 import com.ak.feature_security_impl.R
-import kotlinx.android.synthetic.main.layout_pincode_auth_view.view.cPincodeInputView
-import kotlinx.android.synthetic.main.layout_pincode_auth_view.view.clRootPincodeAuthView
-import kotlinx.android.synthetic.main.layout_pincode_auth_view.view.ivBackspaceAction
-import kotlinx.android.synthetic.main.layout_pincode_auth_view.view.ivBiometricAuthMark
 
 class PincodeAuthView(context: Context, attrs: AttributeSet?) : ConstraintLayout(context, attrs) {
+
+    private val cPincodeInputView by lazy { findViewById<PincodeContentInputView>(R.id.cPincodeInputView) }
+    private val clRootPincodeAuthView by lazy { findViewById<ConstraintLayout>(R.id.clRootPincodeAuthView) }
+    private val ivBackspaceAction by lazy { findViewById<ImageView>(R.id.ivBackspaceAction) }
+    private val ivBiometricAuthMark by lazy { findViewById<ImageView>(R.id.ivBiometricAuthMark) }
 
     companion object {
         private const val FAILED_AUTH_VIBRATION_DELAY_IN_MILLIS = 300L

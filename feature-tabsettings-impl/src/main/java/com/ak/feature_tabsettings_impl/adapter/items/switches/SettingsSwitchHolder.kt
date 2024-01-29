@@ -3,6 +3,8 @@ package com.ak.feature_tabsettings_impl.adapter.items.switches
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewHolder
@@ -10,8 +12,6 @@ import com.ak.base.adapter.AdapterDelegate
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.BaseSettingsViewHolder
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
-import kotlinx.android.synthetic.main.settings_item_spinner_layout.view.tvSettingDescription
-import kotlinx.android.synthetic.main.settings_item_switch_layout.view.sSettingEnablingState
 
 class SwitchAdapterDelegate(
     private val viewType: Int,
@@ -47,16 +47,19 @@ class SettingsSwitchHolder(
     private val onSwitchSettingsChanged: (settingId: Int, isChecked: Boolean) -> Unit
 ) : BaseSettingsViewHolder<SwitchSettingsListItemModel>(itemView) {
 
+    private val tvSettingDescription by lazy { itemView.findViewById<TextView>(R.id.tvSettingDescription) }
+    private val sSettingEnablingState by lazy { itemView.findViewById<SwitchCompat>(R.id.sSettingEnablingState) }
+
     override fun applyTheme(theme: CustomTheme) {
         super.applyTheme(theme)
         CustomThemeApplier.applyTextColor(
             theme,
             R.attr.themedSecondaryTextColor,
-            itemView.tvSettingDescription,
+            tvSettingDescription,
         )
         CustomThemeApplier.applyForSwitch(
             theme,
-            itemView.sSettingEnablingState,
+            sSettingEnablingState,
             R.attr.themedSwitchThumbUncheckedColor,
             R.attr.themedSwitchThumbCheckedColor,
             R.attr.themedSwitchTrackUncheckedColor,
@@ -65,15 +68,15 @@ class SettingsSwitchHolder(
     }
 
     override fun setViewHolderData(itemModel: SwitchSettingsListItemModel) {
-        itemView.sSettingEnablingState.isChecked = itemModel.isChecked
-        itemView.tvSettingDescription.text = itemModel.settingDescription
+        sSettingEnablingState.isChecked = itemModel.isChecked
+        tvSettingDescription.text = itemModel.settingDescription
         itemView.setOnClickListener {
-            val newState = !itemView.sSettingEnablingState.isChecked
-            itemView.sSettingEnablingState.isChecked = newState
+            val newState = !sSettingEnablingState.isChecked
+            sSettingEnablingState.isChecked = newState
             onSwitchSettingsChanged.invoke(adapterPosition, newState)
         }
-        itemView.sSettingEnablingState.setOnClickListener {
-            onSwitchSettingsChanged.invoke(adapterPosition, itemView.sSettingEnablingState.isChecked)
+        sSettingEnablingState.setOnClickListener {
+            onSwitchSettingsChanged.invoke(adapterPosition, sSettingEnablingState.isChecked)
         }
     }
 }

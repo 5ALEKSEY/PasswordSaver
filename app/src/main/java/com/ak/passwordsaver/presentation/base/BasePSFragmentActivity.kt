@@ -8,7 +8,7 @@ import com.ak.app_theme.theme.uicomponents.BaseThemeActivity
 import com.ak.base.extensions.showToastMessage
 import com.ak.base.extensions.vibrate
 import com.ak.base.viewmodel.BasePSViewModel
-import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.core_repo_api.intefaces.preference.ISettingsPreferencesManager
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_security_api.interfaces.IPSAuthManager
 import javax.inject.Inject

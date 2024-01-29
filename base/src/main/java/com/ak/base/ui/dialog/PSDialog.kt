@@ -14,7 +14,6 @@ import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.app_theme.theme.uicomponents.BaseThemeDialogFragment
 import com.ak.base.R
 import com.ak.base.extensions.setVisibilityInvisible
-import kotlinx.android.synthetic.main.layout_alert_dialog.view.*
 
 class PSDialog private constructor() : BaseThemeDialogFragment() {
 
@@ -117,18 +116,18 @@ class PSDialog private constructor() : BaseThemeDialogFragment() {
             return
         }
 
-        containerView = view.llAlertDialogContainer
-        titleTextView = view.tvDialogTitle.apply {
+        containerView = view.findViewById(R.id.llAlertDialogContainer)
+        titleTextView = view.findViewById<TextView>(R.id.tvDialogTitle).apply {
             text = dialogExtras.getString(TITLE_EXTRA, getString(DEFAULT_TITLE_STRING_ID))
         }
-        descriptionTextView = view.tvDialogDescription.apply {
+        descriptionTextView = view.findViewById<TextView>(R.id.tvDialogDescription).apply {
             text = dialogExtras.getString(DESC_EXTRA)
         }
-        positiveBtn = view.tvDialogPositiveButton.apply {
+        positiveBtn = view.findViewById<TextView>(R.id.tvDialogPositiveButton).apply {
             text = dialogExtras.getString(POSITIVE_BTN_EXTRA, getString(DEFAULT_POS_BTN_STRING_ID))
             setClickListenerWithDefault(this, positiveClickListener) { dismissAllowingStateLoss() }
         }
-        negativeBtn = view.tvDialogNegativeButton.apply {
+        negativeBtn = view.findViewById<TextView>(R.id.tvDialogNegativeButton).apply {
             text = dialogExtras.getString(NEGATIVE_BTN_EXTRA, getString(DEFAULT_NEG_BTN_STRING_ID))
             setClickListenerWithDefault(this, negativeClickListener) { dismissAllowingStateLoss() }
             setVisibilityInvisible(!dialogExtras.getBoolean(IS_OK_ONLY_EXTRA, DEFAULT_IS_OK_ONLY))

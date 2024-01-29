@@ -5,11 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
-import com.ak.core_repo_api.intefaces.AccountRepoEntity
-import com.ak.core_repo_api.intefaces.IAccountsRepository
-import com.ak.core_repo_api.intefaces.IPasswordsRepository
+import com.ak.core_repo_api.intefaces.account.AccountRepoEntity
+import com.ak.core_repo_api.intefaces.account.IAccountsRepository
+import com.ak.core_repo_api.intefaces.password.IPasswordsRepository
 import com.ak.core_repo_api.intefaces.IResourceManager
-import com.ak.core_repo_api.intefaces.PasswordRepoEntity
+import com.ak.core_repo_api.intefaces.password.PasswordRepoEntity
+import com.ak.core_repo_api.intefaces.theme.ICustomUserThemesRepository
 import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
@@ -26,6 +27,7 @@ class DebugSettingsViewModel @Inject constructor(
     private val resourceManager: IResourceManager,
     private val passwordsRepository: IPasswordsRepository,
     private val accountsRepository: IAccountsRepository,
+    private val customThemesRepository: ICustomUserThemesRepository,
 ) : BasePSViewModel() {
 
     private val debugSettingsListLiveData = MutableLiveData<List<SettingsListItemModel>>()
@@ -56,6 +58,9 @@ class DebugSettingsViewModel @Inject constructor(
             RESET_APP_THEME_FEATURE_NEW_BADGE_SETTING_ID -> {
                 featuresUpdateManager.resetAppThemeFeatureViewedState()
             }
+            RESET_BACKUP_FEATURE_NEW_BADGE_SETTING_ID -> {
+                featuresUpdateManager.resetBackupFeatureViewedState()
+            }
             RESET_PASSWORDS_STORAGE_SETTING_ID -> {
                 viewModelScope.launch {
                     passwordsRepository.clearAll()
@@ -65,6 +70,12 @@ class DebugSettingsViewModel @Inject constructor(
             RESET_ACCOUNTS_STORAGE_SETTING_ID -> {
                 viewModelScope.launch {
                     accountsRepository.clearAll()
+                    loadDebugSettings()
+                }
+            }
+            RESET_CUSTOM_THEMES_STORAGE -> {
+                viewModelScope.launch {
+                    customThemesRepository.clearAll()
                     loadDebugSettings()
                 }
             }
@@ -118,6 +129,11 @@ class DebugSettingsViewModel @Inject constructor(
             resourceManager.getString(R.string.debug_reset_app_theme_new_badge_setting_name),
         )
 
+        val resetBackupFeatureNewBadge = TextSettingsListItemModel(
+            RESET_BACKUP_FEATURE_NEW_BADGE_SETTING_ID,
+            resourceManager.getString(R.string.debug_reset_backup_new_badge_setting_name),
+        )
+
         val resetPasswordsStorage = TextSettingsListItemModel(
             RESET_PASSWORDS_STORAGE_SETTING_ID,
             resourceManager.getString(R.string.debug_reset_passwords_storage_setting_name),
@@ -126,6 +142,11 @@ class DebugSettingsViewModel @Inject constructor(
         val resetAccountsStorage = TextSettingsListItemModel(
             RESET_ACCOUNTS_STORAGE_SETTING_ID,
             resourceManager.getString(R.string.debug_reset_accounts_storage_setting_name),
+        )
+
+        val resetCustomThemesStorage = TextSettingsListItemModel(
+            RESET_CUSTOM_THEMES_STORAGE,
+            resourceManager.getString(R.string.debug_reset_custom_themes_storage_setting_name),
         )
 
         val addRandomPassword = TextSettingsListItemModel(
@@ -149,8 +170,10 @@ class DebugSettingsViewModel @Inject constructor(
             resetAccountsFeatureNewBadge,
             resetFingerprintFeatureNewBadge,
             resetAppThemeFeatureNewBadge,
+            resetBackupFeatureNewBadge,
             resetPasswordsStorage,
             resetAccountsStorage,
+            resetCustomThemesStorage,
             addRandomPassword,
             addRandomAccount,
         )
@@ -161,9 +184,11 @@ class DebugSettingsViewModel @Inject constructor(
         const val RESET_ACCOUNTS_FEATURE_NEW_BADGE_SETTING_ID = SWITCH_THEME_PERIODICALLY_SETTING_ID + 1
         const val RESET_FINGERPRINT_FEATURE_NEW_BADGE_SETTING_ID = RESET_ACCOUNTS_FEATURE_NEW_BADGE_SETTING_ID + 1
         const val RESET_APP_THEME_FEATURE_NEW_BADGE_SETTING_ID = RESET_FINGERPRINT_FEATURE_NEW_BADGE_SETTING_ID + 1
-        const val RESET_PASSWORDS_STORAGE_SETTING_ID = RESET_APP_THEME_FEATURE_NEW_BADGE_SETTING_ID + 1
+        const val RESET_BACKUP_FEATURE_NEW_BADGE_SETTING_ID = RESET_APP_THEME_FEATURE_NEW_BADGE_SETTING_ID + 1
+        const val RESET_PASSWORDS_STORAGE_SETTING_ID = RESET_BACKUP_FEATURE_NEW_BADGE_SETTING_ID + 1
         const val RESET_ACCOUNTS_STORAGE_SETTING_ID = RESET_PASSWORDS_STORAGE_SETTING_ID + 1
-        const val ADD_RANDOM_PASSWORD_SETTING_ID = RESET_ACCOUNTS_STORAGE_SETTING_ID + 1
+        const val RESET_CUSTOM_THEMES_STORAGE = RESET_ACCOUNTS_STORAGE_SETTING_ID + 1
+        const val ADD_RANDOM_PASSWORD_SETTING_ID = RESET_CUSTOM_THEMES_STORAGE + 1
         const val ADD_RANDOM_ACCOUNT_SETTING_ID = ADD_RANDOM_PASSWORD_SETTING_ID + 1
 
         val encryptedStrings = listOf(

@@ -1,8 +1,8 @@
 package com.example.feature_backup_impl.model.manager
 
 import android.net.Uri
-import com.ak.core_repo_api.intefaces.IAccountsRepository
-import com.ak.core_repo_api.intefaces.IPasswordsRepository
+import com.ak.core_repo_api.intefaces.account.IAccountsRepository
+import com.ak.core_repo_api.intefaces.password.IPasswordsRepository
 import com.example.feature_backup_impl.model.creator.IBackupCreator
 import com.example.feature_backup_impl.model.toRepoEntity
 import javax.inject.Inject

@@ -1,7 +1,7 @@
-package com.ak.core_repo_impl
+package com.ak.core_repo_impl.account
 
-import com.ak.core_repo_api.intefaces.AccountRepoEntity
-import com.ak.core_repo_api.intefaces.IAccountsRepository
+import com.ak.core_repo_api.intefaces.account.AccountRepoEntity
+import com.ak.core_repo_api.intefaces.account.IAccountsRepository
 import com.ak.core_repo_impl.data.model.db.PSDatabase
 import com.ak.core_repo_impl.data.model.db.entities.AccountDBEntity
 import com.ak.core_repo_impl.data.model.mapper.mapToAccountDbEntitiesList
@@ -11,45 +11,47 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class AccountsRepositoryImpl @Inject constructor(
-    private val accountsLocalStore: PSDatabase
+    localStore: PSDatabase
 ) : IAccountsRepository {
 
+    private val accountsLocalStore = localStore.getAccountsDao()
+
     override fun getAllAccounts(): Flow<List<AccountRepoEntity>> {
-        return accountsLocalStore.getAccountsDao().getAllAccounts()
+        return accountsLocalStore.getAllAccounts()
     }
 
     override suspend fun getAccountById(accountId: Long) = withContext(Dispatchers.IO) {
-        accountsLocalStore.getAccountsDao().getAccountById(accountId)
+        accountsLocalStore.getAccountById(accountId)
     }
 
     override suspend fun deleteAccountsByIds(accountIds: List<Long>) = withContext(Dispatchers.IO) {
         val entitiesToDelete = accountIds.map { AccountDBEntity(it) }.toTypedArray()
-        return@withContext accountsLocalStore.getAccountsDao().deleteAccounts(*entitiesToDelete) >= 0
+        return@withContext accountsLocalStore.deleteAccounts(*entitiesToDelete) >= 0
     }
 
     override suspend fun addNewAccounts(accountRepoEntities: List<AccountRepoEntity>) = withContext(Dispatchers.IO) {
         val entitiesToAdd = accountRepoEntities.mapToAccountDbEntitiesList().toTypedArray()
-        return@withContext accountsLocalStore.getAccountsDao().insertNewAccount(*entitiesToAdd).isNotEmpty()
+        return@withContext accountsLocalStore.insertNewAccount(*entitiesToAdd).isNotEmpty()
     }
 
     override suspend fun updateAccounts(accountRepoEntities: List<AccountRepoEntity>) = withContext(Dispatchers.IO) {
         val entitiesToUpdate = accountRepoEntities.mapToAccountDbEntitiesList().toTypedArray()
-        return@withContext accountsLocalStore.getAccountsDao().updateAccounts(*entitiesToUpdate) >= 0
+        return@withContext accountsLocalStore.updateAccounts(*entitiesToUpdate) >= 0
     }
 
     override suspend fun clearAll() = withContext(Dispatchers.IO) {
-        accountsLocalStore.getAccountsDao().clearAccounts()
+        accountsLocalStore.clearAccounts()
     }
 
     override suspend fun getAccountsCount() = withContext(Dispatchers.IO) {
-        accountsLocalStore.getAccountsDao().getAccountsCount()
+        accountsLocalStore.getAccountsCount()
     }
 
     override suspend fun pinAccount(accountIds: Long, pinnedTimestamp: Long) = withContext(Dispatchers.IO) {
-        accountsLocalStore.getAccountsDao().markAccountAsPinned(accountIds, pinnedTimestamp) >= 0
+        accountsLocalStore.markAccountAsPinned(accountIds, pinnedTimestamp) >= 0
     }
 
     override suspend fun unpinAccount(accountIds: Long) = withContext(Dispatchers.IO) {
-        accountsLocalStore.getAccountsDao().markAccountAsUnpinned(accountIds) >= 0
+        accountsLocalStore.markAccountAsUnpinned(accountIds) >= 0
     }
 }

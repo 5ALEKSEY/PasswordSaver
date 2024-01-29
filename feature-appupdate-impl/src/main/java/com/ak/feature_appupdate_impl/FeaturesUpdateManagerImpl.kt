@@ -17,12 +17,14 @@ class FeaturesUpdateManagerImpl @Inject constructor(
         private const val ACCOUNT_TAB_FEATURE_VIEWED_SHARED_KEY = "is_acc_tab_feat_viewed"
         private const val FINGERPRINT_FEATURE_VIEWED_SHARED_KEY = "is_fingerprint_feat_viewed"
         private const val APP_THEME_FEATURE_VIEWED_SHARED_KEY = "is_app_theme_feat_viewed"
+        private const val BACKUP_FEATURE_VIEWED_SHARED_KEY = "is_backup_feat_viewed"
     }
 
     private val featuresUpdateSubjectsMap = mapOf(
         IFeaturesUpdateManager.FeatureType.TAB_ACCOUNTS to BehaviorSubject.create<Boolean>(),
         IFeaturesUpdateManager.FeatureType.FINGERPRINT to BehaviorSubject.create(),
         IFeaturesUpdateManager.FeatureType.APP_THEME to BehaviorSubject.create(),
+        IFeaturesUpdateManager.FeatureType.BACKUP to BehaviorSubject.create(),
     )
 
     override fun isTabAccountsFeatureViewed(): Boolean {
@@ -68,6 +70,21 @@ class FeaturesUpdateManagerImpl @Inject constructor(
 
     override fun resetAppThemeFeatureViewedState() {
         featuresUpdateSP.edit().putBoolean(APP_THEME_FEATURE_VIEWED_SHARED_KEY, false).apply()
+    }
+
+    override fun isBackupFeatureViewed(): Boolean {
+        return featuresUpdateSP.getBoolean(BACKUP_FEATURE_VIEWED_SHARED_KEY, false)
+    }
+
+    override fun markBackupFeatureAsViewed() {
+        markFeatureAsViewed(
+            featureSpKey = BACKUP_FEATURE_VIEWED_SHARED_KEY,
+            featureType = IFeaturesUpdateManager.FeatureType.BACKUP,
+        )
+    }
+
+    override fun resetBackupFeatureViewedState() {
+        featuresUpdateSP.edit().putBoolean(BACKUP_FEATURE_VIEWED_SHARED_KEY, false).apply()
     }
 
     override fun subscribeToViewedFeatureState(featureType: IFeaturesUpdateManager.FeatureType): Observable<Boolean> {

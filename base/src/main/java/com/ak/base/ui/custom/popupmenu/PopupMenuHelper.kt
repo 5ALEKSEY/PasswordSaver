@@ -8,9 +8,9 @@ class PopupMenuHelper(
 ) : CustomTheme.Support {
 
     interface Listener {
-        fun onItemClicked(menuItemId: Int)
-        fun onShow()
-        fun onDismiss()
+        fun onItemClicked(menuItemId: Int) {}
+        fun onShow() {}
+        fun onDismiss() {}
     }
 
     private var popupWindowMenu: PopupWindowMenu? = null

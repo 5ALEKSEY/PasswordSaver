@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cvAddUserCustomThemeRoot"
+        android:layout_width="160dp"
+        android:layout_height="86dp"
+        android:layout_margin="4dp"
+        android:backgroundTint="?themedSecondaryBackgroundColor"
+        android:tag="@string/skipThemeInterceptor"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="4dp">
+
+    <ImageView
+            android:id="@+id/ivAddUserCustomTheme"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_add_circle_outline"
+            android:tag="@string/skipThemeInterceptor"
+            app:tint="?themedAccentColor" />
+
+</androidx.cardview.widget.CardView>

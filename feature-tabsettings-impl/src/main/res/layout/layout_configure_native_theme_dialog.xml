@@ -46,7 +46,7 @@
             android:scrollbars="none"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="1"
-            tools:listitem="@layout/settings_item_theme_change_description_layout" />
+            tools:listitem="@layout/settings_item_app_theme_description_layout" />
 
     <TextView
             android:id="@+id/tvConfigureNativeThemeDarkDescriptionTitle"
@@ -72,7 +72,7 @@
             android:scrollbars="none"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="1"
-            tools:listitem="@layout/settings_item_theme_change_description_layout" />
+            tools:listitem="@layout/settings_item_app_theme_description_layout" />
 
     <RelativeLayout
             android:layout_width="wrap_content"

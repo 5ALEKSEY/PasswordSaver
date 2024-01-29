@@ -1,6 +1,6 @@
 package com.ak.feature_tabpasswords_impl.domain
 
-import com.ak.core_repo_api.intefaces.IPasswordsRepository
+import com.ak.core_repo_api.intefaces.password.IPasswordsRepository
 import com.ak.feature_encryption_api.interfaces.IEncryptionManager
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity

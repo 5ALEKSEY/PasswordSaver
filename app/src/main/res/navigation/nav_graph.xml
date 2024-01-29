@@ -12,4 +12,6 @@
 
     <include app:graph="@navigation/backup_nav_graph" />
 
+    <include app:graph="@navigation/manage_custom_theme_nav_graph" />
+
 </navigation>

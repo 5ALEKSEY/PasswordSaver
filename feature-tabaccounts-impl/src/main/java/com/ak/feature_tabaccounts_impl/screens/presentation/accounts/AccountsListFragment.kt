@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.airbnb.lottie.LottieAnimationView
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibility
@@ -23,13 +25,15 @@ import com.ak.feature_tabaccounts_impl.screens.adapter.AccountItemModel
 import com.ak.feature_tabaccounts_impl.screens.adapter.AccountListClickListener
 import com.ak.feature_tabaccounts_impl.screens.adapter.AccountsListRecyclerAdapter
 import com.ak.feature_tabaccounts_impl.screens.presentation.base.BaseAccountsModuleFragment
-import kotlinx.android.synthetic.main.fragment_accounts_list.view.accountLoadingContainer
-import kotlinx.android.synthetic.main.fragment_accounts_list.view.fabAddNewAccountAction
-import kotlinx.android.synthetic.main.fragment_accounts_list.view.incAccountsEmptyView
-import kotlinx.android.synthetic.main.fragment_accounts_list.view.loadingAnimation
-import kotlinx.android.synthetic.main.fragment_accounts_list.view.rvAccountsList
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>() {
+
+    private var accountLoadingContainer: LinearLayout? = null
+    private var fabAddNewAccountAction: FloatingActionButton? = null
+    private var incAccountsEmptyView: View? = null
+    private var loadingAnimation: LottieAnimationView? = null
+    private var rvAccountsList: RecyclerView? = null
 
     private lateinit var accountsActionModeViewModel: AccountsActionModeViewModel
 
@@ -102,12 +106,23 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
         viewModel.loadPasswords()
     }
 
+    override fun findViews(fragmentView: View) {
+        super.findViews(fragmentView)
+        with(fragmentView) {
+            accountLoadingContainer = findViewById(R.id.accountLoadingContainer)
+            fabAddNewAccountAction = findViewById(R.id.fabAddNewAccountAction)
+            incAccountsEmptyView = findViewById(R.id.incAccountsEmptyView)
+            loadingAnimation = findViewById(R.id.loadingAnimation)
+            rvAccountsList = findViewById(R.id.rvAccountsList)
+        }
+    }
+
     override fun initView(fragmentView: View) {
         super.initView(fragmentView)
         initToolbar()
         initRecyclerView()
 
-        fragmentView.fabAddNewAccountAction.setSafeClickListener {
+        fabAddNewAccountAction?.setSafeClickListener {
             navigator.navigateToAddNewAccount()
         }
     }
@@ -140,11 +155,11 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
     }
 
     private fun setPrimaryLoadingState(isLoading: Boolean) {
-        fragmentView.accountLoadingContainer.setVisibility(isLoading)
+        accountLoadingContainer?.setVisibility(isLoading)
         if (isLoading) {
-            fragmentView.loadingAnimation.playAnimation()
+            loadingAnimation?.playAnimation()
         } else {
-            fragmentView.loadingAnimation.pauseAnimation()
+            loadingAnimation?.pauseAnimation()
         }
     }
 
@@ -160,7 +175,7 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
     }
 
     private fun setEmptyAccountsState(isEmptyViewVisible: Boolean) {
-        fragmentView.incAccountsEmptyView.isVisible = isEmptyViewVisible
+        incAccountsEmptyView?.isVisible = isEmptyViewVisible
     }
 
     private fun showEditAccountScreen(accountId: Long) {
@@ -176,7 +191,7 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
     private fun initRecyclerView() {
         accountsAdapter = AccountsListRecyclerAdapter(accountsListClickListener)
 
-        with(fragmentView.rvAccountsList) {
+        rvAccountsList?.apply {
             adapter = accountsAdapter
             layoutManager = GridLayoutManager(
                 context,
@@ -188,9 +203,9 @@ class AccountsListFragment : BaseAccountsModuleFragment<AccountsListViewModel>()
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     if (dy > 0) {
-                        fragmentView.fabAddNewAccountAction.hide()
+                        fabAddNewAccountAction?.hide()
                     } else {
-                        fragmentView.fabAddNewAccountAction.show()
+                        fabAddNewAccountAction?.show()
                     }
 
                     super.onScrolled(recyclerView, dx, dy)

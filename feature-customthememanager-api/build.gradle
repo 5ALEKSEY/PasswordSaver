@@ -1,0 +1,40 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+def rootExtConfiguration = rootProject.extensions.getByName("ext")
+
+String VERSION_NAME = rootExtConfiguration["appVersionName"]
+int VERSION_CODE = rootExtConfiguration["appVersionCode"]
+
+int COMPILE_SDK_VERSION = rootExtConfiguration["compileSdkVersion"]
+int MIN_SDK_VERSION = rootExtConfiguration["minSdkVersion"]
+int TARGET_SDK_VERSION = rootExtConfiguration["targetSdkVersion"]
+
+android {
+    compileSdkVersion COMPILE_SDK_VERSION
+    defaultConfig {
+        minSdkVersion MIN_SDK_VERSION
+        targetSdkVersion TARGET_SDK_VERSION
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation deps.kotlin
+    implementation deps.androidX
+}

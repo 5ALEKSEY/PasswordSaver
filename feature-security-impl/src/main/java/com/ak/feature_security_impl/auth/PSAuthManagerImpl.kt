@@ -1,7 +1,7 @@
 package com.ak.feature_security_impl.auth
 
-import com.ak.core_repo_api.intefaces.IAuthPreferencesManager
-import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.core_repo_api.intefaces.preference.IAuthPreferencesManager
+import com.ak.core_repo_api.intefaces.preference.ISettingsPreferencesManager
 import com.ak.feature_security_api.interfaces.IPSAuthManager
 import java.util.*
 import javax.inject.Inject

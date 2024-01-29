@@ -4,12 +4,13 @@ import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.isVisible
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.CustomThemeDrawableBuilder
 import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.base.constants.AppConstants
-import com.ak.base.extensions.dpToPx
 import com.ak.base.extensions.drawTextInner
 import com.ak.base.extensions.pxToDp
 import com.ak.base.extensions.setSafeClickListener
@@ -19,18 +20,20 @@ import com.ak.base.ui.custom.popupmenu.PopupWindowMenuItem
 import com.ak.base.ui.recycler.BasePopupMenuRecyclerViewHolder
 import com.ak.base.utils.PSUtils
 import com.ak.feature_tabpasswords_impl.R
-import kotlinx.android.synthetic.main.passwords_item_layout.view.cvPasswordItemContainer
-import kotlinx.android.synthetic.main.passwords_item_layout.view.ivItemPinned
-import kotlinx.android.synthetic.main.passwords_item_layout.view.ivItemSelected
-import kotlinx.android.synthetic.main.passwords_item_layout.view.ivPasswordAvatar
-import kotlinx.android.synthetic.main.passwords_item_layout.view.tvPasswordContent
-import kotlinx.android.synthetic.main.passwords_item_layout.view.tvPasswordName
-import kotlinx.android.synthetic.main.passwords_item_layout.view.vPasswordItemRoot
+import de.hdodenhof.circleimageview.CircleImageView
 
 class PasswordsListItemViewHolder(
     itemView: View,
     private val listener: PasswordsListClickListener,
 ) : BasePopupMenuRecyclerViewHolder(itemView) {
+
+    private val cvPasswordItemContainer by lazy { itemView.findViewById<View>(R.id.cvPasswordItemContainer) }
+    private val ivItemPinned by lazy { itemView.findViewById<View>(R.id.ivItemPinned) }
+    private val ivItemSelected by lazy { itemView.findViewById<View>(R.id.ivItemSelected) }
+    private val ivPasswordAvatar by lazy { itemView.findViewById<CircleImageView>(R.id.ivPasswordAvatar) }
+    private val tvPasswordContent by lazy { itemView.findViewById<TextView>(R.id.tvPasswordContent) }
+    private val tvPasswordName by lazy { itemView.findViewById<TextView>(R.id.tvPasswordName) }
+    private val vPasswordItemRoot by lazy { itemView.findViewById<ViewGroup>(R.id.vPasswordItemRoot) }
 
     override val popupMenuListener = object : PopupMenuHelper.Listener {
         override fun onItemClicked(menuItemId: Int) {
@@ -60,14 +63,14 @@ class PasswordsListItemViewHolder(
         super.applyTheme(theme)
         CustomThemeApplier.applyBackgroundTint(
             theme,
-            itemView.cvPasswordItemContainer,
+            cvPasswordItemContainer,
             R.attr.themedSecondaryBackgroundColor,
         )
         CustomThemeApplier.applyTextColor(
             theme,
             R.attr.themedPrimaryTextColor,
-            itemView.tvPasswordName,
-            itemView.tvPasswordContent,
+            tvPasswordName,
+            tvPasswordContent,
         )
         applySelectedItemIconBackground(theme)
         applyPinItemBackground(theme)
@@ -78,9 +81,9 @@ class PasswordsListItemViewHolder(
     fun bindPasswordListItemView(passwordItemModel: PasswordItemModel, theme: CustomTheme) {
         this.passwordItemModel = passwordItemModel
 
-        itemView.tvPasswordName.text = passwordItemModel.name
+        tvPasswordName.text = passwordItemModel.name
 
-        itemView.tvPasswordContent.apply {
+        tvPasswordContent.apply {
             maxLines = if (passwordItemModel.isPasswordContentVisible) {
                 AppConstants.MAX_LINES_VISIBLE_CONTENT
             } else {
@@ -104,22 +107,22 @@ class PasswordsListItemViewHolder(
 
         initAdditionalItemClickListeners(passwordItemModel)
 
-        setRootItemBackground(passwordItemModel, itemView.vPasswordItemRoot, theme)
+        setRootItemBackground(passwordItemModel, vPasswordItemRoot, theme)
 
         if (!passwordItemModel.isInActionModeState) {
-            itemView.ivItemSelected.setVisibilityInvisible(false)
+            ivItemSelected.setVisibilityInvisible(false)
         } else {
-            itemView.ivItemSelected.apply {
+            ivItemSelected.apply {
                 setVisibilityInvisible(passwordItemModel.isItemSelected)
             }
         }
 
         if (passwordItemModel.passwordAvatarBitmap != null) {
-            itemView.ivPasswordAvatar.setImageBitmap(passwordItemModel.passwordAvatarBitmap)
+            ivPasswordAvatar.setImageBitmap(passwordItemModel.passwordAvatarBitmap)
         }
         drawEmptyPasswordAvatarIfNeeds(theme)
 
-        itemView.ivItemPinned.isVisible = passwordItemModel.isPinned
+        ivItemPinned.isVisible = passwordItemModel.isPinned
     }
 
     private fun drawPasswordContentText(theme: CustomTheme) {
@@ -149,7 +152,7 @@ class PasswordsListItemViewHolder(
                 setBounds(0, 0, hiddenItemSizePx, hiddenItemSizePx)
             }
 
-        itemView.tvPasswordContent.text = PSUtils.getHiddenContentTextTemp(
+        tvPasswordContent.text = PSUtils.getHiddenContentTextTemp(
             passwordItemModel.isPasswordContentVisible,
             passwordItemModel.password,
             hiddenContentDrawable,
@@ -157,7 +160,7 @@ class PasswordsListItemViewHolder(
     }
 
     private fun applyPinItemBackground(theme: CustomTheme) {
-        itemView.ivItemPinned.background = CustomThemeDrawableBuilder(theme, itemView.context)
+        ivItemPinned.background = CustomThemeDrawableBuilder(theme, itemView.context)
             .oval()
             .solidColorAttr(R.attr.themedAccentColor)
             .radius(itemView.resources.getDimensionPixelSize(R.dimen.pinned_password_icon_size).toFloat())
@@ -165,7 +168,7 @@ class PasswordsListItemViewHolder(
     }
 
     private fun applySelectedItemIconBackground(theme: CustomTheme) {
-        itemView.ivItemSelected.background = CustomThemeDrawableBuilder(theme, itemView.context)
+        ivItemSelected.background = CustomThemeDrawableBuilder(theme, itemView.context)
             .oval()
             .solidColorAttr(R.attr.themedAccentColor)
             .radius(itemView.resources.getDimensionPixelSize(R.dimen.pinned_password_selected_item_icon_size).toFloat())
@@ -185,7 +188,7 @@ class PasswordsListItemViewHolder(
         val avatarSizeInPx = itemView.resources.getDimensionPixelSize(
             R.dimen.card_avatar_avatar_size
         )
-        itemView.ivPasswordAvatar.apply {
+        ivPasswordAvatar.apply {
             drawTextInner(
                 itemView.context,
                 avatarSizeInPx,
@@ -200,8 +203,8 @@ class PasswordsListItemViewHolder(
 
     private fun initAdditionalItemClickListeners(passwordItemModel: PasswordItemModel) {
         if (passwordItemModel.isInActionModeState) {
-            for (i in 0..itemView.vPasswordItemRoot.childCount) {
-                itemView.vPasswordItemRoot.getChildAt(i)?.apply {
+            for (i in 0..vPasswordItemRoot.childCount) {
+                vPasswordItemRoot.getChildAt(i)?.apply {
                     isClickable = false
                     isFocusable = false
                 }

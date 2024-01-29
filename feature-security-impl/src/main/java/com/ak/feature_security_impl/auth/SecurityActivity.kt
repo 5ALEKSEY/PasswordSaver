@@ -10,6 +10,8 @@ import android.os.Handler
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -20,16 +22,19 @@ import com.ak.base.extensions.vibrate
 import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_security_impl.R
+import com.ak.feature_security_impl.auth.security.patterncode.PatternAuthView
+import com.ak.feature_security_impl.auth.security.pincode.PincodeAuthView
 import com.ak.feature_security_impl.di.FeatureSecurityComponent
 import com.ak.feature_security_impl.di.modules.SecurityViewModelsModule
 import javax.inject.Inject
 import javax.inject.Named
-import kotlinx.android.synthetic.main.activity_security.ivSecurityInputTypeChangeAction
-import kotlinx.android.synthetic.main.activity_security.tvSecurityMessageText
-import kotlinx.android.synthetic.main.activity_security.vPatternAuthView
-import kotlinx.android.synthetic.main.activity_security.vPincodeAuthView
 
 class SecurityActivity : BaseThemeActivity() {
+
+    private val ivSecurityInputTypeChangeAction by lazy { findViewById<ImageView>(R.id.ivSecurityInputTypeChangeAction) }
+    private val tvSecurityMessageText by lazy { findViewById<TextView>(R.id.tvSecurityMessageText) }
+    private val vPatternAuthView by lazy { findViewById<PatternAuthView>(R.id.vPatternAuthView) }
+    private val vPincodeAuthView by lazy { findViewById<PincodeAuthView>(R.id.vPincodeAuthView) }
 
     companion object {
         private const val IS_AUTH_ACTION_KEY_EXTRA = "is_auth_action"

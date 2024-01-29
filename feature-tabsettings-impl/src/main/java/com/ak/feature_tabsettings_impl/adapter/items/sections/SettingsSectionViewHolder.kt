@@ -3,6 +3,7 @@ package com.ak.feature_tabsettings_impl.adapter.items.sections
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.applier.CustomThemeApplier
 import com.ak.app_theme.theme.uicomponents.recyclerview.CustomThemeRecyclerViewHolder
@@ -11,7 +12,6 @@ import com.ak.base.extensions.setSafeClickListener
 import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.BaseSettingsViewHolder
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
-import kotlinx.android.synthetic.main.settings_item_section_layout.view.ivSettingsSectionImage
 
 class SectionAdapterDelegate(
     private val viewType: Int,
@@ -47,17 +47,19 @@ class SettingsSectionHolder(
     private val onSectionSettingsClicked: (settingId: Int) -> Unit
 ) : BaseSettingsViewHolder<SectionSettingsListItemModel>(itemView) {
 
+    private val ivSettingsSectionImage by lazy { itemView.findViewById<ImageView>(R.id.ivSettingsSectionImage) }
+
     override fun applyTheme(theme: CustomTheme) {
         super.applyTheme(theme)
         CustomThemeApplier.applyTint(
             theme,
             R.attr.themedPrimaryTextColor,
-            itemView.ivSettingsSectionImage,
+            ivSettingsSectionImage,
         )
     }
 
     override fun setViewHolderData(itemModel: SectionSettingsListItemModel) {
-        itemView.ivSettingsSectionImage.setImageResource(itemModel.imageRes)
+        ivSettingsSectionImage.setImageResource(itemModel.imageRes)
         itemView.setSafeClickListener { onSectionSettingsClicked(itemModel.settingId) }
     }
 }

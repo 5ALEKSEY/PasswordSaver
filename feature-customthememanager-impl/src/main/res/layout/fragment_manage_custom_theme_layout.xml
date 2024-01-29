@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?themedPrimaryBackgroundColor">
+
+    <com.ak.base.ui.custom.PsThemedTextInputLayout
+            android:id="@+id/tilCustomThemeNameLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tietCustomThemeNameField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_theme_name_input_field"
+                android:drawablePadding="8dp"
+                android:drawableTint="?themedPrimaryColor"
+                android:hint="@string/custom_theme_name_field_hint"
+                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:textColor="?themedPrimaryTextColor" />
+
+    </com.ak.base.ui.custom.PsThemedTextInputLayout>
+
+    <TextView
+            android:id="@+id/tvLightDarkTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="?themedPrimaryTextColor"
+            app:layout_constraintEnd_toStartOf="@id/sLightState"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:text="Light theme"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tilCustomThemeNameLayout" />
+
+    <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sLightState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="@id/tvLightDarkTitle"
+            app:layout_constraintBottom_toBottomOf="@id/tvLightDarkTitle"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+            android:id="@+id/tvSimpleManageTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="?themedPrimaryTextColor"
+            app:layout_constraintEnd_toStartOf="@id/sSimpleManageEnablingState"
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="10dp"
+            android:text="Simple configuration"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLightDarkTitle" />
+
+    <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/sSimpleManageEnablingState"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintTop_toTopOf="@id/tvSimpleManageTitle"
+            app:layout_constraintBottom_toBottomOf="@id/tvSimpleManageTitle"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+            android:id="@+id/tvSimpleManageDesc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:textColor="?themedSecondaryTextColor"
+            android:text="All other app's colors will be calculated automatically according the one you choose below"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSimpleManageTitle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvCustomThemeModificationList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:background="?themedPrimaryBackgroundColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSimpleManageDesc" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabSaveCustomThemeAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_check"
+            app:backgroundTint="?themedAccentColor"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

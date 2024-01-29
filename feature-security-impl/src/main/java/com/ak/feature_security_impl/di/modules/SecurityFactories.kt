@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.ak.base.viewmodel.BaseViewModelFactory
 import com.ak.base.viewmodel.IViewModelAssistedFactory
 import com.ak.core_repo_api.intefaces.IResourceManager
-import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.core_repo_api.intefaces.preference.ISettingsPreferencesManager
 import com.ak.feature_security_api.interfaces.IPSBiometricManager
 import com.ak.feature_security_impl.auth.SecurityViewModel
 import javax.inject.Inject

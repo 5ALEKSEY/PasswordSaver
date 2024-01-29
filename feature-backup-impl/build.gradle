@@ -2,7 +2,6 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlin_version"
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
 }
 
@@ -63,6 +62,7 @@ dependencies {
 
     implementation project(':base')
     implementation project(':core-repo-api')
+    implementation project(':feature-appupdate-api')
 
     implementation deps.kotlin
     implementation deps.appCompat

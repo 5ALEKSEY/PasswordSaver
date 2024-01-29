@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.TextureView
 import android.view.WindowManager
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.ViewModelProvider
@@ -22,14 +24,15 @@ import com.ak.feature_tabpasswords_impl.di.modules.TabPasswordsViewModelsModule
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.camera.manager.IPSCameraManager
 import javax.inject.Inject
 import javax.inject.Named
-import kotlinx.android.synthetic.main.activity_camera_pick_image.btnTakeImageAction
-import kotlinx.android.synthetic.main.activity_camera_pick_image.ivCameraPickImageCancelAction
-import kotlinx.android.synthetic.main.activity_camera_pick_image.ivChooseImagePanelAction
-import kotlinx.android.synthetic.main.activity_camera_pick_image.ivPreviewImage
-import kotlinx.android.synthetic.main.activity_camera_pick_image.ivRemovePickedImagePanelAction
-import kotlinx.android.synthetic.main.activity_camera_pick_image.texvCameraPickImagePreview
 
 class CameraPickImageActivity : BaseThemeActivity() {
+
+    private val btnTakeImageAction by lazy { findViewById<ImageView>(R.id.btnTakeImageAction) }
+    private val ivCameraPickImageCancelAction by lazy { findViewById<ImageView>(R.id.ivCameraPickImageCancelAction) }
+    private val ivChooseImagePanelAction by lazy { findViewById<ImageView>(R.id.ivChooseImagePanelAction) }
+    private val ivPreviewImage by lazy { findViewById<ImageView>(R.id.ivPreviewImage) }
+    private val ivRemovePickedImagePanelAction by lazy { findViewById<ImageView>(R.id.ivRemovePickedImagePanelAction) }
+    private val texvCameraPickImagePreview by lazy { findViewById<TextureView>(R.id.texvCameraPickImagePreview) }
 
     companion object {
         const val PICKED_IMAGE_PATH_KEY_EXTRA = "picked_image_path"

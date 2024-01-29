@@ -58,6 +58,7 @@
     <string name="settings_toolbar_title">Settings</string>
     <string name="design_settings_toolbar_title">Design</string>
     <string name="backup_info_toolbar_title">Backup</string>
+    <string name="manage_custom_theme_toolbar_title">Custom Theme</string>
     <string name="dialog_attention_title">Attention</string>
     <string name="delete_data_dialog_desc">Are you sure that you want to delete this %s data? You can\'t restore this data later.</string>
     <string name="delete_dialog_password_item">password</string>
@@ -96,7 +97,8 @@
     <string name="orange_theme_name">Orange</string>
     <string name="purple_theme_name">Purple</string>
     <string name="teal_theme_name">Teal</string>
-    <string name="change_theme_setting_name">App theme</string>
+    <string name="app_themes_setting_name">App themes</string>
+    <string name="user_custom_themes_setting_name">Custom themes</string>
     <string name="change_theme_with_animation_setting_name">Theme animation</string>
     <string name="change_theme_with_animation_setting_desc">App theme will have animation during changing</string>
 
@@ -125,13 +127,13 @@
     <string name="native_theme_config_attention_popup_desc">To set \'Native\' theme you need to create it\'s configuration and select \'light\' and \'dark\' variants. Do you want to continue?</string>
     <string name="native_theme_config_attention_popup_positive">yes</string>
     <string name="native_theme_config_attention_popup_negative">No</string>
+    <string name="add_theme_setting_name">Add theme</string>
     <string name="change_theme_use_native_setting_name">Native theme</string>
     <string name="change_theme_use_native_setting_desc">Theme will be changed according to your device settings</string>
     <string name="change_theme_change_native_config_setting_name">Change \'Native\' theme configuration</string>
 
     <string name="toolbar_title_loading_updating_text">Updating</string>
 
-    // Formats
     <string name="format_bytes_value">B</string>
     <string name="format_kilobytes_value">Kb</string>
     <string name="format_megabytes_value">Mb</string>
@@ -158,4 +160,32 @@
 
     <string name="user_has_backup_file_text">I have backup file</string>
     <string name="user_has_backup_g_account_text">I have a Google backup</string>
+
+    <!-- Color attrs -->
+    <string name="primary_bg_color_name">Primary background</string>
+    <string name="secondary_bg_color_name">Secondary background</string>
+    <string name="popup_color_name">Pop-up background</string>
+    <string name="primary_color_name">Primary</string>
+    <string name="primary_dark_color_name">Primary dark</string>
+    <string name="primary_light_color_name">Primary light</string>
+    <string name="accent_color_name">Accent</string>
+    <string name="toolbars_icons_and_text_color_name">Toolbar\'s icons and text</string>
+    <string name="primary_text_color_name">Primary text</string>
+    <string name="primary_hint_text_color_name">Primary hint text</string>
+    <string name="secondary_text_color_name">Secondary text</string>
+    <string name="divider_color_name">Divider</string>
+    <string name="error_color_name">Error</string>
+    <string name="success_color_name">Success</string>
+    <string name="switch_thumb_unchecked_color_name">Switch thumb unchecked</string>
+    <string name="switch_thumb_checked_color_name">Switch thumb checked</string>
+    <string name="switch_track_unchecked_color_name">Switch track unchecked</string>
+    <string name="switch_track_checked_color_name">Switch track checked</string>
+    <string name="selected_item_gradient_start_color_name">Selected item gradient (start)</string>
+    <string name="selected_item_gradient_center_color_name">Selected item gradient (center)</string>
+    <string name="selected_item_gradient_end_color_name">Selected item gradient (end)</string>
+
+    <string name="custom_theme_name_field_hint">Theme name</string>
+
+    <string name="custom_theme_menu_item_delete">Delete</string>
+    <string name="custom_theme_menu_item_edit">Edit</string>
 </resources>

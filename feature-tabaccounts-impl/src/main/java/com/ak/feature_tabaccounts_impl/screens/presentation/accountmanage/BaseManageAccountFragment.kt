@@ -7,21 +7,25 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.hideKeyboard
 import com.ak.base.extensions.setSafeClickListener
+import com.ak.base.ui.custom.PsThemedTextInputLayout
 import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.screens.presentation.base.BaseAccountsModuleFragment
-import kotlinx.android.synthetic.main.fragment_manage_account.view.btnManageAccountAction
-import kotlinx.android.synthetic.main.fragment_manage_account.view.tietAccountLoginField
-import kotlinx.android.synthetic.main.fragment_manage_account.view.tietAccountNameField
-import kotlinx.android.synthetic.main.fragment_manage_account.view.tietAccountPasswordField
-import kotlinx.android.synthetic.main.fragment_manage_account.view.tilAccountLoginLayout
-import kotlinx.android.synthetic.main.fragment_manage_account.view.tilAccountNameLayout
-import kotlinx.android.synthetic.main.fragment_manage_account.view.tilAccountPasswordLayout
+import com.google.android.material.textfield.TextInputEditText
 
 abstract class BaseManageAccountFragment<ManagerVM : BaseManageAccountViewModel>
     : BaseAccountsModuleFragment<ManagerVM>() {
+
+    private var btnManageAccountAction: Button? = null
+    private var tietAccountLoginField: TextInputEditText? = null
+    private var tietAccountNameField: TextInputEditText? = null
+    private var tietAccountPasswordField: TextInputEditText? = null
+    private var tilAccountLoginLayout: PsThemedTextInputLayout? = null
+    private var tilAccountNameLayout: PsThemedTextInputLayout? = null
+    private var tilAccountPasswordLayout: PsThemedTextInputLayout? = null
 
     override fun getFragmentLayoutResId() = R.layout.fragment_manage_account
 
@@ -30,11 +34,24 @@ abstract class BaseManageAccountFragment<ManagerVM : BaseManageAccountViewModel>
         setHasOptionsMenu(true)
     }
 
+    override fun findViews(fragmentView: View) {
+        super.findViews(fragmentView)
+        with(fragmentView) {
+            btnManageAccountAction = findViewById(R.id.btnManageAccountAction)
+            tietAccountLoginField = findViewById(R.id.tietAccountLoginField)
+            tietAccountNameField = findViewById(R.id.tietAccountNameField)
+            tietAccountPasswordField = findViewById(R.id.tietAccountPasswordField)
+            tilAccountLoginLayout = findViewById(R.id.tilAccountLoginLayout)
+            tilAccountNameLayout = findViewById(R.id.tilAccountNameLayout)
+            tilAccountPasswordLayout = findViewById(R.id.tilAccountPasswordLayout)
+        }
+    }
+
     override fun initView(fragmentView: View) {
         super.initView(fragmentView)
         initToolbar()
 
-        fragmentView.tietAccountPasswordField.setOnEditorActionListener { _, actionId, _ ->
+        tietAccountPasswordField?.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener if (actionId == EditorInfo.IME_ACTION_DONE) {
                 manageAccountAction()
                 true
@@ -43,24 +60,24 @@ abstract class BaseManageAccountFragment<ManagerVM : BaseManageAccountViewModel>
             }
         }
 
-        fragmentView.tietAccountNameField.filters = arrayOf(
+        tietAccountNameField?.filters = arrayOf(
             InputFilter.LengthFilter(AppConstants.ACCOUNT_NAME_MAX_LENGTH)
         )
-        fragmentView.tietAccountLoginField.filters = arrayOf(
+        tietAccountLoginField?.filters = arrayOf(
             InputFilter.LengthFilter(AppConstants.ACCOUNT_LOGIN_MAX_LENGTH)
         )
-        fragmentView.tietAccountPasswordField.filters = arrayOf(
+        tietAccountPasswordField?.filters = arrayOf(
             InputFilter.LengthFilter(AppConstants.ACCOUNT_PASSWORD_MAX_LENGTH)
         )
 
-        fragmentView.btnManageAccountAction.setSafeClickListener {
+        btnManageAccountAction?.setSafeClickListener {
             manageAccountAction()
         }
 
         // Theme
-        addThemedView(fragmentView.tilAccountNameLayout)
-        addThemedView(fragmentView.tilAccountLoginLayout)
-        addThemedView(fragmentView.tilAccountPasswordLayout)
+        addThemedView(tilAccountNameLayout)
+        addThemedView(tilAccountLoginLayout)
+        addThemedView(tilAccountPasswordLayout)
     }
 
     override fun subscriberToViewModel(viewModel: ManagerVM) {
@@ -87,15 +104,15 @@ abstract class BaseManageAccountFragment<ManagerVM : BaseManageAccountViewModel>
         }
 
     private fun displayAccountNameInputError(errorMessage: String?) {
-        fragmentView.tilAccountNameLayout.error = errorMessage
+        tilAccountNameLayout?.error = errorMessage
     }
 
     private fun displayAccountLoginInputError(errorMessage: String?) {
-        fragmentView.tilAccountLoginLayout.error = errorMessage
+        tilAccountLoginLayout?.error = errorMessage
     }
 
     private fun displayAccountPasswordInputError(errorMessage: String?) {
-        fragmentView.tilAccountPasswordLayout.error = errorMessage
+        tilAccountPasswordLayout?.error = errorMessage
     }
 
     private fun initToolbar() {
@@ -113,9 +130,9 @@ abstract class BaseManageAccountFragment<ManagerVM : BaseManageAccountViewModel>
     private fun manageAccountAction() {
         hideKeyboard()
         viewModel.onManageAccountAction(
-            fragmentView.tietAccountNameField.text.toString(),
-            fragmentView.tietAccountLoginField.text.toString(),
-            fragmentView.tietAccountPasswordField.text.toString()
+            tietAccountNameField?.text.toString(),
+            tietAccountLoginField?.text.toString(),
+            tietAccountPasswordField?.text.toString()
         )
     }
 }

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.ak.base.livedata.SingleEventLiveData
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.core_repo_api.intefaces.IResourceManager
-import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.core_repo_api.intefaces.preference.ISettingsPreferencesManager
 import com.ak.feature_appupdate_api.interfaces.IFeaturesUpdateManager
 import com.ak.passwordsaver.R
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -63,6 +63,9 @@ class HomeViewModel @Inject constructor(
         featuresUpdateManager.subscribeToViewedFeatureState(IFeaturesUpdateManager.FeatureType.APP_THEME)
             .subscribe { deleteNewBadgeForSettingsTabIfNeeded() }
             .let(this::bindDisposable)
+        featuresUpdateManager.subscribeToViewedFeatureState(IFeaturesUpdateManager.FeatureType.BACKUP)
+            .subscribe { deleteNewBadgeForSettingsTabIfNeeded() }
+            .let(this::bindDisposable)
     }
 
     fun onNavMenuDestinationChanged(destMenuId: Int) {
@@ -104,5 +107,6 @@ class HomeViewModel @Inject constructor(
     private fun isSettingsTabWithNewBadge(): Boolean {
         return !featuresUpdateManager.isFingerprintFeatureViewed()
             || !featuresUpdateManager.isAppThemeFeatureViewed()
+            || !featuresUpdateManager.isBackupFeatureViewed()
     }
 }

@@ -1,7 +1,7 @@
 <resources>
 
     <style name="ActionModeStyle.Blue" parent="BaseActionModeStyle">
-        <item name="background">@color/color_accent_blue</item>
+        <item name="background">?themedAccentColor</item>
     </style>
 
     <style name="CustomTheme.Blue" parent="CustomTheme">

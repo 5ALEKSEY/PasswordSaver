@@ -8,6 +8,8 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.ak.app_theme.theme.CustomThemeInterceptor
 import com.ak.app_theme.theme.CustomThemeManager
+import com.ak.app_theme.theme.ICustomThemesInitializer
+import com.ak.app_theme.theme.ICustomUserThemesProvider
 import com.ak.base.navigation.NavDeepLinkManager
 import com.ak.feature_security_api.interfaces.IPSAuthManager
 import com.ak.feature_tabpasswords_impl.screens.navigation.cross.PasswordsTabCrossModuleNavigatorProvider
@@ -20,6 +22,7 @@ import javax.inject.Inject
 open class PSApplication : Application(), LifecycleObserver,
     PasswordsTabCrossModuleNavigatorProvider,
     NavDeepLinkManager.Provider,
+    ICustomThemesInitializer,
     ApplicationComponentsManager by ApplicationComponentsManagerImpl() {
 
     companion object {
@@ -32,6 +35,8 @@ open class PSApplication : Application(), LifecycleObserver,
     internal lateinit var appNavigator: IAppNavigator
     @Inject
     internal lateinit var navDeepLinkManager: NavDeepLinkManager
+    @Inject
+    internal lateinit var customUserThemesProvider: ICustomUserThemesProvider
 
     private val lifecycleEventObserver = LifecycleEventObserver { _, event ->
         when (event) {
@@ -55,20 +60,24 @@ open class PSApplication : Application(), LifecycleObserver,
         super.onCreate()
         appContext = applicationContext
 
-        initCustomTheme()
         initializeAppComponent().apply {
             inject(this@PSApplication)
         }
+        initializeCustomThemes()
         ProcessLifecycleOwner.get().lifecycle.addObserver(lifecycleEventObserver)
     }
 
-    private fun initCustomTheme() {
+    override fun initializeCustomThemes() {
         ViewPump.init(
             ViewPump.builder()
                 .addInterceptor(CustomThemeInterceptor.instance)
                 .build()
         )
-        CustomThemeManager.getInstance().init(this)
+        CustomThemeManager.getInstance().init(this, customUserThemesProvider)
+    }
+
+    override fun reInitializeCustomUserThemes() {
+        CustomThemeManager.getInstance().initThemesList(this)
     }
 
     override fun provideCrossNavigatorForPasswordsModule() = appNavigator

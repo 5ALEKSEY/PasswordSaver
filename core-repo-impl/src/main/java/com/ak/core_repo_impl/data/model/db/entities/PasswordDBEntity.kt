@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.ak.core_repo_api.intefaces.PasswordRepoEntity
+import com.ak.core_repo_api.intefaces.password.PasswordRepoEntity
 
 @Entity(tableName = PasswordDBEntity.TABLE_NAME)
 data class PasswordDBEntity(

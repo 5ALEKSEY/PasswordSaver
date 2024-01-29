@@ -2,15 +2,12 @@ package com.example.feature_backup_impl.model.creator
 
 import android.content.Context
 import android.net.Uri
-import androidx.core.net.toFile
-import com.ak.core_repo_api.intefaces.IAccountsRepository
-import com.ak.core_repo_api.intefaces.IPasswordsRepository
+import com.ak.core_repo_api.intefaces.account.IAccountsRepository
+import com.ak.core_repo_api.intefaces.password.IPasswordsRepository
 import com.ak.feature_backup_impl.BuildConfig
 import com.example.feature_backup_impl.model.BackupInfo
 import com.example.feature_backup_impl.model.toBackupData
 import java.io.BufferedReader
-import java.io.File
-import java.io.FileInputStream
 import java.io.InputStreamReader
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers

@@ -1,7 +1,7 @@
-package com.ak.core_repo_impl
+package com.ak.core_repo_impl.preference
 
 import android.content.SharedPreferences
-import com.ak.core_repo_api.intefaces.IAuthPreferencesManager
+import com.ak.core_repo_api.intefaces.preference.IAuthPreferencesManager
 import com.ak.core_repo_impl.di.module.PreferencesModule
 import javax.inject.Inject
 import javax.inject.Named

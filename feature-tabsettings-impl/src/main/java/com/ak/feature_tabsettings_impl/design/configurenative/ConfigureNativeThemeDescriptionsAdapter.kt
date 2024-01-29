@@ -41,7 +41,7 @@ class ConfigureNativeThemeDescriptionsAdapter(
     ): ThemeChangeDescriptionViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(
-            R.layout.settings_item_theme_change_description_layout,
+            R.layout.settings_item_app_theme_description_layout,
             parent,
             false,
         )
@@ -66,7 +66,7 @@ class ConfigureNativeThemeDescriptionsAdapter(
 
         fun bind(themeDescription: CustomTheme.Description) {
             itemView.setOnClickListener { onThemeChangedListener(themeDescription) }
-            themeName.setText(themeDescription.nameResId)
+            themeName.text = themeDescription.getName(itemView.context)
             content.background = getThemeDescriptionBackground(themeDescription)
 
             impressionColor1.setImageDrawable(ColorDrawable(themeDescription.impressColor1))

@@ -1,7 +1,7 @@
 package com.example.feature_backup_impl.model.interactor
 
-import com.ak.core_repo_api.intefaces.IAccountsRepository
-import com.ak.core_repo_api.intefaces.IPasswordsRepository
+import com.ak.core_repo_api.intefaces.account.IAccountsRepository
+import com.ak.core_repo_api.intefaces.password.IPasswordsRepository
 import com.example.feature_backup_impl.model.creator.IBackupCreator
 import com.example.feature_backup_impl.repo.IBackupLocalRepo
 import javax.inject.Inject

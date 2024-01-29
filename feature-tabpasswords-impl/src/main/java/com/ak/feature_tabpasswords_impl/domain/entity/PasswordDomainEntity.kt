@@ -1,6 +1,6 @@
 package com.ak.feature_tabpasswords_impl.domain.entity
 
-import com.ak.core_repo_api.intefaces.PasswordRepoEntity
+import com.ak.core_repo_api.intefaces.password.PasswordRepoEntity
 import com.ak.feature_tabpasswords_api.interfaces.PasswordFeatureEntity
 
 class PasswordDomainEntity constructor(

@@ -170,9 +170,9 @@ abstract class BaseThemeActivity : AppCompatActivity() {
     protected fun addThemedView(themedView: CustomThemedView, force: Boolean = true) {
         val viewId = themedView.viewId
 
-        if (isExistsThemedView(viewId) && !force) {
+        /*if (isExistsThemedView(viewId) && !force) {
             return
-        }
+        }*/
 
         try {
             theme?.let {

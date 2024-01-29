@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/manage_custom_theme_nav_graph"
+        app:startDestination="@id/manageCustomThemeFragment">
+
+    <fragment
+            android:id="@+id/manageCustomThemeFragment"
+            android:name="com.example.feature_customthememanager_impl.managetheme.ManageCustomThemeFragment"
+            android:label="ManageCustomThemeFragment"
+            tools:layout="@layout/fragment_manage_custom_theme_layout">
+
+        <argument
+            android:name="themeId"
+            android:defaultValue="-1"/>
+
+        <deepLink app:uri="ps://navigate/manage_custom_theme?themeId={themeId}" />
+
+    </fragment>
+
+</navigation>

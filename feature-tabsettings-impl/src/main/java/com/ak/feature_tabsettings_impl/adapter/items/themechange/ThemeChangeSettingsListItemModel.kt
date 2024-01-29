@@ -8,5 +8,6 @@ class ThemeChangeSettingsListItemModel(
     settingName: String,
     val themes: List<CustomTheme.Description>,
     val selectedThemeId: Int,
+    val shouldShowThemeExampleView: Boolean = false,
     hasNewBadge: Boolean = false,
 ) : SettingsListItemModel(settingId, settingName, hasNewBadge)

@@ -1,6 +1,6 @@
 package com.ak.feature_tabaccounts_impl.domain
 
-import com.ak.core_repo_api.intefaces.IAccountsRepository
+import com.ak.core_repo_api.intefaces.account.IAccountsRepository
 import com.ak.feature_encryption_api.interfaces.IEncryptionManager
 import com.ak.feature_tabaccounts_api.interfaces.AccountFeatureEntity
 import com.ak.feature_tabaccounts_api.interfaces.IAccountsInteractor

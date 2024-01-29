@@ -5,8 +5,6 @@ import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_tabpasswords_impl.R
 import com.ak.feature_tabpasswords_impl.di.FeatureTabPasswordsComponent
 import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.BaseManagePasswordFragment
-import kotlinx.android.synthetic.main.fragment_manage_password.view.tietPasswordContentField
-import kotlinx.android.synthetic.main.fragment_manage_password.view.tietPasswordNameField
 
 class EditPasswordFragment : BaseManagePasswordFragment<EditPasswordViewModel>() {
 
@@ -44,7 +42,7 @@ class EditPasswordFragment : BaseManagePasswordFragment<EditPasswordViewModel>()
     }
 
     private fun displayPasswordData(passwordName: String, passwordContent: String) {
-        fragmentView.tietPasswordNameField.setText(passwordName)
-        fragmentView.tietPasswordContentField.setText(passwordContent)
+        tietPasswordNameField?.setText(passwordName)
+        tietPasswordContentField?.setText(passwordContent)
     }
 }

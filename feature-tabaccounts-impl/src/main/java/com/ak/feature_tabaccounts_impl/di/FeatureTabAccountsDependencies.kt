@@ -1,6 +1,6 @@
 package com.ak.feature_tabaccounts_impl.di
 
-import com.ak.core_repo_api.intefaces.IAccountsRepository
+import com.ak.core_repo_api.intefaces.account.IAccountsRepository
 import com.ak.core_repo_api.intefaces.IDateAndTimeManager
 import com.ak.core_repo_api.intefaces.IResourceManager
 import com.ak.feature_encryption_api.interfaces.IEncryptionManager

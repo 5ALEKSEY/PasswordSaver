@@ -4,6 +4,8 @@ import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.isVisible
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.CustomThemeDrawableBuilder
@@ -18,19 +20,21 @@ import com.ak.base.ui.custom.popupmenu.PopupWindowMenuItem
 import com.ak.base.ui.recycler.BasePopupMenuRecyclerViewHolder
 import com.ak.base.utils.PSUtils
 import com.ak.feature_tabaccounts_impl.R
-import kotlinx.android.synthetic.main.accounts_item_layout.view.cvAccountItemContainer
-import kotlinx.android.synthetic.main.accounts_item_layout.view.ivAccountAvatar
-import kotlinx.android.synthetic.main.accounts_item_layout.view.ivItemPinned
-import kotlinx.android.synthetic.main.accounts_item_layout.view.ivItemSelected
-import kotlinx.android.synthetic.main.accounts_item_layout.view.tvAccountLogin
-import kotlinx.android.synthetic.main.accounts_item_layout.view.tvAccountName
-import kotlinx.android.synthetic.main.accounts_item_layout.view.tvAccountPassword
-import kotlinx.android.synthetic.main.accounts_item_layout.view.vAccountItemRoot
+import de.hdodenhof.circleimageview.CircleImageView
 
 class AccountsListItemViewHolder(
     itemView: View,
     private val listener: AccountListClickListener,
 ) : BasePopupMenuRecyclerViewHolder(itemView) {
+
+    private val cvAccountItemContainer by lazy { itemView.findViewById<View>(R.id.cvAccountItemContainer) }
+    private val ivAccountAvatar by lazy { itemView.findViewById<CircleImageView>(R.id.ivAccountAvatar) }
+    private val ivItemPinned by lazy { itemView.findViewById<View>(R.id.ivItemPinned) }
+    private val ivItemSelected by lazy { itemView.findViewById<View>(R.id.ivItemSelected) }
+    private val tvAccountLogin by lazy { itemView.findViewById<TextView>(R.id.tvAccountLogin) }
+    private val tvAccountName by lazy { itemView.findViewById<TextView>(R.id.tvAccountName) }
+    private val tvAccountPassword by lazy { itemView.findViewById<TextView>(R.id.tvAccountPassword) }
+    private val vAccountItemRoot by lazy { itemView.findViewById<ViewGroup>(R.id.vAccountItemRoot) }
 
     private var accountItemModel: AccountItemModel? = null
 
@@ -61,21 +65,21 @@ class AccountsListItemViewHolder(
         super.applyTheme(theme)
         CustomThemeApplier.applyBackgroundTint(
             theme,
-            itemView.cvAccountItemContainer,
+            cvAccountItemContainer,
             R.attr.themedSecondaryBackgroundColor,
         )
         CustomThemeApplier.applyTextColor(
             theme,
             R.attr.themedPrimaryTextColor,
-            itemView.tvAccountName,
-            itemView.tvAccountLogin,
-            itemView.tvAccountPassword,
+            tvAccountName,
+            tvAccountLogin,
+            tvAccountPassword,
         )
         CustomThemeApplier.applyCompoundDrawablesTint(
             theme,
             R.attr.themedPrimaryColor,
-            itemView.tvAccountLogin,
-            itemView.tvAccountPassword,
+            tvAccountLogin,
+            tvAccountPassword,
         )
         applySelectedItemIconBackground(theme)
         applyPinItemBackground(theme)
@@ -86,9 +90,9 @@ class AccountsListItemViewHolder(
 
     fun bindAccountListItemView(accountItemModel: AccountItemModel, theme: CustomTheme) {
         this.accountItemModel = accountItemModel
-        itemView.tvAccountName.text = accountItemModel.name
+        tvAccountName.text = accountItemModel.name
 
-        itemView.tvAccountLogin.apply {
+        tvAccountLogin.apply {
             maxLines = if (accountItemModel.isAccountContentVisible) {
                 AppConstants.MAX_LINES_VISIBLE_CONTENT
             } else {
@@ -97,7 +101,7 @@ class AccountsListItemViewHolder(
             drawAccountText(theme)
         }
 
-        itemView.tvAccountPassword.apply {
+        tvAccountPassword.apply {
             maxLines = if (accountItemModel.isAccountContentVisible) {
                 AppConstants.MAX_LINES_VISIBLE_CONTENT
             } else {
@@ -121,25 +125,25 @@ class AccountsListItemViewHolder(
 
         initAdditionalItemClickListeners(accountItemModel)
 
-        setRootItemBackground(accountItemModel, itemView.vAccountItemRoot, theme)
+        setRootItemBackground(accountItemModel, vAccountItemRoot, theme)
 
         if (!accountItemModel.isInActionModeState) {
-            itemView.ivItemSelected.setVisibilityInvisible(false)
+            ivItemSelected.setVisibilityInvisible(false)
         } else {
-            itemView.ivItemSelected.apply {
+            ivItemSelected.apply {
                 setVisibilityInvisible(accountItemModel.isItemSelected)
             }
         }
 
         drawAccountAvatar(theme)
 
-        itemView.ivItemPinned.isVisible = accountItemModel.isPinned
+        ivItemPinned.isVisible = accountItemModel.isPinned
     }
 
     private fun drawAccountText(theme: CustomTheme) {
         val accountItemModel = accountItemModel ?: return
 
-        itemView.tvAccountLogin.text = PSUtils.getHiddenContentTextTemp(
+        tvAccountLogin.text = PSUtils.getHiddenContentTextTemp(
             accountItemModel.isAccountContentVisible,
             accountItemModel.login,
             createHiddenItemDrawable(theme),
@@ -149,7 +153,7 @@ class AccountsListItemViewHolder(
     private fun drawPasswordContentText(theme: CustomTheme) {
         val accountItemModel = accountItemModel ?: return
 
-        itemView.tvAccountPassword.text = PSUtils.getHiddenContentTextTemp(
+        tvAccountPassword.text = PSUtils.getHiddenContentTextTemp(
             accountItemModel.isAccountContentVisible,
             accountItemModel.password,
             createHiddenItemDrawable(theme),
@@ -157,7 +161,7 @@ class AccountsListItemViewHolder(
     }
 
     private fun applyPinItemBackground(theme: CustomTheme) {
-        itemView.ivItemPinned.background = CustomThemeDrawableBuilder(theme, itemView.context)
+        ivItemPinned.background = CustomThemeDrawableBuilder(theme, itemView.context)
             .oval()
             .solidColorAttr(R.attr.themedAccentColor)
             .radius(itemView.resources.getDimensionPixelSize(R.dimen.pinned_account_icon_size).toFloat())
@@ -165,7 +169,7 @@ class AccountsListItemViewHolder(
     }
 
     private fun applySelectedItemIconBackground(theme: CustomTheme) {
-        itemView.ivItemSelected.background = CustomThemeDrawableBuilder(theme, itemView.context)
+        ivItemSelected.background = CustomThemeDrawableBuilder(theme, itemView.context)
             .oval()
             .solidColorAttr(R.attr.themedAccentColor)
             .radius(itemView.resources.getDimensionPixelSize(R.dimen.pinned_account_selected_item_icon_size).toFloat())
@@ -181,7 +185,7 @@ class AccountsListItemViewHolder(
         val textColor = theme.getColor(R.attr.themedPrimaryColor)
         val textSizeInPx = itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_inner_text_size)
         val avatarSizeInPx = itemView.resources.getDimensionPixelSize(R.dimen.card_avatar_avatar_size)
-        itemView.ivAccountAvatar.apply {
+        ivAccountAvatar.apply {
             drawTextInner(
                 itemView.context,
                 avatarSizeInPx,
@@ -196,8 +200,8 @@ class AccountsListItemViewHolder(
 
     private fun initAdditionalItemClickListeners(accountItemModel: AccountItemModel) {
         if (accountItemModel.isInActionModeState) {
-            for (i in 0..itemView.vAccountItemRoot.childCount) {
-                itemView.vAccountItemRoot.getChildAt(i)?.apply {
+            for (i in 0..vAccountItemRoot.childCount) {
+                vAccountItemRoot.getChildAt(i)?.apply {
                     isClickable = false
                     isFocusable = false
                 }

@@ -17,6 +17,7 @@ import dagger.Component
 @Component(
     modules = [
         TabSettingsViewModelsModule::class,
+        CustomThemesModule::class,
     ],
     dependencies = [FeatureTabSettingsDependencies::class]
 )

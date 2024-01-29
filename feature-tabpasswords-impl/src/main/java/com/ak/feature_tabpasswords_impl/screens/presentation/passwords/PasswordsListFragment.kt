@@ -4,11 +4,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.airbnb.lottie.LottieAnimationView
 import com.ak.base.constants.AppConstants
 import com.ak.base.extensions.setSafeClickListener
 import com.ak.base.extensions.setVisibility
@@ -21,13 +23,15 @@ import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordItemModel
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordsListClickListener
 import com.ak.feature_tabpasswords_impl.screens.adapter.PasswordsListRecyclerAdapter
 import com.ak.feature_tabpasswords_impl.screens.presentation.base.BasePasswordsModuleFragment
-import kotlinx.android.synthetic.main.fragment_passwords_list.view.fabAddNewPasswordAction
-import kotlinx.android.synthetic.main.fragment_passwords_list.view.incEmptyView
-import kotlinx.android.synthetic.main.fragment_passwords_list.view.loadingAnimation
-import kotlinx.android.synthetic.main.fragment_passwords_list.view.passwordsLoadingContainer
-import kotlinx.android.synthetic.main.fragment_passwords_list.view.rvPasswordsList
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel>() {
+
+    private var fabAddNewPasswordAction: FloatingActionButton? = null
+    private var incEmptyView: View? = null
+    private var loadingAnimation: LottieAnimationView? = null
+    private var passwordsLoadingContainer: LinearLayout? = null
+    private var rvPasswordsList: RecyclerView? = null
 
     private lateinit var passwordsActionModeViewModel: PasswordsActionModeViewModel
 
@@ -98,12 +102,23 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
         viewModel.loadPasswords()
     }
 
+    override fun findViews(fragmentView: View) {
+        super.findViews(fragmentView)
+        with(fragmentView) {
+            fabAddNewPasswordAction = findViewById(R.id.fabAddNewPasswordAction)
+            incEmptyView = findViewById(R.id.incEmptyView)
+            loadingAnimation = findViewById(R.id.loadingAnimation)
+            passwordsLoadingContainer = findViewById(R.id.passwordsLoadingContainer)
+            rvPasswordsList = findViewById(R.id.rvPasswordsList)
+        }
+    }
+
     override fun initView(fragmentView: View) {
         super.initView(fragmentView)
         initToolbar()
         initRecyclerView()
 
-        fragmentView.fabAddNewPasswordAction.setSafeClickListener {
+        fabAddNewPasswordAction?.setSafeClickListener {
             navigator.navigateToAddNewPassword()
         }
     }
@@ -111,14 +126,14 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
     override fun subscriberToViewModel(viewModel: PasswordsListViewModel) {
         super.subscriberToViewModel(viewModel)
         viewModel.subscribeEmptyPasswordState().observe(viewLifecycleOwner) {
-            fragmentView.incEmptyView.setVisibility(it)
+            incEmptyView?.setVisibility(it)
         }
         viewModel.subscribeToPrimaryLoadingState().observe(viewLifecycleOwner) { isLoading ->
-            fragmentView.passwordsLoadingContainer.setVisibility(isLoading)
+            passwordsLoadingContainer?.setVisibility(isLoading)
             if (isLoading) {
-                fragmentView.loadingAnimation.playAnimation()
+                loadingAnimation?.playAnimation()
             } else {
-                fragmentView.loadingAnimation.pauseAnimation()
+                loadingAnimation?.pauseAnimation()
             }
         }
         viewModel.subscribeToSecondaryLoadingState().observe(viewLifecycleOwner, this::setSecondaryLoadingState)
@@ -161,7 +176,7 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
     private fun initRecyclerView() {
         passwordsAdapter = PasswordsListRecyclerAdapter(passwordsListClickListener)
 
-        with(fragmentView.rvPasswordsList) {
+        rvPasswordsList?.apply {
             adapter = passwordsAdapter
             layoutManager = GridLayoutManager(
                 context,
@@ -173,9 +188,9 @@ class PasswordsListFragment : BasePasswordsModuleFragment<PasswordsListViewModel
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     if (dy > 0) {
-                        fragmentView.fabAddNewPasswordAction.hide()
+                        fabAddNewPasswordAction?.hide()
                     } else {
-                        fragmentView.fabAddNewPasswordAction.show()
+                        fabAddNewPasswordAction?.show()
                     }
 
                     super.onScrolled(recyclerView, dx, dy)

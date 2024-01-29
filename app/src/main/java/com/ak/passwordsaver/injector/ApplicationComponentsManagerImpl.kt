@@ -31,6 +31,10 @@ import com.example.feature_backup_impl.di.DaggerFeatureBackupComponent_FeatureBa
 import com.example.feature_backup_impl.di.FeatureBackupComponent
 import com.example.feature_backup_impl.di.FeatureBackupComponentInitializer
 import com.example.feature_backup_impl.di.FeatureBackupDependencies
+import com.example.feature_customthememanager_impl.di.DaggerFeatureCustomThemeManagerComponent_FeatureCustomThemeManagerDependenciesComponent
+import com.example.feature_customthememanager_impl.di.FeatureCustomThemeManagerComponent
+import com.example.feature_customthememanager_impl.di.FeatureCustomThemeManagerComponentInitializer
+import com.example.feature_customthememanager_impl.di.FeatureCustomThemeManagerDependencies
 
 interface ApplicationComponentsManager :
     ClearComponentsByDestinationChangeManager,
@@ -38,7 +42,8 @@ interface ApplicationComponentsManager :
     FeatureTabPasswordsComponentInitializer,
     FeatureTabAccountsComponentInitializer,
     FeatureTabSettingsComponentInitializer,
-    FeatureBackupComponentInitializer
+    FeatureBackupComponentInitializer,
+    FeatureCustomThemeManagerComponentInitializer
 
 interface ClearComponentsByDestinationChangeManager {
     fun onDestinationIdChanged(destinationId: Int)
@@ -94,6 +99,10 @@ class ApplicationComponentsManagerImpl : ApplicationComponentsManager {
         return FeatureBackupComponent.initializeAndGet(initFeatureBackupDependencies(), applicationContext)
     }
 
+    override fun initializeFeatureCustomThemeManagerComponent(): FeatureCustomThemeManagerComponent {
+        return FeatureCustomThemeManagerComponent.initializeAndGet(initFeatureCustomThemeManagerDependencies(), applicationContext)
+    }
+
     private fun clearTabPasswordsFeature() {
         FeatureTabPasswordsComponent.clear()
     }
@@ -130,6 +139,13 @@ class ApplicationComponentsManagerImpl : ApplicationComponentsManager {
 
     private fun initFeatureBackupDependencies(): FeatureBackupDependencies {
         return DaggerFeatureBackupComponent_FeatureBackupDependenciesComponent.builder()
+            .coreRepositoryApi(initCoreRepo())
+            .featureAppUpdateApi(initFeatureAppUpdate())
+            .build()
+    }
+
+    private fun initFeatureCustomThemeManagerDependencies(): FeatureCustomThemeManagerDependencies {
+        return DaggerFeatureCustomThemeManagerComponent_FeatureCustomThemeManagerDependenciesComponent.builder()
             .coreRepositoryApi(initCoreRepo())
             .build()
     }

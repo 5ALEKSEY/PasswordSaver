@@ -3,6 +3,7 @@ package com.ak.feature_tabsettings_impl.debug
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
 import com.ak.base.ui.recycler.decorator.PsDividerItemDecorationSettings
 import com.ak.base.viewmodel.injectViewModel
@@ -11,7 +12,6 @@ import com.ak.feature_tabsettings_impl.R
 import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_debug_settings.view.rvDebugSettingsItemsList
 
 class DebugSettingsFragment : BaseSettingsModuleFragment<DebugSettingsViewModel>() {
 
@@ -75,7 +75,7 @@ class DebugSettingsFragment : BaseSettingsModuleFragment<DebugSettingsViewModel>
             onSwitchSettingsChanged = viewModel::onSwitchSettingsItemChanged,
             onTextSettingsClicked = viewModel::onSettingTextItemClicked,
         )
-        fragmentView.rvDebugSettingsItemsList.apply {
+        fragmentView.findViewById<RecyclerView>(R.id.rvDebugSettingsItemsList).apply {
             adapter = debugRecyclerAdapter
             val linearLayoutManager = LinearLayoutManager(
                 context,

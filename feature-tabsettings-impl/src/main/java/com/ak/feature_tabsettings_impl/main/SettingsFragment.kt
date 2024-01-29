@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.View
 import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ak.base.extensions.showToastMessage
 import com.ak.base.navigation.NavDeepLinkDestination
 import com.ak.base.ui.recycler.decorator.PsDividerItemDecoration
@@ -17,7 +18,6 @@ import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.fragment_settings.view.rvSettingsItemsList
 
 class SettingsFragment : BaseSettingsModuleFragment<SettingsViewModel>() {
 
@@ -124,7 +124,7 @@ class SettingsFragment : BaseSettingsModuleFragment<SettingsViewModel>() {
             onSectionSettingsClicked = viewModel::onSectionClicked,
         )
 
-        with(fragmentView.rvSettingsItemsList) {
+        fragmentView.findViewById<RecyclerView>(R.id.rvSettingsItemsList).apply {
             adapter = settingsRecyclerAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             addItemDecoration(

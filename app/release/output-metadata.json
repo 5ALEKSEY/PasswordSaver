@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 43,
-      "versionName": "3.0.2release",
-      "outputFile": "PasswordSaver_3.0.2_release.apk"
+      "versionCode": 64,
+      "versionName": "4.1.5release",
+      "outputFile": "PasswordSaver_4.1.5_release.apk"
     }
   ],
   "elementType": "File"

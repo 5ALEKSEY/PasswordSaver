@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.fragment.app.FragmentManager
 import com.ak.base.extensions.getColorCompat
@@ -17,9 +18,6 @@ import com.ak.feature_tabpasswords_impl.screens.presentation.passwordmanage.gall
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import javax.inject.Inject
-import kotlinx.android.synthetic.main.layout_photo_chooser_dialog.view.ivPhotoChooserGalleryPreview
-import kotlinx.android.synthetic.main.layout_photo_chooser_dialog.view.vChooseCameraAction
-import kotlinx.android.synthetic.main.layout_photo_chooser_dialog.view.vChooseGalleryAction
 
 class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
 
@@ -68,7 +66,7 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         mCameraPreviewView = view.findViewById(R.id.texvPhotoChooserCameraPreview)
         mPSCameraManager.initCameraManager(true, mCameraPreviewView)
-        view.ivPhotoChooserGalleryPreview.apply {
+        view.findViewById<ImageView>(R.id.ivPhotoChooserGalleryPreview).apply {
             val lastGalleryImage = mPSGalleryManager.getLastGalleryImage()
             if (lastGalleryImage != null) {
                 setImageBitmap(lastGalleryImage)
@@ -78,12 +76,12 @@ class PhotoChooserBottomSheetDialog : BottomSheetDialogFragment() {
                 setImageDrawable(ColorDrawable(noLastImageColor))
             }
         }
-        view.vChooseCameraAction.setSafeClickListener {
+        view.findViewById<View>(R.id.vChooseCameraAction).setSafeClickListener {
             if (this::onChooseAvatarActionListener.isInitialized) {
                 onChooseAvatarActionListener.invoke(CAMERA_CHOOSE_ACTION_ID)
             }
         }
-        view.vChooseGalleryAction.setSafeClickListener {
+        view.findViewById<View>(R.id.vChooseGalleryAction).setSafeClickListener {
             if (this::onChooseAvatarActionListener.isInitialized) {
                 onChooseAvatarActionListener.invoke(GALLERY_CHOOSE_ACTION_ID)
             }

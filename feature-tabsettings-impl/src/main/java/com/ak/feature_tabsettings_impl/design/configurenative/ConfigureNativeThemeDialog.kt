@@ -14,16 +14,9 @@ import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.app_theme.theme.CustomThemePreferencesMng
 import com.ak.app_theme.theme.applier.ComplexViewsApplier
 import com.ak.app_theme.theme.applier.CustomThemeApplier
+import com.ak.app_theme.theme.toDescription
 import com.ak.app_theme.theme.uicomponents.BaseThemeDialogFragment
 import com.ak.feature_tabsettings_impl.R
-import kotlinx.android.synthetic.main.layout_configure_native_theme_dialog.view.llConfigureNativeThemeDialogRoot
-import kotlinx.android.synthetic.main.layout_configure_native_theme_dialog.view.rvConfigureNativeThemeDarkDescriptionsList
-import kotlinx.android.synthetic.main.layout_configure_native_theme_dialog.view.rvConfigureNativeThemeLightDescriptionsList
-import kotlinx.android.synthetic.main.layout_configure_native_theme_dialog.view.tvConfigureNativeThemeApplyAction
-import kotlinx.android.synthetic.main.layout_configure_native_theme_dialog.view.tvConfigureNativeThemeCancelAction
-import kotlinx.android.synthetic.main.layout_configure_native_theme_dialog.view.tvConfigureNativeThemeDarkDescriptionTitle
-import kotlinx.android.synthetic.main.layout_configure_native_theme_dialog.view.tvConfigureNativeThemeDialogTitle
-import kotlinx.android.synthetic.main.layout_configure_native_theme_dialog.view.tvConfigureNativeThemeLightDescriptionTitle
 
 class ConfigureNativeThemeDialog : BaseThemeDialogFragment() {
 
@@ -81,23 +74,24 @@ class ConfigureNativeThemeDialog : BaseThemeDialogFragment() {
         }
 
         // Bind usual views for theme applying
-        root = view.llConfigureNativeThemeDialogRoot
-        dialogTitle = view.tvConfigureNativeThemeDialogTitle
-        lightThemesDescriptionsListTitle = view.tvConfigureNativeThemeLightDescriptionTitle
-        darkThemesDescriptionsListTitle = view.tvConfigureNativeThemeDarkDescriptionTitle
+        root = view.findViewById(R.id.llConfigureNativeThemeDialogRoot)
+        dialogTitle = view.findViewById(R.id.tvConfigureNativeThemeDialogTitle)
+        lightThemesDescriptionsListTitle = view.findViewById(R.id.tvConfigureNativeThemeLightDescriptionTitle)
+        darkThemesDescriptionsListTitle = view.findViewById(R.id.tvConfigureNativeThemeDarkDescriptionTitle)
 
 
         // Bind and configure themes description adapter
         val groupedThemesDescriptionsByLight = CustomThemeManager.getInstance()
             .getAvailableThemes()
-            .filter { it.id != CustomThemeManager.NATIVE_THEME_ID }
+            .filter { it.id != CustomThemeManager.NATIVE_THEME_ID && !it.isCustom }
+            .map { it.toDescription() }
             .groupBy { it.isLight }
 
         val lightThemesDescriptionsAdapter = ConfigureNativeThemeDescriptionsAdapter(
             CustomThemePreferencesMng.getNativeLightThemeId(),
             groupedThemesDescriptionsByLight[true] ?: return
         )
-        lightThemesDescriptionsList = view.rvConfigureNativeThemeLightDescriptionsList.apply {
+        lightThemesDescriptionsList = view.findViewById<RecyclerView>(R.id.rvConfigureNativeThemeLightDescriptionsList).apply {
             adapter = lightThemesDescriptionsAdapter
         }
 
@@ -105,18 +99,18 @@ class ConfigureNativeThemeDialog : BaseThemeDialogFragment() {
             CustomThemePreferencesMng.getNativeDarkThemeId(),
             groupedThemesDescriptionsByLight[false] ?: return
         )
-        darkThemesDescriptionsList = view.rvConfigureNativeThemeDarkDescriptionsList.apply {
+        darkThemesDescriptionsList = view.findViewById<RecyclerView>(R.id.rvConfigureNativeThemeDarkDescriptionsList).apply {
             adapter = darkThemesDescriptionsAdapter
         }
 
         // Bind dialog action buttons listeners
-        cancelActionText = view.tvConfigureNativeThemeCancelAction.apply {
+        cancelActionText = view.findViewById<TextView>(R.id.tvConfigureNativeThemeCancelAction).apply {
             setOnClickListener {
                 listener?.onConfigCancelled()
                 dismissAllowingStateLoss()
             }
         }
-        applyActionText = view.tvConfigureNativeThemeApplyAction.apply {
+        applyActionText = view.findViewById<TextView>(R.id.tvConfigureNativeThemeApplyAction).apply {
             setOnClickListener {
                 listener?.onConfigApplied(
                     lightThemesDescriptionsAdapter.selectedDescriptionId,

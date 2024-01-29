@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
 }
 
@@ -93,6 +92,9 @@ dependencies {
     implementation project(':feature-backup-api')
     implementation project(':feature-backup-impl')
 
+    implementation project(':feature-customthememanager-api')
+    implementation project(':feature-customthememanager-impl')
+
     implementation deps.kotlin
     implementation deps.appCompat
     implementation deps.androidX
@@ -105,11 +107,10 @@ dependencies {
     implementation deps.rx
     implementation deps.rxAndroid
 
-    debugImplementation deps.stethoDebugImpl
-
     implementation deps.lifecycle
     implementation deps.gson
     implementation deps.navComponent
 
     implementation deps.viewPump
+    implementation deps.timberLogs
 }

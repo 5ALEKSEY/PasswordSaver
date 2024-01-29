@@ -1,15 +1,18 @@
 package com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.edit
 
 import android.os.Bundle
+import android.view.View
 import com.ak.base.viewmodel.injectViewModel
 import com.ak.feature_tabaccounts_impl.R
 import com.ak.feature_tabaccounts_impl.di.FeatureTabAccountsComponent
 import com.ak.feature_tabaccounts_impl.screens.presentation.accountmanage.BaseManageAccountFragment
-import kotlinx.android.synthetic.main.fragment_manage_account.view.tietAccountLoginField
-import kotlinx.android.synthetic.main.fragment_manage_account.view.tietAccountNameField
-import kotlinx.android.synthetic.main.fragment_manage_account.view.tietAccountPasswordField
+import com.google.android.material.textfield.TextInputEditText
 
 class EditAccountFragment : BaseManageAccountFragment<EditAccountViewModel>() {
+
+    private var tietAccountLoginField: TextInputEditText? = null
+    private var tietAccountNameField: TextInputEditText? = null
+    private var tietAccountPasswordField: TextInputEditText? = null
 
     companion object {
         const val ACCOUNT_ID_FOR_EDIT_EXTRA_KEY = "account_id_for_edit"
@@ -23,6 +26,15 @@ class EditAccountFragment : BaseManageAccountFragment<EditAccountViewModel>() {
 
     override fun injectFragment(component: FeatureTabAccountsComponent) {
         component.inject(this)
+    }
+
+    override fun findViews(fragmentView: View) {
+        super.findViews(fragmentView)
+        with(fragmentView) {
+            tietAccountLoginField = findViewById(R.id.tietAccountLoginField)
+            tietAccountNameField = findViewById(R.id.tietAccountNameField)
+            tietAccountPasswordField= findViewById(R.id.tietAccountPasswordField)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,8 +57,8 @@ class EditAccountFragment : BaseManageAccountFragment<EditAccountViewModel>() {
     }
 
     private fun displayAccountData(accountName: String, accountLogin: String, accountPassword: String) {
-        fragmentView.tietAccountNameField.setText(accountName)
-        fragmentView.tietAccountLoginField.setText(accountLogin)
-        fragmentView.tietAccountPasswordField.setText(accountPassword)
+        tietAccountNameField?.setText(accountName)
+        tietAccountLoginField?.setText(accountLogin)
+        tietAccountPasswordField?.setText(accountPassword)
     }
 }

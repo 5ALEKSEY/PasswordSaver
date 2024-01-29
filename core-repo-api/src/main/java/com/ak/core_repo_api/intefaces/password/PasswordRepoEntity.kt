@@ -1,4 +1,4 @@
-package com.ak.core_repo_api.intefaces
+package com.ak.core_repo_api.intefaces.password
 
 interface PasswordRepoEntity {
     fun getPasswordId(): Long?

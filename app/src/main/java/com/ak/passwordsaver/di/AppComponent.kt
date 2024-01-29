@@ -7,6 +7,7 @@ import com.ak.passwordsaver.PSApplication
 import com.ak.passwordsaver.di.modules.AppModule
 import com.ak.passwordsaver.di.modules.MainViewModelsModule
 import com.ak.passwordsaver.di.modules.NavigationModule
+import com.ak.passwordsaver.di.modules.ThemesModule
 import com.ak.passwordsaver.presentation.screens.home.HomeActivity
 import dagger.Component
 import javax.inject.Singleton
@@ -16,6 +17,7 @@ import javax.inject.Singleton
         AppModule::class,
         NavigationModule::class,
         MainViewModelsModule::class,
+        ThemesModule::class,
     ],
     dependencies = [AppComponentDependencies::class]
 )

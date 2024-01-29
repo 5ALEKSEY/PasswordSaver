@@ -22,6 +22,9 @@ class SettingsRecyclerViewAdapter constructor(
     private val onSectionSettingsClicked: ((settingId: Int) -> Unit)? = null,
     private val onTextSettingsClicked: ((settingId: Int) -> Unit)? = null,
     private val onThemeChanged: ((newThemeId: Int) -> Unit)? = null,
+    private val onAddTheme: ((settingId: Int) -> Unit)? = null,
+    private val onEditTheme: ((themeId: Int) -> Unit)? = null,
+    private val onDeleteTheme: ((themeId: Int) -> Unit)? = null,
 ) : CustomThemeRecyclerViewAdapter<CustomThemeRecyclerViewHolder>() {
 
     companion object {
@@ -81,11 +84,18 @@ class SettingsRecyclerViewAdapter constructor(
                 )
             )
         }
-        if (onThemeChanged != null) {
+        if (onThemeChanged != null
+            && onAddTheme != null
+            && onEditTheme != null
+            && onDeleteTheme != null
+        ) {
             adapterDelegatesManager.addDelegate(
                 ThemeChangeAdapterDelegate(
                     THEME_CHANGE_SETTING_TYPE,
                     onThemeChanged,
+                    onAddTheme,
+                    onEditTheme,
+                    onDeleteTheme,
                 )
             )
         }
@@ -134,13 +144,16 @@ class SettingsRecyclerViewAdapter constructor(
             val isSameName = oldItem.settingName.contentEquals(newItem.settingName)
             val defaultCondition = isSameId && isSameName
             if (oldItem is SwitchSettingsListItemModel && newItem is SwitchSettingsListItemModel) {
-                return defaultCondition && (oldItem.isChecked == newItem.isChecked)
+                return defaultCondition && oldItem.isChecked == newItem.isChecked
             }
             if (oldItem is SpinnerSettingsListItemModel && newItem is SpinnerSettingsListItemModel) {
-                return defaultCondition && (oldItem.selectedItemPosition == newItem.selectedItemPosition)
+                return defaultCondition && oldItem.selectedItemPosition == newItem.selectedItemPosition
             }
             if (oldItem is ThemeChangeSettingsListItemModel && newItem is ThemeChangeSettingsListItemModel) {
-                return defaultCondition && (oldItem.selectedThemeId == newItem.selectedThemeId)
+                return defaultCondition
+                    && oldItem.selectedThemeId == newItem.selectedThemeId
+                    && oldItem.themes == newItem.themes
+                    && oldItem.shouldShowThemeExampleView == newItem.shouldShowThemeExampleView
             }
             return defaultCondition
         }

@@ -6,7 +6,6 @@ import com.ak.base.viewmodel.IViewModelAssistedFactory
 import com.ak.core_repo_api.intefaces.IDateAndTimeManager
 import com.ak.core_repo_api.intefaces.IPSInternalStorageManager
 import com.ak.core_repo_api.intefaces.IResourceManager
-import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
 import com.ak.feature_tabpasswords_api.interfaces.IPasswordsInteractor
 import com.ak.feature_tabpasswords_impl.screens.logic.IBitmapDecoderManager
 import com.ak.feature_tabpasswords_impl.screens.logic.IDataBufferManager

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.ak.base.constants.AppConstants
 import com.ak.base.viewmodel.BasePSViewModel
 import com.ak.core_repo_api.intefaces.IResourceManager
-import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.core_repo_api.intefaces.preference.ISettingsPreferencesManager
 import com.ak.feature_security_api.interfaces.IAuthCheckerStarter
 import com.ak.feature_security_api.interfaces.IPSBiometricManager
 import com.ak.feature_security_impl.R
@@ -14,7 +14,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
-import javax.inject.Inject
 
 class SecurityViewModel constructor(
     private val settingsPreferencesManager: ISettingsPreferencesManager,

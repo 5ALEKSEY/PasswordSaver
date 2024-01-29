@@ -18,11 +18,17 @@ interface IFeaturesUpdateManager {
     fun markAppThemeFeatureAsViewed()
     fun resetAppThemeFeatureViewedState()
 
+    // passwords and accounts backup
+    fun isBackupFeatureViewed(): Boolean
+    fun markBackupFeatureAsViewed()
+    fun resetBackupFeatureViewedState()
+
     fun subscribeToViewedFeatureState(featureType: FeatureType): Observable<Boolean>
 
     enum class FeatureType {
         TAB_ACCOUNTS,
         FINGERPRINT,
         APP_THEME,
+        BACKUP,
     }
 }

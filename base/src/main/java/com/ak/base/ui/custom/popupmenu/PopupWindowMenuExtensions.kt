@@ -118,7 +118,7 @@ private class TouchWithCoordinatesListener(
     }
 
     private fun setDownCoordinates(event: MotionEvent) {
-        setDownCoordinates(event.x, event.y)
+        setDownCoordinates(event.rawX, event.rawY)
     }
 
     private fun setDownCoordinates(x: Float, y: Float) {
@@ -132,8 +132,8 @@ private class TouchWithCoordinatesListener(
     }
 
     private fun isMoveDistanceAcceptable(event: MotionEvent): Boolean {
-        val xMoveDistance = abs(downX - event.x)
-        val yMoveDistance = abs(downY - event.y)
+        val xMoveDistance = abs(downX - event.rawX)
+        val yMoveDistance = abs(downY - event.rawY)
 
         return xMoveDistance <= MAX_MOVE_DISTANCE_IN_PIXELS && yMoveDistance <= MAX_MOVE_DISTANCE_IN_PIXELS
     }

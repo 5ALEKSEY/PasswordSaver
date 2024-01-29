@@ -8,7 +8,7 @@ import android.util.Log
 import androidx.biometric.BiometricManager
 import androidx.core.hardware.fingerprint.FingerprintManagerCompat
 import androidx.core.os.CancellationSignal
-import com.ak.core_repo_api.intefaces.ISettingsPreferencesManager
+import com.ak.core_repo_api.intefaces.preference.ISettingsPreferencesManager
 import com.ak.feature_security_api.interfaces.IPSBiometricManager
 import javax.inject.Inject
 

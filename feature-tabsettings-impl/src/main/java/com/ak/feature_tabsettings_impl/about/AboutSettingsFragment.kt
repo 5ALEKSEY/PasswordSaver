@@ -1,7 +1,9 @@
 package com.ak.feature_tabsettings_impl.about
 
 import android.view.View
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ak.app_theme.theme.CustomTheme
 import com.ak.app_theme.theme.CustomThemeManager
 import com.ak.base.extensions.drawTextInner
@@ -13,11 +15,13 @@ import com.ak.feature_tabsettings_impl.adapter.SettingsRecyclerViewAdapter
 import com.ak.feature_tabsettings_impl.adapter.items.SettingsListItemModel
 import com.ak.feature_tabsettings_impl.base.BaseSettingsModuleFragment
 import com.ak.feature_tabsettings_impl.di.FeatureTabSettingsComponent
-import kotlinx.android.synthetic.main.fragment_about_settings.view.ivAboutLauncherImage
-import kotlinx.android.synthetic.main.fragment_about_settings.view.rvAboutActionsList
-import kotlinx.android.synthetic.main.fragment_about_settings.view.tvApplicationVersionInfo
+import de.hdodenhof.circleimageview.CircleImageView
 
 class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>() {
+
+    private var ivAboutLauncherImage: CircleImageView? = null
+    private var rvAboutActionsList: RecyclerView? = null
+    private var tvApplicationVersionInfo: TextView? = null
 
     private lateinit var aboutRecyclerAdapter: SettingsRecyclerViewAdapter
 
@@ -29,6 +33,15 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
 
     override fun createViewModel(): AboutSettingsViewModel {
         return injectViewModel(viewModelsFactory)
+    }
+
+    override fun findViews(fragmentView: View) {
+        super.findViews(fragmentView)
+        with(fragmentView) {
+            ivAboutLauncherImage = findViewById(R.id.ivAboutLauncherImage)
+            rvAboutActionsList = findViewById(R.id.rvAboutActionsList)
+            tvApplicationVersionInfo = findViewById(R.id.tvApplicationVersionInfo)
+        }
     }
 
     override fun initView(fragmentView: View) {
@@ -54,7 +67,7 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
     }
 
     private fun setVersionInfo(versionInfo: String) {
-        fragmentView.tvApplicationVersionInfo.text = versionInfo
+        tvApplicationVersionInfo?.text = versionInfo
     }
 
     private fun displayAboutActions(settingsItems: List<SettingsListItemModel>) {
@@ -67,7 +80,7 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
 
     private fun initToolbar() {
         applyForToolbarController {
-            setToolbarTitle(R.string.privacy_settings_toolbar_title)
+            setToolbarTitle(R.string.about_settings_toolbar_title)
             setupBackAction(R.drawable.ic_back_action) {
                 navController.popBackStack()
             }
@@ -80,7 +93,7 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
             onSectionSettingsClicked = viewModel::onAboutActionClicked,
             onTextSettingsClicked = { d -> }
         )
-        fragmentView.rvAboutActionsList.apply {
+        rvAboutActionsList?.apply {
             adapter = aboutRecyclerAdapter
             val linearLayoutManager = LinearLayoutManager(
                 context,
@@ -99,7 +112,7 @@ class AboutSettingsFragment : BaseSettingsModuleFragment<AboutSettingsViewModel>
             resources.getDimensionPixelSize(R.dimen.about_image_launcher_text_size)
         val aboutLauncherImageSizeInPx =
             resources.getDimensionPixelSize(R.dimen.about_image_launcher_size)
-        fragmentView.ivAboutLauncherImage.apply {
+        ivAboutLauncherImage?.apply {
             drawTextInner(
                 requireContext(),
                 aboutLauncherImageSizeInPx,
