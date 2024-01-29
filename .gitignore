@@ -2,9 +2,9 @@
 .gradle
 *.apk
 /local.properties
-/.idea/*
 output.json
 .DS_Store
 /build
 /captures
 .externalNativeBuild
+/.idea/
