@@ -51,20 +51,29 @@ class HomeViewModel @Inject constructor(
         // Settings tab
         fun deleteNewBadgeForSettingsTabIfNeeded() {
             if (!isSettingsTabWithNewBadge()) {
-                featureBadgeTextLiveData.value = R.id.settings_nav_graph to null
+                featureBadgeTextLiveData.postValue(R.id.settings_nav_graph to null)
             }
         }
         if (isSettingsTabWithNewBadge()) {
             featureBadgeTextLiveData.value = R.id.settings_nav_graph to R.string.new_feature_badge
         }
         featuresUpdateManager.subscribeToViewedFeatureState(IFeaturesUpdateManager.FeatureType.FINGERPRINT)
-            .subscribe { deleteNewBadgeForSettingsTabIfNeeded() }
+            .subscribe(
+                { deleteNewBadgeForSettingsTabIfNeeded() },
+                {  }
+            )
             .let(this::bindDisposable)
         featuresUpdateManager.subscribeToViewedFeatureState(IFeaturesUpdateManager.FeatureType.APP_THEME)
-            .subscribe { deleteNewBadgeForSettingsTabIfNeeded() }
+            .subscribe(
+                { deleteNewBadgeForSettingsTabIfNeeded() },
+                {  }
+            )
             .let(this::bindDisposable)
         featuresUpdateManager.subscribeToViewedFeatureState(IFeaturesUpdateManager.FeatureType.BACKUP)
-            .subscribe { deleteNewBadgeForSettingsTabIfNeeded() }
+            .subscribe(
+                { deleteNewBadgeForSettingsTabIfNeeded() },
+                {  }
+            )
             .let(this::bindDisposable)
     }
 
