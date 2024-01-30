@@ -14,8 +14,6 @@
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/core-repo-api" />
             <option value="$PROJECT_DIR$/core-repo-impl" />
-            <option value="$PROJECT_DIR$/feature-appupdate-api" />
-            <option value="$PROJECT_DIR$/feature-appupdate-impl" />
             <option value="$PROJECT_DIR$/feature-backup-api" />
             <option value="$PROJECT_DIR$/feature-backup-impl" />
             <option value="$PROJECT_DIR$/feature-customthememanager-api" />
@@ -30,6 +28,8 @@
             <option value="$PROJECT_DIR$/feature-tabpasswords-impl" />
             <option value="$PROJECT_DIR$/feature-tabsettings-api" />
             <option value="$PROJECT_DIR$/feature-tabsettings-impl" />
+            <option value="$PROJECT_DIR$/feature/appupdate/feature-appupdate-api" />
+            <option value="$PROJECT_DIR$/feature/appupdate/feature-appupdate-impl" />
             <option value="$PROJECT_DIR$/localization" />
           </set>
         </option>

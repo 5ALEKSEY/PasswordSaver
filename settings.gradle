@@ -1,22 +1,38 @@
+def includeFeature(String moduleName, String subdirectoryName) {
+    includeCustom(moduleName, "feature/$subdirectoryName")
+}
+
+def includeCore(String moduleName, String subdirectoryName) {
+    includeCustom(moduleName, "core/$subdirectoryName")
+}
+
+def includeCustom(String moduleName, String directoryName) {
+    var module = ":$moduleName"
+    include module
+    project(module).projectDir = new File(rootDir, "$directoryName/$moduleName")
+}
+
 include ':app'
 include ':app-theme'
 include ':base'
 include ':localization'
-include ':core-repo-api'
-include ':core-repo-impl'
-include ':feature-tabpasswords-api'
-include ':feature-tabpasswords-impl'
-include ':feature-security-api'
-include ':feature-security-impl'
-include ':feature-tabsettings-api'
-include ':feature-tabsettings-impl'
-include ':feature-encryption-api'
-include ':feature-encryption-impl'
-include ':feature-tabaccounts-api'
-include ':feature-tabaccounts-impl'
-include ':feature-appupdate-api'
-include ':feature-appupdate-impl'
-include ':feature-backup-api'
-include ':feature-backup-impl'
-include ':feature-customthememanager-api'
-include ':feature-customthememanager-impl'
+
+includeCore 'core-repo-api', 'repo'
+includeCore 'core-repo-impl', 'repo'
+
+includeFeature 'feature-tabpasswords-api', 'tabpasswords'
+includeFeature 'feature-tabpasswords-impl', 'tabpasswords'
+includeFeature 'feature-security-api', 'security'
+includeFeature 'feature-security-impl', 'security'
+includeFeature 'feature-tabsettings-api', 'tabsettings'
+includeFeature 'feature-tabsettings-impl', 'tabsettings'
+includeFeature 'feature-encryption-api', 'encryption'
+includeFeature 'feature-encryption-impl', 'encryption'
+includeFeature 'feature-tabaccounts-api', 'tabaccounts'
+includeFeature 'feature-tabaccounts-impl', 'tabaccounts'
+includeFeature 'feature-appupdate-api', 'appupdate'
+includeFeature 'feature-appupdate-impl', 'appupdate'
+includeFeature 'feature-backup-api', 'backup'
+includeFeature 'feature-backup-impl', 'backup'
+includeFeature 'feature-customthememanager-api', 'customthememanager'
+includeFeature 'feature-customthememanager-impl', 'customthememanager'
