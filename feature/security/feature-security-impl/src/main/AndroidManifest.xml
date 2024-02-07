@@ -1,8 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         package="com.ak.feature_security_impl">
 
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <!--suppress DeprecatedClassUsageInspection -->
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+
+    <application>
+
+        <activity
+                android:name="com.ak.feature_security_impl.auth.SecurityActivity"
+                android:exported="false"
+                android:screenOrientation="portrait"
+                tools:ignore="LockedOrientationActivity" />
+
+    </application>
 
 </manifest>
